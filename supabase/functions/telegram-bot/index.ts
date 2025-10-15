@@ -11,7 +11,9 @@ if (!SUPABASE_URL || !SERVICE_KEY || !TG_TOKEN) {
   Deno.serve(() => new Response("ok", { status: 200 }));
   Deno.exit(0);
 }
-const sb = createClient(SUPABASE_URL, SERVICE_KEY);
+const sb = createClient(SUPABASE_URL, SERVICE_KEY, {
+  global: { fetch: (url, opts) => fetch(url, opts) },
+});
 
 async function safeParse(req: Request) {
   try {

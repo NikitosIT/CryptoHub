@@ -26,7 +26,7 @@ async function uploadTelegramFileToSupabase(file_id: string, type: string) {
   const filename = `posts/${file_id}.${ext}`;
 
   const { error } = await supabase.storage
-    .from("telegram_media")
+    .from("tg_media")
     .upload(filename, buffer, {
       contentType: fileRes.headers.get("content-type") ||
         "application/octet-stream",
@@ -35,7 +35,7 @@ async function uploadTelegramFileToSupabase(file_id: string, type: string) {
   if (error) throw error;
 
   const { data } = supabase.storage
-    .from("telegram_media")
+    .from("tg_media")
     .getPublicUrl(filename);
 
   return { type, url: data.publicUrl };

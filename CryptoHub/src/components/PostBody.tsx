@@ -1,4 +1,3 @@
-//Здесь лежит компонент, который рендерит тело поста из телеги
 import DOMPurify from "dompurify";
 import { toHTML } from "@telegraf/entity";
 import { normalizeEntities } from "@/utils/normalize";
