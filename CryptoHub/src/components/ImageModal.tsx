@@ -1,9 +1,5 @@
+import type { ImageModalProps } from "@/types/db";
 import { useEffect } from "react";
-
-interface ImageModalProps {
-  url: string;
-  onClose: () => void;
-}
 
 export function ImageModal({ url, onClose }: ImageModalProps) {
   useEffect(() => {
@@ -25,7 +21,7 @@ export function ImageModal({ url, onClose }: ImageModalProps) {
       />
       <button
         onClick={onClose}
-        className="absolute top-5 right-5 text-white/80 hover:text-white text-2xl font-bold"
+        className="absolute text-2xl font-bold top-5 right-5 text-white/80 hover:text-white"
       >
         ✕
       </button>

@@ -30,5 +30,17 @@ export type TelegramPost = {
     text_caption: string | null;
     text_entities: MessageEntity[] | MessageEntity | null;
     media: { type: string; url: string }[] | null;
+    tg_author_id: number | null;
     created_at: string | null;
 };
+
+export type TgAuthor = {
+    name: string | null;
+    link: string | null;
+    tg_author_id: number | null;
+};
+
+export interface ImageModalProps {
+    url: string;
+    onClose: () => void;
+}

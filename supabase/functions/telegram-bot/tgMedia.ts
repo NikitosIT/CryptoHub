@@ -7,7 +7,16 @@ const supabase = createClient(
 
 const TG_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN")!;
 
-const MEDIA_KEYS = ["photo", "video"] as const;
+const MEDIA_KEYS = [
+  "photo",
+  "video",
+  "animation", // GIF
+  "document", // файлы (PDF, ZIP и т.д.)
+  "audio", // музыка
+  "voice", // голосовые
+  "video_note", // кружочки
+  "sticker", // стикеры
+] as const;
 
 async function uploadTelegramFileToSupabase(file_id: string, type: string) {
   const res = await fetch(

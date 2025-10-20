@@ -1,54 +1,63 @@
-import { useEffect, useRef, useState } from "react";
 import { useInfinitePosts } from "@/utils/TestLazyLoad";
 import { FeedSkeleton } from "@/components/FeedSkeleton";
 import { TelegramCaption } from "./PostBody";
+import { useFilters } from "@/store/useFilters";
+import Tokens from "./FilterByToken";
+import { useTokens } from "@/store/useTokens";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useScrollTop } from "@/hooks/useScrollTop";
+import Authors from "./FilterByAuthors";
 
 export function PostFeed() {
-  const [showScrollTop, setShowScrollTop] = useState(false);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfinitePosts();
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useInfiniteScroll({ hasNextPage, fetchNextPage });
+  const { show: showScrollTop, scrollToTop } = useScrollTop();
 
+  const { selectedAuthorId } = useFilters();
+  const { selectedToken } = useTokens();
   const posts = data?.pages.flat() ?? [];
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const filteredPosts = posts.filter((p) => {
+    const matchAuthor =
+      !selectedAuthorId || p.tg_author_id === selectedAuthorId;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 400) setShowScrollTop(true);
-      else setShowScrollTop(false);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const matchToken =
+      !selectedToken || p.crypto_tokens?.includes(selectedToken.value);
 
-  useEffect(() => {
-    if (!hasNextPage) return;
-    const el = observerRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { rootMargin: "400px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+    return matchAuthor && matchToken;
+  });
 
   if (isLoading) return <FeedSkeleton />;
 
   return (
     <div className="space-y-4">
-      {posts.map((post) => (
-        <div key={post.id} className="p-4 border shadow-sm rounded-xl">
-          <TelegramCaption post={post} />
+      <Authors />
+      <Tokens />
+
+      {filteredPosts.map((post, idx) => (
+        <div key={post.id}>
+          {/* Имя автора над постом */}
+          <div className="mb-2 ml-1 ">
+            <a
+              href={post.author_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-base font-semibold text-white transition-colors duration-200 ml-95 hover:text-blue-400"
+            >
+              {post.author_name}
+            </a>
+          </div>
+
+          {/* Сам пост */}
+          <div className="p-4 border shadow-sm rounded-xl">
+            <TelegramCaption post={post} />
+          </div>
+
+          {/* Разделительная линия между постами */}
+          {idx < filteredPosts.length - 1 && (
+            <hr className="w-full mx-auto my-8 border-gray-800" />
+          )}
         </div>
       ))}
 
