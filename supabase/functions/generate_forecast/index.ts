@@ -108,7 +108,7 @@ Sentiment: positive | neutral | negative
   ).trim();
 
   // --- сохраняем в базу ---
-  const { error } = await supabase.from("token_forecasts").insert([
+  const { error: insertError } = await supabase.from("token_forecasts").insert([
     {
       token_name,
       forecast_text: forecast,
@@ -117,22 +117,28 @@ Sentiment: positive | neutral | negative
       status: "pending",
     },
   ]);
+  if (insertError) {
+    console.error(
+      `❌ Ошибка вставки прогноза для ${token_name}:`,
+      insertError.message,
+    );
+    throw insertError;
+  }
 
-  if (error) throw error;
   console.log(`✅ ${token_name} — готов (${sentiment})`);
 }
 type ForecastRequest = { token_name?: string };
 // --- 🔹 основной обработчик ---
 Deno.serve(async (req) => {
   try {
-    let json = {};
+    let json: ForecastRequest | null = null;
     try {
       json = await req.json();
     } catch (_) {
       // нет тела — значит cron
     }
 
-    const token_name = (json as any)?.token_name;
+    const token_name = json?.token_name;
 
     if (token_name) {
       // 🔹 Ручной вызов

@@ -1,7 +1,7 @@
 import { createClient } from "supabase";
-import { extractTokensLLM } from "./extractTokens.ts";
-import { ExtendedMessage, Message, Update } from "./types.ts";
-import { collectMedia } from "./tgMedia.ts";
+import { extractTokensLLM } from "../shared/extractTokens.ts";
+import { ExtendedMessage, Message, Update } from "../shared/types.ts";
+import { collectMedia } from "../shared/tgMedia.ts";
 
 const SUPABASE_URL = Deno.env.get("MY_SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("MY_SUPABASE_SERVICE_ROLE_KEY")!;
