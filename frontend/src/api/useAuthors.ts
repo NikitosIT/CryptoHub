@@ -15,5 +15,7 @@ export const useAuthors = () => {
                 id: author.tg_author_id,
             }));
         },
+        staleTime: Infinity,
+        gcTime: Infinity,
     });
 };

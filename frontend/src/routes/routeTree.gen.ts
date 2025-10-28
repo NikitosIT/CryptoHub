@@ -9,24 +9,61 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./__root";
+import { Route as ProfileRouteImport } from "./profile";
 import { Route as IndexRouteImport } from "./index";
+import { Route as ProfileMainRouteImport } from "./profile/main";
+import { Route as ProfileLikespostsRouteImport } from "./profile/likesposts";
+import { Route as ProfileFavoritevideosRouteImport } from "./profile/favoritevideos";
+import { Route as ProfileEditnameRouteImport } from "./profile/editname";
+import { Route as ProfileCryptohuberRouteImport } from "./profile/cryptohuber";
 import { Route as AuthVerifyRouteImport } from "./auth/verify";
-import { Route as AuthProfileRouteImport } from "./auth/profile";
+import { Route as AuthSavenicknameRouteImport } from "./auth/savenickname";
 import { Route as AuthEmailRouteImport } from "./auth/email";
+import { Route as AuthCallbackRouteImport } from "./auth/callback";
 
+const ProfileRoute = ProfileRouteImport.update({
+  id: "/profile",
+  path: "/profile",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => rootRouteImport,
+} as any);
+const ProfileMainRoute = ProfileMainRouteImport.update({
+  id: "/main",
+  path: "/main",
+  getParentRoute: () => ProfileRoute,
+} as any);
+const ProfileLikespostsRoute = ProfileLikespostsRouteImport.update({
+  id: "/likesposts",
+  path: "/likesposts",
+  getParentRoute: () => ProfileRoute,
+} as any);
+const ProfileFavoritevideosRoute = ProfileFavoritevideosRouteImport.update({
+  id: "/favoritevideos",
+  path: "/favoritevideos",
+  getParentRoute: () => ProfileRoute,
+} as any);
+const ProfileEditnameRoute = ProfileEditnameRouteImport.update({
+  id: "/editname",
+  path: "/editname",
+  getParentRoute: () => ProfileRoute,
+} as any);
+const ProfileCryptohuberRoute = ProfileCryptohuberRouteImport.update({
+  id: "/cryptohuber",
+  path: "/cryptohuber",
+  getParentRoute: () => ProfileRoute,
 } as any);
 const AuthVerifyRoute = AuthVerifyRouteImport.update({
   id: "/auth/verify",
   path: "/auth/verify",
   getParentRoute: () => rootRouteImport,
 } as any);
-const AuthProfileRoute = AuthProfileRouteImport.update({
-  id: "/auth/profile",
-  path: "/auth/profile",
+const AuthSavenicknameRoute = AuthSavenicknameRouteImport.update({
+  id: "/auth/savenickname",
+  path: "/auth/savenickname",
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthEmailRoute = AuthEmailRouteImport.update({
@@ -34,49 +71,153 @@ const AuthEmailRoute = AuthEmailRouteImport.update({
   path: "/auth/email",
   getParentRoute: () => rootRouteImport,
 } as any);
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: "/auth/callback",
+  path: "/auth/callback",
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
+  "/profile": typeof ProfileRouteWithChildren;
+  "/auth/callback": typeof AuthCallbackRoute;
   "/auth/email": typeof AuthEmailRoute;
-  "/auth/profile": typeof AuthProfileRoute;
+  "/auth/savenickname": typeof AuthSavenicknameRoute;
   "/auth/verify": typeof AuthVerifyRoute;
+  "/profile/cryptohuber": typeof ProfileCryptohuberRoute;
+  "/profile/editname": typeof ProfileEditnameRoute;
+  "/profile/favoritevideos": typeof ProfileFavoritevideosRoute;
+  "/profile/likesposts": typeof ProfileLikespostsRoute;
+  "/profile/main": typeof ProfileMainRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
+  "/profile": typeof ProfileRouteWithChildren;
+  "/auth/callback": typeof AuthCallbackRoute;
   "/auth/email": typeof AuthEmailRoute;
-  "/auth/profile": typeof AuthProfileRoute;
+  "/auth/savenickname": typeof AuthSavenicknameRoute;
   "/auth/verify": typeof AuthVerifyRoute;
+  "/profile/cryptohuber": typeof ProfileCryptohuberRoute;
+  "/profile/editname": typeof ProfileEditnameRoute;
+  "/profile/favoritevideos": typeof ProfileFavoritevideosRoute;
+  "/profile/likesposts": typeof ProfileLikespostsRoute;
+  "/profile/main": typeof ProfileMainRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
+  "/profile": typeof ProfileRouteWithChildren;
+  "/auth/callback": typeof AuthCallbackRoute;
   "/auth/email": typeof AuthEmailRoute;
-  "/auth/profile": typeof AuthProfileRoute;
+  "/auth/savenickname": typeof AuthSavenicknameRoute;
   "/auth/verify": typeof AuthVerifyRoute;
+  "/profile/cryptohuber": typeof ProfileCryptohuberRoute;
+  "/profile/editname": typeof ProfileEditnameRoute;
+  "/profile/favoritevideos": typeof ProfileFavoritevideosRoute;
+  "/profile/likesposts": typeof ProfileLikespostsRoute;
+  "/profile/main": typeof ProfileMainRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/auth/email" | "/auth/profile" | "/auth/verify";
+  fullPaths:
+    | "/"
+    | "/profile"
+    | "/auth/callback"
+    | "/auth/email"
+    | "/auth/savenickname"
+    | "/auth/verify"
+    | "/profile/cryptohuber"
+    | "/profile/editname"
+    | "/profile/favoritevideos"
+    | "/profile/likesposts"
+    | "/profile/main";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/auth/email" | "/auth/profile" | "/auth/verify";
-  id: "__root__" | "/" | "/auth/email" | "/auth/profile" | "/auth/verify";
+  to:
+    | "/"
+    | "/profile"
+    | "/auth/callback"
+    | "/auth/email"
+    | "/auth/savenickname"
+    | "/auth/verify"
+    | "/profile/cryptohuber"
+    | "/profile/editname"
+    | "/profile/favoritevideos"
+    | "/profile/likesposts"
+    | "/profile/main";
+  id:
+    | "__root__"
+    | "/"
+    | "/profile"
+    | "/auth/callback"
+    | "/auth/email"
+    | "/auth/savenickname"
+    | "/auth/verify"
+    | "/profile/cryptohuber"
+    | "/profile/editname"
+    | "/profile/favoritevideos"
+    | "/profile/likesposts"
+    | "/profile/main";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  ProfileRoute: typeof ProfileRouteWithChildren;
+  AuthCallbackRoute: typeof AuthCallbackRoute;
   AuthEmailRoute: typeof AuthEmailRoute;
-  AuthProfileRoute: typeof AuthProfileRoute;
+  AuthSavenicknameRoute: typeof AuthSavenicknameRoute;
   AuthVerifyRoute: typeof AuthVerifyRoute;
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/profile": {
+      id: "/profile";
+      path: "/profile";
+      fullPath: "/profile";
+      preLoaderRoute: typeof ProfileRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/": {
       id: "/";
       path: "/";
       fullPath: "/";
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
+    };
+    "/profile/main": {
+      id: "/profile/main";
+      path: "/main";
+      fullPath: "/profile/main";
+      preLoaderRoute: typeof ProfileMainRouteImport;
+      parentRoute: typeof ProfileRoute;
+    };
+    "/profile/likesposts": {
+      id: "/profile/likesposts";
+      path: "/likesposts";
+      fullPath: "/profile/likesposts";
+      preLoaderRoute: typeof ProfileLikespostsRouteImport;
+      parentRoute: typeof ProfileRoute;
+    };
+    "/profile/favoritevideos": {
+      id: "/profile/favoritevideos";
+      path: "/favoritevideos";
+      fullPath: "/profile/favoritevideos";
+      preLoaderRoute: typeof ProfileFavoritevideosRouteImport;
+      parentRoute: typeof ProfileRoute;
+    };
+    "/profile/editname": {
+      id: "/profile/editname";
+      path: "/editname";
+      fullPath: "/profile/editname";
+      preLoaderRoute: typeof ProfileEditnameRouteImport;
+      parentRoute: typeof ProfileRoute;
+    };
+    "/profile/cryptohuber": {
+      id: "/profile/cryptohuber";
+      path: "/cryptohuber";
+      fullPath: "/profile/cryptohuber";
+      preLoaderRoute: typeof ProfileCryptohuberRouteImport;
+      parentRoute: typeof ProfileRoute;
     };
     "/auth/verify": {
       id: "/auth/verify";
@@ -85,11 +226,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthVerifyRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/auth/profile": {
-      id: "/auth/profile";
-      path: "/auth/profile";
-      fullPath: "/auth/profile";
-      preLoaderRoute: typeof AuthProfileRouteImport;
+    "/auth/savenickname": {
+      id: "/auth/savenickname";
+      path: "/auth/savenickname";
+      fullPath: "/auth/savenickname";
+      preLoaderRoute: typeof AuthSavenicknameRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/auth/email": {
@@ -99,13 +240,42 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthEmailRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    "/auth/callback": {
+      id: "/auth/callback";
+      path: "/auth/callback";
+      fullPath: "/auth/callback";
+      preLoaderRoute: typeof AuthCallbackRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
+interface ProfileRouteChildren {
+  ProfileCryptohuberRoute: typeof ProfileCryptohuberRoute;
+  ProfileEditnameRoute: typeof ProfileEditnameRoute;
+  ProfileFavoritevideosRoute: typeof ProfileFavoritevideosRoute;
+  ProfileLikespostsRoute: typeof ProfileLikespostsRoute;
+  ProfileMainRoute: typeof ProfileMainRoute;
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileCryptohuberRoute: ProfileCryptohuberRoute,
+  ProfileEditnameRoute: ProfileEditnameRoute,
+  ProfileFavoritevideosRoute: ProfileFavoritevideosRoute,
+  ProfileLikespostsRoute: ProfileLikespostsRoute,
+  ProfileMainRoute: ProfileMainRoute,
+};
+
+const ProfileRouteWithChildren = ProfileRoute._addFileChildren(
+  ProfileRouteChildren,
+);
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProfileRoute: ProfileRouteWithChildren,
+  AuthCallbackRoute: AuthCallbackRoute,
   AuthEmailRoute: AuthEmailRoute,
-  AuthProfileRoute: AuthProfileRoute,
+  AuthSavenicknameRoute: AuthSavenicknameRoute,
   AuthVerifyRoute: AuthVerifyRoute,
 };
 export const routeTree = rootRouteImport

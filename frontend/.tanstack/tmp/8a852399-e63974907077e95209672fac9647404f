@@ -1,0 +1,6 @@
+import ProfileMain from "@/pages/auth/profile/ProfileMain";
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/profile/profile")({
+  component: ProfileMain,
+});

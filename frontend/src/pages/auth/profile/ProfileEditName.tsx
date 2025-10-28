@@ -12,9 +12,11 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import HomeRedirectIcon from "./HomeRedirect";
 
-export default function ProfilePage() {
+import BackButton from "./BackButton";
+import HomeRedirectIcon from "../HomeRedirect";
+
+export default function ProfileEditName() {
   const { user, nickname } = useUserStore();
   const { isLoading } = useProfile();
   const mutation = useUpdateNickname();
@@ -51,6 +53,7 @@ export default function ProfilePage() {
   return (
     <Container maxWidth="sm" sx={{ mt: 10 }}>
       <HomeRedirectIcon />
+      <BackButton />
       <Paper sx={{ p: 4, borderRadius: 3 }}>
         <Typography variant="h5" fontWeight={600} mb={2}>
           Привет, {nickname || user.email}

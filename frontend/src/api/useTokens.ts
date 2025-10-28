@@ -20,5 +20,7 @@ export const useTokens = () => {
                 xlink: `${X_LINK}${token.x_link}`,
             }));
         },
+        staleTime: Infinity,
+        gcTime: Infinity,
     });
 };

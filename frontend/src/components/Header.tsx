@@ -1,10 +1,14 @@
 import { useUserStore } from "@/store/useUserStore";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 function Header() {
   const { user } = useUserStore();
+  const navigate = useNavigate();
   return (
     <header className="mt-3 mb-6 text-center">
-      <h1 className="inline-block text-6xl font-bold transition-colors duration-300 cursor-pointer group">
+      <h1
+        onClick={() => navigate({ to: "/" })}
+        className="inline-block text-6xl font-bold transition-colors duration-300 cursor-pointer group"
+      >
         <span className="text-white transition-colors duration-300 group-hover:text-orange-400">
           Crypto
         </span>
@@ -25,7 +29,7 @@ function Header() {
             <li>
               <Link
                 className="text-white hover:text-blue-400"
-                to="/auth/profile"
+                to="/profile/profile"
               >
                 Profile
               </Link>

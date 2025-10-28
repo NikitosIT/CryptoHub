@@ -7,3 +7,5 @@ export function getFileTypeLabel(mime?: string) {
     if (mime.includes("text")) return "Текстовый файл";
     return "Файл";
 }
+
+/// Реаоизовать чтобы при наведение показывалась маленькая модалка с именем файла

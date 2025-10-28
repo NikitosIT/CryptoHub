@@ -5,20 +5,25 @@ import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routes/routeTree.gen";
-import { useAuthListener } from "./hooks/useAuthListener";
+import { useAuthListener } from "./api/useAuthListener";
+
 const queryClient = new QueryClient();
 const router = createRouter({ routeTree });
-function Root() {
-  // 👇 слушатель теперь на верхнем уровне
-  useAuthListener();
 
+function RootWithProviders() {
+  useAuthListener();
+  return <RouterProvider router={router} />;
+}
+
+function Root() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <RootWithProviders />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Root />

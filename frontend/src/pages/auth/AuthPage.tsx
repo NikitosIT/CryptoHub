@@ -8,41 +8,42 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { supabase } from "@/lib/supabaseClient";
-import HomeRedirectIcon from "./HomeRedirect";
 import { emailSchema } from "@/lib/validatorSchemas";
 import { useUserStore } from "@/store/useUserStore";
+import AuthGoogle from "@/pages/auth/AuthGoogle";
+import HomeRedirectIcon from "./HomeRedirect";
+import { useSendEmail } from "@/api/useSendEmail";
 
 export default function EmailAuthPage() {
   const [email, setEmail] = useState("");
-  const [, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { setEmail: setStoreEmail } = useUserStore();
   const navigate = useNavigate();
+  const { setEmail: setStoreEmail } = useUserStore();
+
+  const sendCodeMutation = useSendEmail();
 
   const sendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
     const result = emailSchema.safeParse(email);
     if (!result.success) {
       setError(result.error.issues[0].message);
       return;
     }
 
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    if (error) {
-      setError(error.message);
-      return;
+    try {
+      await sendCodeMutation.mutateAsync(email);
+      setStoreEmail(email);
+      navigate({ to: "/auth/verify" });
+      useUserStore.getState().setEmailSent(true);
+    } catch (err: any) {
+      setError(err.message);
     }
-    setStoreEmail(email);
-    setSent(true);
-
-    navigate({ to: "/auth/verify" });
   };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 10 }}>
+      <AuthGoogle />
       <HomeRedirectIcon />
       <Paper sx={{ p: 4, borderRadius: 3 }}>
         <Typography variant="h5" fontWeight={600} textAlign="center" mb={3}>
@@ -61,8 +62,8 @@ export default function EmailAuthPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            error={!!error}
-            helperText={error || ""}
+            error={!!error || sendCodeMutation.isError}
+            helperText={error || sendCodeMutation.error?.message || ""}
             fullWidth
           />
 
@@ -70,9 +71,9 @@ export default function EmailAuthPage() {
             type="submit"
             variant="contained"
             size="large"
-            disabled={!email}
+            disabled={sendCodeMutation.isPending}
           >
-            Получить код
+            {sendCodeMutation.isPending ? "Отправка..." : "Получить код"}
           </Button>
         </Box>
       </Paper>
