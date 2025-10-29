@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
 import { useUserStore } from "@/store/useUserStore";
-import { useResendCode } from "@/api/useResendCode";
+import { useResendCode } from "@/api/auth/useResendCode";
 import { useCountdown } from "@/hooks/useCountdown";
 
 export default function ResendEmailCodePage() {

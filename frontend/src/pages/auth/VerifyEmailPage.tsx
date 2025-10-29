@@ -11,7 +11,7 @@ import { useUserStore } from "@/store/useUserStore";
 import HomeRedirectIcon from "./HomeRedirect";
 import { codeSchema } from "@/lib/validatorSchemas";
 import ResendEmailCodePage from "./ResendCode";
-import { useVerifyOtp } from "@/api/useVerifyOtp";
+import { useVerifyOtp } from "@/api/auth/useVerifyOtp";
 import { useNavigate } from "@tanstack/react-router";
 
 export default function VerifyEmailPage() {

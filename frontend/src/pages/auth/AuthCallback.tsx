@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useUserStore } from "@/store/useUserStore";
-import { useCheckProfile } from "@/api/useCheckProfile";
+import { useCheckProfile } from "@/api/profile/useCheckProfile";
 import { CircularProgress, Box, Typography } from "@mui/material";
 
 export default function AuthCallback() {

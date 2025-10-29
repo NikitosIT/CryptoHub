@@ -8,10 +8,12 @@ interface UserState {
     email: string | null;
     nickname: string | null;
     isProfileLoading: boolean;
+    isEmailSent: boolean;
+    profile_logo: string | null;
     setUser: (user: User | null) => void;
     setEmail: (email: string | null) => void;
     setNickname: (nickname: string | null) => void;
-    isEmailSent: boolean;
+    setProfileLogo: (url: string | null) => void;
     setEmailSent: (value: boolean) => void;
     loadProfile: () => Promise<void>;
     logout: () => Promise<void>;
@@ -25,10 +27,12 @@ export const useUserStore = create<UserState>()(
             nickname: null,
             isProfileLoading: false,
             isEmailSent: false,
+            profile_logo: null,
             setUser: (user) => set({ user }),
             setEmail: (email) => set({ email }),
             setNickname: (nickname) => set({ nickname }),
             setEmailSent: (value: boolean) => set({ isEmailSent: value }),
+            setProfileLogo: (url) => set({ profile_logo: url }),
             loadProfile: async () => {
                 const { user, isProfileLoading } = get();
                 if (!user || isProfileLoading) return;
@@ -37,12 +41,17 @@ export const useUserStore = create<UserState>()(
                 try {
                     const { data, error } = await supabase
                         .from("profiles")
-                        .select("nickname")
+                        .select("nickname, profile_logo")
                         .eq("id", user.id)
                         .maybeSingle();
 
                     if (error) throw error;
-                    if (data?.nickname) set({ nickname: data.nickname });
+                    if (data) {
+                        set({
+                            nickname: data.nickname,
+                            profile_logo: data.profile_logo,
+                        });
+                    }
                 } catch (err) {
                     console.error("Ошибка при загрузке профиля:", err);
                 } finally {
@@ -59,6 +68,7 @@ export const useUserStore = create<UserState>()(
             name: "user-storage",
             partialize: (state) => ({
                 nickname: state.nickname,
+                profile_logo: state.profile_logo,
                 isEmailSent: state.isEmailSent,
             }),
         },

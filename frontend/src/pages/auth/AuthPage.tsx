@@ -12,7 +12,7 @@ import { emailSchema } from "@/lib/validatorSchemas";
 import { useUserStore } from "@/store/useUserStore";
 import AuthGoogle from "@/pages/auth/AuthGoogle";
 import HomeRedirectIcon from "./HomeRedirect";
-import { useSendEmail } from "@/api/useSendEmail";
+import { useSendEmail } from "@/api/auth/useSendEmail";
 
 export default function EmailAuthPage() {
   const [email, setEmail] = useState("");

@@ -1,7 +1,7 @@
 import { useUserStore } from "@/store/useUserStore";
 import { Link, useNavigate } from "@tanstack/react-router";
 function Header() {
-  const { user } = useUserStore();
+  const { user, nickname } = useUserStore();
   const navigate = useNavigate();
   return (
     <header className="mt-3 mb-6 text-center">
@@ -25,11 +25,11 @@ function Header() {
               </Link>
             </li>
           )}
-          {user && (
+          {user && nickname && (
             <li>
               <Link
                 className="text-white hover:text-blue-400"
-                to="/profile/profile"
+                to="/profile/main"
               >
                 Profile
               </Link>

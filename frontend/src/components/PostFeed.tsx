@@ -7,8 +7,10 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useScrollTop } from "@/hooks/useScrollTop";
 import Authors from "./filters/FilterByAuthors";
 import FeedSkeleton from "./FeedSkeleton";
+import { useUserLikes } from "@/api/useUserLikes";
 
 export function PostFeed() {
+  useUserLikes();
   const selectedAuthorId = useAuthorsStore((s) => s.selectedAuthorId);
   const selectedToken = useTokensStore((s) => s.selectedToken);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -29,7 +31,7 @@ export function PostFeed() {
 
       {/* Список постов */}
       <div className="max-w-2xl mx-auto space-y-8">
-        {posts.map((post, idx) => {
+        {posts.map((post) => {
           const authorLogo = `/authors/${post.tg_author_id}.jpg`;
           const hasLogo = !!post.tg_author_id;
 

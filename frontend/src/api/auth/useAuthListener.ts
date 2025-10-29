@@ -5,8 +5,9 @@ import { useUserStore } from "@/store/useUserStore";
 
 export function useAuthListener() {
     const queryClient = useQueryClient();
-    const { setUser, loadProfile, nickname, isProfileLoading } = useUserStore
-        .getState();
+    const { setUser, loadProfile, nickname, isProfileLoading, profile_logo } =
+        useUserStore
+            .getState();
 
     // 1️⃣ Получаем текущую сессию из Supabase
     const { data: session, isLoading } = useQuery({
@@ -28,10 +29,17 @@ export function useAuthListener() {
 
         setUser(nextUser);
 
-        if (nextUser && !isProfileLoading && !nickname) {
+        if (nextUser && !isProfileLoading) {
             loadProfile();
         }
-    }, [session, setUser, loadProfile, nickname, isProfileLoading]);
+    }, [
+        session,
+        setUser,
+        loadProfile,
+        nickname,
+        isProfileLoading,
+        profile_logo,
+    ]);
 
     // 3️⃣ Следим за изменениями авторизации (login / logout / refresh)
     useEffect(() => {
@@ -53,7 +61,7 @@ export function useAuthListener() {
         );
 
         return () => sub.subscription.unsubscribe();
-    }, [queryClient, setUser, loadProfile, nickname]);
+    }, [queryClient, setUser, loadProfile, nickname, profile_logo]);
 
     return { session, isLoading };
 }

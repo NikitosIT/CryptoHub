@@ -1,21 +1,27 @@
 import { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "@tanstack/react-router";
-import { useSaveNickname } from "@/api/useSaveNickname";
+
+import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
+import { nicknameSchema } from "@/lib/validatorSchemas";
 
 export default function SaveNickname() {
   const [nickname, setNickname] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const saveNickname = useSaveNickname();
+  const saveNickname = useUpdateProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
+    const result = nicknameSchema.safeParse(nickname.trim());
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
     try {
-      await saveNickname.mutateAsync(nickname);
-      navigate({ to: "/profile/main" });
+      await saveNickname.mutateAsync({ nickname: nickname });
+      navigate({ to: "/profile/main", replace: true });
     } catch (err: any) {
       setError(err.message);
     }

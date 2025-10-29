@@ -8,6 +8,9 @@ import { formatDate } from "@/utils/formatDate";
 import { sanitizeHtml } from "@/utils/sanitizeHtml";
 import { processLinks } from "@/utils/processLinks";
 import { DocumentIcon } from "./DocumentIcon";
+import LikeButton from "./LikeButton";
+import { useUserStore } from "@/store/useUserStore";
+import { useLikesStore } from "@/store/useLikesStore";
 
 export function TelegramCaption({ post }: { post: TelegramPost }) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -15,9 +18,10 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
   const caption = post.text_caption ?? "";
   const entities: MessageEntity[] = normalizeEntities(post.text_entities);
   const rawHtml = toHTML({ text: caption, entities });
-
+  const { likeCounts } = useLikesStore();
   const safeHtml = sanitizeHtml(rawHtml);
   const finalHtml = useMemo(() => processLinks(safeHtml), [safeHtml]);
+  const { user } = useUserStore();
 
   const date = formatDate(post.created_at);
   const MAX_LENGTH = 1000;
@@ -48,7 +52,11 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
             {expanded ? "Свернуть ▲" : "Читать дальше ▼"}
           </button>
         )}
-
+        <LikeButton
+          postId={post.id}
+          user={user}
+          likeCount={likeCounts[post.id] ?? post.like_count}
+        />
         {/* === Дата === */}
         {date && (
           <div className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">

@@ -8,6 +8,7 @@ import {
 import { useUserStore } from "@/store/useUserStore";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+import ProfileLogo from "./ProfileLogo";
 
 export default function ProfileMain() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export default function ProfileMain() {
           Привет, <span style={{ color: "#fb923c" }}>{nickname || "..."}</span>{" "}
           👋
         </Typography>
-
+        <ProfileLogo />
         <Typography
           variant="body2"
           sx={{ color: "#a1a1aa", mb: 3, lineHeight: 1.5 }}

@@ -33,6 +33,7 @@ export type TelegramPost = {
         | { type: string; url: string; file_name: string; mime_type: string }[]
         | null;
     tg_author_id: number | null;
+    like_count: string | null;
     created_at: string | null;
 };
 
@@ -51,3 +52,18 @@ export type MediaGridProps = {
     media: TelegramPost["media"];
     onPreview?: (url: string | null) => void;
 };
+
+export interface User {
+    id: string;
+    email?: string;
+}
+
+export interface LikeResponse {
+    liked: boolean;
+}
+
+export interface LikeButtonProps {
+    postId: number;
+    user: User | null;
+    likeCount: number | null;
+}

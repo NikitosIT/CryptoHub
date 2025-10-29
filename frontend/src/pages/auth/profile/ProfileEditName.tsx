@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useUserStore } from "@/store/useUserStore";
-import { useProfile } from "@/api/useProfile";
-import { useUpdateNickname } from "@/api/useUpdateNickname";
+import { useProfile } from "@/api/profile/useProfile";
+
 import {
   CircularProgress,
   Typography,
@@ -15,11 +15,13 @@ import {
 
 import BackButton from "./BackButton";
 import HomeRedirectIcon from "../HomeRedirect";
+import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
+import { nicknameSchema } from "@/lib/validatorSchemas";
 
 export default function ProfileEditName() {
   const { user, nickname } = useUserStore();
   const { isLoading } = useProfile();
-  const mutation = useUpdateNickname();
+  const mutation = useUpdateProfile();
   const navigate = useNavigate();
 
   const [newNick, setNewNick] = useState("");
@@ -43,11 +45,18 @@ export default function ProfileEditName() {
     e.preventDefault();
     setMessage(null);
     setError(null);
-
-    mutation.mutate(newNick, {
-      onSuccess: () => setMessage("✅ Ник успешно обновлён!"),
-      onError: (err: any) => setError(err.message),
-    });
+    const result = nicknameSchema.safeParse(newNick.trim());
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+    mutation.mutate(
+      { nickname: newNick },
+      {
+        onSuccess: () => setMessage("✅ Ник успешно обновлён!"),
+        onError: (err: any) => setError(err.message),
+      }
+    );
   };
 
   return (

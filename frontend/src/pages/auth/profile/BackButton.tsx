@@ -8,7 +8,7 @@ export default function BackButton() {
     <div className="flex items-center">
       <Tooltip title="Назад" arrow>
         <IconButton
-          onClick={() => navigate({ to: "/profile/profile" })} // возвращает на предыдущую страницу
+          onClick={() => navigate({ to: "/profile/main" })} // возвращает на предыдущую страницу
           sx={{
             color: "#fb923c",
             backgroundColor: "rgba(251,146,60,0.08)",
