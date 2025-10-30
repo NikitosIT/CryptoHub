@@ -35,7 +35,8 @@ export type TelegramPost = {
     tg_author_id: number | null;
     author_name: string;
     author_link: string;
-    like_count: string | null;
+    like_count: number | null;
+    dislike_count: number | null;
     created_at: string | null;
 };
 
@@ -59,13 +60,12 @@ export interface User {
     id: string;
     email?: string;
 }
-
 export interface LikeResponse {
     liked: boolean;
 }
-
-export interface LikeButtonProps {
+export interface ReactionButtonProps {
     postId: number;
     user: User | null;
-    likeCount: number | null;
+    likeCount?: number | null;
+    dislikeCount?: number | null;
 }

@@ -1,5 +1,4 @@
 import { useInfinitePosts } from "@/api/useInfinitePosts";
-import { useUserLikes } from "@/api/useUserLikes";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useScrollTop } from "@/hooks/useScrollTop";
 import FeedSkeleton from "./FeedSkeleton";
@@ -16,7 +15,6 @@ export default function PostList({
   authorId,
   tokenName,
 }: PostListProps) {
-  useUserLikes();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfinitePosts({
       authorId,

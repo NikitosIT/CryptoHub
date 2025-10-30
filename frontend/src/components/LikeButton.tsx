@@ -1,36 +1,41 @@
-import { useState } from "react";
+import { toggleReactions } from "@/lib/api-likes";
+import { useDislikesStore } from "@/store/useDislikeStore";
 import { useLikesStore } from "@/store/useLikesStore";
-import { toggleLike } from "@/lib/api-likes";
-import type { LikeButtonProps } from "@/types/db";
+import type { ReactionButtonProps } from "@/types/db";
+import { useState } from "react";
 
-export default function LikeButton({
-  postId,
-  user,
-  likeCount: initialCount,
-}: LikeButtonProps) {
-  const { likes, toggleLikeLocal } = useLikesStore();
-  const [loading] = useState(false);
+export default function LikeButton({ postId, user }: ReactionButtonProps) {
+  const { likes, toggleLikeLocal, removeLike, isLiked } = useLikesStore();
+  const { isDisliked, toggleDislikeLocal, removeDislike } = useDislikesStore();
 
-  const [likeCount, setLikeCount] = useState<number>(initialCount ?? 0);
-
-  const isLiked = likes.some((l) => l.post_id === postId);
+  const [loading, setLoading] = useState(false);
+  const liked = isLiked(postId);
+  const likeCount = likes.filter((l) => l.post_id === postId).length;
 
   const handleLike = async () => {
     if (!user) {
-      alert("🔐 Только зарегистрированные пользователи могут ставить лайки!");
+      alert("👤 Только зарегистрированные пользователи могут ставить лайки");
       return;
     }
 
-    toggleLikeLocal(postId, !isLiked);
-    setLikeCount((prev) => Math.max(0, prev + (isLiked ? -1 : 1)));
+    toggleLikeLocal(postId, !liked);
+
+    if (isDisliked(postId)) {
+      toggleDislikeLocal(postId, false);
+      removeDislike(postId);
+    }
 
     try {
-      const res = await toggleLike(postId);
-      setLikeCount((prev) => Math.max(0, prev + (res.liked ? 0 : 0)));
+      setLoading(true);
+      await toggleReactions(postId, "like", user.id);
+
+      if (liked) removeLike(postId);
     } catch (err) {
-      console.error("Ошибка toggleLike:", err);
-      toggleLikeLocal(postId, isLiked);
-      setLikeCount((prev) => Math.max(0, prev + (isLiked ? 1 : -1)));
+      console.error("Ошибка toggleReaction:", err);
+
+      toggleLikeLocal(postId, liked);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,9 +43,9 @@ export default function LikeButton({
     <button
       onClick={handleLike}
       disabled={loading}
-      className={`transition-all ${isLiked ? "text-red-500" : "text-gray-400"}`}
+      className={`transition-colors duration-200 ${liked ? "text-red-500" : "text-gray-400"}`}
     >
-      ❤️ {isNaN(likeCount) ? 0 : likeCount}
+      ❤️ {likeCount}
     </button>
   );
 }
