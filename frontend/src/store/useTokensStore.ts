@@ -18,3 +18,15 @@ export const useTokensStore = create<TokensState>()(
         },
     ),
 );
+
+export const useLikedTokensStore = create<TokensState>()(
+    persist(
+        (set) => ({
+            selectedToken: null,
+            setSelectedToken: (token) => set({ selectedToken: token }),
+        }),
+        {
+            name: "tokens-liked-storage",
+        },
+    ),
+);

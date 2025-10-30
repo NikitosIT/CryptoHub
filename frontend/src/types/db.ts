@@ -33,6 +33,8 @@ export type TelegramPost = {
         | { type: string; url: string; file_name: string; mime_type: string }[]
         | null;
     tg_author_id: number | null;
+    author_name: string;
+    author_link: string;
     like_count: string | null;
     created_at: string | null;
 };

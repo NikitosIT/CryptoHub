@@ -1,42 +1,30 @@
-import { useLikedPosts } from "@/api/useLikedPosts";
-import LikeButton from "@/components/LikeButton";
-import { useLikesStore } from "@/store/useLikesStore";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserLikes } from "@/api/useUserLikes";
+import Authors from "@/components/filters/FilterByAuthors";
+import Tokens from "@/components/filters/FilterByToken";
+import PostList from "@/components/PostSettings";
+import { useLikedFiltersStore } from "@/store/useAuthorsStore";
+import { useSession } from "@supabase/auth-helpers-react";
 
-export default function LikedVideos() {
-  const { data: likedPosts, isLoading } = useLikedPosts();
-  const { user } = useUserStore();
-  const { likeCounts } = useLikesStore();
-  if (isLoading) return <p>loading...</p>;
+export default function ProfileLikedPosts() {
+  useUserLikes();
+  const session = useSession();
 
-  if (!likedPosts?.length)
-    return (
-      <p className="mt-8 text-center text-gray-400">
-        Пока нет лайкнутых постов 💔
-      </p>
-    );
+  const { selectedAuthorId, selectedToken } = useLikedFiltersStore();
 
   return (
-    <div className="flex flex-col gap-6 p-4">
-      {likedPosts.map((post: any) => (
-        <div key={post.id} className="pb-4 border-b border-gray-700">
-          <p className="font-semibold">{post.text_caption}</p>
-          {post.media?.length > 0 && (
-            <img
-              src={post.media[0]?.url}
-              alt=""
-              className="w-full mt-3 rounded-xl"
-            />
-          )}
-          <p className="mt-2 text-sm text-gray-400">
-            <LikeButton
-              postId={post.id}
-              user={user}
-              likeCount={likeCounts[post.id] ?? post.like_count}
-            />
-          </p>
-        </div>
-      ))}
+    <div className="space-y-6">
+      {/* Фильтры */}
+      <div className="flex flex-col items-center justify-center w-full gap-6 px-4 pt-4 pb-6 bg-black md:flex-row md:items-center md:gap-10 md:px-10">
+        <Authors />
+        <Tokens />
+      </div>
+
+      <PostList
+        mode="liked"
+        userId={session?.user.id ?? null}
+        authorId={selectedAuthorId}
+        tokenName={selectedToken?.value ?? null}
+      />
     </div>
   );
 }

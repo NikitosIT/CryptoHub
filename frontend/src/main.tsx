@@ -6,7 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routes/routeTree.gen";
 import { useAuthListener } from "./api/auth/useAuthListener";
-
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { supabase } from "./lib/supabaseClient";
 const queryClient = new QueryClient();
 const router = createRouter({ routeTree });
 
@@ -26,6 +27,8 @@ function Root() {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Root />
+    <SessionContextProvider supabaseClient={supabase}>
+      <Root />
+    </SessionContextProvider>
   </StrictMode>
 );

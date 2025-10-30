@@ -1,4 +1,4 @@
-import { PostFeed } from "./components/PostFeed";
+import { PostFeed } from "./components/PostsTelegram";
 
 function App() {
   return <PostFeed />;
