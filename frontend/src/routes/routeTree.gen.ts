@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from "./__root";
 import { Route as ProfileRouteImport } from "./profile";
 import { Route as IndexRouteImport } from "./index";
+import { Route as ProfileUnlikedpostsRouteImport } from "./profile/unlikedposts";
 import { Route as ProfileMainRouteImport } from "./profile/main";
 import { Route as ProfileLikespostsRouteImport } from "./profile/likesposts";
 import { Route as ProfileFavoritevideosRouteImport } from "./profile/favoritevideos";
@@ -30,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => rootRouteImport,
+} as any);
+const ProfileUnlikedpostsRoute = ProfileUnlikedpostsRouteImport.update({
+  id: "/unlikedposts",
+  path: "/unlikedposts",
+  getParentRoute: () => ProfileRoute,
 } as any);
 const ProfileMainRoute = ProfileMainRouteImport.update({
   id: "/main",
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   "/profile/favoritevideos": typeof ProfileFavoritevideosRoute;
   "/profile/likesposts": typeof ProfileLikespostsRoute;
   "/profile/main": typeof ProfileMainRoute;
+  "/profile/unlikedposts": typeof ProfileUnlikedpostsRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   "/profile/favoritevideos": typeof ProfileFavoritevideosRoute;
   "/profile/likesposts": typeof ProfileLikespostsRoute;
   "/profile/main": typeof ProfileMainRoute;
+  "/profile/unlikedposts": typeof ProfileUnlikedpostsRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   "/profile/favoritevideos": typeof ProfileFavoritevideosRoute;
   "/profile/likesposts": typeof ProfileLikespostsRoute;
   "/profile/main": typeof ProfileMainRoute;
+  "/profile/unlikedposts": typeof ProfileUnlikedpostsRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
@@ -130,7 +139,8 @@ export interface FileRouteTypes {
     | "/profile/editname"
     | "/profile/favoritevideos"
     | "/profile/likesposts"
-    | "/profile/main";
+    | "/profile/main"
+    | "/profile/unlikedposts";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
@@ -143,7 +153,8 @@ export interface FileRouteTypes {
     | "/profile/editname"
     | "/profile/favoritevideos"
     | "/profile/likesposts"
-    | "/profile/main";
+    | "/profile/main"
+    | "/profile/unlikedposts";
   id:
     | "__root__"
     | "/"
@@ -156,7 +167,8 @@ export interface FileRouteTypes {
     | "/profile/editname"
     | "/profile/favoritevideos"
     | "/profile/likesposts"
-    | "/profile/main";
+    | "/profile/main"
+    | "/profile/unlikedposts";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -183,6 +195,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/";
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
+    };
+    "/profile/unlikedposts": {
+      id: "/profile/unlikedposts";
+      path: "/unlikedposts";
+      fullPath: "/profile/unlikedposts";
+      preLoaderRoute: typeof ProfileUnlikedpostsRouteImport;
+      parentRoute: typeof ProfileRoute;
     };
     "/profile/main": {
       id: "/profile/main";
@@ -256,6 +275,7 @@ interface ProfileRouteChildren {
   ProfileFavoritevideosRoute: typeof ProfileFavoritevideosRoute;
   ProfileLikespostsRoute: typeof ProfileLikespostsRoute;
   ProfileMainRoute: typeof ProfileMainRoute;
+  ProfileUnlikedpostsRoute: typeof ProfileUnlikedpostsRoute;
 }
 
 const ProfileRouteChildren: ProfileRouteChildren = {
@@ -264,6 +284,7 @@ const ProfileRouteChildren: ProfileRouteChildren = {
   ProfileFavoritevideosRoute: ProfileFavoritevideosRoute,
   ProfileLikespostsRoute: ProfileLikespostsRoute,
   ProfileMainRoute: ProfileMainRoute,
+  ProfileUnlikedpostsRoute: ProfileUnlikedpostsRoute,
 };
 
 const ProfileRouteWithChildren = ProfileRoute._addFileChildren(

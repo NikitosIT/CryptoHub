@@ -4,7 +4,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { useResendCode } from "@/api/auth/useResendCode";
 import { useCountdown } from "@/hooks/useCountdown";
 
-export default function ResendEmailCodePage() {
+export default function ResendEmailCode() {
   const { email } = useUserStore();
   const resendCode = useResendCode();
   const [message, setMessage] = useState<string | null>(null);
@@ -53,3 +53,5 @@ export default function ResendEmailCodePage() {
     </div>
   );
 }
+
+///фйал

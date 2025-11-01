@@ -37,6 +37,8 @@ export type TelegramPost = {
     author_link: string;
     like_count: number | null;
     dislike_count: number | null;
+    reaction_type: "like" | "dislike" | null;
+    user_reaction: "like" | "dislike" | null;
     created_at: string | null;
 };
 
@@ -59,6 +61,7 @@ export type MediaGridProps = {
 export interface User {
     id: string;
     email?: string;
+    avatar_url?: string;
 }
 export interface LikeResponse {
     liked: boolean;

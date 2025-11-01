@@ -25,7 +25,7 @@ export const useUpdateProfile = () => {
                     },
                     body: JSON.stringify({
                         user_id: user.id,
-                        ...payload, // 👈 отправляем только то, что реально передали
+                        ...payload,
                     }),
                 },
             );
@@ -46,3 +46,5 @@ export const useUpdateProfile = () => {
 
     return mutation;
 };
+
+//Не вынести ли запрос в lib

@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useTokensStore } from "@/store/useTokensStore";
+import { useFiltersStore } from "@/store/useFiltersStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePredictionPrice } from "@/api/usePredictionPrice";
+import { useTokensAiForecasts } from "@/api/useTokensAiForecasts";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 
-export default function PredictionPrice() {
-  const { selectedToken } = useTokensStore();
+export default function TokensAiForecasts() {
+  const { selectedToken } = useFiltersStore();
   const [open, setOpen] = useState(false);
 
-  const { data: forecast, isLoading, error, refetch } = usePredictionPrice();
+  const { data: forecast, isLoading, error, refetch } = useTokensAiForecasts();
   if (error) console.error("Ошибка загрузки прогноза", error.message);
 
   const handleOpen = async () => {
@@ -96,3 +96,5 @@ export default function PredictionPrice() {
     </>
   );
 }
+
+//TokensAIForecast

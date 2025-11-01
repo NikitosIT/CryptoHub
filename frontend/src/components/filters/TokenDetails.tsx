@@ -1,7 +1,7 @@
 import React from "react";
-import PredictionPrice from "../PridictionPrice";
 import NoPostsMessage from "@/components/NoPostsMessage";
 import type { Token } from "@/types/TokenAndAuthorTypes";
+import TokensAiForecasts from "../TokensAiForecasts";
 
 interface TokenDetailsProps {
   selectedToken: Token;
@@ -84,7 +84,7 @@ export const TokenDetails: React.FC<TokenDetailsProps> = ({
         )}
 
         {/*  Прогноз цены */}
-        <PredictionPrice />
+        <TokensAiForecasts />
       </div>
 
       {/* 🔹 Если нет постов про этот токен */}

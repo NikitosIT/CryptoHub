@@ -8,7 +8,21 @@ interface AuthorsState {
     setSelectedToken: (token: Token | null) => void;
 }
 
-export const useAuthorsStore = create<AuthorsState>()(
+export const useLikedFiltersStore = create<AuthorsState>()(
+    persist(
+        (set) => ({
+            selectedAuthorId: null,
+            selectedToken: null,
+            setSelectedAuthorId: (id) => set({ selectedAuthorId: id }),
+            setSelectedToken: (token) => set({ selectedToken: token }),
+        }),
+        {
+            name: "filters-liked-storage",
+        },
+    ),
+);
+
+export const useFiltersStore = create<AuthorsState>()(
     persist(
         (set) => ({
             selectedAuthorId: null,
@@ -22,7 +36,7 @@ export const useAuthorsStore = create<AuthorsState>()(
     ),
 );
 
-export const useLikedFiltersStore = create<AuthorsState>()(
+export const useUnlikedFiltersStore = create<AuthorsState>()(
     persist(
         (set) => ({
             selectedAuthorId: null,

@@ -20,3 +20,5 @@ export const nicknameSchema = z
         (val) => /[a-zA-Z]/.test(val),
         "Никнейм должен содержать хотя бы одну букву",
     );
+
+//файл понятнее

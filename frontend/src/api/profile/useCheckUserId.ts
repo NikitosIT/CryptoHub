@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabaseClient";
 
-export const useCheckProfile = () => {
+export const useCheckUserId = () => {
     return useMutation({
         mutationFn: async (userId: string) => {
             const { data, error } = await supabase
@@ -15,3 +15,4 @@ export const useCheckProfile = () => {
         },
     });
 };
+///Более понятнфе названия

@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useUserStore } from "@/store/useUserStore";
-import { useProfile } from "@/api/profile/useProfile";
 
 import {
-  CircularProgress,
   Typography,
   Container,
   Paper,
@@ -14,27 +12,20 @@ import {
 } from "@mui/material";
 
 import BackButton from "./BackButton";
-import HomeRedirectIcon from "../HomeRedirect";
+
 import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
 import { nicknameSchema } from "@/lib/validatorSchemas";
+import HomeRedirectIcon from "../auth/HomeRedirect";
 
 export default function ProfileEditName() {
   const { user, nickname } = useUserStore();
-  const { isLoading } = useProfile();
+
   const mutation = useUpdateProfile();
   const navigate = useNavigate();
 
   const [newNick, setNewNick] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  if (isLoading) {
-    return (
-      <Container sx={{ mt: 10, display: "flex", justifyContent: "center" }}>
-        <CircularProgress />
-      </Container>
-    );
-  }
 
   if (!user) {
     navigate({ to: "/auth/email" });

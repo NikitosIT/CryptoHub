@@ -60,3 +60,5 @@ export function useCountdown(
 
     return { timeLeft, isActive, start, stop, reset };
 }
+
+///Пересмотреть возможно логика легче

@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { useRoutesProtected } from "@/hooks/useRoutesProtected";
 
 export const Route = createFileRoute("/profile")({
   component: () => {
-    useAuthGuard({ requireAuth: true });
+    useRoutesProtected({ requireAuth: true });
 
     return <Outlet />;
   },

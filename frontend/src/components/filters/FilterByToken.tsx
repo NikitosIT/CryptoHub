@@ -1,13 +1,13 @@
-import { useTokensStore } from "@/store/useTokensStore";
-import { useTokens } from "@/api/useTokens";
 import SelectFilter from "./CustomSelectFilter";
 import type { Token } from "@/types/TokenAndAuthorTypes";
 import FilterSkeleton from "./FilterSkeleton";
 import { TokenDetails } from "./TokenDetails";
+import { useFilterTokens } from "@/api/useFilterTokens";
+import { useFiltersStore } from "@/store/useFiltersStore";
 
-export default function Tokens() {
-  const { selectedToken, setSelectedToken } = useTokensStore();
-  const { data: tokens, isLoading, error } = useTokens();
+export default function FilterTokens() {
+  const { selectedToken, setSelectedToken } = useFiltersStore();
+  const { data: tokens, isLoading, error } = useFilterTokens();
 
   if (isLoading) return <FilterSkeleton />;
   if (error) return <p className="text-red-500">Ошибка: {error.message}</p>;
@@ -31,3 +31,5 @@ export default function Tokens() {
     </div>
   );
 }
+
+//FilterToken

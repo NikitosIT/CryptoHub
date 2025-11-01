@@ -11,7 +11,7 @@ interface GuardOptions {
     redirectTo?: string; // кастомный редирект
 }
 
-export function useAuthGuard({
+export function useRoutesProtected({
     requireAuth = false,
     requireNoAuth = false,
     requireVerifiedEmail = false,
@@ -59,3 +59,5 @@ export function useAuthGuard({
         navigate,
     ]);
 }
+
+//useRoutesProtected or useRoutesSecurity

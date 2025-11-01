@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabaseClient";
 import type { Author } from "@/types/TokenAndAuthorTypes";
 import { useQuery } from "@tanstack/react-query";
 
-export const useAuthors = () => {
+export const useFilterAuthors = () => {
     return useQuery<Author[]>({
         queryKey: ["authors"],
         queryFn: async () => {
@@ -19,3 +19,5 @@ export const useAuthors = () => {
         gcTime: Infinity,
     });
 };
+
+//useFilterAuuthors

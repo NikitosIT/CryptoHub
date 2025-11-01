@@ -127,7 +127,25 @@ export default function ProfileMain() {
             </Typography>
           </ListItemButton>
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
-
+          {/* Дизлайк видео */}
+          <ListItemButton
+            sx={{
+              justifyContent: "center",
+              py: 1.2,
+              borderRadius: "8px",
+              transition: "0.25s",
+              "&:hover": {
+                backgroundColor: "rgba(251,146,60,0.1)",
+                color: "#fb923c",
+              },
+            }}
+            onClick={() => navigate({ to: "/profile/unlikedposts" })}
+          >
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: 500 }}>
+              Плохие видео
+            </Typography>
+          </ListItemButton>
+          <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
           {/* Избранные видео */}
           <ListItemButton
             sx={{

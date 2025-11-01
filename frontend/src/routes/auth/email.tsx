@@ -1,10 +1,12 @@
-import { useAuthGuard } from "@/hooks/useAuthGuard";
-import EmailAuthPage from "@/pages/auth/AuthPage";
+import { useRoutesProtected } from "@/hooks/useRoutesProtected";
+import EmailAuth from "@/pages/auth/EmaulAuth";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/email")({
   component: () => {
-    useAuthGuard({ requireNoAuth: true });
-    return <EmailAuthPage />;
+    useRoutesProtected({ requireNoAuth: true });
+    return <EmailAuth />;
   },
 });
+
+//auth/login

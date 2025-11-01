@@ -91,8 +91,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 5️⃣ Проверка 14 дней только при смене ника
-
     // 6️⃣ Обновляем только те поля, что переданы
     const updates: Record<string, any> = {};
     if (nickname) {

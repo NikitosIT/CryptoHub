@@ -8,9 +8,8 @@ import { formatDate } from "@/utils/formatDate";
 import { sanitizeHtml } from "@/utils/sanitizeHtml";
 import { processLinks } from "@/utils/processLinks";
 import { DocumentIcon } from "./DocumentIcon";
-import LikeButton from "./LikeButton";
 import { useUserStore } from "@/store/useUserStore";
-import DislikeButton from "./Dislike";
+import { ReactionButton } from "./ReactionButton";
 
 export function TelegramCaption({ post }: { post: TelegramPost }) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -51,25 +50,8 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
             {expanded ? "Свернуть ▲" : "Читать дальше ▼"}
           </button>
         )}
-        <div className="flex items-center gap-4 mt-3">
-          <LikeButton
-            postId={post.id}
-            user={user}
-            likeCount={Number(post.like_count) || 0}
-          />
 
-          <DislikeButton
-            postId={post.id}
-            user={user}
-            dislikeCount={Number(post.dislike_count) || 0}
-          />
-        </div>
-
-        {/* <LikeButton
-          postId={post.id}
-          user={user}
-          likeCount={likeCounts[post.id] ?? post.like_count}
-        /> */}
+        <ReactionButton post={post} user={user} />
 
         {/* === Дата === */}
         {date && (
@@ -86,6 +68,7 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
     </div>
   );
 }
+//Пересмотреть название
 
 function MediaGrid({ media, onPreview }: MediaGridProps) {
   const [, setPreview] = useState<string | null>(null);

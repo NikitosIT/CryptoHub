@@ -1,9 +1,9 @@
 import { supabase } from "@/lib/supabaseClient";
-import { useTokensStore } from "@/store/useTokensStore";
+import { useFiltersStore } from "@/store/useFiltersStore";
 import { useQuery } from "@tanstack/react-query";
 
-export function usePredictionPrice() {
-    const { selectedToken } = useTokensStore();
+export function useTokensAiForecasts() {
+    const { selectedToken } = useFiltersStore();
     return useQuery({
         queryKey: ["forecast", selectedToken?.label],
         enabled: false,
@@ -24,3 +24,5 @@ export function usePredictionPrice() {
         },
     });
 }
+
+//useTokensAiForecasts

@@ -14,7 +14,7 @@ import AuthGoogle from "@/pages/auth/AuthGoogle";
 import HomeRedirectIcon from "./HomeRedirect";
 import { useSendEmail } from "@/api/auth/useSendEmail";
 
-export default function EmailAuthPage() {
+export default function EmailAuth() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -80,3 +80,5 @@ export default function EmailAuthPage() {
     </Container>
   );
 }
+
+//AuthWithEmail

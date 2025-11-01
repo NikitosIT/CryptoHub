@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useUserStore } from "@/store/useUserStore";
-import { useCheckProfile } from "@/api/profile/useCheckProfile";
+import { useCheckUserId } from "@/api/profile/useCheckUserId";
 import { CircularProgress, Box, Typography } from "@mui/material";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
   const { user, setNickname } = useUserStore();
-  const checkProfile = useCheckProfile();
+  const checkProfile = useCheckUserId();
 
   useEffect(() => {
     const handleRedirect = async () => {

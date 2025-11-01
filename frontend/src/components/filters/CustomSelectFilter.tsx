@@ -61,7 +61,7 @@ export default function SelectFilter<
             {/* === Авторы === */}
 
             {isAuthorFilter && (
-              <div className="relative flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-[#121212]">
+              <div className="relative flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-[#121212] shrink-0">
                 <img
                   src={`${authorBase}.jpg`}
                   alt={option.label}
@@ -74,7 +74,7 @@ export default function SelectFilter<
             )}
 
             {/* === Имя === */}
-            <span className="text-sm font-medium text-white truncate transition-colors duration-200 hover:text-blue-400">
+            <span className="text-sm font-medium text-white truncate transition-colors duration-200 hover:text-blue-400 max-w-[150px]">
               {option.label}
             </span>
           </li>

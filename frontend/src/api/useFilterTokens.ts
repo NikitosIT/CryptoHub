@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 import type { Token } from "@/types/TokenAndAuthorTypes";
 import { useQuery } from "@tanstack/react-query";
 
-export const useTokens = () => {
+export const useFilterTokens = () => {
     return useQuery<Token[]>({
         queryKey: ["cryptotokens"],
         queryFn: async () => {
@@ -24,3 +24,5 @@ export const useTokens = () => {
         gcTime: Infinity,
     });
 };
+
+//useTokensFilter

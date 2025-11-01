@@ -1,6 +1,8 @@
-import ProfileLikedPosts from "@/pages/auth/profile/ProfileLikedPosts";
+import ProfileLikedPosts from "@/pages/profile/ProfileLikedPosts";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/profile/likesposts")({
   component: ProfileLikedPosts,
 });
+
+//liked

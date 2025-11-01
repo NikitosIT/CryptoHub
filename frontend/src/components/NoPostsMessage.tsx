@@ -1,7 +1,7 @@
-import { useInfinitePosts } from "@/api/useInfinitePosts";
+import { useTelegramPosts } from "@/api/useTelegramPosts";
 
 export default function NoPostsMessage({ tokenName }: { tokenName: string }) {
-  const { data, isLoading } = useInfinitePosts(null, tokenName);
+  const { data, isLoading } = useTelegramPosts({ tokenName });
   if (isLoading) return null;
   const hasPosts = data?.pages?.some((page) => page.length > 0);
   if (!hasPosts)

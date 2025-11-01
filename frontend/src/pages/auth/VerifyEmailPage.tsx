@@ -10,14 +10,14 @@ import {
 import { useUserStore } from "@/store/useUserStore";
 import HomeRedirectIcon from "./HomeRedirect";
 import { codeSchema } from "@/lib/validatorSchemas";
-import ResendEmailCodePage from "./ResendCode";
 import { useVerifyOtp } from "@/api/auth/useVerifyOtp";
 import { useNavigate } from "@tanstack/react-router";
+import ResendEmailCode from "./ResendEmailCode";
 
 export default function VerifyEmailPage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const { email } = useUserStore(); // 🔥 берем email из Zustand
+  const { email } = useUserStore();
   const verifyOtp = useVerifyOtp();
   const navigate = useNavigate();
 
@@ -72,7 +72,7 @@ export default function VerifyEmailPage() {
           >
             {verifyOtp.isPending ? "Проверка..." : "Подтвердить"}
           </Button>
-          <ResendEmailCodePage />
+          <ResendEmailCode />
         </Box>
       </Paper>
     </Container>

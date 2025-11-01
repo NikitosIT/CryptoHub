@@ -1,22 +1,23 @@
-import { useInfinitePosts } from "@/api/useInfinitePosts";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useScrollTop } from "@/hooks/useScrollTop";
 import FeedSkeleton from "./FeedSkeleton";
 import { PostCard } from "./PostCard";
+import { useInitReactions } from "@/hooks/useInitReactions";
+import { useTelegramPosts } from "@/api/useTelegramPosts";
 interface PostListProps {
-  mode?: "all" | "liked";
+  mode?: "all" | "liked" | "disliked";
   userId?: string | null;
   authorId?: number | null;
   tokenName?: string | null;
 }
-export default function PostList({
+export default function PostsList({
   mode = "all",
   userId,
   authorId,
   tokenName,
 }: PostListProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfinitePosts({
+    useTelegramPosts({
       authorId,
       tokenName,
       mode,
@@ -27,6 +28,7 @@ export default function PostList({
   const { show: showScrollTop, scrollToTop } = useScrollTop();
 
   const posts = data?.pages.flat() ?? [];
+  useInitReactions(posts);
   if (isLoading) return <FeedSkeleton />;
   return (
     <div>

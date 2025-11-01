@@ -1,13 +1,13 @@
-import { useAuthorsStore } from "@/store/useAuthorsStore";
-import { useAuthors } from "@/api/useAuthors";
+import { useFiltersStore } from "@/store/useFiltersStore";
 import SelectFilter from "./CustomSelectFilter";
 import type { Author } from "@/types/TokenAndAuthorTypes";
 import FilterSkeleton from "./FilterSkeleton";
+import { useFilterAuthors } from "@/api/useFilterAuthors";
 
-export default function Authors() {
-  const { selectedAuthorId, setSelectedAuthorId } = useAuthorsStore();
+export default function FilterAuthors() {
+  const { selectedAuthorId, setSelectedAuthorId } = useFiltersStore();
 
-  const { data: authors, isLoading, error } = useAuthors();
+  const { data: authors, isLoading, error } = useFilterAuthors();
   if (isLoading) return <FilterSkeleton />;
   if (error) return <p className="text-red-500">Ошибка: {error.message}</p>;
 
@@ -27,3 +27,5 @@ export default function Authors() {
     </div>
   );
 }
+
+//FilterAuthros
