@@ -1,5 +1,5 @@
 import { useRoutesProtected } from "@/hooks/useRoutesProtected";
-import EmailAuth from "@/pages/auth/EmaulAuth";
+import EmailAuth from "@/components/auth/EmaulAuth";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/email")({

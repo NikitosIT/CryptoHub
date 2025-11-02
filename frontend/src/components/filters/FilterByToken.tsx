@@ -1,12 +1,11 @@
 import SelectFilter from "./CustomSelectFilter";
 import type { Token } from "@/types/TokenAndAuthorTypes";
 import FilterSkeleton from "./FilterSkeleton";
-import { TokenDetails } from "./TokenDetails";
+import { TokenDetails } from "../TokenDetails";
 import { useFilterTokens } from "@/api/useFilterTokens";
-import { useFiltersStore } from "@/store/useFiltersStore";
 
-export default function FilterTokens() {
-  const { selectedToken, setSelectedToken } = useFiltersStore();
+export default function FilterTokens({ useStore }: { useStore: any }) {
+  const { selectedToken, setSelectedToken } = useStore();
   const { data: tokens, isLoading, error } = useFilterTokens();
 
   if (isLoading) return <FilterSkeleton />;
@@ -31,5 +30,3 @@ export default function FilterTokens() {
     </div>
   );
 }
-
-//FilterToken

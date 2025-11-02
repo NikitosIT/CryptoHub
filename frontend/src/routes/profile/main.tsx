@@ -1,5 +1,5 @@
+import ProfileMain from "@/components/profile/ProfileMain";
 import { useRoutesProtected } from "@/hooks/useRoutesProtected";
-import ProfileMain from "@/pages/profile/ProfileMain";
 
 import { createFileRoute } from "@tanstack/react-router";
 

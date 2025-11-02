@@ -39,6 +39,7 @@ export type TelegramPost = {
     dislike_count: number | null;
     reaction_type: "like" | "dislike" | null;
     user_reaction: "like" | "dislike" | null;
+    is_favorite: boolean;
     created_at: string | null;
 };
 

@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { supabase } from "@/lib/supabaseClient";
 
 const PAGE_SIZE = 10;
@@ -16,10 +17,9 @@ export function useTelegramPosts({
   mode = "all",
   userId = null,
 }: UseInfinitePostsParams) {
-  return useInfiniteQuery({
+  const query = useInfiniteQuery({
     queryKey: ["posts", authorId, tokenName, mode, userId],
     initialPageParam: { createdAt: null, id: null },
-
     queryFn: async ({ pageParam }) => {
       const { createdAt, id } = pageParam ?? {};
 
@@ -36,12 +36,11 @@ export function useTelegramPosts({
       });
 
       if (error) throw error;
-
       return data ?? [];
     },
 
     getNextPageParam: (lastPage) => {
-      if (!lastPage.length) return undefined;
+      if (!lastPage?.length) return undefined;
       const last = lastPage[lastPage.length - 1];
       return { createdAt: last.created_at, id: last.id };
     },
@@ -49,6 +48,6 @@ export function useTelegramPosts({
     staleTime: 60_000,
     gcTime: 5 * 60_000,
   });
-}
 
-//useTelegramPosts
+  return query;
+}

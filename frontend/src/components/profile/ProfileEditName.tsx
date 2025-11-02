@@ -15,7 +15,7 @@ import BackButton from "./BackButton";
 
 import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
 import { nicknameSchema } from "@/lib/validatorSchemas";
-import HomeRedirectIcon from "../auth/HomeRedirect";
+import HomeRedirectIcon from "../../components/auth/HomeRedirect";
 
 export default function ProfileEditName() {
   const { user, nickname } = useUserStore();

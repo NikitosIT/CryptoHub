@@ -145,6 +145,7 @@ export default function ProfileMain() {
               Плохие видео
             </Typography>
           </ListItemButton>
+
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
           {/* Избранные видео */}
           <ListItemButton

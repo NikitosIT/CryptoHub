@@ -1,5 +1,5 @@
 import { useRoutesProtected } from "@/hooks/useRoutesProtected";
-import SaveNickname from "@/pages/auth/SaveNickname";
+import SaveNickname from "@/components/auth/SaveNickname";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/savenickname")({

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { emailSchema } from "@/lib/validatorSchemas";
 import { useUserStore } from "@/store/useUserStore";
-import AuthGoogle from "@/pages/auth/AuthGoogle";
+import AuthGoogle from "@/components/auth/AuthGoogle";
 import HomeRedirectIcon from "./HomeRedirect";
 import { useSendEmail } from "@/api/auth/useSendEmail";
 

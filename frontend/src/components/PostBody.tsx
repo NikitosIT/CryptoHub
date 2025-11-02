@@ -10,6 +10,7 @@ import { processLinks } from "@/utils/processLinks";
 import { DocumentIcon } from "./DocumentIcon";
 import { useUserStore } from "@/store/useUserStore";
 import { ReactionButton } from "./ReactionButton";
+import FavoriteButton from "./FavoriteButton";
 
 export function TelegramCaption({ post }: { post: TelegramPost }) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -51,7 +52,16 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
           </button>
         )}
 
-        <ReactionButton post={post} user={user} />
+        {/* === Реакции и избранное === */}
+        <div className="flex items-center justify-between px-1 mt-3">
+          <div className="flex items-center gap-3">
+            <ReactionButton post={post} user={user} />
+          </div>
+
+          <div className="flex items-center">
+            <FavoriteButton post={post} />
+          </div>
+        </div>
 
         {/* === Дата === */}
         {date && (

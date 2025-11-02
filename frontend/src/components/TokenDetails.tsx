@@ -1,7 +1,7 @@
 import React from "react";
 import NoPostsMessage from "@/components/NoPostsMessage";
 import type { Token } from "@/types/TokenAndAuthorTypes";
-import TokensAiForecasts from "../TokensAiForecasts";
+import TokensAiForecasts from "./TokensAiForecasts";
 
 interface TokenDetailsProps {
   selectedToken: Token;

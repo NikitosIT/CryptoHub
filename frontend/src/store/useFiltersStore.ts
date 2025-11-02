@@ -13,8 +13,8 @@ export const useLikedFiltersStore = create<AuthorsState>()(
         (set) => ({
             selectedAuthorId: null,
             selectedToken: null,
-            setSelectedAuthorId: (id) => set({ selectedAuthorId: id }),
-            setSelectedToken: (token) => set({ selectedToken: token }),
+            setSelectedAuthorId: (id) => set({ selectedAuthorId: id ?? null }),
+            setSelectedToken: (token) => set({ selectedToken: token ?? null }),
         }),
         {
             name: "filters-liked-storage",
@@ -27,8 +27,8 @@ export const useFiltersStore = create<AuthorsState>()(
         (set) => ({
             selectedAuthorId: null,
             selectedToken: null,
-            setSelectedAuthorId: (id) => set({ selectedAuthorId: id }),
-            setSelectedToken: (token) => set({ selectedToken: token }),
+            setSelectedAuthorId: (id) => set({ selectedAuthorId: id ?? null }),
+            setSelectedToken: (token) => set({ selectedToken: token ?? null }),
         }),
         {
             name: "filter-storage",
@@ -41,8 +41,22 @@ export const useUnlikedFiltersStore = create<AuthorsState>()(
         (set) => ({
             selectedAuthorId: null,
             selectedToken: null,
-            setSelectedAuthorId: (id) => set({ selectedAuthorId: id }),
-            setSelectedToken: (token) => set({ selectedToken: token }),
+            setSelectedAuthorId: (id) => set({ selectedAuthorId: id ?? null }),
+            setSelectedToken: (token) => set({ selectedToken: token ?? null }),
+        }),
+        {
+            name: "filters-liked-storage",
+        },
+    ),
+);
+
+export const useFavoritesFiltersStore = create<AuthorsState>()(
+    persist(
+        (set) => ({
+            selectedAuthorId: null,
+            selectedToken: null,
+            setSelectedAuthorId: (id) => set({ selectedAuthorId: id ?? null }),
+            setSelectedToken: (token) => set({ selectedToken: token ?? null }),
         }),
         {
             name: "filters-liked-storage",
