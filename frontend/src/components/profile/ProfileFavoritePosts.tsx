@@ -4,7 +4,7 @@ import FilterTokens from "@/components/filters/FilterByToken";
 
 import PostsList from "@/components/PostsList";
 import { useFavoritesFiltersStore } from "@/store/useFiltersStore";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSession } from "@/api/user/useSession";
 
 export default function ProfileFavoritesPosts() {
   const session = useSession();

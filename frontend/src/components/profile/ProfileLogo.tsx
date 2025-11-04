@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { Avatar, Button, Box } from "@mui/material";
-import { useUserStore } from "@/store/useUserStore";
 import { supabase } from "@/lib/supabaseClient";
+import { useUserProfile } from "@/api/user/useUserProfile";
 import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
+import { useSession } from "@/api/user/useSession";
+import {
+  USER_AVATARS_BUCKET,
+  USER_LOGO_PREFIX,
+  getPublicAvatarUrl,
+} from "@/constants/storage";
 
 export default function ProfileLogo() {
-  const { user, profile_logo, setProfileLogo } = useUserStore();
-  const saveProfileLogo = useUpdateProfile();
+  const session = useSession();
+  const user = session?.user ?? null;
+  const userId = user?.id;
+  const { data: profile } = useUserProfile(userId);
+  const saveProfileLogo = useUpdateProfile(userId);
   const [uploading, setUploading] = useState(false);
 
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,18 +25,12 @@ export default function ProfileLogo() {
     setUploading(true);
     try {
       const { error: uploadError } = await supabase.storage
-        .from("user_avatars")
-        .upload(`logos/${encryption}.png`, file, { upsert: true });
+        .from(USER_AVATARS_BUCKET)
+        .upload(`${USER_LOGO_PREFIX}${encryption}.png`, file, { upsert: true });
       if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage
-        .from("user_avatars")
-        .getPublicUrl(`logos/${encryption}.png`);
-      const publicUrl = `${urlData.publicUrl}`;
-
-      await saveProfileLogo.mutateAsync({ profile_logo: publicUrl });
-
-      setProfileLogo(publicUrl);
+      // Store only UUID in DB
+      await saveProfileLogo.mutateAsync({ profile_logo: encryption });
     } catch (err: any) {
       console.error("Ошибка при загрузке:", err.message);
       alert("Не удалось загрузить фото 😕");
@@ -39,7 +42,9 @@ export default function ProfileLogo() {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
       <Avatar
-        src={profile_logo || ""}
+        src={
+          profile?.profile_logo ? getPublicAvatarUrl(profile.profile_logo) : ""
+        }
         alt="Avatar"
         sx={{ width: 80, height: 80, border: "2px solid #fbbf24" }}
       >

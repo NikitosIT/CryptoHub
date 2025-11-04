@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserProfile } from "@/api/user/useUserProfile";
+import { useSession } from "../api/user/useSession";
 
 interface GuardOptions {
     requireAuth?: boolean; // нужно ли быть залогиненным
@@ -20,38 +21,38 @@ export function useRoutesProtected({
     redirectTo,
 }: GuardOptions) {
     const navigate = useNavigate();
-    const { user, nickname, isEmailSent } = useUserStore();
+    const session = useSession();
+    const user = session?.user ?? null;
+    const userId = user?.id;
+    const { data: profile } = useUserProfile(userId);
 
     useEffect(() => {
-        // 🔐 если нужно быть залогиненным, но юзера нет — редиректим
         if (requireAuth && !user) {
             navigate({ to: redirectTo ?? "/auth/email" });
             return;
         }
 
-        // 🚫 если юзер залогинен, но страница для незалогиненных (login, verify и т.п.)
         if (requireNoAuth && user) {
-            navigate({ to: redirectTo ?? "/profile/profile" });
+            navigate({ to: redirectTo ?? "/profile/main" });
             return;
         }
 
-        // 📨 если нужно подтверждение email, а email не найден
         if (requireVerifiedEmail && !user?.email_confirmed_at) {
             navigate({ to: "/auth/email" });
             return;
         }
 
-        // 🧩 если нужен никнейм, а его ещё нет
-        if (requireNickname && !nickname) {
+        if (requireNickname && !profile?.nickname) {
             navigate({ to: "/auth/savenickname" });
         }
-        if (requireEmailSent && !isEmailSent) {
-            navigate({ to: "/auth/email" }); // 🔥 без отправки кода — редирект
+
+        if (requireEmailSent) {
+            navigate({ to: "/auth/email" });
             return;
         }
     }, [
         user,
-        nickname,
+        profile?.nickname,
         requireAuth,
         requireNoAuth,
         requireVerifiedEmail,
@@ -59,5 +60,3 @@ export function useRoutesProtected({
         navigate,
     ]);
 }
-
-//useRoutesProtected or useRoutesSecurity

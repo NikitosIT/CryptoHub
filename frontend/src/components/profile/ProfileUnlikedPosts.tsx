@@ -2,7 +2,7 @@ import FilterAuthors from "@/components/filters/FilterByAuthors";
 import FilterTokens from "@/components/filters/FilterByToken";
 import PostsList from "@/components/PostsList";
 import { useUnlikedFiltersStore } from "@/store/useFiltersStore";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSession } from "@/api/user/useSession";
 
 function ProfileUnlikedPosts() {
   const session = useSession();

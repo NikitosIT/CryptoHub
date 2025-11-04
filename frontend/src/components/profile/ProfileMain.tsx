@@ -5,15 +5,19 @@ import {
   Divider,
   Paper,
 } from "@mui/material";
-import { useUserStore } from "@/store/useUserStore";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import ProfileLogo from "./ProfileLogo";
+import { useUserProfile } from "@/api/user/useUserProfile";
+import { supabase } from "@/lib/supabaseClient";
+import { useSession } from "@/api/user/useSession";
 
 export default function ProfileMain() {
   const navigate = useNavigate();
-
-  const { user, nickname, logout, setNickname } = useUserStore();
+  const session = useSession();
+  const user = session?.user ?? null;
+  const userId = user?.id;
+  const { data: profile, isLoading } = useUserProfile(userId);
 
   useEffect(() => {
     if (!user) navigate({ to: "/auth/email" });
@@ -21,11 +25,10 @@ export default function ProfileMain() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await supabase.auth.signOut();
       navigate({ to: "/auth/email", replace: true });
     } catch (e: any) {
       console.error("Ошибка выхода:", e?.message || e);
-      setNickname(null);
       navigate({ to: "/auth/email", replace: true });
     }
   };
@@ -54,7 +57,10 @@ export default function ProfileMain() {
             letterSpacing: "0.5px",
           }}
         >
-          Привет, <span style={{ color: "#fb923c" }}>{nickname || "..."}</span>{" "}
+          Привет,{" "}
+          <span style={{ color: "#fb923c" }}>
+            {isLoading ? "..." : profile?.nickname || "..."}
+          </span>{" "}
           👋
         </Typography>
         <ProfileLogo />

@@ -1,5 +1,5 @@
-import { useUserStore } from "@/store/useUserStore";
-import { useToggleFavorite } from "@/hooks/useToggleFavorite";
+import { useToggleFavorite } from "@/api/useToggleFavorite";
+import { useSession } from "@/api/user/useSession";
 import type { TelegramPost } from "@/types/db";
 
 interface FavoriteProps {
@@ -7,7 +7,8 @@ interface FavoriteProps {
 }
 
 export default function FavoriteButton({ post }: FavoriteProps) {
-  const { user } = useUserStore();
+  const session = useSession();
+  const user = session?.user;
   const mutation = useToggleFavorite();
 
   if (!user) return null;

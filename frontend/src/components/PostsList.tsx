@@ -28,7 +28,6 @@ export default function PostsList({
   const { show: showScrollTop, scrollToTop } = useScrollTop();
 
   const posts = data?.pages.flat() ?? [];
-  // useInitReactions(posts);
   if (isLoading) return <FeedSkeleton />;
   return (
     <div>

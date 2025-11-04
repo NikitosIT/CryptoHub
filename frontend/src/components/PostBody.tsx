@@ -8,7 +8,6 @@ import { formatDate } from "@/utils/formatDate";
 import { sanitizeHtml } from "@/utils/sanitizeHtml";
 import { processLinks } from "@/utils/processLinks";
 import { DocumentIcon } from "./DocumentIcon";
-import { useUserStore } from "@/store/useUserStore";
 import { ReactionButton } from "./ReactionButton";
 import FavoriteButton from "./FavoriteButton";
 
@@ -20,7 +19,6 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
   const rawHtml = toHTML({ text: caption, entities });
   const safeHtml = sanitizeHtml(rawHtml);
   const finalHtml = useMemo(() => processLinks(safeHtml), [safeHtml]);
-  const { user } = useUserStore();
 
   const date = formatDate(post.created_at);
   const MAX_LENGTH = 1000;
@@ -55,7 +53,7 @@ export function TelegramCaption({ post }: { post: TelegramPost }) {
         {/* === Реакции и избранное === */}
         <div className="flex items-center justify-between px-1 mt-3">
           <div className="flex items-center gap-3">
-            <ReactionButton post={post} user={user} />
+            <ReactionButton post={post} />
           </div>
 
           <div className="flex items-center">

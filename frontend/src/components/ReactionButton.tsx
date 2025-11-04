@@ -1,14 +1,11 @@
-import { useToggleReaction } from "@/hooks/useToggleReaction";
-import type { TelegramPost, User } from "@/types/db";
+import { useToggleReaction } from "@/api/useToggleReaction";
+import { useSession } from "@/api/user/useSession";
+import type { TelegramPost } from "@/types/db";
 
-export function ReactionButton({
-  post,
-  user,
-}: {
-  post: TelegramPost;
-  user: User | null;
-}) {
+export function ReactionButton({ post }: { post: TelegramPost }) {
   const mutation = useToggleReaction();
+  const session = useSession();
+  const user = session?.user ?? null;
 
   const handleLike = () => {
     if (!user)

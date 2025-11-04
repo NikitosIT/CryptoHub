@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo } from "react";
 import {
   Box,
   Button,
@@ -8,36 +8,41 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { emailSchema } from "@/lib/validatorSchemas";
-import { useUserStore } from "@/store/useUserStore";
+import { useQueryClient } from "@tanstack/react-query";
 import AuthGoogle from "@/components/auth/AuthGoogle";
 import HomeRedirectIcon from "./HomeRedirect";
 import { useSendEmail } from "@/api/auth/useSendEmail";
 
 export default function EmailAuth() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { setEmail: setStoreEmail } = useUserStore();
+  const queryClient = useQueryClient();
 
   const sendCodeMutation = useSendEmail();
+  const formSchema = useMemo(() => z.object({ email: emailSchema }), []);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<{ email: string }>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { email: "" },
+    mode: "onTouched",
+  });
 
-  const sendCode = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    const result = emailSchema.safeParse(email);
-    if (!result.success) {
-      setError(result.error.issues[0].message);
-      return;
-    }
-
+  const onSubmit = async ({ email }: { email: string }) => {
     try {
       await sendCodeMutation.mutateAsync(email);
-      setStoreEmail(email);
+      queryClient.setQueryData(["authEmail"], email);
+      console.log("before");
       navigate({ to: "/auth/verify" });
-      useUserStore.getState().setEmailSent(true);
-    } catch (err: any) {
-      setError(err.message);
+      console.log("after");
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -52,7 +57,7 @@ export default function EmailAuth() {
 
         <Box
           component="form"
-          onSubmit={sendCode}
+          onSubmit={handleSubmit(onSubmit)}
           display="flex"
           flexDirection="column"
           gap={2}
@@ -60,10 +65,11 @@ export default function EmailAuth() {
           <TextField
             label="Email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={!!error || sendCodeMutation.isError}
-            helperText={error || sendCodeMutation.error?.message || ""}
+            {...register("email")}
+            error={!!errors.email || sendCodeMutation.isError}
+            helperText={
+              errors.email?.message || sendCodeMutation.error?.message || ""
+            }
             fullWidth
           />
 
@@ -71,7 +77,7 @@ export default function EmailAuth() {
             type="submit"
             variant="contained"
             size="large"
-            disabled={sendCodeMutation.isPending}
+            disabled={sendCodeMutation.isPending || !watch("email")}
           >
             {sendCodeMutation.isPending ? "Отправка..." : "Получить код"}
           </Button>

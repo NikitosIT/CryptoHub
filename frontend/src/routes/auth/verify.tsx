@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/verify")({
   component: () => {
-    useRoutesProtected({ requireNoAuth: true, requireEmailSent: true });
+    useRoutesProtected({ requireNoAuth: true, requireEmailSent: false });
     return <VerifyEmailPage />;
   },
 });

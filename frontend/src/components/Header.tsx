@@ -1,7 +1,10 @@
-import { useUserStore } from "@/store/useUserStore";
+import { useAuthListener } from "@/api/auth/useAuthListener";
+import { useUserProfile } from "@/api/user/useUserProfile";
 import { Link, useNavigate } from "@tanstack/react-router";
 function Header() {
-  const { user, nickname } = useUserStore();
+  const { session } = useAuthListener();
+  const user = session?.user ?? null;
+  const { data: profile } = useUserProfile(user?.id);
   const navigate = useNavigate();
   return (
     <header className="mt-3 mb-6 text-center">
@@ -25,13 +28,13 @@ function Header() {
               </Link>
             </li>
           )}
-          {user && nickname && (
+          {user && profile?.nickname && (
             <li>
               <Link
                 className="text-white hover:text-blue-400"
                 to="/profile/main"
               >
-                Profile
+                {profile.nickname}
               </Link>
             </li>
           )}

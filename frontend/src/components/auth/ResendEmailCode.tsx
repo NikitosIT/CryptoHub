@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { Button, Typography } from "@mui/material";
-import { useUserStore } from "@/store/useUserStore";
+import { useQuery } from "@tanstack/react-query";
 import { useResendCode } from "@/api/auth/useResendCode";
 import { useCountdown } from "@/hooks/useCountdown";
 
 export default function ResendEmailCode() {
-  const { email } = useUserStore();
+  const { data: email } = useQuery<string | null>({
+    queryKey: ["authEmail"],
+    queryFn: async () => null,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
   const resendCode = useResendCode();
   const [message, setMessage] = useState<string | null>(null);
 

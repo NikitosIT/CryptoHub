@@ -32,7 +32,7 @@ export function useTelegramPosts({
         p_only_liked: mode === "liked",
         p_only_disliked: mode === "disliked",
         p_only_favorites: mode === "favorites",
-        p_user_id: userId,
+        p_user_id: userId || null,
       });
 
       if (error) throw error;

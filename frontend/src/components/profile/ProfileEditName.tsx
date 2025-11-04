@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useUserStore } from "@/store/useUserStore";
+import { useUserProfile } from "@/api/user/useUserProfile";
 
 import {
   Typography,
@@ -13,14 +13,17 @@ import {
 
 import BackButton from "./BackButton";
 
-import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
 import { nicknameSchema } from "@/lib/validatorSchemas";
 import HomeRedirectIcon from "../../components/auth/HomeRedirect";
+import { useUpdateProfile } from "@/api/profile/useUpdateProfile";
+import { useSession } from "@/api/user/useSession";
 
 export default function ProfileEditName() {
-  const { user, nickname } = useUserStore();
-
-  const mutation = useUpdateProfile();
+  const session = useSession();
+  const user = session?.user ?? null;
+  const userId = user?.id;
+  const { data: profile } = useUserProfile(userId);
+  const mutation = useUpdateProfile(userId);
   const navigate = useNavigate();
 
   const [newNick, setNewNick] = useState("");
@@ -56,7 +59,7 @@ export default function ProfileEditName() {
       <BackButton />
       <Paper sx={{ p: 4, borderRadius: 3 }}>
         <Typography variant="h5" fontWeight={600} mb={2}>
-          Привет, {nickname || user.email}
+          Привет, {profile?.nickname || user.email}
         </Typography>
 
         <Box

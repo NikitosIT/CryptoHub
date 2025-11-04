@@ -1,13 +1,13 @@
 import PostsList from "./PostsList";
-
-import { useUserStore } from "@/store/useUserStore";
 import FilterAuthors from "./filters/FilterByAuthors";
 import FilterTokens from "./filters/FilterByToken";
 import { useFiltersStore } from "@/store/useFiltersStore";
+import { useSession } from "@/api/user/useSession";
 
 export function PostFeed() {
   const { selectedAuthorId, selectedToken } = useFiltersStore();
-  const { user } = useUserStore();
+  const session = useSession();
+  const user = session?.user ?? null;
 
   return (
     <div className="space-y-6">

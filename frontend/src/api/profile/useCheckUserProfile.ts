@@ -1,9 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabaseClient";
 
-export const useCheckUserId = () => {
-    return useMutation({
-        mutationFn: async (userId: string) => {
+export const useCheckUserProfile = (userId?: string) => {
+    return useQuery({
+        queryKey: ["profile", userId],
+        queryFn: async () => {
+            if (!userId) return null;
             const { data, error } = await supabase
                 .from("profiles")
                 .select("nickname")
@@ -13,6 +15,6 @@ export const useCheckUserId = () => {
             if (error) throw new Error(error.message);
             return data;
         },
+        enabled: !!userId,
     });
 };
-///Более понятнфе названия

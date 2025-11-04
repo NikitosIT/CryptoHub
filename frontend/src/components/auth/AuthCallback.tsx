@@ -1,36 +1,26 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useUserStore } from "@/store/useUserStore";
-import { useCheckUserId } from "@/api/profile/useCheckUserId";
-import { CircularProgress, Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { useCheckUserProfile } from "@/api/profile/useCheckUserProfile";
+import { useAuthListener } from "@/api/auth/useAuthListener";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
-  const { user, setNickname } = useUserStore();
-  const checkProfile = useCheckUserId();
+  const { session } = useAuthListener();
+  const user = session?.user ?? null;
+
+  const { data: profile, isLoading, isError } = useCheckUserProfile(user?.id);
 
   useEffect(() => {
-    const handleRedirect = async () => {
-      if (!user) return;
-
-      try {
-        const profile = await checkProfile.mutateAsync(user.id);
-
-        if (profile?.nickname) {
-          setNickname(profile.nickname);
-          navigate({ to: "/profile/main", replace: true });
-        } else {
-          navigate({ to: "/auth/savenickname" });
-        }
-      } catch (err) {
-        console.error("Ошибка проверки профиля:", err);
-        navigate({ to: "/auth/savenickname" });
-      }
-    };
-
-    handleRedirect();
-  }, [user]);
-
+    if (!user || isLoading) return;
+    if (profile?.nickname) {
+      navigate({ to: "/profile/main", replace: true });
+    } else {
+      navigate({ to: "/auth/savenickname" });
+    }
+  }, [user, isLoading, profile, navigate]);
+  if (isLoading) return <div>Проверка профиля...</div>;
+  if (isError) return <div>Ошибка</div>;
   return (
     <Box
       sx={{
@@ -42,9 +32,6 @@ export default function AuthCallback() {
         justifyContent: "center",
         alignItems: "center",
       }}
-    >
-      <CircularProgress sx={{ color: "#9333ea", mb: 3 }} />
-      <Typography>Авторизация...</Typography>
-    </Box>
+    ></Box>
   );
 }
