@@ -1,0 +1,10 @@
+html,
+body {
+  background-color: gray;
+  transition: background-color 0.2s ease;
+}
+
+html.dark,
+html.dark body {
+  background-color: #000000;
+}
