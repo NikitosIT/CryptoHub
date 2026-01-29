@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api, type UpdateProfilePayload, type UserProfile } from "@/api";
+import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import {
   setCachedProfile,
   updateProfileCache,
@@ -8,13 +9,11 @@ import {
 
 import { profileQueryKey } from "./useUserProfile";
 
-export const useUpdateProfile = (userId?: string) => {
+export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
-
+  const { userId } = useRequiredAuth();
   return useMutation({
     mutationFn: async (payload: Omit<UpdateProfilePayload, "user_id">) => {
-      if (!userId) throw new Error("User not found");
-
       return await api.profile.update({
         user_id: userId,
         ...payload,
@@ -27,7 +26,7 @@ export const useUpdateProfile = (userId?: string) => {
       });
 
       const previousProfile = queryClient.getQueryData<UserProfile | null>(
-        profileQueryKey(userId)
+        profileQueryKey(userId),
       );
 
       if (previousProfile && userId) {
@@ -46,7 +45,7 @@ export const useUpdateProfile = (userId?: string) => {
       if (onMutateReturn?.previousProfile) {
         queryClient.setQueryData(
           profileQueryKey(userId),
-          onMutateReturn.previousProfile
+          onMutateReturn.previousProfile,
         );
         setCachedProfile(onMutateReturn.previousProfile);
       }

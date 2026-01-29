@@ -1,20 +1,16 @@
 import { api } from "@/api";
+import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import { useToast } from "@/hooks/useToast";
 import { useUpdateProfile } from "@/routes/profile/-api/useUpdateProfile";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { generateUUID } from "@/utils/uuid";
 
-export function useUploadProfileLogo(userId?: string) {
-  const saveProfileLogo = useUpdateProfile(userId);
+export function useUploadProfileLogo() {
+  const { userId } = useRequiredAuth();
+  const saveProfileLogo = useUpdateProfile();
   const { showError } = useToast();
 
   const uploadLogo = async (file: File) => {
-    if (!userId) {
-      const errorMessage = "User not found";
-      showError(errorMessage);
-      throw new Error(errorMessage);
-    }
-
     try {
       const encryption = generateUUID();
 

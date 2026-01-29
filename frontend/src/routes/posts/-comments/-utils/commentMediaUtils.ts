@@ -78,3 +78,13 @@ export function createBlobMediaFromFiles(mediaFiles?: File[]): {
 
   return { media, blobUrls };
 }
+
+export function getExistingMedia(
+  comments: CommentWithReplies[] | undefined,
+  commentId: number,
+  existingMediaUrls: string[],
+): CommentMedia[] {
+  const comment = comments?.find((c) => c.id === commentId);
+  if (!comment?.media) return [];
+  return comment.media.filter((m) => existingMediaUrls.includes(m.url));
+}

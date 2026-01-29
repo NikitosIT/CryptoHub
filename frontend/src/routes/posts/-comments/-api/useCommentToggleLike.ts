@@ -8,27 +8,17 @@ import type { CommentWithReplies } from "@/types/db";
 import { debounceAsync } from "@/utils/debounceAsync";
 import { getErrorMessage } from "@/utils/errorUtils";
 
+import { findCommentInCache } from "../-utils/commentCache";
 import { commentsListQueryKey } from "./useCommentList";
 
 const initialCommentLikeByKey = new Map<string, boolean>();
-
-function findCommentInCache(
-  queryClient: ReturnType<typeof useQueryClient>,
-  queryKey: readonly unknown[],
-  commentId: number,
-): CommentWithReplies | null {
-  const comments = queryClient.getQueryData<CommentWithReplies[]>(queryKey);
-  if (!comments) return null;
-
-  const comment = comments.find((c) => c.id === commentId);
-  return comment || null;
-}
 
 export function useCommentToggleLike(postId: number) {
   const queryClient = useQueryClient();
   const { showError } = useToast();
   const { user } = useAuthState();
   const userId = user?.id;
+
   function debouncedToggleCommentLikeWithCheck(commentId: number) {
     const key = `like-comment:${commentId}:${userId}`;
     const queryKey = commentsListQueryKey(postId);
@@ -56,7 +46,7 @@ export function useCommentToggleLike(postId: number) {
         initialCommentLikeByKey.delete(key);
         return res;
       },
-      1500,
+      500,
     );
   }
 

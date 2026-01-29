@@ -49,7 +49,7 @@ export function useToggleFavorite() {
           await api.reactions.toggleFavorite(postId, userId);
           initialFavoriteMap.delete(key);
         },
-        1500,
+        500,
       );
     },
 

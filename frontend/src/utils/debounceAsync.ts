@@ -1,4 +1,4 @@
-const DEFAULT_DELAY_MS = 1500;
+const DEFAULT_DELAY_MS = 500;
 
 interface PendingCall<T> {
   timer: ReturnType<typeof setTimeout>;
@@ -40,8 +40,6 @@ export function cancelDebounce(key: string) {
   if (!entry) return;
 
   clearTimeout(entry.timer);
-  entry.resolvers.forEach((r) =>
-    r.reject(new Error("Debounced call cancelled")),
-  );
+
   pending.delete(key);
 }

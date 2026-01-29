@@ -242,5 +242,3 @@ export function CommentInput({
     </Box>
   );
 }
-
-///вынести

@@ -44,7 +44,7 @@ export function useToggleReaction() {
           await api.reactions.toggle({ postId, reactionType, userId });
           initialReactionMap.delete(key);
         },
-        1500,
+        500,
       );
     },
 

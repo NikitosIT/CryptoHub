@@ -50,10 +50,9 @@ interface CommentsModalProps {
 }
 
 export function CommentModal({ postId, isOpen, onClose }: CommentsModalProps) {
-  const { user, isAuthenticatedWith2FA } = useAuthState({
+  const { user } = useAuthState({
     checkTwoFactor: true,
   });
-  const currentUserId = isAuthenticatedWith2FA ? user?.id : undefined;
 
   const {
     data: comments,
@@ -61,7 +60,6 @@ export function CommentModal({ postId, isOpen, onClose }: CommentsModalProps) {
     error,
   } = useCommentsList(postId, {
     enabled: isOpen,
-    userId: currentUserId,
   });
 
   const { showError } = useToast();
@@ -87,7 +85,7 @@ export function CommentModal({ postId, isOpen, onClose }: CommentsModalProps) {
     cancelEdit,
     handleJumpToComment,
     highlightedCommentId,
-  } = useCommentsModal({ postId, currentUserId });
+  } = useCommentsModal(postId);
 
   useEscapeKey(onClose);
 
@@ -163,7 +161,7 @@ export function CommentModal({ postId, isOpen, onClose }: CommentsModalProps) {
         </DialogContent>
 
         <DialogActions sx={commentModalActionsStyles}>
-          {currentUserId ? (
+          {user?.id ? (
             <CommentInput
               postId={postId}
               onSubmit={handleSubmit}
