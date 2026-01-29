@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
+import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import { useToast } from "@/hooks/useToast";
 import { removeCommentFromList } from "@/routes/posts/-comments/-utils/commentUtils";
 import type { CommentWithReplies } from "@/types/db";
@@ -14,7 +15,6 @@ import { useCommentsUpdateCountCache } from "./useCommentsUpdateCountCache";
 
 type DeleteCommentVariables = {
   commentId: number;
-  userId: string;
   postId: number;
 };
 
@@ -25,11 +25,12 @@ type MutationContext = {
 
 export function useCommentDelete() {
   const queryClient = useQueryClient();
+  const { user } = useRequiredAuth();
+  const userId = user.id;
   const updateCommentsCount = useCommentsUpdateCountCache();
   const { showError } = useToast();
-
   return useMutation({
-    mutationFn:  ({ commentId, userId }: DeleteCommentVariables) =>
+    mutationFn: ({ commentId }: DeleteCommentVariables) =>
       api.comments.delete(commentId, userId),
 
     onMutate: async ({ commentId, postId }): Promise<MutationContext> => {
@@ -51,7 +52,12 @@ export function useCommentDelete() {
         queryClient.setQueryData(context.queryKey, context.previousComments);
       }
 
-      showError(getErrorMessage(err, "Failed to delete comment. Please try again later."));
+      showError(
+        getErrorMessage(
+          err,
+          "Failed to delete comment. Please try again later.",
+        ),
+      );
     },
 
     onSuccess: (_data, { postId }) => {

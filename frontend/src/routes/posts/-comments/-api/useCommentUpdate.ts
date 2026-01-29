@@ -2,8 +2,12 @@ import { useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
+import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import { useToast } from "@/hooks/useToast";
-import { createBlobMediaFromFiles } from "@/routes/posts/-comments/-utils/commentMediaUtils";
+import {
+  createBlobMediaFromFiles,
+  getExistingMedia,
+} from "@/routes/posts/-comments/-utils/commentMediaUtils";
 import { updateCommentInList } from "@/routes/posts/-comments/-utils/commentUtils";
 import type { CommentMedia, CommentWithReplies } from "@/types/db";
 import { getErrorMessage } from "@/utils/errorUtils";
@@ -17,7 +21,6 @@ import { uploadCommentMedia } from "./useUploadMedia";
 type UpdateCommentVariables = {
   commentId: number;
   text: string;
-  userId: string;
   postId: number;
   mediaFiles?: File[];
   existingMediaUrls?: string[];
@@ -29,18 +32,9 @@ type MutationContext = {
   blobUrls: string[];
 };
 
-function getExistingMedia(
-  comments: CommentWithReplies[] | undefined,
-  commentId: number,
-  existingMediaUrls: string[],
-): CommentMedia[] {
-  const comment = comments?.find((c) => c.id === commentId);
-  if (!comment?.media) return [];
-  return comment.media.filter((m) => existingMediaUrls.includes(m.url));
-}
-
 export function useCommentUpdate() {
   const queryClient = useQueryClient();
+  const { userId } = useRequiredAuth();
   const { showError } = useToast();
   const existingMediaRef = useRef<CommentMedia[]>([]);
 
@@ -48,7 +42,6 @@ export function useCommentUpdate() {
     mutationFn: async ({
       commentId,
       text,
-      userId,
       mediaFiles,
     }: UpdateCommentVariables) => {
       const existingMedia = existingMediaRef.current;
@@ -81,7 +74,8 @@ export function useCommentUpdate() {
 
       existingMediaRef.current = existingMedia;
 
-      const { media: blobMedia, blobUrls } = createBlobMediaFromFiles(mediaFiles);
+      const { media: blobMedia, blobUrls } =
+        createBlobMediaFromFiles(mediaFiles);
       const optimisticMedia = [...existingMedia, ...blobMedia];
 
       queryClient.setQueriesData<CommentWithReplies[]>({ queryKey }, (old) => {
@@ -103,7 +97,12 @@ export function useCommentUpdate() {
       }
       context?.blobUrls.forEach((url) => URL.revokeObjectURL(url));
 
-      showError(getErrorMessage(err, "Failed to update comment. Please try again later."));
+      showError(
+        getErrorMessage(
+          err,
+          "Failed to update comment. Please try again later.",
+        ),
+      );
     },
 
     onSuccess: (_, __, context) => {

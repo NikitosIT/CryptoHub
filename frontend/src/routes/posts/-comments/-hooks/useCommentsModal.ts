@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 
+import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
 import { useCommentCreate } from "@/routes/posts/-comments/-api/useCommentCreate";
 import { useCommentUpdate } from "@/routes/posts/-comments/-api/useCommentUpdate";
 import type { CommentWithReplies } from "@/types/db";
 
-interface UseCommentsModalProps {
-  postId: number;
-  currentUserId: string | undefined;
-}
-
-export function useCommentsModal({
-  postId,
-  currentUserId,
-}: UseCommentsModalProps) {
+export function useCommentsModal(postId: number) {
   const [replyingTo, setReplyingTo] = useState<CommentWithReplies | null>(null);
   const [editingComment, setEditingComment] =
     useState<CommentWithReplies | null>(null);
@@ -22,7 +15,8 @@ export function useCommentsModal({
 
   const createComment = useCommentCreate();
   const updateComment = useCommentUpdate();
-
+  const { user } = useAuthState();
+  const currentUserId = user?.id;
   const handleJumpToComment = (commentId: number) => {
     const element = document.getElementById(`comment-${commentId}`);
     if (element) {
@@ -37,7 +31,7 @@ export function useCommentsModal({
   const handleSubmit = (
     text: string,
     mediaFiles?: File[],
-    existingMediaUrls?: string[]
+    existingMediaUrls?: string[],
   ) => {
     if (!currentUserId) {
       return;
@@ -55,7 +49,6 @@ export function useCommentsModal({
       updateComment.mutate({
         commentId,
         text: text.trim(),
-        userId: currentUserId,
         postId,
         mediaFiles,
         existingMediaUrls,

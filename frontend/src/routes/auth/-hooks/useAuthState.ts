@@ -37,7 +37,6 @@ export function useAuthState(
 
   const isLoading =
     sessionQuery.isPending || sessionQuery.isFetching || isTwoFactorLoading;
-
   return {
     isAuthenticatedWith2FA,
     hasPendingTwoFactor,

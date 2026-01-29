@@ -1,13 +1,11 @@
 import { Box, Button } from "@mui/material";
 
 import { UserAvatar } from "@/components/ui/UserAvatar";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
 
 import { useUploadProfileLogo } from "../-api/useUploadProfileLogo";
 
 export default function ProfileLogo() {
-  const { user } = useAuthState({ checkTwoFactor: false });
-  const { uploadLogo, isUploading } = useUploadProfileLogo(user?.id);
+  const { uploadLogo, isUploading } = useUploadProfileLogo();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

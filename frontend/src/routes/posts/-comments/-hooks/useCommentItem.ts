@@ -23,7 +23,6 @@ export function useCommentItem({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const deleteComment = useCommentDelete();
   const { user } = useAuthState();
-  const currentUserId = user?.id;
   const handleDeleteClick = () => {
     setOpenDeleteDialog(true);
   };
@@ -32,7 +31,7 @@ export function useCommentItem({
     setOpenDeleteDialog(false);
     deleteComment.mutate({
       commentId: comment.id,
-      userId: currentUserId!,
+
       postId,
     });
   };

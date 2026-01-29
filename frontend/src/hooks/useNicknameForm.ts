@@ -4,10 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { nicknameSchema } from "@/lib/validatorSchemas";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
 import { useUpdateProfile } from "@/routes/profile/-api/useUpdateProfile";
 import { useUserProfile } from "@/routes/profile/-api/useUserProfile";
 import { getErrorMessage } from "@/utils/errorUtils";
+
+import { useRequiredAuth } from "./useRequiredAuth";
 
 type NicknameFormValues = { nickname: string };
 
@@ -56,8 +57,8 @@ export function useNicknameForm({
   onError,
   resetOnSuccess = false,
 }: UseNicknameFormProps) {
-  const { user } = useAuthState();
-  const mutation = useUpdateProfile(user?.id);
+  const { user } = useRequiredAuth();
+  const mutation = useUpdateProfile();
   const { data: profile } = useUserProfile();
 
   const {
@@ -79,13 +80,6 @@ export function useNicknameForm({
   );
 
   const onSubmit = async ({ nickname }: NicknameFormValues) => {
-    if (!user?.id) {
-      const error = new Error("User ID is not available");
-      onError?.(error);
-      setFormError("nickname", { message: error.message });
-      return;
-    }
-
     try {
       await mutation.mutateAsync({ nickname });
       if (resetOnSuccess) {
@@ -102,7 +96,7 @@ export function useNicknameForm({
   const nicknameValue = watch("nickname");
   const isPending = mutation.isPending || isSubmitting;
   const isDisabled =
-    isPending || !nicknameValue || !user?.id || !canChangeNickname;
+    isPending || !nicknameValue || !user.id || !canChangeNickname;
 
   return {
     register,
