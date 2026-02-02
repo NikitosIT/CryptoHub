@@ -15,6 +15,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    env: {
+      VITE_SUPABASE_URL: "https://project.supabase.co",
+      VITE_SUPABASE_ANON_KEY: "test-anon-key",
+    },
     exclude: [
       "**/node_modules/**",
       "**/dist/**",

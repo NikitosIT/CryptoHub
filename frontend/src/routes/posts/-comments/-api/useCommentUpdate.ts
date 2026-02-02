@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import { useToast } from "@/hooks/useToast";
 import {
   createBlobMediaFromFiles,
@@ -34,7 +33,7 @@ type MutationContext = {
 
 export function useCommentUpdate() {
   const queryClient = useQueryClient();
-  const { userId } = useRequiredAuth();
+
   const { showError } = useToast();
   const existingMediaRef = useRef<CommentMedia[]>([]);
 
@@ -51,7 +50,6 @@ export function useCommentUpdate() {
       return api.comments.update({
         commentId,
         text,
-        userId,
         media: allMedia.length > 0 ? allMedia : null,
       });
     },

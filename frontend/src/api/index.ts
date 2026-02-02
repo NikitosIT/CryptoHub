@@ -11,15 +11,12 @@ import { supabase } from "@/lib/supabaseClient";
 import type { Author, CommentMedia, TelegramPost, Token } from "@/types/db";
 
 import { twoFactorStatusQueryKey } from "../routes/auth/-api/use2faApi.ts";
-
-type InFlightKey = string;
-const inFlight = new Map<InFlightKey, Promise<unknown>>();
+import { getRequestAuth, getSession } from "./getSession";
 
 interface FunctionRequestOptions {
   functionName: string;
   action?: string;
   body: unknown;
-  key: InFlightKey;
   requireAuth?: boolean;
 }
 
@@ -27,12 +24,8 @@ function performFunctionRequest<T>({
   functionName,
   action,
   body,
-  key,
   requireAuth = false,
 }: FunctionRequestOptions): Promise<T> {
-  const existing = inFlight.get(key) as Promise<T> | undefined;
-  if (existing) return existing;
-
   const functionsBaseUrl: string =
     (import.meta.env.VITE_SUPABASE_FUNCTIONS_URL as string | undefined) ||
     `${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1`;
@@ -60,16 +53,11 @@ function performFunctionRequest<T>({
       apikey: anonKey,
     };
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (session?.access_token) {
-      headers["Authorization"] = `Bearer ${session.access_token}`;
-    } else {
-      headers["Authorization"] = `Bearer ${anonKey}`;
-    }
+    const { accessToken } = await getRequestAuth();
+    const token = accessToken ?? anonKey;
+    headers.Authorization = `Bearer ${token}`;
 
-    if (requireAuth && !session?.access_token) {
+    if (requireAuth && !accessToken) {
       throw new Error("Authentication required");
     }
 
@@ -93,18 +81,14 @@ function performFunctionRequest<T>({
       throw error;
     }
     return data as T;
-  })().finally(() => {
-    inFlight.delete(key);
-  });
+  })();
 
-  inFlight.set(key, promise);
   return promise;
 }
 
 export interface CreateCommentParams {
   postId: number;
   text: string;
-  userId: string;
   parentCommentId?: number | null;
   media?: CommentMedia[] | null;
 }
@@ -112,7 +96,6 @@ export interface CreateCommentParams {
 export interface UpdateCommentParams {
   commentId: number;
   text: string;
-  userId: string;
   media?: CommentMedia[] | null;
 }
 
@@ -121,7 +104,6 @@ export type ReactionType = "like" | "dislike";
 export interface ToggleReactionsParams {
   postId: number;
   reactionType: ReactionType;
-  userId: string;
 }
 
 export type TwoFactorStatusResponse = {
@@ -134,7 +116,6 @@ export type EnableTwoFactorResponse = {
 };
 
 export interface UpdateProfilePayload {
-  user_id: string;
   nickname?: string;
   profile_logo?: string;
 }
@@ -191,6 +172,7 @@ async function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
       );
     }
 
+    // eslint-disable-next-line no-await-in-loop
     const { generateUUID } = await import("@/utils/uuid");
     const fileId = generateUUID();
     const ext =
@@ -222,14 +204,12 @@ async function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
 }
 
 function createComment(params: CreateCommentParams) {
-  const { postId, text, userId, parentCommentId, media } = params;
+  const { postId, text, parentCommentId, media } = params;
   return performFunctionRequest<{ success: boolean; data: unknown }>({
     functionName: "user-comments",
     action: "create",
-    key: `create:${postId}:${userId}`,
     requireAuth: true,
     body: {
-      user_id: userId,
       post_id: postId,
       text,
       parent_comment_id: parentCommentId || null,
@@ -239,14 +219,12 @@ function createComment(params: CreateCommentParams) {
 }
 
 function updateComment(params: UpdateCommentParams) {
-  const { commentId, text, userId, media } = params;
+  const { commentId, text, media } = params;
   return performFunctionRequest<{ success: boolean; data: unknown }>({
     functionName: "user-comments",
     action: "update",
-    key: `update:${commentId}:${userId}`,
     requireAuth: true,
     body: {
-      user_id: userId,
       comment_id: commentId,
       text,
       media: media || null,
@@ -254,71 +232,60 @@ function updateComment(params: UpdateCommentParams) {
   });
 }
 
-function deleteComment(commentId: number, userId: string) {
+function deleteComment(commentId: number) {
   return performFunctionRequest<{ success: boolean }>({
     functionName: "user-comments",
     action: "delete",
-    key: `delete:${commentId}:${userId}`,
     requireAuth: true,
     body: {
-      user_id: userId,
       comment_id: commentId,
     },
   });
 }
 
-function listComments(postId: number, userId?: string | null) {
+function listComments(postId: number) {
   return performFunctionRequest<{ success: boolean; data: unknown[] }>({
     functionName: "user-comments",
     action: "list",
-    key: `list:${postId}:${userId ?? "anon"}`,
-    requireAuth: !!userId,
     body: {
       post_id: postId,
-      user_id: userId ?? null,
     },
   });
 }
 
 // Reaction functions
-function toggleFavorite(postId: number, userId: string) {
+function toggleFavorite(postId: number) {
   return performFunctionRequest<{ success: boolean }>({
     functionName: "toggle-favorites",
-    key: `${postId}:${userId}`,
     requireAuth: true,
     body: {
       post_id: postId,
-      user_id: userId,
     },
   });
 }
 
-function toggleCommentsLike(commentId: number, userId: string | undefined) {
+function toggleCommentsLike(commentId: number) {
   return performFunctionRequest<{
     success: boolean;
     status: "added" | "removed";
     like_count: number;
   }>({
     functionName: "users-comments-like",
-    key: `${commentId}:${userId}:comment-like`,
     requireAuth: true,
     body: {
       comment_id: commentId,
-      user_id: userId,
     },
   });
 }
 
 function toggleReactions(params: ToggleReactionsParams) {
-  const { postId, reactionType, userId } = params;
+  const { postId, reactionType } = params;
   return performFunctionRequest<{ success: boolean }>({
     functionName: "toggle-reactions",
-    key: `${postId}:${userId}:${reactionType}`,
     requireAuth: true,
     body: {
       post_id: postId,
       reaction_type: reactionType,
-      user_id: userId,
     },
   });
 }
@@ -327,7 +294,6 @@ function toggleReactions(params: ToggleReactionsParams) {
 function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
   return performFunctionRequest<TwoFactorStatusResponse>({
     functionName: "get-2fa-status",
-    key: "get-2fa-status",
     body: {},
     requireAuth: true,
   });
@@ -336,7 +302,6 @@ function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
 function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
   return performFunctionRequest<EnableTwoFactorResponse>({
     functionName: "enable-2fa",
-    key: "enable-2fa",
     body: {},
     requireAuth: true,
   });
@@ -349,7 +314,6 @@ function verifyTwoFactorSetup(code: string): Promise<{
     success?: boolean;
   }>({
     functionName: "verify-2fa-setup",
-    key: `verify-2fa-setup:${code}`,
     body: { code },
     requireAuth: true,
   });
@@ -368,7 +332,6 @@ function verifyLogin2FA(code: string): Promise<{
     remainingAttempts?: number;
   }>({
     functionName: "verify-login-2fa",
-    key: `verify-login-2fa:${code}`,
     body: { code },
     requireAuth: true,
   });
@@ -379,7 +342,6 @@ function disableTwoFactor(code: string): Promise<{
 }> {
   return performFunctionRequest<{ success?: boolean }>({
     functionName: "disable-2fa",
-    key: `disable-2fa:${code}`,
     body: { code },
     requireAuth: true,
   });
@@ -396,7 +358,6 @@ function clearTwoFactorVerification(): Promise<{
     error?: string;
   }>({
     functionName: "clear-2fa-verification",
-    key: "clear-2fa-verification",
     body: {},
     requireAuth: true,
   });
@@ -446,7 +407,6 @@ function updateProfile(
 ): Promise<UpdateProfileResponse> {
   return performFunctionRequest<UpdateProfileResponse>({
     functionName: "update-profile",
-    key: `update-profile:${payload.user_id}`,
     body: payload,
     requireAuth: true,
   });
@@ -526,7 +486,6 @@ interface FetchTelegramPostParams {
   mode?: "all" | "liked" | "disliked" | "favorites";
   authorId?: number | null;
   tokenName?: string | null;
-  userId?: string | null;
 }
 
 async function fetchTelegramPost(
@@ -560,12 +519,6 @@ async function fetchTelegramPost(
         );
   }
   return data ?? [];
-}
-
-// Auth functions
-async function getSession(): Promise<Session | null> {
-  const { data: sessionData } = await supabase.auth.getSession();
-  return sessionData.session ?? null;
 }
 
 async function signInWithOtp(email: string): Promise<string> {

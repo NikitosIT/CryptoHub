@@ -31,7 +31,6 @@ export function useCommentItem({
     setOpenDeleteDialog(false);
     deleteComment.mutate({
       commentId: comment.id,
-
       postId,
     });
   };

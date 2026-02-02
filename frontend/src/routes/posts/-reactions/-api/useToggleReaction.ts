@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
+import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
 import { cancelDebounce, debounceAsync } from "@/utils/debounceAsync";
 
 import { toggleReaction } from "../-hooks/useToggleReactionHook";
@@ -12,18 +13,17 @@ const initialReactionMap = new Map<string, UserReaction>();
 
 export function useToggleReaction() {
   const queryClient = useQueryClient();
-
+  const { user } = useAuthState();
+  const userId = user?.id;
   return useMutation({
     mutationFn: ({
       postId,
       reactionType,
-      userId,
     }: {
       postId: number;
       reactionType: "like" | "dislike";
-      userId: string;
     }) => {
-      const key = `${postId}:${userId}`;
+      const key = `${postId}:${user?.id}`;
 
       const initial = initialReactionMap.get(key) ?? null;
 
@@ -37,11 +37,13 @@ export function useToggleReaction() {
         initialReactionMap.delete(key);
         return Promise.resolve();
       }
-
+      if (!userId) {
+        return Promise.reject(new Error("User not authenticated"));
+      }
       return debounceAsync(
         key,
         async () => {
-          await api.reactions.toggle({ postId, reactionType, userId });
+          await api.reactions.toggle({ postId, reactionType });
           initialReactionMap.delete(key);
         },
         500,
@@ -51,11 +53,9 @@ export function useToggleReaction() {
     onMutate: ({
       postId,
       reactionType,
-      userId,
     }: {
       postId: number;
       reactionType: "like" | "dislike";
-      userId: string;
     }) => {
       const key = `${postId}:${userId}`;
 

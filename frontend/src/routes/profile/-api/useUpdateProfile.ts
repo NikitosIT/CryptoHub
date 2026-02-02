@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api, type UpdateProfilePayload, type UserProfile } from "@/api";
-import { useRequiredAuth } from "@/hooks/useRequiredAuth";
+import { useRequiredAuth } from "@/routes/auth/-hooks/useRequiredAuth";
 import {
   setCachedProfile,
   updateProfileCache,
@@ -13,9 +13,8 @@ export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
   const { userId } = useRequiredAuth();
   return useMutation({
-    mutationFn: async (payload: Omit<UpdateProfilePayload, "user_id">) => {
+    mutationFn: async (payload: UpdateProfilePayload) => {
       return await api.profile.update({
-        user_id: userId,
         ...payload,
       });
     },

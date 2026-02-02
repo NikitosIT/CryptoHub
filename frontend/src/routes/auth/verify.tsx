@@ -21,7 +21,7 @@ export const Route = createFileRoute("/auth/verify")({
   component: VerifyEmailPage,
 });
 
-function VerifyEmailPage() {
+export function VerifyEmailPage() {
   const {
     showOTPField,
     control,

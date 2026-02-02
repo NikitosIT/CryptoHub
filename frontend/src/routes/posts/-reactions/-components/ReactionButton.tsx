@@ -11,11 +11,11 @@ export function ReactionButton({ post }: { post: TelegramPost }) {
   const { user } = useAuthState({ checkTwoFactor: false });
 
   const userReaction = user?.id ? post.user_reaction : null;
-  const isDisabled = !user?.id;
+  const canHover = Boolean(user?.id);
 
   const handleReaction = (reactionType: ReactionType) => {
     if (!user?.id) return;
-    mutation.mutate({ postId: post.id, reactionType, userId: user.id });
+    mutation.mutate({ postId: post.id, reactionType });
   };
 
   return (
@@ -24,21 +24,13 @@ export function ReactionButton({ post }: { post: TelegramPost }) {
         const config = REACTIONS[type];
         const isActive = userReaction === type;
 
-        const classes = getReactionClasses({
-          isActive,
-          isDisabled,
-          activeBg: config.activeBg,
-          hoverBg: config.hoverBg,
-          activeText: config.activeText,
-          hoverText: config.hoverText,
-        });
+        const classes = getReactionClasses(isActive, canHover, config);
 
         return (
           <button
             key={type}
             type="button"
             onClick={() => handleReaction(type)}
-            disabled={isDisabled}
             aria-pressed={isActive}
             aria-label={`${config.label} (${post[config.countKey]})`}
             className={classes.button}

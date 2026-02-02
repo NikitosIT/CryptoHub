@@ -57,23 +57,23 @@ export const useFiltersStore = create<FiltersStore>()(
         }));
       },
     }),
-    { name: "filters-storage" },
-  ),
+    { name: "filters-storage" }
+  )
 );
 
 export function useFiltersForMode() {
   const { mode } = usePostsMode();
 
   const selectedAuthorId = useFiltersStore(
-    (state) => state.filters[mode].selectedAuthorId,
+    (state) => state.filters[mode].selectedAuthorId
   );
 
   const selectedToken = useFiltersStore(
-    (state) => state.filters[mode].selectedToken,
+    (state) => state.filters[mode].selectedToken
   );
 
   const setSelectedAuthorId = useFiltersStore(
-    (state) => state.setSelectedAuthorId,
+    (state) => state.setSelectedAuthorId
   );
 
   const setSelectedToken = useFiltersStore((state) => state.setSelectedToken);
@@ -84,7 +84,7 @@ export function useFiltersForMode() {
 
       setSelectedToken: (token: Token | null) => setSelectedToken(mode, token),
     }),
-    [mode, setSelectedAuthorId, setSelectedToken],
+    [mode, setSelectedAuthorId, setSelectedToken]
   );
 
   return {

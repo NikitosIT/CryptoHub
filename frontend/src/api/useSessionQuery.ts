@@ -1,17 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { api } from "@/api";
+import { getSession } from "@/api/getSession";
 
 export const sessionQueryKey = () => ["session"] as const;
-
-function sessionGet() {
-  return api.auth.getSession();
-}
 
 export function useSessionQuery() {
   return useQuery({
     queryKey: sessionQueryKey(),
-    queryFn: sessionGet,
+    queryFn: getSession,
     staleTime: Infinity,
     gcTime: Infinity,
   });

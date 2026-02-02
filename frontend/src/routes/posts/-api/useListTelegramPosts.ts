@@ -11,7 +11,7 @@ const PAGE_SIZE = 10;
 const postsQueryKey = (
   authorId?: number | null,
   tokenName?: string | null,
-  mode?: "all" | "liked" | "disliked" | "favorites",
+  mode?: "all" | "liked" | "disliked" | "favorites"
 ) => ["posts", authorId, tokenName, mode] as const;
 
 export function useTelegramPosts() {

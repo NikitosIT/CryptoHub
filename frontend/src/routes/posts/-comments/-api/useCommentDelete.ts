@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import { useToast } from "@/hooks/useToast";
 import { removeCommentFromList } from "@/routes/posts/-comments/-utils/commentUtils";
 import type { CommentWithReplies } from "@/types/db";
@@ -25,13 +24,13 @@ type MutationContext = {
 
 export function useCommentDelete() {
   const queryClient = useQueryClient();
-  const { user } = useRequiredAuth();
-  const userId = user.id;
   const updateCommentsCount = useCommentsUpdateCountCache();
   const { showError } = useToast();
+
   return useMutation({
-    mutationFn: ({ commentId }: DeleteCommentVariables) =>
-      api.comments.delete(commentId, userId),
+    mutationFn: ({ commentId }: DeleteCommentVariables) => {
+      return api.comments.delete(commentId);
+    },
 
     onMutate: async ({ commentId, postId }): Promise<MutationContext> => {
       const queryKey = commentsListQueryKey(postId);

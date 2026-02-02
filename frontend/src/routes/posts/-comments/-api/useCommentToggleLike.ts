@@ -41,7 +41,7 @@ export function useCommentToggleLike(postId: number) {
           return { skipped: true as const };
         }
 
-        const res = await api.reactions.toggleCommentsLike(commentId, userId);
+        const res = await api.reactions.toggleCommentsLike(commentId);
 
         initialCommentLikeByKey.delete(key);
         return res;
@@ -56,7 +56,7 @@ export function useCommentToggleLike(postId: number) {
     },
 
     onMutate: async ({ commentId }: { commentId: number }) => {
-      if (userId) {
+      if (!userId) {
         return { previous: null, queryKey: null };
       }
 

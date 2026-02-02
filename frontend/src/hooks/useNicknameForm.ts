@@ -8,7 +8,7 @@ import { useUpdateProfile } from "@/routes/profile/-api/useUpdateProfile";
 import { useUserProfile } from "@/routes/profile/-api/useUserProfile";
 import { getErrorMessage } from "@/utils/errorUtils";
 
-import { useRequiredAuth } from "./useRequiredAuth";
+import { useRequiredAuth } from "../routes/auth/-hooks/useRequiredAuth";
 
 type NicknameFormValues = { nickname: string };
 

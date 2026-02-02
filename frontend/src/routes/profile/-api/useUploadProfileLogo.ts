@@ -1,6 +1,6 @@
 import { api } from "@/api";
-import { useRequiredAuth } from "@/hooks/useRequiredAuth";
 import { useToast } from "@/hooks/useToast";
+import { useRequiredAuth } from "@/routes/auth/-hooks/useRequiredAuth";
 import { useUpdateProfile } from "@/routes/profile/-api/useUpdateProfile";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { generateUUID } from "@/utils/uuid";
