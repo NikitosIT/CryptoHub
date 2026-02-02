@@ -1,25 +1,45 @@
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useScrollTop } from "@/hooks/useScrollTop";
-import { useListAuthors } from "@/routes/authors/-api/useListAuthors";
-import { useTelegramPosts } from "@/routes/posts/-api/useListTelegramPosts";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { useScrollTop } from '@/hooks/useScrollTop';
+import { useListAuthors } from '@/routes/authors/-api/useListAuthors';
+import { useTelegramPosts } from '@/routes/posts/-api/useListTelegramPosts';
+import { useFiltersForMode } from '@/store/useFiltersStore';
 
-import FeedSkeleton from "./FeedSkeleton";
-import { PostCard } from "./PostCard";
+import FeedSkeleton from './FeedSkeleton';
+import { PostCard } from './PostCard';
 
 export default function PostsList() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useTelegramPosts();
-  const { data: authors } = useListAuthors();
-  const { selectedAuthorId: authorId } = useFiltersForMode();
-  const observerRef = useInfiniteScroll({
+  const {
+    data,
+    fetchNextPage,
     hasNextPage,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    isFetchingNextPage,
+    isLoading,
+    isPlaceholderData,
+    isFetching,
+  } = useTelegramPosts();
+
+  const { data: authors } = useListAuthors();
+  const posts = data?.pages.flat() ?? [];
+  const { selectedAuthorId: authorId, selectedToken } = useFiltersForMode();
+
+  // Scroll to top when filters change
+  // useEffect(() => {
+  //   window.scrollTo({ top: 0, behavior: 'instant' });
+  // }, [authorId, selectedToken]);
+
+  // // Prevent fetching next page if we are already fetching or showing placeholder data (transitioning)
+  const shouldFetchNextPage =
+    hasNextPage &&
+    !isFetchingNextPage &&
+    !isPlaceholderData &&
+    !isFetching &&
+    Boolean(posts.length);
+
+  const observerRef = useInfiniteScroll({
+    hasNextPage: shouldFetchNextPage,
     fetchNextPage,
   });
   const { show: showScrollTop, scrollToTop } = useScrollTop();
-
-  const posts = data?.pages.flat() ?? [];
 
   if (isLoading) return <FeedSkeleton />;
   const selectedAuthorName =
@@ -30,9 +50,9 @@ export default function PostsList() {
   if (authorId != null && posts.length === 0) {
     return (
       <p className="px-4 py-3 mt-4 text-sm text-center text-gray-400 shadow-inner sm:px-6 sm:mt-6 sm:text-base rounded-xl shadow-black/30">
-        No posts from{" "}
+        No posts from{' '}
         <span className="font-semibold text-white">
-          {selectedAuthorName ?? "this author"}
+          {selectedAuthorName ?? 'this author'}
         </span>
       </p>
     );
@@ -42,7 +62,11 @@ export default function PostsList() {
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
-      <div ref={observerRef} />
+      {/* <div
+        ref={observerRef}
+        key={`${authorId ?? 'all'}-${selectedToken?.value ?? 'all'}`}
+        className="h-4 w-full"
+      /> */}
       {isFetchingNextPage ? <FeedSkeleton /> : null}
       {showScrollTop ? (
         <button

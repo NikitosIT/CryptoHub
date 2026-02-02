@@ -1,9 +1,8 @@
-import { useMemo } from "react";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { useMemo } from 'react';
+import { create } from 'zustand';
 
-import { usePostsMode } from "@/routes/posts/-hooks/usePostsMode";
-import type { PostMode, Token } from "@/types/db";
+import { usePostsMode } from '@/routes/posts/-hooks/usePostsMode';
+import type { PostMode, Token } from '@/types/db';
 
 interface FilterData {
   selectedAuthorId: number | null;
@@ -23,57 +22,52 @@ const defaultFilterData: FilterData = {
   selectedToken: null,
 };
 
-export const useFiltersStore = create<FiltersStore>()(
-  persist(
-    (set) => ({
+export const useFiltersStore = create<FiltersStore>()((set) => ({
+  filters: {
+    all: { ...defaultFilterData },
+    liked: { ...defaultFilterData },
+    disliked: { ...defaultFilterData },
+    favorites: { ...defaultFilterData },
+    selectedToken: null,
+  },
+  setSelectedAuthorId: (mode, id) => {
+    set((state) => ({
       filters: {
-        all: { ...defaultFilterData },
-        liked: { ...defaultFilterData },
-        disliked: { ...defaultFilterData },
-        favorites: { ...defaultFilterData },
+        ...state.filters,
+        [mode]: {
+          ...state.filters[mode],
+          selectedAuthorId: id,
+        },
       },
+    }));
+  },
 
-      setSelectedAuthorId: (mode, id) => {
-        set((state) => ({
-          filters: {
-            ...state.filters,
-            [mode]: {
-              ...state.filters[mode],
-              selectedAuthorId: id,
-            },
-          },
-        }));
+  setSelectedToken: (mode, token) => {
+    set((state) => ({
+      filters: {
+        ...state.filters,
+        [mode]: {
+          ...state.filters[mode],
+          selectedToken: token,
+        },
       },
-
-      setSelectedToken: (mode, token) => {
-        set((state) => ({
-          filters: {
-            ...state.filters,
-            [mode]: {
-              ...state.filters[mode],
-              selectedToken: token,
-            },
-          },
-        }));
-      },
-    }),
-    { name: "filters-storage" }
-  )
-);
+    }));
+  },
+}));
 
 export function useFiltersForMode() {
   const { mode } = usePostsMode();
 
   const selectedAuthorId = useFiltersStore(
-    (state) => state.filters[mode].selectedAuthorId
+    (state) => state.filters[mode].selectedAuthorId,
   );
 
   const selectedToken = useFiltersStore(
-    (state) => state.filters[mode].selectedToken
+    (state) => state.filters[mode].selectedToken,
   );
 
   const setSelectedAuthorId = useFiltersStore(
-    (state) => state.setSelectedAuthorId
+    (state) => state.setSelectedAuthorId,
   );
 
   const setSelectedToken = useFiltersStore((state) => state.setSelectedToken);
@@ -84,7 +78,7 @@ export function useFiltersForMode() {
 
       setSelectedToken: (token: Token | null) => setSelectedToken(mode, token),
     }),
-    [mode, setSelectedAuthorId, setSelectedToken]
+    [mode, setSelectedAuthorId, setSelectedToken],
   );
 
   return {
