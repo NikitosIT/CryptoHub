@@ -1,6 +1,5 @@
-import { supabase } from "../../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../../shared/supabaseApi.ts";
 import { errorResponse, jsonResponse, RequestBody } from "../utils.ts";
-import { verifyUserId } from "../../shared/auth.ts";
 import { safeLogError } from "../../shared/logger.ts";
 
 const COMMENT_MEDIA_BUCKET = "comment_media";
@@ -21,7 +20,12 @@ function extractFilename(url: string): string {
 
 export async function handleDeleteComment(req: Request, body: RequestBody) {
   try {
-    const user_id = await verifyUserId(req, body.user_id);
+    const supabaseClient = createSupabaseClient(req);
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+    const userId = user?.id;
+
     const { comment_id } = body;
 
     if (!comment_id) {
@@ -38,7 +42,7 @@ export async function handleDeleteComment(req: Request, body: RequestBody) {
       return errorResponse("Comment not found", 404);
     }
 
-    if (comment.user_id !== user_id) {
+    if (comment.user_id !== userId) {
       return errorResponse("Unauthorized", 403);
     }
 
@@ -65,9 +69,9 @@ export async function handleDeleteComment(req: Request, body: RequestBody) {
         if (deleteMediaError) {
           safeLogError(
             new Error(
-              `Failed to delete comment media: ${deleteMediaError.message}`
+              `Failed to delete comment media: ${deleteMediaError.message}`,
             ),
-            "deleteComment"
+            "deleteComment",
           );
         }
       }

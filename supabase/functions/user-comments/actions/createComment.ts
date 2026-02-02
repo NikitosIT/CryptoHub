@@ -1,4 +1,4 @@
-import { supabase } from "../../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../../shared/supabaseApi.ts";
 import {
   errorResponse,
   jsonResponse,
@@ -6,15 +6,18 @@ import {
   RawComment,
   RequestBody,
 } from "../utils.ts";
-import { verifyUserId } from "../../shared/auth.ts";
 import { checkRateLimit } from "../../shared/rateLimiter.ts";
 import { sanitizeText, sanitizeUrl } from "../../shared/sanitize.ts";
 
 export async function handleCreateComment(req: Request, body: RequestBody) {
   try {
-    const user_id = await verifyUserId(req, body.user_id);
+    const supabaseClient = createSupabaseClient(req);
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+    const userId = user?.id;
 
-    await checkRateLimit(user_id, "create_comment", {
+    await checkRateLimit("create_comment", {
       maxRequests: 10,
       windowMs: 60 * 1000,
     });
@@ -51,7 +54,7 @@ export async function handleCreateComment(req: Request, body: RequestBody) {
         if (!mediaItem.url || typeof mediaItem.url !== "string") {
           return errorResponse(
             "Media URL is required and must be a string",
-            400
+            400,
           );
         }
 
@@ -78,7 +81,7 @@ export async function handleCreateComment(req: Request, body: RequestBody) {
       .from("comments")
       .insert([
         {
-          user_id,
+          user_id: userId,
           post_id,
           parent_comment_id: parent_comment_id || null,
           text: sanitizedText,
@@ -95,7 +98,7 @@ export async function handleCreateComment(req: Request, body: RequestBody) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("nickname, profile_logo")
-      .eq("id", user_id)
+      .eq("id", userId)
       .maybeSingle();
 
     const data = {

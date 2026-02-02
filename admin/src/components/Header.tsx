@@ -37,15 +37,6 @@ function Header() {
                 >
                   Forecasts
                 </Link>
-                <Link
-                  to="/support"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-orange-500 hover:bg-gray-900"
-                  activeProps={{
-                    className: "text-orange-500 bg-gray-900",
-                  }}
-                >
-                  Support
-                </Link>
               </nav>
             )}
           </div>

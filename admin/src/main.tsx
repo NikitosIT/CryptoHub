@@ -7,8 +7,6 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { useAuthListener } from "./api/useAuthListener";
 import "./index.css";
 import { routeTree } from "./routes/routeTree.gen";
-import { store } from "./store/store";
-import ThemeProvider from "./store/ThemeProvider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,12 +37,8 @@ if (!rootElement) {
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <RootWithProviders />
-        </QueryClientProvider>
-      </ThemeProvider>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <RootWithProviders />
+    </QueryClientProvider>
   </React.StrictMode>,
 );

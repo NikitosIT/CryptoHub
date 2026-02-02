@@ -1,9 +1,8 @@
-import { supabase } from "../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../shared/supabaseApi.ts";
 import { handleOptions } from "../shared/cors.ts";
 import { errorResponse, jsonResponse } from "../shared/responses.ts";
-import { parseRequestBody, validateRequiredFields } from "../shared/request.ts";
+import { parseRequestBody } from "../shared/request.ts";
 import { safeLogError } from "../shared/logger.ts";
-import { verifyUserId } from "../shared/auth.ts";
 
 const USER_AVATARS_BUCKET = "user_avatars";
 const USER_LOGO_PREFIX = "logos/";
@@ -12,20 +11,17 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return handleOptions(req);
   }
-
+  const supabaseClient = createSupabaseClient(req);
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
+  const userId = user?.id;
   try {
     const body = await parseRequestBody<{
-      user_id?: string;
       nickname?: string;
       profile_logo?: string;
     }>(req);
 
-    const validation = validateRequiredFields(body, ["user_id"]);
-    if (!validation.valid) {
-      return errorResponse(validation.error, 400, req);
-    }
-
-    const user_id = await verifyUserId(req, body.user_id);
     const { nickname, profile_logo } = body;
 
     if (!nickname && !profile_logo) {
@@ -37,7 +33,7 @@ Deno.serve(async (req) => {
         .from("profiles")
         .select("id")
         .eq("nickname", nickname)
-        .neq("id", user_id)
+        .neq("id", userId)
         .maybeSingle();
 
       if (nickErr) throw nickErr;
@@ -53,7 +49,7 @@ Deno.serve(async (req) => {
     const { data: profile, error: profileErr } = await supabase
       .from("profiles")
       .select("id, nickname, last_changed, profile_logo")
-      .eq("id", user_id)
+      .eq("id", userId)
       .maybeSingle();
 
     if (profileErr) throw profileErr;
@@ -80,15 +76,13 @@ Deno.serve(async (req) => {
     }
 
     if (!profile) {
-      const { error: insertErr } = await supabase
-        .from("profiles")
-        .insert({
-          id: user_id,
-          nickname: nickname || null,
-          profile_logo: profile_logo || null,
-          created_at: new Date().toISOString(),
-          last_changed: new Date().toISOString(),
-        });
+      const { error: insertErr } = await supabase.from("profiles").insert({
+        id: userId,
+        nickname: nickname || null,
+        profile_logo: profile_logo || null,
+        created_at: new Date().toISOString(),
+        last_changed: new Date().toISOString(),
+      });
 
       if (insertErr) throw insertErr;
 
@@ -131,7 +125,7 @@ Deno.serve(async (req) => {
     const { error: updateErr } = await supabase
       .from("profiles")
       .update(updates)
-      .eq("id", user_id);
+      .eq("id", userId);
 
     if (updateErr) throw updateErr;
 

@@ -11,34 +11,17 @@ import { createSupabaseClient } from "../../shared/supabaseApi.ts";
 
 export async function handleListComments(req: Request, body: RequestBody) {
   try {
-    const { post_id, user_id: user_id_from_body } = body;
+    const { post_id } = body;
 
     if (!post_id) {
       return errorResponse("Missing post_id", 400);
     }
 
-    let user_id: string | undefined;
-
     const supabaseClient = createSupabaseClient(req);
     const {
       data: { user },
-      error: authError,
     } = await supabaseClient.auth.getUser();
-
-    if (!authError && user?.id) {
-      const authenticatedUserId = user.id;
-
-      if (user_id_from_body && user_id_from_body !== authenticatedUserId) {
-        return errorResponse(
-          "Unauthorized: user_id does not match authenticated user",
-          403,
-        );
-      }
-
-      user_id = authenticatedUserId;
-    } else {
-      user_id = undefined;
-    }
+    const userId = user?.id;
 
     const { data: comments, error } = await supabase
       .from("comments")
@@ -51,11 +34,11 @@ export async function handleListComments(req: Request, body: RequestBody) {
     const commentIds = (comments || []).map((c) => c.id);
 
     let likedCommentIds = new Set<number>();
-    if (user_id && commentIds.length > 0) {
+    if (userId && commentIds.length > 0) {
       const { data: likedReactions, error: reactionsError } = await supabase
         .from("comment_reactions")
         .select("comment_id")
-        .eq("user_id", user_id)
+        .eq("user_id", userId)
         .in("comment_id", commentIds);
 
       if (reactionsError) throw reactionsError;
@@ -63,7 +46,7 @@ export async function handleListComments(req: Request, body: RequestBody) {
       likedCommentIds = new Set(
         (likedReactions || [])
           .map((reaction) =>
-            parseNumber((reaction as { comment_id: unknown }).comment_id)
+            parseNumber((reaction as { comment_id: unknown }).comment_id),
           )
           .filter((value): value is number => value !== null),
       );
@@ -82,14 +65,14 @@ export async function handleListComments(req: Request, body: RequestBody) {
     const data = (comments || []).map((comment) => {
       const normalizedComment = normalizeComment(comment as RawComment);
       const commentNumericId = parseNumber(normalizedComment.id);
-      const isOwner = normalizedComment.user_id === user_id;
+      const isOwner = normalizedComment.user_id === userId;
       const profile = profileMap.get(normalizedComment.user_id);
 
       return {
         ...normalizedComment,
         user_id: isOwner ? normalizedComment.user_id : null,
-        user_has_liked: commentNumericId !== null &&
-          likedCommentIds.has(commentNumericId),
+        user_has_liked:
+          commentNumericId !== null && likedCommentIds.has(commentNumericId),
         user: {
           raw_user_meta_data: {
             nickname: profile?.nickname || null,
