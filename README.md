@@ -1,19 +1,60 @@
-# <span style="color: #fff">Crypto</span><span style="color: #fb923c">Hub</span>
+# CryptoHub
 
-**CryptoHub** is a cryptocurrency news platform that integrates with Telegram and OpenAI to automatically publish posts on the website.
-Using AI, the system automatically detects which cryptocurrency a post is related to, allowing users to easily filter posts by a specific coin. Users can interact with posts by leaving reactions, which are instantly reflected in their profile.
+**CryptoHub** is a cryptocurrency news platform that integrates with **Telegram** and **OpenAI** to automatically publish posts on the website.
 
-- **Stack:** React 19, Vite 7, TypeScript, TanStack Router, React Query, Supabase (auth + API), MUI, Tailwind CSS
-- **Features:** Auth (Google + email OTP), two-factor authentication, profile with avatar, posts feed with reactions/favorites, comments with media, token and author filters
+Using AI, the system detects which cryptocurrency a post is related to, allowing users to easily filter content by a specific token. Users can interact with posts by leaving reactions and comments, which are instantly reflected in their profile.
+
+The project uses **Supabase as a backend** — authentication, database, API, and storage are handled there.
 
 ---
 
-## Setup & install
+## 🧱 Tech stack
 
-From the project root (e.g. where `package.json` is):
+### Frontend
+
+- React
+- Vite
+- JavaScript
+- TypeScript
+- TanStack Router
+- TanStack Query
+- Zustand
+- React Hook Form
+- Zod
+- MUI
+- Tailwind CSS
+
+### Backend (Supabase)
+
+- Authentication (Email OTP + Google OAuth)
+- PostgreSQL
+- Row Level Security (RLS)
+- Storage (avatars, media)
+- RPC functions
+- Edge Functions
+
+---
+
+## ✨ Features
+
+- 🔐 Authentication (Google OAuth + Email OTP)
+- 🔑 Optional Two-Factor Authentication (TOTP)
+- 📰 Telegram posts feed with pagination
+- 🤖 AI-based token detection (OpenAI)
+- 👍 Reactions & favorites (optimistic updates)
+- 💬 Comments with media attachments
+- 🔍 Filters by token and author
+- 👤 User profile with avatar
+
+---
+
+## 🚀 Setup & install
+
+From the project root:
 
 ```bash
 cd frontend
+
 ```
 
 Install dependencies:
@@ -28,24 +69,15 @@ Run the dev server:
 npm run dev
 ```
 
-Build for production:
-
-```bash
-npm run build
-```
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
 Other commands:
 
 ```bash
-npm run lint      # run ESLint
-npm run test      # run Vitest
-npm run router:gen   # regenerate TanStack Router route tree
+npm run build       # production build
+npm run preview     # preview production build
+npm run lint        # ESLint
+npm run test        # Vitest
+npm run router:gen  # regenerate TanStack Router tree
+
 ```
 
 ---
@@ -60,3 +92,13 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 Replace `your_supabase_project_url` and `your_supabase_anon_key` with the values from your [Supabase](https://supabase.com) project (Settings → API).
+
+## 🗄️ Supabase setup
+
+**This project expects the Supabase backend to have:**
+Auth enabled (Email + Google)
+Required database tables
+RLS policies
+Storage buckets (user_avatars, comment media, tg_media)
+RPC / Edge Functions
+⚠️ The SQL schema and functions are not auto-provisioned yet and must be set up manually.
