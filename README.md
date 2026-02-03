@@ -1,61 +1,62 @@
-**CryptoHub**
+# <span style="color: #fff">Crypto</span><span style="color: #fb923c">Hub</span>
 
-CryptoHub is a cryptocurrency news platform that integrates with Telegram and OpenAI to automatically publish posts on the website.
-
+**CryptoHub** is a cryptocurrency news platform that integrates with Telegram and OpenAI to automatically publish posts on the website.
 Using AI, the system automatically detects which cryptocurrency a post is related to, allowing users to easily filter posts by a specific coin. Users can interact with posts by leaving reactions, which are instantly reflected in their profile.
 
-**Authentication & Security**
+- **Stack:** React 19, Vite 7, TypeScript, TanStack Router, React Query, Supabase (auth + API), MUI, Tailwind CSS
+- **Features:** Auth (Google + email OTP), two-factor authentication, profile with avatar, posts feed with reactions/favorites, comments with media, token and author filters
 
-1. Email registration with OTP code confirmation
-2. Google authentication for quick and easy sign-in
-3. Optional Two-Factor Authentication (2FA) for enhanced security
-4. When enabled, 2FA is required on every login
+---
 
-**Features**
+## Setup & install
 
-1. AI-powered cryptocurrency detection for posts
-2. Filtering posts by cryptocurrency
-3. Optimistic UI updates for comments
-4. Secure authentication with optional 2FA
-5. Clean and modern UI with responsive design
-6. Pagination for posts
+From the project root (e.g. where `package.json` is):
 
-**Tech Stack**
-Frontend
+```bash
+cd frontend
+```
 
-1. State management (server state): TanStack Query
-2. Filters & client state: Zustand
-3. Forms & inputs: React Hook Form
-4. Validation: Zod
-5. UI components: MUI
-6. Styling: Tailwind CSS
-7. Routing: TanStack Router
-8. Testing: Vitest
+Install dependencies:
 
-Backend
+```bash
+npm install
+```
 
-1. Backend & Auth: Supabase
-2. AI integration: OpenAI
+Run the dev server:
 
----Setup & run---
+```bash
+npm run dev
+```
 
-**Setup**
+Build for production:
 
-1. Clone the repo and go to the frontend folder:
-   cd frontend
+```bash
+npm run build
+```
 
-2. Install dependencies:
-   npm install
+Preview the production build locally:
 
-3. Start the dev server:
-   npm run dev
+```bash
+npm run preview
+```
 
-   The app will be available at the port shown in the terminal.
+Other commands:
 
-**Other commands**
+```bash
+npm run lint      # run ESLint
+npm run test      # run Vitest
+npm run router:gen   # regenerate TanStack Router route tree
+```
 
-- `npm run build` — production build
-- `npm run preview` — preview the production build locally
-- `npm run test` — run tests (Vitest)
-- `npm run lint` — run ESLint
-- `npm run router:gen` — regenerate TanStack Router route tree
+---
+
+## Environment
+
+Create a `.env` (or `.env.local`) in `frontend/` with your Supabase URL and anon key so auth and API calls work:
+
+```bash
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+Replace `your_supabase_project_url` and `your_supabase_anon_key` with the values from your [Supabase](https://supabase.com) project (Settings → API).
