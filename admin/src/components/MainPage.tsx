@@ -27,22 +27,6 @@ function MainPage() {
               отклоняйте прогнозы перед публикацией.
             </p>
           </Link>
-
-          <Link
-            to="/support"
-            className="p-6 transition-all bg-gray-900 border rounded-xl border-orange-500/20 hover:border-orange-500/40 hover:bg-gray-800"
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <div className="text-4xl">💬</div>
-              <h2 className="text-2xl font-semibold text-orange-400">
-                Поддержка
-              </h2>
-            </div>
-            <p className="text-gray-400">
-              Просматривайте сообщения от пользователей. Отвечайте на вопросы и
-              решайте проблемы.
-            </p>
-          </Link>
         </div>
       </div>
     </div>

@@ -1,24 +1,25 @@
-import { supabase } from "../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../shared/supabaseApi.ts";
 import { handleOptions } from "../shared/cors.ts";
 import { errorResponse, jsonResponse } from "../shared/responses.ts";
 import { parseRequestBody, validateRequiredFields } from "../shared/request.ts";
 import { safeLogError } from "../shared/logger.ts";
-import { verifyUserId } from "../shared/auth.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return handleOptions();
   }
-
+  const supabaseClient = createSupabaseClient(req);
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
+  const userId = user?.id;
   try {
     const body = await parseRequestBody<{
-      user_id?: string;
       post_id?: number;
       reaction_type?: string;
     }>(req);
 
     const validation = validateRequiredFields(body, [
-      "user_id",
       "post_id",
       "reaction_type",
     ]);
@@ -26,13 +27,12 @@ Deno.serve(async (req) => {
       return errorResponse(validation.error);
     }
 
-    const user_id = await verifyUserId(req, body.user_id);
     const { post_id, reaction_type } = body;
 
     const { data: existing, error: selectError } = await supabase
       .from("reactions")
       .select("*")
-      .eq("user_id", user_id)
+      .eq("user_id", userId)
       .eq("post_id", post_id)
       .maybeSingle();
 
@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
     } else {
       const { error: insError } = await supabase
         .from("reactions")
-        .insert([{ user_id, post_id, reaction_type }]);
+        .insert([{ user_id: userId, post_id, reaction_type }]);
       if (insError) throw insError;
     }
 
@@ -67,8 +67,8 @@ Deno.serve(async (req) => {
     if (countError) throw countError;
 
     const likeCount = counts.filter((r) => r.reaction_type === "like").length;
-    const dislikeCount = counts.filter((r) =>
-      r.reaction_type === "dislike"
+    const dislikeCount = counts.filter(
+      (r) => r.reaction_type === "dislike",
     ).length;
 
     const { error: updatePostError } = await supabase
@@ -89,9 +89,8 @@ Deno.serve(async (req) => {
       return err;
     }
     safeLogError(err, "toggle-reactions");
-    const errorMessage = err instanceof Error
-      ? err.message
-      : "Unexpected error";
+    const errorMessage =
+      err instanceof Error ? err.message : "Unexpected error";
     return errorResponse(errorMessage, 500);
   }
 });

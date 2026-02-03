@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseApi.ts";
+import { createSupabaseClient, supabase } from "./supabaseApi.ts";
 import { errorResponse } from "./responses.ts";
 
 export interface RateLimitConfig {
@@ -13,13 +13,16 @@ export interface VerificationRateLimitResult {
 }
 
 export async function checkRateLimit(
-  userId: string,
   action: string,
-  config: RateLimitConfig
+  config: RateLimitConfig,
 ): Promise<boolean> {
   const now = Date.now();
   const windowStart = now - config.windowMs;
-
+  const supabaseClient = createSupabaseClient();
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
+  const userId = user?.id;
   const { data: requests, error } = await supabase
     .from("rate_limits")
     .select("id")
@@ -39,7 +42,7 @@ export async function checkRateLimit(
       `Rate limit exceeded: Maximum ${
         config.maxRequests
       } requests per ${Math.floor(config.windowMs / 1000)} seconds`,
-      429
+      429,
     );
   }
 
@@ -68,7 +71,7 @@ export async function checkVerificationRateLimit(
   userId: string,
   action: string,
   config: RateLimitConfig,
-  isFailedAttempt: boolean
+  isFailedAttempt: boolean,
 ): Promise<VerificationRateLimitResult> {
   const now = Date.now();
   const windowStart = now - config.windowMs;
@@ -103,15 +106,15 @@ export async function checkVerificationRateLimit(
           `Too many failed attempts. Please try again in ${minutesLeft} minute${
             minutesLeft !== 1 ? "s" : ""
           }.`,
-          429
+          429,
         );
       }
     } else {
       throw errorResponse(
         `Too many failed attempts. Please try again in ${Math.ceil(
-          config.windowMs / 60000
+          config.windowMs / 60000,
         )} minutes.`,
-        429
+        429,
       );
     }
   }

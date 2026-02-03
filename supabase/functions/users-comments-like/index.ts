@@ -1,9 +1,8 @@
-import { supabase } from "../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../shared/supabaseApi.ts";
 import { handleOptions } from "../shared/cors.ts";
 import { errorResponse, jsonResponse } from "../shared/responses.ts";
 import { parseRequestBody, validateRequiredFields } from "../shared/request.ts";
 import { safeLogError } from "../shared/logger.ts";
-import { verifyUserId } from "../shared/auth.ts";
 
 function parseCommentId(value: unknown): number {
   if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -29,26 +28,29 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return handleOptions();
   }
+  const supabaseClient = createSupabaseClient(req);
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
+  const userId = user?.id;
 
   try {
     const body = await parseRequestBody<{
       comment_id?: unknown;
-      user_id?: string;
     }>(req);
 
-    const validation = validateRequiredFields(body, ["comment_id", "user_id"]);
+    const validation = validateRequiredFields(body, ["comment_id"]);
     if (!validation.valid) {
       return errorResponse(validation.error);
     }
 
-    const user_id = await verifyUserId(req, body.user_id);
     const normalizedCommentId = parseCommentId(body.comment_id);
 
     const { data: existing, error: selectError } = await supabase
       .from("comment_reactions")
       .select("id")
       .eq("comment_id", normalizedCommentId)
-      .eq("user_id", user_id)
+      .eq("user_id", userId)
       .maybeSingle();
 
     if (selectError) throw selectError;
@@ -72,7 +74,7 @@ Deno.serve(async (req) => {
 
     const { error: insertError } = await supabase
       .from("comment_reactions")
-      .insert([{ comment_id: normalizedCommentId, user_id }]);
+      .insert([{ comment_id: normalizedCommentId, user_id: userId }]);
 
     if (insertError) throw insertError;
 
@@ -88,9 +90,8 @@ Deno.serve(async (req) => {
       return err;
     }
     safeLogError(err, "users-comments-like");
-    const errorMessage = err instanceof Error
-      ? err.message
-      : "Unexpected error";
+    const errorMessage =
+      err instanceof Error ? err.message : "Unexpected error";
     return errorResponse(errorMessage, 500);
   }
 });

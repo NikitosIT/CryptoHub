@@ -1,4 +1,4 @@
-import { supabase } from "../../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../../shared/supabaseApi.ts";
 import {
   errorResponse,
   jsonResponse,
@@ -6,7 +6,6 @@ import {
   RawComment,
   RequestBody,
 } from "../utils.ts";
-import { verifyUserId } from "../../shared/auth.ts";
 import { sanitizeText, sanitizeUrl } from "../../shared/sanitize.ts";
 import { safeLogError } from "../../shared/logger.ts";
 
@@ -28,7 +27,12 @@ function extractFilename(url: string): string {
 
 export async function handleUpdateComment(req: Request, body: RequestBody) {
   try {
-    const user_id = await verifyUserId(req, body.user_id);
+    const supabaseClient = createSupabaseClient(req);
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+    const userId = user?.id;
+
     const { comment_id, text, media } = body;
 
     if (!comment_id || (!text && !media)) {
@@ -61,7 +65,7 @@ export async function handleUpdateComment(req: Request, body: RequestBody) {
         if (!mediaItem.url || typeof mediaItem.url !== "string") {
           return errorResponse(
             "Media URL is required and must be a string",
-            400
+            400,
           );
         }
 
@@ -91,7 +95,7 @@ export async function handleUpdateComment(req: Request, body: RequestBody) {
       .eq("id", comment_id)
       .single();
 
-    if (!existing || existing.user_id !== user_id) {
+    if (!existing || existing.user_id !== userId) {
       return errorResponse("Unauthorized", 403);
     }
 
@@ -120,7 +124,7 @@ export async function handleUpdateComment(req: Request, body: RequestBody) {
 
             if (oldMediaItem.thumbnail_url) {
               const thumbnailFilename = extractFilename(
-                oldMediaItem.thumbnail_url
+                oldMediaItem.thumbnail_url,
               );
               filesToDelete.push(thumbnailFilename);
             }
@@ -137,9 +141,9 @@ export async function handleUpdateComment(req: Request, body: RequestBody) {
       if (deleteMediaError) {
         safeLogError(
           new Error(
-            `Failed to delete old comment media: ${deleteMediaError.message}`
+            `Failed to delete old comment media: ${deleteMediaError.message}`,
           ),
-          "updateComment"
+          "updateComment",
         );
       }
     }
@@ -163,13 +167,13 @@ export async function handleUpdateComment(req: Request, body: RequestBody) {
       .from("comment_reactions")
       .select("id")
       .eq("comment_id", comment_id)
-      .eq("user_id", user_id)
+      .eq("user_id", userId)
       .maybeSingle();
 
     const { data: profile } = await supabase
       .from("profiles")
       .select("nickname, profile_logo")
-      .eq("id", user_id)
+      .eq("id", userId)
       .maybeSingle();
 
     const data = {

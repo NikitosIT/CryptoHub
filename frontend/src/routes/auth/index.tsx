@@ -26,7 +26,7 @@ export const Route = createFileRoute("/auth/")({
   component: EmailAuth,
 });
 
-function EmailAuth() {
+export function EmailAuth() {
   const { register, handleSubmit, formErrors, isPending } = useLogin();
 
   return (

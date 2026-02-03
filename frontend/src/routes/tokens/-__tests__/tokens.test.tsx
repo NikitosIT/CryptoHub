@@ -2,14 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { supabase } from "@/lib/supabaseClient";
 
-// Mock supabase
 vi.mock("@/lib/supabaseClient", () => ({
   supabase: {
     from: vi.fn(),
   },
 }));
 
-// Sample token data matching the cryptotokens table response
 const mockTokensResponse = [
   {
     id: 17,
@@ -27,7 +25,6 @@ const mockTokensResponse = [
     x_link: "StellarOrg",
     priority: null,
   },
-  
 ];
 
 describe("Tokens API - cryptotokens response", () => {
@@ -54,23 +51,18 @@ describe("Tokens API - cryptotokens response", () => {
       error: null,
     });
 
-    // Supabase request
     const { data, error } = await supabase
       .from("cryptotokens")
       .select("*")
       .overrideTypes<typeof mockTokensResponse>();
 
-    // Verify request was made to correct table
     expect(mockFrom).toHaveBeenCalledWith("cryptotokens");
     expect(mockSelect).toHaveBeenCalledWith("*");
 
-    // Verify no error
     expect(error).toBeNull();
 
-    // Verify response data has correct structure
     expect(data).toHaveLength(2);
 
-    // Check each token has required fields
     data?.forEach((token) => {
       expect(token).toHaveProperty("id");
       expect(token).toHaveProperty("token_name");
@@ -80,7 +72,6 @@ describe("Tokens API - cryptotokens response", () => {
       expect(token).toHaveProperty("priority");
     });
 
-    // Verify first token data matches expected
     expect(data?.[0]).toEqual({
       id: 17,
       token_name: "LINK",

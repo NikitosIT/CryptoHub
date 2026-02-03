@@ -46,7 +46,7 @@ export function useToggleFavorite() {
       return debounceAsync(
         key,
         async () => {
-          await api.reactions.toggleFavorite(postId, userId);
+          await api.reactions.toggleFavorite(postId);
           initialFavoriteMap.delete(key);
         },
         500,

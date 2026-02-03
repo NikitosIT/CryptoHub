@@ -39,7 +39,7 @@ function Notifications() {
           >
             <NotificationsIcon
               sx={{ fontSize: { xs: 28, sm: 32 }, color: "#fb923c" }}
-              aria-hidden
+              aria-hidden="true"
             />
             <Typography
               id="notifications-title"
@@ -50,78 +50,8 @@ function Notifications() {
               Notifications
             </Typography>
           </Box>
-
-          {/* Content list */}
-          <Box
-            component="ul"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: { xs: 2, sm: 2.5 },
-              listStyle: "none",
-              p: 0,
-              m: 0,
-            }}
-          >
-            <NotificationItem
-              title="Stay Updated"
-              text="Get notified about important updates, new features, and security alerts. We'll keep you informed about changes that matter to you."
-            />
-
-            <NotificationItem
-              title="Comment Replies"
-              text="Receive notifications when someone replies to your comments or mentions you in a discussion."
-            />
-
-            <NotificationItem
-              title="Security Alerts"
-              text="Important security notifications including login attempts, 2FA changes, and account activity will be sent to your email."
-            />
-
-            <NotificationItem
-              title="Coming Soon"
-              text="Notification preferences and in-app notifications are coming soon. You'll be able to customize what you want to be notified about."
-            />
-          </Box>
         </Paper>
       </Box>
-    </Box>
-  );
-}
-function NotificationItem({ title, text }: { title: string; text: string }) {
-  return (
-    <Box
-      component="li"
-      sx={{
-        p: { xs: 2, sm: 2.5 },
-        borderRadius: 2,
-        bgcolor: "rgba(255, 255, 255, 0.05)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-      }}
-    >
-      <Typography
-        component="h3"
-        variant="subtitle1"
-        fontWeight={600}
-        sx={{
-          color: "#fb923c",
-          mb: 1,
-          fontSize: { xs: "14px", sm: "16px" },
-        }}
-      >
-        {title}
-      </Typography>
-
-      <Typography
-        variant="body2"
-        sx={{
-          color: "rgba(255, 255, 255, 0.8)",
-          fontSize: { xs: "13px", sm: "14px" },
-          lineHeight: 1.6,
-        }}
-      >
-        {text}
-      </Typography>
     </Box>
   );
 }

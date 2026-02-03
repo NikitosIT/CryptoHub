@@ -1,42 +1,37 @@
-export const baseButton =
-  "group flex items-center gap-1 px-3 py-1 rounded-full transition-all duration-200 border";
-export const disabledButton = "opacity-50 cursor-not-allowed border-gray-500";
-
-export const baseIcon =
+const baseButton =
+  "group flex items-center gap-1 px-3 py-1 rounded-full transition-all duration-200 border cursor-pointer";
+const baseIcon =
   "transition-all duration-200 brightness-0 saturate-0 invert-[0.4]";
-export const baseCount = "text-sm transition-colors duration-200 text-gray-400";
+const activeIcon = "transition-all duration-200 brightness-0 invert";
+const baseCount = "text-sm transition-colors duration-200";
 
-export function getReactionClasses({
-  isActive,
-  isDisabled,
-  activeBg,
-  hoverBg,
-  activeText,
-  hoverText,
-}: {
-  isActive: boolean;
-  isDisabled: boolean;
+type ReactionStyleConfig = {
   activeBg: string;
   hoverBg: string;
   activeText: string;
   hoverText: string;
-}) {
+};
+
+export function getReactionClasses(
+  isActive: boolean,
+  canHover: boolean,
+  config: ReactionStyleConfig,
+) {
+  const { activeBg, hoverBg } = config;
+  const inactiveButton = "bg-transparent border-gray-500";
+
   return {
-    button: isDisabled
-      ? `${baseButton} ${disabledButton}`
-      : `${baseButton} cursor-pointer ${
-          isActive ? activeBg : `bg-transparent border-gray-500 ${hoverBg}`
-        }`,
-    icon: isDisabled
-      ? `${baseIcon} opacity-50`
-      : isActive
-        ? "transition-all duration-200 brightness-0 invert"
-        : `${baseIcon} group-hover:brightness-0 group-hover:invert-[0.6]`,
-    count: isDisabled
-      ? "text-sm transition-colors duration-200 text-gray-400"
-      : isActive
-        ? `text-sm transition-colors duration-200 ${activeText}`
-        : `${baseCount} ${hoverText}`,
+    button: [
+      baseButton,
+      isActive ? activeBg : canHover ? `${inactiveButton} ${hoverBg}` : inactiveButton,
+    ].join(" "),
+    icon: [
+      isActive ? activeIcon : baseIcon,
+      canHover && !isActive && "group-hover:brightness-0 group-hover:invert-[0.6]",
+    ]
+      .filter(Boolean)
+      .join(" "),
+    count: [baseCount, isActive ? "text-gray-100" : "text-gray-400"].join(" "),
   };
 }
 

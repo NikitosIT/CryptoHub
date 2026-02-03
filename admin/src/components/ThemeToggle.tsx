@@ -1,20 +1,17 @@
 import { Moon, Sun } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
 
-import { selectThemeMode } from "@/store/themeSelector";
-import { toggleTheme } from "@/store/themeSlice";
+import { useThemeStore } from "@/store/useThemeStore";
 
 function ThemeToggle() {
-  const dispatch = useDispatch();
-  const mode = useSelector(selectThemeMode);
+  const { theme, toggleTheme } = useThemeStore();
 
   return (
     <button
-      onClick={() => dispatch(toggleTheme())}
-      className="p-2 text-gray-700 transition-colors rounded-lg dark:text-gray-300 hover:text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-900"
-      aria-label={`Switch to ${mode === "light" ? "dark" : "light"} mode`}
+      onClick={toggleTheme}
+      className="px-4 py-2 text-black bg-white border rounded-lg dark:bg-zinc-900 dark:text-white"
+      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
-      {mode === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+      {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
     </button>
   );
 }

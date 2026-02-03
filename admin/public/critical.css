@@ -1,10 +1,17 @@
-html,
-body {
-  background-color: gray;
-  transition: background-color 0.2s ease;
+html {
+  background-color: #000;
 }
 
-html.dark,
-html.dark body {
-  background-color: #000000;
+html.light {
+  background-color: gray;
+}
+
+html.dark {
+  background-color: #000;
+}
+
+body {
+  min-height: 100vh;
+  background-color: inherit;
+  transition: background-color 0.2s ease;
 }

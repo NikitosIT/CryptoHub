@@ -21,7 +21,7 @@ export default function FilterSkeleton() {
         sx={{
           width: {
             xs: "100%",
-            sm: 260,
+            sm: 220,
             md: 280,
           },
           borderRadius: 1,

@@ -6,13 +6,13 @@ const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
 export const supabaseAdmin = createClient(
   SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY
+  SUPABASE_SERVICE_ROLE_KEY,
 );
 
 export const supabase = supabaseAdmin;
 
-export function createSupabaseClient(req: Request) {
-  const accessToken = req.headers.get("Authorization");
+export function createSupabaseClient(req?: Request) {
+  const accessToken = req?.headers.get("Authorization");
 
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     global: {

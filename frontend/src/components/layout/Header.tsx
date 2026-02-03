@@ -9,7 +9,7 @@ import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
 
 import { useHeaderNavigation } from "../../hooks/useHeaderNavigation";
 
-function Header() {
+export default function Header() {
   const { isAuthenticatedWith2FA, hasPendingTwoFactor, isLoading } =
     useAuthState({
       checkTwoFactor: true,
@@ -100,8 +100,6 @@ function Header() {
     </header>
   );
 }
-
-export default Header;
 
 function Helper({ onHelpClick }: { onHelpClick: () => void }) {
   return (

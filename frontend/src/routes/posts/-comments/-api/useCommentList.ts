@@ -1,7 +1,6 @@
 import { type QueryClient, useQuery } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
 import type { Comment, CommentWithReplies } from "@/types/db";
 
 import { organizeComments } from "../-utils/commentUtils";
@@ -23,9 +22,8 @@ export function getPreviousCommentsList(
 
 async function fetchCommentsList(
   postId: number,
-  userId?: string | null,
 ): Promise<CommentWithReplies[]> {
-  const response = (await api.comments.list(postId, userId)) as {
+  const response = (await api.comments.list(postId)) as {
     success: boolean;
     data: Comment[];
   };
@@ -37,15 +35,11 @@ export function useCommentsList(
   postId: number,
   options: UseListCommentsOptions = {},
 ) {
-  const { user } = useAuthState({
-    checkTwoFactor: true,
-  });
   const { enabled = true } = options;
 
   return useQuery({
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: commentsListQueryKey(postId),
-    queryFn: () => fetchCommentsList(postId, user?.id),
+    queryFn: () => fetchCommentsList(postId),
     enabled,
     staleTime: 60_000,
     gcTime: 2 * 60_000,

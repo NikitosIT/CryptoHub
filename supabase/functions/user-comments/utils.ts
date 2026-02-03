@@ -1,7 +1,6 @@
 import { safeLogError } from "../shared/logger.ts";
 
 export interface RequestBody {
-  user_id?: string;
   post_id?: number;
   comment_id?: number;
   parent_comment_id?: number | null;
@@ -13,8 +12,8 @@ export type RawComment = {
   id: number | string;
   post_id: number | string;
   parent_comment_id: number | string | null;
-  user_id: string;
   text: string;
+  user_id: string;
   media: unknown;
   created_at: string;
   updated_at: string;
@@ -37,9 +36,10 @@ export function parseNumber(value: unknown): number | null {
 export function normalizeComment(comment: RawComment) {
   const id = parseNumber(comment.id);
   const postId = parseNumber(comment.post_id);
-  const parentId = comment.parent_comment_id === null
-    ? null
-    : parseNumber(comment.parent_comment_id);
+  const parentId =
+    comment.parent_comment_id === null
+      ? null
+      : parseNumber(comment.parent_comment_id);
   const likeCount = parseNumber(comment.like_count);
 
   return {

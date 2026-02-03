@@ -7,9 +7,11 @@
     <title>Vite + React + TS</title>
     <script>
       (function () {
-        const saved = localStorage.getItem("admin-theme-mode");
-        const theme = saved === "light" || saved === "dark" ? saved : "dark";
-        document.documentElement.classList.toggle("dark", theme === "dark");
+        try {
+          const saved = localStorage.getItem("theme-storage");
+          const theme = saved === "light" || saved === "dark" ? saved : "dark";
+          document.documentElement.classList.add(theme);
+        } catch {}
       })();
     </script>
     <link rel="stylesheet" href="/critical.css" />

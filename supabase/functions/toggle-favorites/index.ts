@@ -1,34 +1,35 @@
-import { supabase } from "../shared/supabaseApi.ts";
+import { createSupabaseClient, supabase } from "../shared/supabaseApi.ts";
 import { handleOptions } from "../shared/cors.ts";
 import { errorResponse, jsonResponse } from "../shared/responses.ts";
 import { parseRequestBody, validateRequiredFields } from "../shared/request.ts";
 import { safeLogError } from "../shared/logger.ts";
-import { verifyUserId } from "../shared/auth.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return handleOptions();
   }
-
+  const supabaseClient = createSupabaseClient(req);
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
+  const userId = user?.id;
   try {
     const body = await parseRequestBody<{
       post_id?: number;
-      user_id?: string;
     }>(req);
 
-    const validation = validateRequiredFields(body, ["post_id", "user_id"]);
+    const validation = validateRequiredFields(body, ["post_id"]);
     if (!validation.valid) {
       return errorResponse(validation.error);
     }
 
-    const user_id = await verifyUserId(req, body.user_id);
     const { post_id } = body;
 
     const { data: existing, error: selectError } = await supabase
       .from("favorites")
       .select("id")
       .eq("post_id", post_id)
-      .eq("user_id", user_id)
+      .eq("user_id", userId)
       .maybeSingle();
 
     if (selectError) throw selectError;
@@ -45,7 +46,7 @@ Deno.serve(async (req) => {
     } else {
       const { error: insertError } = await supabase
         .from("favorites")
-        .insert([{ post_id, user_id }]);
+        .insert([{ post_id, user_id: userId }]);
 
       if (insertError) throw insertError;
 

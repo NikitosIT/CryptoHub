@@ -1,9 +1,18 @@
 import { Outlet, useLocation } from "@tanstack/react-router";
 import Header from "./Header";
+import { useThemeStore } from "@/store/useThemeStore";
+import { useEffect } from "react";
 
 export function MainLayout() {
   const location = useLocation();
   const isAuthPage = location.pathname === "/auth";
+  const theme = useThemeStore((s) => s.theme);
+  useEffect(() => {
+    const root = document.documentElement;
+
+    root.classList.remove("light", "dark");
+    root.classList.add(theme);
+  }, [theme]);
 
   return (
     <div>

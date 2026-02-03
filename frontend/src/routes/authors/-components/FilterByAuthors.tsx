@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useToast } from "@/hooks/useToast";
 import { useListAuthors } from "@/routes/authors/-api/useListAuthors";
 import { useFiltersForMode } from "@/store/useFiltersStore";
-import type { Author, PostMode } from "@/types/db";
+import type { Author } from "@/types/db";
 
 import SelectFilter from "../../../components/filters/CustomSelectFilter";
 import FilterSkeleton from "../../../components/filters/FilterSkeleton";
@@ -16,7 +16,7 @@ export default function FilterAuthors() {
   useEffect(() => {
     if (error) {
       showError(
-        error instanceof Error ? error.message : "Failed to load authors list",
+        error instanceof Error ? error.message : "Failed to load authors list"
       );
     }
   }, [error, showError]);

@@ -38,7 +38,6 @@ export function useCommentCreate() {
     mutationFn: async ({
       postId,
       text,
-      userId,
       parentCommentId,
       mediaFiles,
     }: CommentVariables) => {
@@ -47,7 +46,6 @@ export function useCommentCreate() {
       return api.comments.create({
         postId,
         text,
-        userId,
         parentCommentId,
         media: uploadedMedia.length > 0 ? uploadedMedia : null,
       });
@@ -145,5 +143,3 @@ export function useCommentCreate() {
     },
   });
 }
-
-///нужно ли так прокидывать userId
