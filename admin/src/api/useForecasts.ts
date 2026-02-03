@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import type { TokenForecast } from "@/types/admin";
+import type { TokenForecast } from "@/types/admins";
 
 export const forecastsQueryKey = () => ["admin", "forecasts"] as const;
 
@@ -53,7 +53,7 @@ export function useForecasts(authorized: boolean, onUnauthorized?: () => void) {
     },
     onSuccess: (data) => {
       queryClient.setQueryData<TokenForecast[]>(forecastsQueryKey(), (old) =>
-        old?.filter((f) => f.id !== data.id)
+        old?.filter((f) => f.id !== data.id),
       );
     },
     onError: handleAuthError,
@@ -66,8 +66,8 @@ export function useForecasts(authorized: boolean, onUnauthorized?: () => void) {
     onSuccess: (_, variables) => {
       queryClient.setQueryData<TokenForecast[]>(forecastsQueryKey(), (old) =>
         old?.map((f) =>
-          f.id === variables.id ? { ...f, forecast_text: variables.text } : f
-        )
+          f.id === variables.id ? { ...f, forecast_text: variables.text } : f,
+        ),
       );
     },
     onError: handleAuthError,

@@ -1,7 +1,7 @@
 import type { Session } from "@supabase/supabase-js";
 
 import { supabase } from "@/lib/supabaseClient";
-import type { ForecastsResponse, CheckEmailResponse } from "@/types/admin";
+import type { ForecastsResponse, CheckEmailResponse } from "@/types/admins";
 
 interface FunctionRequestOptions {
   functionName: string;
@@ -20,7 +20,7 @@ async function performFunctionRequest<T>({
 
   if (!functionsBaseUrl) {
     throw new Error(
-      "VITE_SUPABASE_FUNCTIONS_URL or VITE_SUPABASE_URL must be set"
+      "VITE_SUPABASE_FUNCTIONS_URL or VITE_SUPABASE_URL must be set",
     );
   }
 
@@ -81,7 +81,7 @@ function listForecasts(): Promise<ForecastsResponse> {
 
 function updateForecastStatus(
   forecastId: number,
-  status: "approved" | "rejected"
+  status: "approved" | "rejected",
 ): Promise<void> {
   return performFunctionRequest<void>({
     functionName: "admin-forecasts",
@@ -96,7 +96,7 @@ function updateForecastStatus(
 
 function updateForecastText(
   forecastId: number,
-  forecast_text: string
+  forecast_text: string,
 ): Promise<void> {
   return performFunctionRequest<void>({
     functionName: "admin-forecasts",
@@ -143,7 +143,7 @@ async function signOut(): Promise<void> {
 }
 
 function onAuthStateChange(
-  callback: (event: string, session: Session | null) => void
+  callback: (event: string, session: Session | null) => void,
 ) {
   const { data } = supabase.auth.onAuthStateChange(callback);
   return {
