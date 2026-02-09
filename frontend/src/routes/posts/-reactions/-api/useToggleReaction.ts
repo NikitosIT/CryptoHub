@@ -46,7 +46,7 @@ export function useToggleReaction() {
           await api.reactions.toggle({ postId, reactionType });
           initialReactionMap.delete(key);
         },
-        500,
+        500
       );
     },
 
@@ -64,7 +64,7 @@ export function useToggleReaction() {
         initialReactionMap.set(key, post?.user_reaction ?? null);
       }
       updatePostInCache(queryClient, postId, (post) =>
-        toggleReaction(post, reactionType),
+        toggleReaction(post, reactionType)
       );
     },
   });

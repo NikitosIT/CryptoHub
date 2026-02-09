@@ -27,7 +27,7 @@ export const Route = createFileRoute("/profile/edit")({
   component: ProfileEditName,
 });
 
-function ProfileEditName() {
+export function ProfileEditName() {
   const { data: session } = useSessionQuery();
   const { showError, showSuccess } = useToast();
 
@@ -42,14 +42,12 @@ function ProfileEditName() {
             Profile Settings
           </Typography>
 
-          {/* Avatar Section */}
           <Box display="flex" flexDirection="column" alignItems="center" mb={4}>
             <ProfileLogo />
           </Box>
 
           <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.1)", mb: 3 }} />
 
-          {/* User Info Section */}
           <Box mb={3}>
             <Typography
               variant="body2"
@@ -85,7 +83,6 @@ function ProfileEditName() {
 
           <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.1)", mb: 3 }} />
 
-          {/* Nickname Form Section */}
           <Box>
             <Typography
               variant="body2"

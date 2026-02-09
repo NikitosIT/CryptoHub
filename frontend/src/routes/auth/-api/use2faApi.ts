@@ -23,8 +23,6 @@ export function useTwoFactorStatus(userId?: string) {
   });
 }
 
-// Mutations
-
 export function useRequestTwoFactor() {
   return useMutation({
     mutationFn: async () => {
@@ -85,8 +83,6 @@ export function useDisableTwoFactor() {
     },
   });
 }
-
-// Helpers
 
 function updateTwoFactorCache(
   queryClient: ReturnType<typeof useQueryClient>,

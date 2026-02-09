@@ -27,7 +27,9 @@ import {
 const statusAlertStyles = (enabled: boolean) => ({
   bgcolor: enabled ? "rgba(34, 197, 94, 0.1)" : "rgba(59, 130, 246, 0.1)",
   color: enabled ? "#22c55e" : "#3b82f6",
-  border: `1px solid ${enabled ? "rgba(34, 197, 94, 0.3)" : "rgba(59, 130, 246, 0.3)"}`,
+  border: `1px solid ${
+    enabled ? "rgba(34, 197, 94, 0.3)" : "rgba(59, 130, 246, 0.3)"
+  }`,
   "& .MuiAlert-icon": { color: enabled ? "#22c55e" : "#3b82f6" },
 });
 
@@ -157,8 +159,6 @@ export default function ProfileTwoFactor() {
     </Box>
   );
 }
-
-// Sub-components
 
 type CodeInputProps = {
   control: Control<{ code: string }>;
