@@ -1,16 +1,10 @@
 import { Container, Paper, Stack, Typography } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
 
 import { createRouteGuard } from "@/hooks/routeGuards";
+import { verifySearchSchema } from "@/lib/validatorSchemas";
 import { OtpForm } from "@/routes/auth/-components/OtpForm";
 import { useVerifyOTP } from "@/routes/auth/-hooks/useVerifyOTP";
-
-const verifySearchSchema = z.object({
-  redirectTo: z.string().optional(),
-  mode: z.literal("email").optional(),
-  email: z.string().email().optional(),
-});
 
 export const Route = createFileRoute("/auth/verify")({
   validateSearch: verifySearchSchema,

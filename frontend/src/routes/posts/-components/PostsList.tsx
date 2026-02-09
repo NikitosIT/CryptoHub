@@ -47,12 +47,11 @@ export default function PostsList() {
         <PostCard key={post.id} post={post} />
       ))}
 
-      {/* Load more button */}
       {shouldShowLoadMore ? (
         <button
           onClick={() => void fetchNextPage()}
           disabled={isFetchingNextPage}
-          className="w-full py-3 mt-4 text-sm text-gray-400 border rounded-lg hover:text-white disabled:opacity-50"
+          className="w-full py-3 mt-4 text-sm text-gray-400 border rounded-lg cursor-pointer hover:text-white disabled:opacity-50"
         >
           {isFetchingNextPage ? "Loading..." : "Load more"}
         </button>

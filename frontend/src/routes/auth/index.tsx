@@ -7,16 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
 
 import { AuthButton } from "@/components/ui/AuthButton";
 import { createRouteGuard } from "@/hooks/routeGuards";
+import { loginSearchSchema } from "@/lib/validatorSchemas";
 import AuthGoogle from "@/routes/auth/-components/AuthGoogle";
 import { useLogin } from "@/routes/auth/-hooks/useLogin";
 
-const loginSearchSchema = z.object({
-  redirectTo: z.string().optional(),
-});
 export const Route = createFileRoute("/auth/")({
   validateSearch: loginSearchSchema,
   beforeLoad: createRouteGuard({

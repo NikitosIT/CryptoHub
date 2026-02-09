@@ -10,7 +10,7 @@ export const Route = createFileRoute("/profile/notifications")({
   component: Notifications,
 });
 
-function Notifications() {
+export function Notifications() {
   return (
     <Box component="main" display="flex" justifyContent="center" px={2} mt={10}>
       <Box width="100%" maxWidth={420}>

@@ -40,7 +40,7 @@ export const Route = createFileRoute("/profile/")({
   component: ProfileMain,
 });
 
-function ProfileMain() {
+export function ProfileMain() {
   const navigate = useNavigate();
 
   const { data: profile } = useUserProfile();
@@ -49,18 +49,14 @@ function ProfileMain() {
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-6 sm:px-4 sm:mt-8 md:mt-10">
       <Paper elevation={6} sx={profileCard}>
-        {/* Greeting */}
         <Typography variant="h5" sx={profileNickname}>
           {profile?.nickname || session?.user.email?.split("@")[0] || "User"}
         </Typography>
 
-        {/* Avatar */}
         <Box display="flex" justifyContent="center" sx={{ mb: 3 }}>
           <UserAvatar size={100} showSkeleton={true} />
         </Box>
-        {/* Sections */}
         <List sx={{ color: "#fff" }}>
-          {/* Change nickname */}
           <ListItemButton
             onClick={() => void navigate({ to: "/profile/edit" })}
             sx={profileSettingName}
@@ -73,7 +69,6 @@ function ProfileMain() {
 
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
 
-          {/* Two-factor authentication */}
           <ListItemButton
             onClick={() => void navigate({ to: "/profile/twofactor" })}
             sx={profileSecurity}
@@ -85,7 +80,6 @@ function ProfileMain() {
           </ListItemButton>
 
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
-          {/* Notifications */}
           <ListItemButton
             sx={profileNotifications}
             onClick={() => void navigate({ to: "/profile/notifications" })}
@@ -97,7 +91,6 @@ function ProfileMain() {
           </ListItemButton>
 
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
-          {/* Liked posts */}
           <ListItemButton
             sx={profileLikedPost}
             onClick={() =>
@@ -111,7 +104,6 @@ function ProfileMain() {
           </ListItemButton>
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
 
-          {/* Disliked posts */}
           <ListItemButton
             sx={profileDislikedPost}
             onClick={() =>
@@ -126,7 +118,6 @@ function ProfileMain() {
 
           <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
 
-          {/* Favorite posts */}
           <ListItemButton
             sx={profileFavorites}
             onClick={() =>

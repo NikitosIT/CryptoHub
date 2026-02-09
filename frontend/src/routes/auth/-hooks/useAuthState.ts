@@ -15,7 +15,6 @@ export interface UseAuthStateReturn {
   isLoading: boolean;
 }
 
-//use for react components
 export function useAuthState(
   options: UseAuthStateOptions = {},
 ): UseAuthStateReturn {
