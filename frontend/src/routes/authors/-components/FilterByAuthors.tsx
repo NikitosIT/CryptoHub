@@ -1,31 +1,41 @@
-import { useEffect } from "react";
+import { memo, useCallback, useEffect, useMemo } from "react";
 
 import { useToast } from "@/hooks/useToast";
 import { useListAuthors } from "@/routes/authors/-api/useListAuthors";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedAuthorId } from "@/store/useFiltersStore";
 import type { Author } from "@/types/db";
 
 import SelectFilter from "../../../components/filters/CustomSelectFilter";
 import FilterSkeleton from "../../../components/filters/FilterSkeleton";
 
-export default function FilterAuthors() {
-  const { selectedAuthorId, setSelectedAuthorId } = useFiltersForMode();
+function FilterAuthors() {
+  const { selectedAuthorId, setSelectedAuthorId } = useSelectedAuthorId();
   const { data: authors, isLoading, error } = useListAuthors();
   const { showError } = useToast();
 
   useEffect(() => {
     if (error) {
       showError(
-        error instanceof Error ? error.message : "Failed to load authors list"
+        error instanceof Error ? error.message : "Failed to load authors list",
       );
     }
   }, [error, showError]);
 
-  if (isLoading) return <FilterSkeleton />;
+  const safeAuthors = useMemo(() => authors ?? [], [authors]);
 
-  const safeAuthors = authors ?? [];
-  const selectedAuthor =
-    safeAuthors.find((a) => a.id === selectedAuthorId) ?? null;
+  const selectedAuthor = useMemo(
+    () => safeAuthors.find((a) => a.id === selectedAuthorId) ?? null,
+    [safeAuthors, selectedAuthorId],
+  );
+
+  const handleChange = useCallback(
+    (val: Author | null) => {
+      setSelectedAuthorId(val?.id ?? null);
+    },
+    [setSelectedAuthorId],
+  );
+
+  if (isLoading) return <FilterSkeleton />;
 
   return (
     <div className="w-full">
@@ -33,9 +43,11 @@ export default function FilterAuthors() {
         label="Select author"
         options={safeAuthors}
         value={selectedAuthor}
-        onChange={(val) => setSelectedAuthorId(val?.id ?? null)}
+        onChange={handleChange}
         showLogos={false}
       />
     </div>
   );
 }
+
+export default memo(FilterAuthors);

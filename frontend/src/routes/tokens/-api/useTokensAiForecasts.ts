@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedToken } from "@/store/useFiltersStore";
 
 export const forecastQueryKey = (tokenLabel?: string) =>
   ["forecast", tokenLabel] as const;
@@ -11,7 +11,7 @@ async function forecastGet(tokenLabel: string) {
 }
 
 export function useTokensAiForecasts() {
-  const { selectedToken } = useFiltersForMode();
+  const { selectedToken } = useSelectedToken();
   return useQuery({
     queryKey: [...forecastQueryKey(selectedToken?.label), selectedToken],
     enabled: Boolean(selectedToken),

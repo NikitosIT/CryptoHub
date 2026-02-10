@@ -1,4 +1,4 @@
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedToken } from "@/store/useFiltersStore";
 
 import FilterAuthors from "../../authors/-components/FilterByAuthors";
 import FilterTokens from "../../tokens/-components/FilterByToken";
@@ -6,7 +6,7 @@ import { TokenDetails } from "../../tokens/-components/TokenDetails";
 import PostsList from "./PostsList";
 
 export function PostsTelegram() {
-  const { selectedToken } = useFiltersForMode();
+  const { selectedToken } = useSelectedToken();
 
   return (
     <>
