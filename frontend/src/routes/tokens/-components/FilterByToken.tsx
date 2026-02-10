@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { memo, useCallback, useEffect, useMemo } from "react";
 
 import { useToast } from "@/hooks/useToast";
 import { useListTokens } from "@/routes/tokens/-api/useListTokens";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedToken } from "@/store/useFiltersStore";
 import type { Token } from "@/types/db";
 
 import SelectFilter from "../../../components/filters/CustomSelectFilter";
 import FilterSkeleton from "../../../components/filters/FilterSkeleton";
 
-export default function FilterTokens() {
-  const { selectedToken, setSelectedToken } = useFiltersForMode();
+function FilterTokens() {
+  const { selectedToken, setSelectedToken } = useSelectedToken();
 
   const { data: tokens, isLoading, error } = useListTokens();
   const { showError } = useToast();
@@ -22,9 +22,16 @@ export default function FilterTokens() {
     }
   }, [error, showError]);
 
-  if (isLoading) return <FilterSkeleton />;
+  const safeTokens = useMemo(() => tokens ?? [], [tokens]);
 
-  const safeTokens = tokens ?? [];
+  const handleChange = useCallback(
+    (val: Token | null) => {
+      setSelectedToken(val);
+    },
+    [setSelectedToken],
+  );
+
+  if (isLoading) return <FilterSkeleton />;
 
   return (
     <div className="w-full">
@@ -32,9 +39,11 @@ export default function FilterTokens() {
         label="Select token"
         options={safeTokens}
         value={selectedToken}
-        onChange={(val) => setSelectedToken(val)}
+        onChange={handleChange}
         showLogos
       />
     </div>
   );
 }
+
+export default memo(FilterTokens);

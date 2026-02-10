@@ -4,7 +4,7 @@ import {
   PAGE_SIZE,
   useTelegramPosts,
 } from "@/routes/posts/-api/useListTelegramPosts";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedAuthorId } from "@/store/useFiltersStore";
 
 import FeedSkeleton from "./FeedSkeleton";
 import { PostCard } from "./PostCard";
@@ -14,7 +14,7 @@ export default function PostsList() {
     useTelegramPosts();
 
   const { data: authors } = useListAuthors();
-  const { selectedAuthorId: authorId } = useFiltersForMode();
+  const { selectedAuthorId: authorId } = useSelectedAuthorId();
   const { show: showScrollTop, scrollToTop } = useScrollTop();
 
   const pages = data?.pages ?? [];

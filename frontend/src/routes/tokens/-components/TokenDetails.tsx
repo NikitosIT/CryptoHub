@@ -1,4 +1,4 @@
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedToken } from "@/store/useFiltersStore";
 
 import NoPostsTokenMessage from "../../posts/-components/NoPostsMessage";
 import TokensAiForecasts from "./TokensAiForecasts";
@@ -44,7 +44,7 @@ function TokenLink({
 }
 
 export function TokenDetails() {
-  const { selectedToken } = useFiltersForMode();
+  const { selectedToken } = useSelectedToken();
 
   if (!selectedToken) return;
 

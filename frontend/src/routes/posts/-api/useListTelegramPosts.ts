@@ -1,7 +1,10 @@
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import {
+  useSelectedAuthorId,
+  useSelectedToken,
+} from "@/store/useFiltersStore";
 
 import { usePostsMode } from "../-hooks/usePostsMode";
 
@@ -17,7 +20,8 @@ const postsQueryKey = (
 };
 
 export function useTelegramPosts() {
-  const { selectedAuthorId, selectedToken } = useFiltersForMode();
+  const { selectedAuthorId } = useSelectedAuthorId();
+  const { selectedToken } = useSelectedToken();
 
   const tokenName = selectedToken?.value || null;
   const authorId = selectedAuthorId ?? null;

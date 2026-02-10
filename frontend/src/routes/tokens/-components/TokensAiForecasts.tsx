@@ -15,7 +15,7 @@ import {
 
 import { useToast } from "@/hooks/useToast";
 import { useTokensAiForecasts } from "@/routes/tokens/-api/useTokensAiForecasts";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedToken } from "@/store/useFiltersStore";
 import { getErrorMessage } from "@/utils/errorUtils";
 
 import {
@@ -44,7 +44,7 @@ function isTokenForecast(data: unknown): data is TokenForecast {
 }
 
 export default function TokensAiForecasts() {
-  const { selectedToken } = useFiltersForMode();
+  const { selectedToken } = useSelectedToken();
   const [open, setOpen] = useState(false);
   const { showError } = useToast();
 

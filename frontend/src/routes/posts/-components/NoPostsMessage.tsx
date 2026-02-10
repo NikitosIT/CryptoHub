@@ -1,10 +1,10 @@
 import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { useFiltersForMode } from "@/store/useFiltersStore";
+import { useSelectedToken } from "@/store/useFiltersStore";
 
 import { useTelegramPosts } from "../-api/useListTelegramPosts";
 
 export default function NoPostsTokenMessage() {
-  const { selectedToken } = useFiltersForMode();
+  const { selectedToken } = useSelectedToken();
   const { isLoading } = useAuthState();
   const { data: postsData } = useTelegramPosts();
 
