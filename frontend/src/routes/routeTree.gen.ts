@@ -17,6 +17,7 @@ import { Route as AuthIndexRouteImport } from "./auth/index";
 import { Route as ProfileTwofactorRouteImport } from "./profile/twofactor";
 import { Route as ProfileNotificationsRouteImport } from "./profile/notifications";
 import { Route as ProfileEditRouteImport } from "./profile/edit";
+import { Route as ProfileBecameAnalyticRouteImport } from "./profile/became-analytic";
 import { Route as AuthVerify2faRouteImport } from "./auth/verify-2fa";
 import { Route as AuthVerifyRouteImport } from "./auth/verify";
 import { Route as AuthSetnicknameRouteImport } from "./auth/setnickname";
@@ -62,6 +63,11 @@ const ProfileEditRoute = ProfileEditRouteImport.update({
   path: "/profile/edit",
   getParentRoute: () => rootRouteImport,
 } as any);
+const ProfileBecameAnalyticRoute = ProfileBecameAnalyticRouteImport.update({
+  id: "/profile/became-analytic",
+  path: "/profile/became-analytic",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const AuthVerify2faRoute = AuthVerify2faRouteImport.update({
   id: "/auth/verify-2fa",
   path: "/auth/verify-2fa",
@@ -90,12 +96,13 @@ export interface FileRoutesByFullPath {
   "/auth/setnickname": typeof AuthSetnicknameRoute;
   "/auth/verify": typeof AuthVerifyRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
+  "/profile/became-analytic": typeof ProfileBecameAnalyticRoute;
   "/profile/edit": typeof ProfileEditRoute;
   "/profile/notifications": typeof ProfileNotificationsRoute;
   "/profile/twofactor": typeof ProfileTwofactorRoute;
-  "/auth": typeof AuthIndexRoute;
-  "/help": typeof HelpIndexRoute;
-  "/profile": typeof ProfileIndexRoute;
+  "/auth/": typeof AuthIndexRoute;
+  "/help/": typeof HelpIndexRoute;
+  "/profile/": typeof ProfileIndexRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   "/auth/setnickname": typeof AuthSetnicknameRoute;
   "/auth/verify": typeof AuthVerifyRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
+  "/profile/became-analytic": typeof ProfileBecameAnalyticRoute;
   "/profile/edit": typeof ProfileEditRoute;
   "/profile/notifications": typeof ProfileNotificationsRoute;
   "/profile/twofactor": typeof ProfileTwofactorRoute;
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   "/auth/setnickname": typeof AuthSetnicknameRoute;
   "/auth/verify": typeof AuthVerifyRoute;
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
+  "/profile/became-analytic": typeof ProfileBecameAnalyticRoute;
   "/profile/edit": typeof ProfileEditRoute;
   "/profile/notifications": typeof ProfileNotificationsRoute;
   "/profile/twofactor": typeof ProfileTwofactorRoute;
@@ -135,12 +144,13 @@ export interface FileRouteTypes {
     | "/auth/setnickname"
     | "/auth/verify"
     | "/auth/verify-2fa"
+    | "/profile/became-analytic"
     | "/profile/edit"
     | "/profile/notifications"
     | "/profile/twofactor"
-    | "/auth"
-    | "/help"
-    | "/profile";
+    | "/auth/"
+    | "/help/"
+    | "/profile/";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | "/auth/setnickname"
     | "/auth/verify"
     | "/auth/verify-2fa"
+    | "/profile/became-analytic"
     | "/profile/edit"
     | "/profile/notifications"
     | "/profile/twofactor"
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | "/auth/setnickname"
     | "/auth/verify"
     | "/auth/verify-2fa"
+    | "/profile/became-analytic"
     | "/profile/edit"
     | "/profile/notifications"
     | "/profile/twofactor"
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   AuthSetnicknameRoute: typeof AuthSetnicknameRoute;
   AuthVerifyRoute: typeof AuthVerifyRoute;
   AuthVerify2faRoute: typeof AuthVerify2faRoute;
+  ProfileBecameAnalyticRoute: typeof ProfileBecameAnalyticRoute;
   ProfileEditRoute: typeof ProfileEditRoute;
   ProfileNotificationsRoute: typeof ProfileNotificationsRoute;
   ProfileTwofactorRoute: typeof ProfileTwofactorRoute;
@@ -205,21 +218,21 @@ declare module "@tanstack/react-router" {
     "/profile/": {
       id: "/profile/";
       path: "/profile";
-      fullPath: "/profile";
+      fullPath: "/profile/";
       preLoaderRoute: typeof ProfileIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/help/": {
       id: "/help/";
       path: "/help";
-      fullPath: "/help";
+      fullPath: "/help/";
       preLoaderRoute: typeof HelpIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/auth/": {
       id: "/auth/";
       path: "/auth";
-      fullPath: "/auth";
+      fullPath: "/auth/";
       preLoaderRoute: typeof AuthIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
@@ -242,6 +255,13 @@ declare module "@tanstack/react-router" {
       path: "/profile/edit";
       fullPath: "/profile/edit";
       preLoaderRoute: typeof ProfileEditRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/profile/became-analytic": {
+      id: "/profile/became-analytic";
+      path: "/profile/became-analytic";
+      fullPath: "/profile/became-analytic";
+      preLoaderRoute: typeof ProfileBecameAnalyticRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/auth/verify-2fa": {
@@ -282,6 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSetnicknameRoute: AuthSetnicknameRoute,
   AuthVerifyRoute: AuthVerifyRoute,
   AuthVerify2faRoute: AuthVerify2faRoute,
+  ProfileBecameAnalyticRoute: ProfileBecameAnalyticRoute,
   ProfileEditRoute: ProfileEditRoute,
   ProfileNotificationsRoute: ProfileNotificationsRoute,
   ProfileTwofactorRoute: ProfileTwofactorRoute,

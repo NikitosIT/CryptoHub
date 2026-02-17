@@ -520,3 +520,25 @@ entrypoint = "./functions/admin-forecasts/index.ts"
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/admin-forecasts/*.html" ]
 
+
+[functions.admin_notifications]
+enabled = true
+verify_jwt = true
+import_map = "./functions/admin_notifications/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/admin_notifications/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/admin_notifications/*.html" ]
+
+[functions.users_notifications]
+enabled = true
+verify_jwt = true
+import_map = "./functions/users_notifications/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/users_notifications/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/users_notifications/*.html" ]

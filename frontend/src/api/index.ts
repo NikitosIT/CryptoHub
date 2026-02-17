@@ -1,5 +1,5 @@
 import type { Session, User } from "@supabase/supabase-js";
-import type { QueryClient } from "@tanstack/react-query";
+import { type QueryClient, useMutation } from "@tanstack/react-query";
 
 import { CMC_LINK, COINGLASS_LINK, HOME_LINK, X_LINK } from "@/constants/links";
 import {
@@ -384,15 +384,49 @@ async function getUserProfile(
   return data as UserProfile | null;
 }
 
+export interface UserNotifications {
+  id: number;
+  send_to: string | null;
+  send_to_all: boolean;
+  msg: string | null;
+  created_at: string;
+}
+
+async function getNotifications(): Promise<UserNotifications[]> {
+  const { data, error } = await supabase
+    .from("notification_users")
+    .select("id, send_to, send_to_all, msg, created_at")
+    .order("created_at", { ascending: false });
+  if (error) {
+    throw error instanceof Error ? error : new Error(String(error));
+  }
+  return data as UserNotifications[];
+}
+
+export interface SendMessagePayload {
+  admin_msg: string;
+  msg: string;
+}
+
+function sendMessagetoAdmin(admin_msg: string, msg: string): Promise<void> {
+  return performFunctionRequest<void>({
+    functionName: "users_notifications",
+    requireAuth: true,
+    body: { admin_msg, msg },
+  });
+}
+
+export function useSendMessage() {
+  return useMutation({
+    mutationFn: ({ admin_msg, msg }: SendMessagePayload) =>
+      api.profile.sendMessagetoAdmin(admin_msg, msg),
+  });
+}
+
 async function uploadProfileLogo(
-  userId: string,
   file: File,
   encryption: string,
 ): Promise<void> {
-  if (!userId) {
-    throw new Error("User ID is required for logo upload");
-  }
-
   const { error: uploadError } = await supabase.storage
     .from(USER_AVATARS_BUCKET)
     .upload(`${USER_LOGO_PREFIX}${encryption}.png`, file, {
@@ -661,6 +695,8 @@ export const api = {
     get: getUserProfile,
     update: updateProfile,
     uploadLogo: uploadProfileLogo,
+    getNotifications,
+    sendMessagetoAdmin,
   },
 } as const;
 

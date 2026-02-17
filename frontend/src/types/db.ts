@@ -119,5 +119,3 @@ export type Author = {
   label: string;
   id: number;
 };
-
-export type PostMode = "all" | "liked" | "disliked" | "favorites";

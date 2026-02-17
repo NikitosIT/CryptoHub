@@ -2,6 +2,8 @@ import type { Session } from "@supabase/supabase-js";
 
 import { supabase } from "@/lib/supabaseClient";
 import type { ForecastsResponse, CheckEmailResponse } from "@/types/admins";
+import { USER_AVATARS_BUCKET, USER_LOGO_PREFIX } from "@/constans/userLogo";
+import { useMutation } from "@tanstack/react-query";
 
 interface FunctionRequestOptions {
   functionName: string;
@@ -109,6 +111,38 @@ function updateForecastText(
   });
 }
 
+export interface SendNotificationPayload {
+  send_to: string;
+  send_to_all: boolean;
+  msg: string;
+  links?: unknown;
+}
+
+function sendNotification(
+  send_to: string,
+  send_to_all: boolean,
+  msg: string,
+  links?: unknown,
+): Promise<void> {
+  return performFunctionRequest<void>({
+    functionName: "admin_notifications",
+    requireAuth: true,
+    body: { send_to, send_to_all, msg, links },
+  });
+}
+
+export function useSendNotification() {
+  return useMutation({
+    mutationFn: ({
+      send_to,
+      send_to_all,
+      msg,
+      links,
+    }: SendNotificationPayload) =>
+      api.admin.sendNotification(send_to, send_to_all, msg, links),
+  });
+}
+
 async function getSession(): Promise<Session | null> {
   const { data: sessionData } = await supabase.auth.getSession();
   return sessionData.session ?? null;
@@ -151,9 +185,27 @@ function onAuthStateChange(
   };
 }
 
+export interface UserInfo {
+  id: string | null;
+  nickname: string | null;
+  profile_logo: string | null;
+}
+
+async function listProfiles(): Promise<UserInfo[]> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, nickname, profile_logo");
+  if (error) {
+    throw error instanceof Error ? error : new Error(String(error));
+  }
+  return (data ?? []) as UserInfo[];
+}
+
 export const api = {
   admin: {
     checkEmail: checkAdminEmail,
+    listProfiles,
+    sendNotification,
     forecasts: {
       list: listForecasts,
       updateStatus: updateForecastStatus,

@@ -1,12 +1,10 @@
 import { api } from "@/api";
 import { useToast } from "@/hooks/useToast";
-import { useRequiredAuth } from "@/routes/auth/-hooks/useRequiredAuth";
 import { useUpdateProfile } from "@/routes/profile/-api/useUpdateProfile";
 import { getErrorMessage } from "@/utils/errorUtils";
 import { generateUUID } from "@/utils/uuid";
 
 export function useUploadProfileLogo() {
-  const { userId } = useRequiredAuth();
   const saveProfileLogo = useUpdateProfile();
   const { showError } = useToast();
 
@@ -14,7 +12,7 @@ export function useUploadProfileLogo() {
     try {
       const encryption = generateUUID();
 
-      await api.profile.uploadLogo(userId, file, encryption);
+      await api.profile.uploadLogo(file, encryption);
 
       await saveProfileLogo.mutateAsync({ profile_logo: encryption });
     } catch (err) {

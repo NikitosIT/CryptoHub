@@ -36,9 +36,6 @@ export default function Header() {
 
   const shouldShowHelp = isProfilePath || isAuthPath;
 
-  const loginClassName =
-    "text-sm text-white transition-colors bg-transparent border-none cursor-pointer sm:text-base font-montserratt hover:text-blue-400";
-
   const onLoginClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (isOnVerificationPage && hasPendingTwoFactor) {
       void handleLoginClick(e);
@@ -53,7 +50,6 @@ export default function Header() {
   return (
     <header className="relative px-4 mt-2 mb-4 sm:mt-3 sm:mb-6">
       {shouldShowHelp ? <Helper onHelpClick={onHelpClick} /> : null}
-      {/* Logo */}
       <div className="flex justify-center mb-3 sm:mb-4">
         <Link
           to="/"
@@ -74,7 +70,10 @@ export default function Header() {
         <ul className="flex items-center gap-2 sm:gap-4">
           {shouldShowLogin ? (
             <li>
-              <button onClick={onLoginClick} className={loginClassName}>
+              <button
+                onClick={onLoginClick}
+                className="text-sm text-white transition-colors bg-transparent border-none cursor-pointer sm:text-base font-montserratt hover:text-blue-400"
+              >
                 Login
               </button>
             </li>

@@ -66,8 +66,10 @@ export function CommentActionsMenu({
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
-        PaperProps={{
-          sx: commentActionsMenuPaperStyles,
+        slotProps={{
+          paper: {
+            sx: commentActionsMenuPaperStyles,
+          },
         }}
       >
         {onReply ? (

@@ -19,35 +19,9 @@ export const commentInputTextFieldStyles = {
     fontSize: { xs: "16px", sm: "14px" },
     paddingRight: { xs: "48px", sm: "52px" },
     borderRadius: { xs: "20px", sm: "8px" },
-    "& fieldset": {
-      borderColor: "grey.600",
-      borderWidth: "1px",
-    },
-    "&:hover fieldset": {
-      borderColor: "grey.500",
-    },
     "&.Mui-focused fieldset": {
       borderColor: "primary.main",
       borderWidth: "1px",
-    },
-    "& .MuiOutlinedInput-input": {
-      color: "common.white",
-      fontSize: { xs: "16px", sm: "14px" },
-      ...commentTextStyles,
-      scrollbarWidth: "none",
-      "&::-webkit-scrollbar": {
-        display: "none",
-      },
-      "@media (max-width: 640px)": {
-        transform: "scale(1) !important",
-        WebkitTextSizeAdjust: "100%",
-      },
-    },
-    "& .MuiOutlinedInput-input::placeholder": {
-      color: "grey.400",
-      opacity: 1,
-      fontSize: { xs: "16px", sm: "14px" },
-      ...commentTextStyles,
     },
   },
 };
@@ -56,10 +30,9 @@ export const commentActionsMenuPaperStyles = {
   bgcolor: "grey.900",
   border: "1px solid",
   borderColor: "grey.800",
-  borderRadius: 1.5,
+  borderRadius: 2.5,
   minWidth: 180,
   mt: 0.5,
-  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.5)",
   overflow: "hidden",
   "& .MuiMenuItem-root": {
     ...commentCaptionStyles,
@@ -77,20 +50,6 @@ export const commentActionsMenuPaperStyles = {
       ...commentCaptionStyles,
       fontWeight: 400,
       color: "common.white",
-    },
-    "&[data-delete='true']": {
-      color: "#ef4444 !important",
-      "&:hover": {
-        bgcolor: "rgba(239, 68, 68, 0.1) !important",
-        color: "#ef4444 !important",
-      },
-      "& .MuiListItemIcon-root": {
-        color: "#ef4444 !important",
-      },
-      "& .MuiListItemText-primary": {
-        color: "#ef4444 !important",
-        fontWeight: 500,
-      },
     },
   },
 };
@@ -153,19 +112,18 @@ export const commentAvatarStyles = {
 export const commentOpenButtonStyles = {
   color: "grey.400",
   transition: "all 0.2s ease",
+  "& img": {
+    width: 30,
+    height: 30,
+    filter: "brightness(0) saturate(100%) invert(60%)",
+    transition: "filter 0.2s ease",
+  },
   "&:hover": {
     color: "common.white",
     "& img": {
       filter: "brightness(0) saturate(100%) invert(100%)",
     },
   },
-};
-
-export const commentOpenButtonIconStyles = {
-  width: 30,
-  height: 30,
-  filter: "brightness(0) saturate(100%) invert(60%)",
-  transition: "filter 0.2s ease",
 };
 
 export const commentContentTextStyles = {
@@ -234,7 +192,7 @@ export const getCommentItemStyles = (
   theme: Theme,
   isOwner: boolean,
   isReply: boolean,
-  isJumpHighlighted: boolean
+  isJumpHighlighted: boolean,
 ) => {
   const isHighlighted = isOwner || isReply;
   return {
@@ -244,29 +202,28 @@ export const getCommentItemStyles = (
     px: isHighlighted ? { xs: 0.5, sm: 0.625 } : 0,
     borderRadius: isHighlighted ? { xs: 1.25, sm: 1.5 } : 0,
     borderLeft: isOwner
-      ? { xs: "2px solid", sm: "2px solid" }
+      ? "2px solid"
       : isReply
-      ? { xs: "1px solid", sm: "1.5px solid" }
-      : "none",
+        ? { xs: "1px solid", sm: "1.5px solid" }
+        : "none",
     borderLeftColor: isOwner
       ? theme.palette.primary.main
       : isReply
-      ? theme.palette.grey[700]
-      : "transparent",
+        ? theme.palette.grey[700]
+        : "transparent",
     bgcolor: isJumpHighlighted
       ? "rgba(59, 130, 246, 0.2)"
       : isOwner
-      ? alpha(theme.palette.primary.main, 0.08)
-      : isReply
-      ? alpha(theme.palette.grey[700], 0.15)
-      : "transparent",
+        ? alpha(theme.palette.primary.main, 0.08)
+        : isReply
+          ? alpha(theme.palette.grey[700], 0.15)
+          : "transparent",
     transition: "background-color 1s ease",
     mx: isHighlighted ? { xs: -0.5, sm: -0.75 } : 0,
     mb: { xs: 1, sm: 1.25 },
     ...commentTextStyles,
   };
 };
-
 
 export const commentMediaPreviewItemContainerStyles = {
   position: "relative",
@@ -395,7 +352,7 @@ export const mediaThumbnailCountTextStyles = {
 };
 
 export const getCommentMediaLoadingOverlayStyles = (
-  loadingOverlaySx?: object
+  loadingOverlaySx?: object,
 ) => ({
   position: "absolute" as const,
   inset: 0,
@@ -574,22 +531,6 @@ export const commentDeleteDialogDeleteButtonStyles = {
   },
 };
 
-export const ShowRepliesButtonStyles = {
-  textTransform: "none",
-  color: "grey.500",
-  fontSize: { xs: "11px", sm: "12px" },
-  padding: { xs: "2px 0", sm: "2px 0" },
-  minWidth: "auto",
-  textAlign: "left",
-  fontWeight: 400,
-  ...commentTextStyles,
-  "&:hover": {
-    color: "grey.300",
-    backgroundColor: "transparent",
-  },
-  mt: { xs: 0.25, sm: 0.5 },
-};
-
 export const commentModalPaperStyles = {
   bgcolor: "grey.900",
   color: "common.white",
@@ -708,15 +649,8 @@ export const getCommentInputSendButtonStyles = (show: boolean) => ({
   alignItems: "center",
   justifyContent: "center",
   flexShrink: 0,
-  "& svg": {
-    fontSize: { xs: "12px", sm: "16px" },
-  },
   "&:hover": {
     bgcolor: show ? "primary.dark" : undefined,
-  },
-  "&:disabled": {
-    bgcolor: show ? "grey.600" : undefined,
-    color: "grey.400",
   },
   transition: "all 0.2s ease",
   zIndex: 1,

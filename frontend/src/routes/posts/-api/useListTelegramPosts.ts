@@ -1,10 +1,7 @@
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import {
-  useSelectedAuthorId,
-  useSelectedToken,
-} from "@/store/useFiltersStore";
+import { useSelectedAuthorId, useSelectedToken } from "@/store/useFiltersStore";
 
 import { usePostsMode } from "../-hooks/usePostsMode";
 
@@ -15,7 +12,7 @@ const postsQueryKey = (
   tokenName: string | null,
   mode: "all" | "liked" | "disliked" | "favorites",
 ) => {
-  const key = ["posts", authorId ?? null, tokenName ?? null, mode] as const;
+  const key = ["posts", authorId, tokenName, mode] as const;
   return key;
 };
 
