@@ -103,8 +103,8 @@ export function CommentModal({ postId, isOpen, onClose }: CommentsModalProps) {
         scroll="paper"
         disableScrollLock
         keepMounted
-        TransitionComponent={DialogTransition}
-        PaperProps={{ sx: commentModalPaperStyles }}
+        slots={{ transition: DialogTransition }}
+        slotProps={{ paper: { sx: commentModalPaperStyles } }}
         aria-labelledby="comments-dialog-title"
       >
         <DialogTitle id="comments-dialog-title" sx={commentModalTitleStyles}>

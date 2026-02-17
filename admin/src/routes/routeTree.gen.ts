@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from "./__root";
 import { Route as IndexRouteImport } from "./index";
+import { Route as NotificationsIndexRouteImport } from "./notifications/index";
 import { Route as ForecastsIndexRouteImport } from "./forecasts/index";
 import { Route as AuthIndexRouteImport } from "./auth/index";
 import { Route as AuthVerifyRouteImport } from "./auth/verify";
@@ -18,6 +19,11 @@ import { Route as AuthCallbackRouteImport } from "./auth/callback";
 const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
+  id: "/notifications/",
+  path: "/notifications/",
   getParentRoute: () => rootRouteImport,
 } as any);
 const ForecastsIndexRoute = ForecastsIndexRouteImport.update({
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   "/auth/verify": typeof AuthVerifyRoute;
   "/auth/": typeof AuthIndexRoute;
   "/forecasts/": typeof ForecastsIndexRoute;
+  "/notifications/": typeof NotificationsIndexRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   "/auth/verify": typeof AuthVerifyRoute;
   "/auth": typeof AuthIndexRoute;
   "/forecasts": typeof ForecastsIndexRoute;
+  "/notifications": typeof NotificationsIndexRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
@@ -62,19 +70,33 @@ export interface FileRoutesById {
   "/auth/verify": typeof AuthVerifyRoute;
   "/auth/": typeof AuthIndexRoute;
   "/forecasts/": typeof ForecastsIndexRoute;
+  "/notifications/": typeof NotificationsIndexRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/auth/callback" | "/auth/verify" | "/auth/" | "/forecasts/";
+  fullPaths:
+    | "/"
+    | "/auth/callback"
+    | "/auth/verify"
+    | "/auth/"
+    | "/forecasts/"
+    | "/notifications/";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/auth/callback" | "/auth/verify" | "/auth" | "/forecasts";
+  to:
+    | "/"
+    | "/auth/callback"
+    | "/auth/verify"
+    | "/auth"
+    | "/forecasts"
+    | "/notifications";
   id:
     | "__root__"
     | "/"
     | "/auth/callback"
     | "/auth/verify"
     | "/auth/"
-    | "/forecasts/";
+    | "/forecasts/"
+    | "/notifications/";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -83,6 +105,7 @@ export interface RootRouteChildren {
   AuthVerifyRoute: typeof AuthVerifyRoute;
   AuthIndexRoute: typeof AuthIndexRoute;
   ForecastsIndexRoute: typeof ForecastsIndexRoute;
+  NotificationsIndexRoute: typeof NotificationsIndexRoute;
 }
 
 declare module "@tanstack/react-router" {
@@ -92,6 +115,13 @@ declare module "@tanstack/react-router" {
       path: "/";
       fullPath: "/";
       preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/notifications/": {
+      id: "/notifications/";
+      path: "/notifications";
+      fullPath: "/notifications/";
+      preLoaderRoute: typeof NotificationsIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/forecasts/": {
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyRoute: AuthVerifyRoute,
   AuthIndexRoute: AuthIndexRoute,
   ForecastsIndexRoute: ForecastsIndexRoute,
+  NotificationsIndexRoute: NotificationsIndexRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

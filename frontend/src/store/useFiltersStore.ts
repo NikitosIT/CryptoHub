@@ -1,8 +1,11 @@
 import { useMemo } from "react";
 import { create } from "zustand";
 
-import { usePostsMode } from "@/routes/posts/-hooks/usePostsMode";
-import type { PostMode, Token } from "@/types/db";
+import {
+  type PostMode,
+  usePostsMode,
+} from "@/routes/posts/-hooks/usePostsMode";
+import type { Token } from "@/types/db";
 
 interface FilterData {
   selectedAuthorId: number | null;

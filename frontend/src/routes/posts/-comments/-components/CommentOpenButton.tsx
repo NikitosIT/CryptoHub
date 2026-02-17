@@ -3,10 +3,7 @@ import { Badge, Box, IconButton } from "@mui/material";
 import { useCommentsModalPersistence } from "@/routes/posts/-comments/-hooks/useCommentsModalPersistence";
 import type { TelegramPost } from "@/types/db";
 
-import {
-  commentOpenButtonIconStyles,
-  commentOpenButtonStyles,
-} from "../-utils/commentStyles";
+import { commentOpenButtonStyles } from "../-utils/commentStyles";
 import { CommentModal } from "./CommentModal";
 
 interface CommentButtonProps {
@@ -39,7 +36,6 @@ export function CommentOpenButton({ post }: CommentButtonProps) {
             component="img"
             src="/links_logo/comments.svg"
             alt="Comments"
-            sx={commentOpenButtonIconStyles}
           />
         </Badge>
       </IconButton>
