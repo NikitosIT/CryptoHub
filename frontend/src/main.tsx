@@ -1,20 +1,20 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 
-import { useAuthListener } from "./api/useAuthListener";
-import { ToastProvider } from "./hooks/useToast";
-import { supabase } from "./lib/supabaseClient";
-import { routeTree } from "./routes/routeTree.gen";
-import { theme } from "./theme";
+import { useAuthListener } from './api/useAuthListener';
+import { ToastProvider } from './hooks/useToast';
+import { supabase } from './lib/supabaseClient';
+import { routeTree } from './routes/routeTree.gen';
+import { theme } from './theme';
 
-import "./index.css";
+import './index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,14 +27,14 @@ const queryClient = new QueryClient({
         const errorMessage =
           error instanceof Error
             ? error.message
-            : "An error occurred. Please try again later.";
+            : 'An error occurred. Please try again later.';
         console.error(errorMessage);
       },
     },
   },
 });
 
-export const REACT_QUERY_CACHE_KEY = "REACT_QUERY_OFFLINE_CACHE";
+export const REACT_QUERY_CACHE_KEY = 'REACT_QUERY_OFFLINE_CACHE';
 
 export const persister = createAsyncStoragePersister({
   storage: window.localStorage,
@@ -60,10 +60,10 @@ function Root() {
         maxAge: Infinity,
         dehydrateOptions: {
           shouldDehydrateQuery: (query) => {
-            return query.queryKey[0] === "twoFactorStatus";
+            return query.queryKey[0] === 'twoFactorStatus';
           },
         },
-        buster: "",
+        buster: '',
       }}
     >
       <ToastProvider>
@@ -74,7 +74,7 @@ function Root() {
   );
 }
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />

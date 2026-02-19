@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { api } from "@/api";
+import { api } from '@/api';
 
 export const useSendEmail = (options?: {
   onSuccess?: (email: string) => void;
@@ -15,15 +15,9 @@ export const useSendEmail = (options?: {
 
 export const useVerifyOtp = () => {
   return useMutation({
-    mutationFn: async ({
-      email,
-      code,
-    }: {
-      email: string | null;
-      code: string;
-    }) => {
+    mutationFn: async ({ email, code }: { email: string | null; code: string }) => {
       if (!email) {
-        throw new Error("Email not found — try again");
+        throw new Error('Email not found — try again');
       }
 
       return await api.auth.verifyOtp(email, code);

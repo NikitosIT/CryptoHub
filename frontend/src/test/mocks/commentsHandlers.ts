@@ -1,11 +1,11 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse } from 'msw';
 
-const BASE = "http://localhost";
+const BASE = 'http://localhost';
 
 const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, apikey, Authorization",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, apikey, Authorization',
 } as const;
 
 export type MockComment = {
@@ -51,7 +51,7 @@ export type CommentsDeleteResponse = { success: boolean };
 export type CommentsLikePayload = { comment_id: number };
 export type CommentsLikeResponse = {
   success: boolean;
-  status: "added" | "removed";
+  status: 'added' | 'removed';
   like_count: number;
 };
 
@@ -72,23 +72,23 @@ export function resetCommentsHandlersHistory() {
 function createMockComment(overrides: Partial<MockComment> = {}): MockComment {
   return {
     id: 1,
-    user_id: "user-1",
+    user_id: 'user-1',
     post_id: 1,
     parent_comment_id: null,
-    text: "A comment",
+    text: 'A comment',
     media: null,
-    created_at: "2025-01-01T12:00:00Z",
-    updated_at: "2025-01-01T12:00:00Z",
+    created_at: '2025-01-01T12:00:00Z',
+    updated_at: '2025-01-01T12:00:00Z',
     like_count: 0,
     user_has_liked: false,
-    user: { raw_user_meta_data: { nickname: "TestUser", avatar_url: null } },
+    user: { raw_user_meta_data: { nickname: 'TestUser', avatar_url: null } },
     ...overrides,
   };
 }
 
 const defaultListComment = createMockComment({
   id: 100,
-  text: "Existing comment",
+  text: 'Existing comment',
   like_count: 2,
   user_has_liked: false,
 });
@@ -99,10 +99,10 @@ export const userCommentsHandler = http.post(
   `${BASE}/user-comments`,
   async ({ request }) => {
     const url = new URL(request.url);
-    const action = url.searchParams.get("action");
+    const action = url.searchParams.get('action');
     const body = (await request.json()) as Record<string, unknown>;
 
-    if (action === "list") {
+    if (action === 'list') {
       const payload = body as unknown as CommentsListPayload;
       commentsListRequests.push({ payload });
       const response: CommentsListResponse = {
@@ -112,7 +112,7 @@ export const userCommentsHandler = http.post(
       return HttpResponse.json(response, { headers: CORS_HEADERS });
     }
 
-    if (action === "create") {
+    if (action === 'create') {
       const payload = body as unknown as CommentsCreatePayload;
       commentsCreateRequests.push({ payload });
       const comment: MockComment = createMockComment({
@@ -128,7 +128,7 @@ export const userCommentsHandler = http.post(
       return HttpResponse.json(response, { headers: CORS_HEADERS });
     }
 
-    if (action === "update") {
+    if (action === 'update') {
       const payload = body as unknown as CommentsUpdatePayload;
       commentsUpdateRequests.push({ payload });
       const comment: MockComment = createMockComment({
@@ -141,14 +141,14 @@ export const userCommentsHandler = http.post(
       return HttpResponse.json(response, { headers: CORS_HEADERS });
     }
 
-    if (action === "delete") {
+    if (action === 'delete') {
       const payload = body as unknown as CommentsDeletePayload;
       commentsDeleteRequests.push({ payload });
       const response: CommentsDeleteResponse = { success: true };
       return HttpResponse.json(response, { headers: CORS_HEADERS });
     }
 
-    return HttpResponse.json({ error: "unexpected action" }, { status: 400 });
+    return HttpResponse.json({ error: 'unexpected action' }, { status: 400 });
   },
 );
 
@@ -159,7 +159,7 @@ export const commentsLikeHandler = http.post(
     commentsLikeRequests.push({ payload });
     const response: CommentsLikeResponse = {
       success: true,
-      status: "added",
+      status: 'added',
       like_count: 1,
     };
     return HttpResponse.json(response, { headers: CORS_HEADERS });

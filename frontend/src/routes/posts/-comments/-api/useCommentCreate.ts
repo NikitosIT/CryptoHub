@@ -1,18 +1,23 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api, type UserProfile } from "@/api";
-import { useToast } from "@/hooks/useToast";
-import { organizeComments } from "@/routes/posts/-comments/-utils/commentUtils";
-import type { CommentWithReplies } from "@/types/db";
-import { getErrorMessage } from "@/utils/errorUtils";
+import { api } from '@/api';
+import { useToast } from '@/hooks/useToast';
+import { organizeComments } from '@/routes/posts/-comments/-utils/commentUtils';
+import type { UserProfile } from '@/routes/profile/-api/useUserProfile';
+import type { CommentMedia, CommentWithReplies } from '@/types/db';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-import { createBlobMediaFromFiles } from "../-utils/commentMediaUtils";
-import {
-  commentsListQueryKey,
-  getPreviousCommentsList,
-} from "./useCommentList";
-import { useCommentsUpdateCountCache } from "./useCommentsUpdateCountCache";
-import { uploadCommentMedia } from "./useUploadMedia";
+import { createBlobMediaFromFiles } from '../-utils/commentMediaUtils';
+import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
+import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
+import { uploadCommentMedia } from './useUploadMedia';
+export interface CreateCommentParams {
+  postId: number;
+  text: string;
+  parentCommentId?: number | null;
+  media?: CommentMedia[] | null;
+}
+
 type CommentVariables = {
   postId: number;
   commentId?: number;
@@ -24,7 +29,7 @@ type CommentVariables = {
 
 type MutationContext = {
   previousComments: CommentWithReplies[] | undefined;
-  queryKey: readonly ["comments", number];
+  queryKey: readonly ['comments', number];
   blobUrls: string[];
   optimisticCommentId: number;
 };
@@ -63,9 +68,8 @@ export function useCommentCreate() {
       await queryClient.cancelQueries({ queryKey });
 
       const previousComments = getPreviousCommentsList(queryClient, postId);
-      const profile = queryClient.getQueryData<UserProfile>(["profile"]);
-      const { media: optimisticMedia, blobUrls } =
-        createBlobMediaFromFiles(mediaFiles);
+      const profile = queryClient.getQueryData<UserProfile>(['profile']);
+      const { media: optimisticMedia, blobUrls } = createBlobMediaFromFiles(mediaFiles);
 
       const optimisticCommentId = Date.now();
       const optimisticComment: CommentWithReplies = {
@@ -94,13 +98,11 @@ export function useCommentCreate() {
       });
 
       setTimeout(() => {
-        const element = document.getElementById(
-          `comment-${optimisticComment.id}`,
-        );
+        const element = document.getElementById(`comment-${optimisticComment.id}`);
         if (element) {
           element.scrollIntoView({
-            behavior: "auto",
-            block: "center",
+            behavior: 'auto',
+            block: 'center',
           });
         }
       }, 0);
@@ -115,10 +117,7 @@ export function useCommentCreate() {
       context?.blobUrls.forEach((url) => URL.revokeObjectURL(url));
 
       showError(
-        getErrorMessage(
-          err,
-          "Failed to create comment. Please try again later.",
-        ),
+        getErrorMessage(err, 'Failed to create comment. Please try again later.'),
       );
     },
 

@@ -1,10 +1,10 @@
-import { api } from "@/api";
-import { useToast } from "@/hooks/useToast";
-import { persister } from "@/main";
-import { useTwoFactorStatus } from "@/routes/auth/-api/use2faApi";
-import { getErrorMessage } from "@/utils/errorUtils";
+import { api } from '@/api';
+import { useToast } from '@/hooks/useToast';
+import { persister } from '@/main';
+import { useTwoFactorStatus } from '@/routes/auth/-api/use2faApi';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-import { useAuthState } from "./useAuthState";
+import { useAuthState } from './useAuthState';
 
 export function useLogout() {
   const { showError } = useToast();
@@ -17,20 +17,20 @@ export function useLogout() {
       try {
         await api.twoFactor.clearVerification();
       } catch (clearError) {
-        console.error("Failed to clear 2FA verification:", clearError);
+        console.error('Failed to clear 2FA verification:', clearError);
       }
     }
 
     try {
       await api.auth.signOut();
-      localStorage.removeItem("user_profile_cache");
+      localStorage.removeItem('user_profile_cache');
       persister.removeClient();
-      window.location.href = "/auth/";
+      window.location.href = '/auth/';
     } catch (error) {
-      const errorMessage = getErrorMessage(error, "Failed to log out.");
+      const errorMessage = getErrorMessage(error, 'Failed to log out.');
       showError(errorMessage);
       setTimeout(() => {
-        window.location.href = "/auth/";
+        window.location.href = '/auth/';
       }, 1000);
     }
   };

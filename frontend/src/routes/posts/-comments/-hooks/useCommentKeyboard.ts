@@ -1,21 +1,16 @@
 interface UseCommentKeyboardProps {
-    onFormSubmit: () => void;
-    onCancel: () => void;
+  onFormSubmit: () => void;
 }
 
-export function useCommentKeyboard({
-    onFormSubmit,
-    onCancel,
-}: UseCommentKeyboardProps) {
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            onFormSubmit();
-        } else if (e.key === "Escape") {
-            e.preventDefault();
-            onCancel();
-        }
-    };
+export function useCommentKeyboard({ onFormSubmit }: UseCommentKeyboardProps) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      onFormSubmit();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+    }
+  };
 
-    return { handleKeyDown };
+  return { handleKeyDown };
 }

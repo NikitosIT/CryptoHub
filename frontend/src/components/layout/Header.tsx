@@ -1,31 +1,28 @@
-import type { MouseEvent } from "react";
-import HelpIcon from "@mui/icons-material/Help";
-import { Box, IconButton, Tooltip } from "@mui/material";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import type { MouseEvent } from 'react';
+import HelpIcon from '@mui/icons-material/Help';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 
-import { UserAvatar } from "@/components/ui/UserAvatar";
-import { useDisplayNickname } from "@/hooks/useDisplayNickname";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
+import { UserAvatar } from '@/components/ui/UserAvatar';
+import { useDisplayNickname } from '@/hooks/useDisplayNickname';
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 
-import { useHeaderNavigation } from "../../hooks/useHeaderNavigation";
+import { useHeaderNavigation } from '../../hooks/useHeaderNavigation';
 
 export default function Header() {
-  const { isAuthenticatedWith2FA, hasPendingTwoFactor, isLoading } =
-    useAuthState({
-      checkTwoFactor: true,
-    });
+  const { isAuthenticatedWith2FA, hasPendingTwoFactor, isLoading } = useAuthState({
+    checkTwoFactor: true,
+  });
 
   const { displayNickname } = useDisplayNickname();
   const { handleLoginClick, isOnVerificationPage } = useHeaderNavigation();
   const navigate = useNavigate();
   const location = useLocation();
-  const isProfilePath = location.pathname.startsWith("/profile");
-  const isAuthPath = location.pathname.startsWith("/auth");
+  const isProfilePath = location.pathname.startsWith('/profile');
+  const isAuthPath = location.pathname.startsWith('/auth');
 
   const shouldShowLogin =
-    !isLoading &&
-    !isProfilePath &&
-    (!isAuthenticatedWith2FA || hasPendingTwoFactor);
+    !isLoading && !isProfilePath && (!isAuthenticatedWith2FA || hasPendingTwoFactor);
 
   const shouldShowProfile =
     !isLoading &&
@@ -38,14 +35,14 @@ export default function Header() {
 
   const onLoginClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (isOnVerificationPage && hasPendingTwoFactor) {
-      void handleLoginClick(e);
+      handleLoginClick(e);
       return;
     }
 
-    void navigate({ to: "/auth/", replace: true });
+    navigate({ to: '/auth/', replace: true });
   };
 
-  const onHelpClick = () => void navigate({ to: "/help" });
+  const onHelpClick = () => navigate({ to: '/help' });
 
   return (
     <header className="relative px-4 mt-2 mb-4 sm:mt-3 sm:mb-6">
@@ -106,12 +103,12 @@ function Helper({ onHelpClick }: { onHelpClick: () => void }) {
       component="aside"
       aria-label="Help actions"
       sx={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: { xs: 8, sm: 16 },
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
       <Tooltip title="Help" arrow>
@@ -119,12 +116,12 @@ function Helper({ onHelpClick }: { onHelpClick: () => void }) {
           aria-label="Open help"
           onClick={onHelpClick}
           sx={{
-            color: "#fff",
-            transition: "0.25s",
-            "&:hover": {
-              color: "#fb923c",
-              bgcolor: "rgba(251,146,60,0.08)",
-              transform: "scale(1.1)",
+            color: '#fff',
+            transition: '0.25s',
+            '&:hover': {
+              color: '#fb923c',
+              bgcolor: 'rgba(251,146,60,0.08)',
+              transform: 'scale(1.1)',
             },
           }}
         >

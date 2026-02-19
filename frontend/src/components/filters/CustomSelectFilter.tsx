@@ -1,5 +1,5 @@
-import type React from "react";
-import { memo, useCallback, useMemo } from "react";
+import type React from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import {
   Autocomplete,
   Box,
@@ -7,10 +7,10 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import type { AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
+} from '@mui/material';
+import type { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 
-import { AuthorImg, DropdownPaper, TokenImg } from "./FilterImages";
+import { AuthorImg, DropdownPaper, TokenImg } from './FilterImages';
 
 interface SelectFilterProps<T> {
   label: string;
@@ -36,10 +36,7 @@ function SelectFilter<T extends OptionType>({
   showLogos,
 }: SelectFilterProps<T>) {
   const renderOption = useCallback(
-    (
-      props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
-      option: T,
-    ) => {
+    (props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
       const { key, ...rest } = props;
       return (
         <Box component="li" key={key} {...rest} sx={optionSx}>
@@ -83,9 +80,7 @@ function SelectFilter<T extends OptionType>({
             startAdornment: (
               <>
                 {startAdornment ? (
-                  <InputAdornment position="start">
-                    {startAdornment}
-                  </InputAdornment>
+                  <InputAdornment position="start">{startAdornment}</InputAdornment>
                 ) : null}
                 {params.InputProps.startAdornment}
               </>
@@ -113,17 +108,17 @@ function SelectFilter<T extends OptionType>({
 export default memo(SelectFilter) as typeof SelectFilter;
 
 const autocompleteSx = {
-  width: "100%",
+  width: '100%',
   maxWidth: 320,
-  "& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator": {
-    color: "#e0e0e0",
-    "&:hover": {
-      color: "#ffffff",
+  '& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator': {
+    color: '#e0e0e0',
+    '&:hover': {
+      color: '#ffffff',
     },
   },
-  "& .MuiAutocomplete-input": {
-    "@media (max-width: 840px)": {
-      maxWidth: "calc(100% - 60px)",
+  '& .MuiAutocomplete-input': {
+    '@media (max-width: 840px)': {
+      maxWidth: 'calc(100% - 60px)',
     },
   },
 };
@@ -131,6 +126,6 @@ const autocompleteSx = {
 const optionSx = {
   px: 1,
   py: 0.75,
-  cursor: "pointer",
-  "&:hover": { bgcolor: "#1e1e1e" },
+  cursor: 'pointer',
+  '&:hover': { bgcolor: '#1e1e1e' },
 };

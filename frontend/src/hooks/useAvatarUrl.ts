@@ -1,13 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
 
-import {
-  profileQueryKey,
-  useUserProfile,
-} from "@/routes/profile/-api/useUserProfile";
-import { getCachedProfile } from "@/routes/profile/-utils/profileCache";
-import { getPublicAvatarUrl } from "@/utils/storage";
+import { profileQueryKey, useUserProfile } from '@/routes/profile/-api/useUserProfile';
+import { getCachedProfile } from '@/routes/profile/-utils/profileCache';
+import { getPublicAvatarUrl } from '@/utils/storage';
 
-import { useAuthState } from "../routes/auth/-hooks/useAuthState";
+import { useAuthState } from '../routes/auth/-hooks/useAuthState';
 
 export function useAvatarUrl() {
   const queryClient = useQueryClient();

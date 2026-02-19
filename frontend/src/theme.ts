@@ -1,32 +1,32 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   components: {
     MuiTextField: {
       styleOverrides: {
         root: {
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.23)",
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.23)',
             },
-            "&:hover fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.4)",
+            '&:hover fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.4)',
             },
-            "&.Mui-focused fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.6)",
+            '&.Mui-focused fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.6)',
             },
           },
-          "& .MuiInputLabel-root": {
-            color: "rgba(255, 255, 255, 0.7)",
+          '& .MuiInputLabel-root': {
+            color: 'rgba(255, 255, 255, 0.7)',
           },
-          "& .MuiInputLabel-root.Mui-focused": {
-            color: "rgba(255, 255, 255, 0.9)",
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: 'rgba(255, 255, 255, 0.9)',
           },
-          "& .MuiOutlinedInput-input": {
-            color: "white",
+          '& .MuiOutlinedInput-input': {
+            color: 'white',
           },
-          "& .MuiFormHelperText-root": {
-            color: "rgba(255, 255, 255, 0.6)",
+          '& .MuiFormHelperText-root': {
+            color: 'rgba(255, 255, 255, 0.6)',
           },
         },
       },
@@ -34,9 +34,9 @@ export const theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          color: "rgba(255,255,255,0.5)",
-          "&.Mui-focused": {
-            color: "#fb923c",
+          color: 'rgba(255,255,255,0.5)',
+          '&.Mui-focused': {
+            color: '#fb923c',
           },
         },
       },
@@ -88,7 +88,7 @@ export const theme = createTheme({
     button: {
       fontFamily: '"Inter", sans-serif',
       fontWeight: 500,
-      textTransform: "none",
+      textTransform: 'none',
     },
     caption: {
       fontFamily: '"Inter", sans-serif',

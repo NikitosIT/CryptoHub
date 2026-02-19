@@ -1,15 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import { useToast } from "@/hooks/useToast";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { updateCommentInList } from "@/routes/posts/-comments/-utils/commentUtils";
-import type { CommentWithReplies } from "@/types/db";
-import { debounceAsync } from "@/utils/debounceAsync";
-import { getErrorMessage } from "@/utils/errorUtils";
+import { api } from '@/api';
+import { useToast } from '@/hooks/useToast';
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtils';
+import type { CommentWithReplies } from '@/types/db';
+import { debounceAsync } from '@/utils/debounceAsync';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-import { findCommentInCache } from "../-utils/commentCache";
-import { commentsListQueryKey } from "./useCommentList";
+import { findCommentInCache } from '../-utils/commentCache';
+import { commentsListQueryKey } from './useCommentList';
 
 const initialCommentLikeByKey = new Map<string, boolean>();
 
@@ -27,14 +27,8 @@ export function useCommentToggleLike(postId: number) {
       key,
       async () => {
         const initial = initialCommentLikeByKey.get(key);
-        const currentComment = findCommentInCache(
-          queryClient,
-          queryKey,
-          commentId,
-        );
-        const current = currentComment
-          ? !!currentComment.user_has_liked
-          : false;
+        const currentComment = findCommentInCache(queryClient, queryKey, commentId);
+        const current = currentComment ? !!currentComment.user_has_liked : false;
 
         if (initial === current) {
           initialCommentLikeByKey.delete(key);
@@ -68,14 +62,9 @@ export function useCommentToggleLike(postId: number) {
         exact: false,
       });
 
-      const previousComments =
-        queryClient.getQueryData<CommentWithReplies[]>(queryKey);
+      const previousComments = queryClient.getQueryData<CommentWithReplies[]>(queryKey);
 
-      const currentComment = findCommentInCache(
-        queryClient,
-        queryKey,
-        commentId,
-      );
+      const currentComment = findCommentInCache(queryClient, queryKey, commentId);
 
       if (!currentComment) {
         return { previousComments, queryKey };
@@ -117,7 +106,7 @@ export function useCommentToggleLike(postId: number) {
 
       const errorMessage = getErrorMessage(
         err,
-        "Failed to toggle like. Please try again later.",
+        'Failed to toggle like. Please try again later.',
       );
       showError(errorMessage);
     },

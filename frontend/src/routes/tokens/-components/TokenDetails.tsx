@@ -1,7 +1,7 @@
-import { useSelectedToken } from "@/store/useFiltersStore";
+import { useSelectedToken } from '@/store/useFiltersStore';
 
-import NoPostsTokenMessage from "../../posts/-components/NoPostsMessage";
-import TokensAiForecasts from "./TokensAiForecasts";
+import NoPostsTokenMessage from '../../posts/-components/NoPostsMessage';
+import TokensAiForecasts from './TokensAiForecasts';
 
 interface TokenLinkConfig {
   href: string | undefined;
@@ -13,7 +13,7 @@ interface TokenLinkConfig {
 }
 
 const linkBaseClass =
-  "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white transition-all rounded-lg";
+  'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white transition-all rounded-lg';
 
 function TokenLink({
   href,
@@ -51,34 +51,34 @@ export function TokenDetails() {
   const links: TokenLinkConfig[] = [
     {
       href: selectedToken.cmc,
-      icon: "/links_logo/cmc.svg",
-      label: "CoinMarketCap",
-      shortLabel: "CMC",
-      bgColor: "bg-blue-600",
-      hoverColor: "hover:bg-blue-500",
+      icon: '/links_logo/cmc.svg',
+      label: 'CoinMarketCap',
+      shortLabel: 'CMC',
+      bgColor: 'bg-blue-600',
+      hoverColor: 'hover:bg-blue-500',
     },
     {
       href: selectedToken.coinglass,
-      icon: "/links_logo/coinglass.png",
-      label: "Coinglass",
-      shortLabel: "CG",
-      bgColor: "bg-gray-800",
-      hoverColor: "hover:bg-gray-700",
+      icon: '/links_logo/coinglass.png',
+      label: 'Coinglass',
+      shortLabel: 'CG',
+      bgColor: 'bg-gray-800',
+      hoverColor: 'hover:bg-gray-700',
     },
     {
       href: selectedToken.homelink,
-      icon: "/links_logo/home.svg",
-      label: "Official site",
-      shortLabel: "Site",
-      bgColor: "bg-orange-600",
-      hoverColor: "hover:bg-orange-500",
+      icon: '/links_logo/home.svg',
+      label: 'Official site',
+      shortLabel: 'Site',
+      bgColor: 'bg-orange-600',
+      hoverColor: 'hover:bg-orange-500',
     },
     {
       href: selectedToken.xlink,
-      icon: "/links_logo/x-2.svg",
-      label: "X",
-      bgColor: "bg-gray-700",
-      hoverColor: "hover:bg-gray-500",
+      icon: '/links_logo/x-2.svg',
+      label: 'X',
+      bgColor: 'bg-gray-700',
+      hoverColor: 'hover:bg-gray-500',
     },
   ];
 

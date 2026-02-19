@@ -1,14 +1,14 @@
-import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { nicknameSchema } from "@/lib/validatorSchemas";
-import { useUpdateProfile } from "@/routes/profile/-api/useUpdateProfile";
-import { useUserProfile } from "@/routes/profile/-api/useUserProfile";
-import { getErrorMessage } from "@/utils/errorUtils";
+import { nicknameSchema } from '@/lib/validatorSchemas';
+import { useUpdateProfile } from '@/routes/profile/-api/useUpdateProfile';
+import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-import { useRequiredAuth } from "../routes/auth/-hooks/useRequiredAuth";
+import { useRequiredAuth } from '../routes/auth/-hooks/useRequiredAuth';
 
 type NicknameFormValues = { nickname: string };
 
@@ -18,8 +18,8 @@ const DAYS_BETWEEN_CHANGES = 14;
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 function formatDate(date: Date): string {
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   return `${day}.${month}.${year}`;
 }
@@ -52,7 +52,7 @@ interface UseNicknameFormProps {
 }
 
 export function useNicknameForm({
-  defaultNickname = "",
+  defaultNickname = '',
   onSuccess,
   onError,
   resetOnSuccess = false,
@@ -71,7 +71,7 @@ export function useNicknameForm({
   } = useForm<NicknameFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: { nickname: defaultNickname },
-    mode: "onTouched",
+    mode: 'onTouched',
   });
 
   const { canChange: canChangeNickname, nextChangeDate } = useMemo(
@@ -83,20 +83,19 @@ export function useNicknameForm({
     try {
       await mutation.mutateAsync({ nickname });
       if (resetOnSuccess) {
-        reset({ nickname: "" });
+        reset({ nickname: '' });
       }
       onSuccess?.(nickname);
     } catch (err) {
-      const errorMessage = getErrorMessage(err, "Error saving");
-      setFormError("nickname", { message: errorMessage });
+      const errorMessage = getErrorMessage(err, 'Error saving');
+      setFormError('nickname', { message: errorMessage });
       onError?.(new Error(errorMessage));
     }
   };
 
-  const nicknameValue = watch("nickname");
+  const nicknameValue = watch('nickname');
   const isPending = mutation.isPending || isSubmitting;
-  const isDisabled =
-    isPending || !nicknameValue || !user.id || !canChangeNickname;
+  const isDisabled = isPending || !nicknameValue || !user.id || !canChangeNickname;
 
   return {
     register,

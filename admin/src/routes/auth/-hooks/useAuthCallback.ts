@@ -13,11 +13,11 @@ export function useAuthCallback() {
     if (isLoading) return;
 
     if (!session) {
-      void navigate({ to: "/auth/", replace: true });
+      navigate({ to: "/auth/", replace: true });
       return;
     }
 
-    void navigate({ to: "/", replace: true });
+    navigate({ to: "/", replace: true });
   }, [session, isLoading, navigate]);
 
   return {

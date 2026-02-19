@@ -1,5 +1,5 @@
-import Countdown from "react-countdown";
-import { Box, Typography } from "@mui/material";
+import Countdown from 'react-countdown';
+import { Box, Typography } from '@mui/material';
 
 interface CountdownDisplayProps {
   date: number;
@@ -27,8 +27,8 @@ export function CountdownDisplay({ date, onComplete }: CountdownDisplayProps) {
       <Typography
         variant="body2"
         sx={{
-          fontSize: { xs: "0.875rem", sm: "1rem" },
-          color: "rgba(255, 255, 255, 0.7)",
+          fontSize: { xs: '0.875rem', sm: '1rem' },
+          color: 'rgba(255, 255, 255, 0.7)',
         }}
       >
         in {displaySeconds} sec

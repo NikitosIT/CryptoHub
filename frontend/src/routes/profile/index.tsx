@@ -1,25 +1,18 @@
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import SecurityIcon from "@mui/icons-material/Security";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
-import {
-  Box,
-  Divider,
-  List,
-  ListItemButton,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
-import { useNavigate } from "@tanstack/react-router";
-import { EditIcon } from "lucide-react";
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SecurityIcon from '@mui/icons-material/Security';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import { Box, Divider, List, ListItemButton, Paper, Typography } from '@mui/material';
+import { createFileRoute } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
+import { EditIcon } from 'lucide-react';
 
-import { useSessionQuery } from "@/api/useSessionQuery";
-import { UserAvatar } from "@/components/ui/UserAvatar";
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { useUserProfile } from "@/routes/profile/-api/useUserProfile";
-import { LogoutButton } from "@/routes/profile/-components/LogoutButton";
+import { useSessionQuery } from '@/api/useSessionQuery';
+import { UserAvatar } from '@/components/ui/UserAvatar';
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
+import { LogoutButton } from '@/routes/profile/-components/LogoutButton';
 
 import {
   profileCard,
@@ -30,12 +23,12 @@ import {
   profileNotifications,
   profileSecurity,
   profileSettingName,
-} from "./-utils/profileStyles";
+} from './-utils/profileStyles';
 
-export const Route = createFileRoute("/profile/")({
+export const Route = createFileRoute('/profile/')({
   beforeLoad: createRouteGuard({
     requireAuth: true,
-    redirectTo: "/auth/",
+    redirectTo: '/auth/',
   }),
   component: ProfileMain,
 });
@@ -50,15 +43,15 @@ export function ProfileMain() {
     <div className="flex flex-col items-center justify-center px-2 mt-6 sm:px-4 sm:mt-8 md:mt-10">
       <Paper elevation={6} sx={profileCard}>
         <Typography variant="h5" sx={profileNickname}>
-          {profile?.nickname || session?.user.email?.split("@")[0] || "User"}
+          {profile?.nickname || session?.user.email?.split('@')[0] || 'User'}
         </Typography>
 
         <Box display="flex" justifyContent="center" sx={{ mb: 3 }}>
           <UserAvatar size={100} showSkeleton={true} />
         </Box>
-        <List sx={{ color: "#fff" }}>
+        <List sx={{ color: '#fff' }}>
           <ListItemButton
-            onClick={() => void navigate({ to: "/profile/edit" })}
+            onClick={() => navigate({ to: '/profile/edit' })}
             sx={profileSettingName}
           >
             <EditIcon width={20} height={20} />
@@ -67,10 +60,10 @@ export function ProfileMain() {
             </Typography>
           </ListItemButton>
 
-          <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
+          <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
 
           <ListItemButton
-            onClick={() => void navigate({ to: "/profile/twofactor" })}
+            onClick={() => navigate({ to: '/profile/twofactor' })}
             sx={profileSecurity}
           >
             <SecurityIcon sx={{ fontSize: 20 }} />
@@ -79,10 +72,10 @@ export function ProfileMain() {
             </Typography>
           </ListItemButton>
 
-          <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
+          <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
           <ListItemButton
             sx={profileNotifications}
-            onClick={() => void navigate({ to: "/profile/notifications" })}
+            onClick={() => navigate({ to: '/profile/notifications' })}
           >
             <NotificationsIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>
@@ -90,25 +83,21 @@ export function ProfileMain() {
             </Typography>
           </ListItemButton>
 
-          <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
+          <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
           <ListItemButton
             sx={profileLikedPost}
-            onClick={() =>
-              void navigate({ to: "/posts", search: { mode: "liked" } })
-            }
+            onClick={() => navigate({ to: '/posts', search: { mode: 'liked' } })}
           >
             <FavoriteBorderIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>
               Liked Posts
             </Typography>
           </ListItemButton>
-          <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
+          <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
 
           <ListItemButton
             sx={profileDislikedPost}
-            onClick={() =>
-              void navigate({ to: "/posts", search: { mode: "disliked" } })
-            }
+            onClick={() => navigate({ to: '/posts', search: { mode: 'disliked' } })}
           >
             <ThumbDownOffAltIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>
@@ -116,13 +105,11 @@ export function ProfileMain() {
             </Typography>
           </ListItemButton>
 
-          <Divider sx={{ backgroundColor: "#3f3f46", my: 0.5 }} />
+          <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
 
           <ListItemButton
             sx={profileFavorites}
-            onClick={() =>
-              void navigate({ to: "/posts", search: { mode: "favorites" } })
-            }
+            onClick={() => navigate({ to: '/posts', search: { mode: 'favorites' } })}
           >
             <BookmarkBorderIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>

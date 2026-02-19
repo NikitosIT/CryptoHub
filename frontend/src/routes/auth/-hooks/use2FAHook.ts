@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 
-import { twoFactorCodeSchema } from "@/lib/validatorSchemas";
+import { twoFactorCodeSchema } from '@/lib/validatorSchemas';
 import {
   useDisableTwoFactor,
   useRequestTwoFactor,
   useTwoFactorStatus,
   useVerifyTwoFactorLogin,
   useVerifyTwoFactorSetup,
-} from "@/routes/auth/-api/use2faApi";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { useCodeForm } from "@/routes/auth/-hooks/useCodeForm";
-import { getErrorMessage } from "@/utils/errorUtils";
+} from '@/routes/auth/-api/use2faApi';
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { useCodeForm } from '@/routes/auth/-hooks/useCodeForm';
+import { getErrorMessage } from '@/utils/errorUtils';
 
 type CodeForm = { code: string };
 
@@ -28,10 +28,9 @@ export function useTwoFactorHook() {
   const verifySetup = useVerifyTwoFactorSetup();
   const disableTwoFactor = useDisableTwoFactor();
 
-  const { control, codeFormErrors, handleSubmit, setError, reset } =
-    useCodeForm({
-      schema: twoFactorCodeSchema,
-    });
+  const { control, codeFormErrors, handleSubmit, setError, reset } = useCodeForm({
+    schema: twoFactorCodeSchema,
+  });
 
   const resetState = () => {
     setErrorMessage(null);
@@ -44,7 +43,7 @@ export function useTwoFactorHook() {
     fallbackError: string,
   ) => {
     if (!user?.id) {
-      setError("code", { type: "server", message: "Authentication error" });
+      setError('code', { type: 'server', message: 'Authentication error' });
       return;
     }
     setErrorMessage(null);
@@ -52,8 +51,8 @@ export function useTwoFactorHook() {
     try {
       await action(user.id);
     } catch (err) {
-      setError("code", {
-        type: "server",
+      setError('code', {
+        type: 'server',
         message: getErrorMessage(err, fallbackError),
       });
     }
@@ -66,16 +65,14 @@ export function useTwoFactorHook() {
       const data = await requestTwoFactor.mutateAsync();
       setQrUrl(data.qrUrl);
     } catch (err) {
-      setErrorMessage(
-        getErrorMessage(err, "Failed to get QR code. Please try again."),
-      );
+      setErrorMessage(getErrorMessage(err, 'Failed to get QR code. Please try again.'));
     }
   };
 
   const handleConfirmSetup = ({ code }: CodeForm) =>
     withUserId(async (uid) => {
       await verifySetup.mutateAsync({ code: code.trim(), userId: uid });
-      setSuccessMessage("2FA successfully enabled!");
+      setSuccessMessage('2FA successfully enabled!');
       setQrUrl(null);
       reset();
     }, "Code didn't match. Please try again.");
@@ -83,10 +80,10 @@ export function useTwoFactorHook() {
   const handleDisableSubmit = ({ code }: CodeForm) =>
     withUserId(async (uid) => {
       await disableTwoFactor.mutateAsync({ code: code.trim(), userId: uid });
-      setSuccessMessage("2FA disabled.");
+      setSuccessMessage('2FA disabled.');
       setDisableMode(false);
       reset();
-    }, "Failed to disable 2FA.");
+    }, 'Failed to disable 2FA.');
 
   return {
     qrUrl,
@@ -123,33 +120,31 @@ export function useVerify2FA() {
   });
   const verifyMutation = useVerifyTwoFactorLogin();
 
-  const { control, codeFormErrors, codeValue, handleSubmit, setError } =
-    useCodeForm({
-      schema: twoFactorCodeSchema,
-    });
+  const { control, codeFormErrors, codeValue, handleSubmit, setError } = useCodeForm({
+    schema: twoFactorCodeSchema,
+  });
 
   const onSubmit = async ({ code }: CodeForm) => {
     if (!user?.id) {
-      setError("code", {
-        type: "server",
-        message: "Authentication error. Please try again.",
+      setError('code', {
+        type: 'server',
+        message: 'Authentication error. Please try again.',
       });
       return;
     }
 
     try {
       await verifyMutation.mutateAsync({ code, userId: user.id });
-      void navigate({ to: "/auth/callback", replace: true });
+      navigate({ to: '/auth/callback', replace: true });
     } catch (err) {
-      const remaining = (err as { remainingAttempts?: number })
-        .remainingAttempts;
+      const remaining = (err as { remainingAttempts?: number }).remainingAttempts;
       const message =
         remaining !== undefined
           ? remaining > 0
             ? `Invalid code. ${remaining} attempts remaining.`
-            : "Invalid code. Attempts exhausted."
-          : getErrorMessage(err, "Failed to verify code.");
-      setError("code", { type: "server", message });
+            : 'Invalid code. Attempts exhausted.'
+          : getErrorMessage(err, 'Failed to verify code.');
+      setError('code', { type: 'server', message });
     }
   };
 

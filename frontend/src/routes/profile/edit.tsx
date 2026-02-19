@@ -1,4 +1,4 @@
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   Box,
   Divider,
@@ -7,22 +7,19 @@ import {
   Stack,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
+} from '@mui/material';
+import { createFileRoute } from '@tanstack/react-router';
 
-import { useSessionQuery } from "@/api/useSessionQuery";
-import BackButton from "@/components/ui/BackButton";
-import { NicknameForm } from "@/components/ui/NicknameForm";
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { useToast } from "@/hooks/useToast";
-import ProfileLogo from "@/routes/profile/-components/ProfileLogo";
+import { useSessionQuery } from '@/api/useSessionQuery';
+import BackButton from '@/components/ui/BackButton';
+import { NicknameForm } from '@/components/ui/NicknameForm';
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { useToast } from '@/hooks/useToast';
+import ProfileLogo from '@/routes/profile/-components/ProfileLogo';
 
-import {
-  profileEditCard,
-  profileEmailBackground,
-} from "./-utils/profileStyles";
+import { profileEditCard, profileEmailBackground } from './-utils/profileStyles';
 
-export const Route = createFileRoute("/profile/edit")({
+export const Route = createFileRoute('/profile/edit')({
   beforeLoad: createRouteGuard({ requireAuth: true }),
   component: ProfileEditName,
 });
@@ -46,18 +43,15 @@ export function ProfileEditName() {
             <ProfileLogo />
           </Box>
 
-          <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.1)", mb: 3 }} />
+          <Divider sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)', mb: 3 }} />
 
           <Box mb={3}>
-            <Typography
-              variant="body2"
-              sx={{ color: "rgba(255, 255, 255, 0.7)", mb: 1 }}
-            >
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 1 }}>
               Email
             </Typography>
 
             <Box sx={profileEmailBackground}>
-              <Typography>{session?.user.email || "Not specified"}</Typography>
+              <Typography>{session?.user.email || 'Not specified'}</Typography>
 
               <Tooltip title="Copy email">
                 <IconButton
@@ -65,13 +59,13 @@ export function ProfileEditName() {
                   aria-label="Copy email"
                   onClick={() => {
                     if (session?.user.email) {
-                      void navigator.clipboard.writeText(session.user.email);
+                      navigator.clipboard.writeText(session.user.email);
                     }
                   }}
                   sx={{
-                    color: "rgba(255,255,255,0.7)",
-                    "&:hover": {
-                      color: "#fb923c",
+                    color: 'rgba(255,255,255,0.7)',
+                    '&:hover': {
+                      color: '#fb923c',
                     },
                   }}
                 >
@@ -81,13 +75,10 @@ export function ProfileEditName() {
             </Box>
           </Box>
 
-          <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.1)", mb: 3 }} />
+          <Divider sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)', mb: 3 }} />
 
           <Box>
-            <Typography
-              variant="body2"
-              sx={{ color: "rgba(255, 255, 255, 0.7)", mb: 2 }}
-            >
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 2 }}>
               Nickname
             </Typography>
             <NicknameForm
@@ -96,10 +87,10 @@ export function ProfileEditName() {
               loadingText="Updating..."
               resetOnSuccess={true}
               onSuccess={() => {
-                showSuccess("Nickname successfully updated!");
+                showSuccess('Nickname successfully updated!');
               }}
               onError={(err) => {
-                showError(err.message || "Failed to update nickname");
+                showError(err.message || 'Failed to update nickname');
               }}
             />
           </Box>

@@ -1,35 +1,25 @@
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import { Button, Stack } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { Button, Stack } from '@mui/material';
 
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import {
-  commentActionsLikeButtonStyles,
-  commentActionsReplyButtonStyles,
-} from "@/routes/posts/-comments/-utils/commentStyles";
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { useCommentToggleLike } from '@/routes/posts/-comments/-api/useCommentToggleLike';
+import type { CommentProps } from '@/types/db';
 
-import {
-  CommentActionsMenu,
-  type SharedCommentActionProps,
-} from "./CommentActionsMenu";
+import { CommentActionsMenu } from './CommentActionsMenu';
+import { useCommentContext } from './comments-context';
 
-interface CommentActionsProps extends SharedCommentActionProps {
-  onToggleLike: () => void;
-  likeCount: number;
-  userHasLiked: boolean;
-}
-
-export function CommentActions({
-  isOwner,
-  onReply,
-  onEdit,
-  onDelete,
-  onCopy,
-  onToggleLike,
-  likeCount,
-  userHasLiked,
-}: CommentActionsProps) {
+export function CommentActions({ comment }: CommentProps) {
   const { user } = useAuthState();
+  const { postId, handleReplyClick } = useCommentContext();
+  const toggleCommentLike = useCommentToggleLike(postId);
+  const commentId = comment.id;
+  const handleToggleLike = () => {
+    toggleCommentLike.mutate({ commentId });
+  };
+
+  const likeCount = comment.like_count;
+  const userHasLiked = !!comment.user_has_liked;
   return (
     <Stack
       direction="row"
@@ -38,28 +28,26 @@ export function CommentActions({
       sx={{ mt: { xs: 0.375, sm: 0.5 } }}
     >
       <Button
-        onClick={onToggleLike}
+        onClick={handleToggleLike}
         disabled={!user?.id}
         size="small"
         variant="text"
         startIcon={
           userHasLiked ? (
-            <FavoriteIcon sx={{ fontSize: { xs: "16px", sm: "18px" } }} />
+            <FavoriteIcon sx={{ fontSize: { xs: '16px', sm: '18px' } }} />
           ) : (
-            <FavoriteBorderOutlinedIcon
-              sx={{ fontSize: { xs: "16px", sm: "18px" } }}
-            />
+            <FavoriteBorderOutlinedIcon sx={{ fontSize: { xs: '16px', sm: '18px' } }} />
           )
         }
         sx={{
           ...commentActionsLikeButtonStyles,
-          color: userHasLiked ? "error.light" : "grey.400",
-          "&:hover": {
-            color: userHasLiked ? "error.main" : "grey.200",
-            backgroundColor: "transparent",
+          color: userHasLiked ? 'error.light' : 'grey.400',
+          '&:hover': {
+            color: userHasLiked ? 'error.main' : 'grey.200',
+            backgroundColor: 'transparent',
           },
-          "&.Mui-disabled": {
-            color: "grey.600",
+          '&.Mui-disabled': {
+            color: 'grey.600',
           },
         }}
       >
@@ -68,7 +56,7 @@ export function CommentActions({
 
       {user?.id ? (
         <Button
-          onClick={onReply}
+          onClick={() => handleReplyClick(comment)}
           variant="text"
           size="small"
           sx={commentActionsReplyButtonStyles}
@@ -76,13 +64,34 @@ export function CommentActions({
           Reply
         </Button>
       ) : null}
-      <CommentActionsMenu
-        isOwner={isOwner}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        onCopy={onCopy}
-        onReply={user?.id ? onReply : undefined}
-      />
+      <CommentActionsMenu comment={comment} />
     </Stack>
   );
 }
+
+const COMMENT_FONT_FAMILY = 'Inter, sans-serif';
+
+const commentTextStyles = {
+  fontFamily: COMMENT_FONT_FAMILY,
+};
+
+const commentActionsLikeButtonStyles = {
+  textTransform: 'none',
+  fontSize: { xs: '11px', sm: '12px' },
+  padding: { xs: '2px 6px', sm: '4px 6px' },
+  minWidth: 'auto',
+  fontWeight: 500,
+  ...commentTextStyles,
+};
+
+const commentActionsReplyButtonStyles = {
+  textTransform: 'none',
+  color: 'grey.400',
+  fontSize: { xs: '11px', sm: '12px' },
+  padding: { xs: '2px 6px', sm: '4px 6px' },
+  ...commentTextStyles,
+  '&:hover': {
+    color: 'primary.light',
+    backgroundColor: 'transparent',
+  },
+};

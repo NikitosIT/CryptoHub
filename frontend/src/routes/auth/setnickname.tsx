@@ -1,10 +1,10 @@
-import { Container, Paper, Typography } from "@mui/material";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Container, Paper, Typography } from '@mui/material';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
-import { NicknameForm } from "@/components/ui/NicknameForm";
-import { createRouteGuard } from "@/hooks/routeGuards";
+import { NicknameForm } from '@/components/ui/NicknameForm';
+import { createRouteGuard } from '@/hooks/routeGuards';
 
-export const Route = createFileRoute("/auth/setnickname")({
+export const Route = createFileRoute('/auth/setnickname')({
   beforeLoad: createRouteGuard({ requireAuth: true }),
   component: SetNickname,
 });
@@ -18,8 +18,8 @@ function SetNickname() {
         sx={{
           p: 4,
           borderRadius: 3,
-          bgcolor: "rgba(30, 30, 30, 0.8)",
-          color: "white",
+          bgcolor: 'rgba(30, 30, 30, 0.8)',
+          color: 'white',
         }}
       >
         <NicknameForm
@@ -31,7 +31,7 @@ function SetNickname() {
           buttonText="Continue"
           loadingText="Saving..."
           onSuccess={() => {
-            void navigate({ to: "/profile/", replace: true });
+            navigate({ to: '/profile/', replace: true });
           }}
         />
       </Paper>

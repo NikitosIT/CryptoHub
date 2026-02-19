@@ -1,7 +1,7 @@
-import { RemoveScroll } from "react-remove-scroll";
+import { RemoveScroll } from 'react-remove-scroll';
 
-import { useEscapeKey } from "@/hooks/useEscapeKey";
-import type { ImageModalProps } from "@/types/db";
+import { useEscapeKey } from '@/hooks/useEscapeKey';
+import type { ImageModalProps } from '@/types/db';
 
 export function ImageModal({ url, onClose }: ImageModalProps) {
   useEscapeKey(onClose);
@@ -12,7 +12,7 @@ export function ImageModal({ url, onClose }: ImageModalProps) {
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md sm:backdrop-blur-sm"
         onClick={onClose}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onClose();
           }
@@ -27,7 +27,7 @@ export function ImageModal({ url, onClose }: ImageModalProps) {
           className="max-w-[85vw] max-h-[75vh] sm:max-w-[90vw] sm:max-h-[90vh] object-contain rounded-lg sm:rounded-2xl shadow-2xl relative z-10"
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
+            if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               e.stopPropagation();
             }

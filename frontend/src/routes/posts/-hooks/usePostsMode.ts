@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { useSearch } from "@tanstack/react-router";
+import { useSearch } from '@tanstack/react-router';
 
-export type PostMode = "all" | "liked" | "disliked" | "favorites";
+export type PostMode = 'all' | 'liked' | 'disliked' | 'favorites';
 
 export const usePostsMode = (): { mode: PostMode } => {
   const search = useSearch({ strict: false }) as {
@@ -9,6 +9,6 @@ export const usePostsMode = (): { mode: PostMode } => {
   };
 
   return {
-    mode: search.mode ?? "all",
+    mode: search.mode ?? 'all',
   };
 };

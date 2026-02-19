@@ -1,12 +1,14 @@
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { useToggleFavorite } from "@/routes/posts/-reactions/-api/useToggleFavorite";
-import type { TelegramPost } from "@/types/db";
+import { memo } from 'react';
+
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { useToggleFavorite } from '@/routes/posts/-reactions/-api/useToggleFavorite';
+import type { TelegramPost } from '@/types/db';
 
 interface FavoriteProps {
   post: TelegramPost;
 }
 
-export default function FavoriteButton({ post }: FavoriteProps) {
+function FavoriteButtonComponent({ post }: FavoriteProps) {
   const { user } = useAuthState({
     checkTwoFactor: false,
   });
@@ -25,9 +27,9 @@ export default function FavoriteButton({ post }: FavoriteProps) {
       type="button"
       onClick={handleClick}
       aria-pressed={isFavorite}
-      aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+      aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
       className={`flex items-center justify-center p-1.5 cursor-pointer rounded-full transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${
-        isFavorite ? "bg-yellow-400" : "bg-transparent"
+        isFavorite ? 'bg-yellow-400' : 'bg-transparent'
       }`}
     >
       <img
@@ -37,10 +39,14 @@ export default function FavoriteButton({ post }: FavoriteProps) {
         className="w-5 h-5 transition-all duration-200 "
         style={{
           filter: isFavorite
-            ? "brightness(0) invert(1)"
-            : "brightness(0) saturate(100%) invert(60%)",
+            ? 'brightness(0) invert(1)'
+            : 'brightness(0) saturate(100%) invert(60%)',
         }}
       />
     </button>
   );
 }
+
+export default memo(FavoriteButtonComponent, (prev, next) => {
+  return prev.post.id === next.post.id && prev.post.is_favorite === next.post.is_favorite;
+});

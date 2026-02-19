@@ -1,7 +1,7 @@
-import { type Control, type FieldErrors, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { ZodString } from "zod";
-import { z } from "zod";
+import { type Control, type FieldErrors, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { ZodString } from 'zod';
+import { z } from 'zod';
 
 type CodeFormValues = { code: string };
 
@@ -19,11 +19,11 @@ export function useCodeForm({ schema }: UseCodeFormOptions) {
     reset,
   } = useForm<CodeFormValues>({
     resolver: zodResolver(z.object({ code: schema })),
-    defaultValues: { code: "" },
-    mode: "onTouched",
+    defaultValues: { code: '' },
+    mode: 'onTouched',
   });
 
-  const codeValue = watch("code");
+  const codeValue = watch('code');
 
   const codeFormErrors: FieldErrors<CodeFormValues> = { code: errors.code };
 

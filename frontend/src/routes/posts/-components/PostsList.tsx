@@ -1,13 +1,10 @@
-import { useScrollTop } from "@/hooks/useScrollTop";
-import { useListAuthors } from "@/routes/authors/-api/useListAuthors";
-import {
-  PAGE_SIZE,
-  useTelegramPosts,
-} from "@/routes/posts/-api/useListTelegramPosts";
-import { useSelectedAuthorId } from "@/store/useFiltersStore";
+import { useScrollTop } from '@/hooks/useScrollTop';
+import { useListAuthors } from '@/routes/authors/-api/useListAuthors';
+import { PAGE_SIZE, useTelegramPosts } from '@/routes/posts/-api/useListTelegramPosts';
+import { useSelectedAuthorId } from '@/store/useFiltersStore';
 
-import FeedSkeleton from "./FeedSkeleton";
-import { PostCard } from "./PostCard";
+import FeedSkeleton from './FeedSkeleton';
+import { PostCard } from './PostCard';
 
 export default function PostsList() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -33,9 +30,9 @@ export default function PostsList() {
   if (authorId != null && posts.length === 0) {
     return (
       <p className="px-4 py-3 mt-4 text-sm text-center text-gray-400 shadow-inner sm:px-6 sm:mt-6 sm:text-base rounded-xl shadow-black/30">
-        No posts from{" "}
+        No posts from{' '}
         <span className="font-semibold text-white">
-          {selectedAuthorName ?? "this author"}
+          {selectedAuthorName ?? 'this author'}
         </span>
       </p>
     );
@@ -49,11 +46,11 @@ export default function PostsList() {
 
       {shouldShowLoadMore ? (
         <button
-          onClick={() => void fetchNextPage()}
+          onClick={() => fetchNextPage()}
           disabled={isFetchingNextPage}
           className="w-full py-3 mt-4 text-sm text-gray-400 border rounded-lg cursor-pointer hover:text-white disabled:opacity-50"
         >
-          {isFetchingNextPage ? "Loading..." : "Load more"}
+          {isFetchingNextPage ? 'Loading...' : 'Load more'}
         </button>
       ) : null}
 

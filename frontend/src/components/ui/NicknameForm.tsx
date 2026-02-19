@@ -1,8 +1,8 @@
-import { type ReactNode } from "react";
-import { Box, type SxProps, TextField, type Theme } from "@mui/material";
+import { type ReactNode } from 'react';
+import { Box, type SxProps, TextField, type Theme } from '@mui/material';
 
-import { AuthButton } from "@/components/ui/AuthButton";
-import { useNicknameForm } from "@/hooks/useNicknameForm";
+import { AuthButton } from '@/components/ui/AuthButton';
+import { useNicknameForm } from '@/hooks/useNicknameForm';
 
 export interface NicknameFormProps {
   title?: ReactNode;
@@ -18,10 +18,10 @@ export interface NicknameFormProps {
 
 export function NicknameForm({
   title,
-  label = "Nickname",
-  buttonText = "Save",
-  loadingText = "Saving...",
-  defaultNickname = "",
+  label = 'Nickname',
+  buttonText = 'Save',
+  loadingText = 'Saving...',
+  defaultNickname = '',
   onSuccess,
   onError,
   resetOnSuccess = false,
@@ -48,7 +48,7 @@ export function NicknameForm({
     <Box
       component="form"
       onSubmit={(e) => {
-        void handleSubmit(e);
+        handleSubmit(e);
       }}
       display="flex"
       flexDirection="column"
@@ -59,9 +59,9 @@ export function NicknameForm({
 
       <TextField
         label={label}
-        {...register("nickname")}
+        {...register('nickname')}
         error={!!errors.nickname || isError}
-        helperText={errors.nickname?.message || error?.message || " "}
+        helperText={errors.nickname?.message || error?.message || ' '}
         fullWidth
         disabled={!canChangeNickname}
       />
@@ -69,9 +69,9 @@ export function NicknameForm({
       {!canChangeNickname && nextChangeDate ? (
         <Box
           sx={{
-            fontSize: "0.875rem",
-            color: "rgba(255, 255, 255, 0.7)",
-            textAlign: "center",
+            fontSize: '0.875rem',
+            color: 'rgba(255, 255, 255, 0.7)',
+            textAlign: 'center',
           }}
         >
           Next nickname change available: {nextChangeDate}

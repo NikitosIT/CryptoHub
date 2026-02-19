@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import { useSelectedToken } from "@/store/useFiltersStore";
+import { api } from '@/api';
+import { useSelectedToken } from '@/store/useFiltersStore';
 
 export const forecastQueryKey = (tokenLabel?: string) =>
-  ["forecast", tokenLabel] as const;
+  ['forecast', tokenLabel] as const;
 
 async function forecastGet(tokenLabel: string) {
   return await api.tokens.getForecast(tokenLabel);

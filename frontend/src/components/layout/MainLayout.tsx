@@ -1,6 +1,6 @@
-import { Outlet } from "@tanstack/react-router";
+import { Outlet } from '@tanstack/react-router';
 
-import Header from "./Header";
+import Header from './Header';
 
 export function MainLayout() {
   return (

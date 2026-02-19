@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 
-import { useToast } from "@/hooks/useToast";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { useUserProfile } from "@/routes/profile/-api/useUserProfile";
-import { validateRedirectTo } from "@/utils/redirectValidation";
+import { useToast } from '@/hooks/useToast';
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
+import { validateRedirectTo } from '@/utils/redirectValidation';
 
 type CallbackSearchParams = {
   redirectTo?: string;
@@ -13,7 +13,7 @@ type CallbackSearchParams = {
 export function useAuthCallback() {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: "/auth/callback" }) as CallbackSearchParams;
+  const search = useSearch({ from: '/auth/callback' }) as CallbackSearchParams;
   const { showError } = useToast();
 
   const {
@@ -37,20 +37,20 @@ export function useAuthCallback() {
     if (validatedRedirect) {
       return validatedRedirect;
     }
-    return profileNickname ? "/profile/" : "/auth/setnickname";
+    return profileNickname ? '/profile/' : '/auth/setnickname';
   }, [searchRedirectTo, profileNickname]);
 
   useEffect(() => {
     if (isAuthLoading || user?.id === undefined) return;
 
     if (!user.id) {
-      void navigate({ to: "/auth/", replace: true });
+      navigate({ to: '/auth/', replace: true });
       return;
     }
 
     if (hasPendingTwoFactor) {
-      void navigate({
-        to: "/auth/verify-2fa",
+      navigate({
+        to: '/auth/verify-2fa',
         replace: true,
       });
       return;
@@ -62,14 +62,14 @@ export function useAuthCallback() {
       const errorMessage =
         profileError instanceof Error
           ? profileError.message
-          : "Failed to load profile. Please try again later.";
+          : 'Failed to load profile. Please try again later.';
       showError(errorMessage);
 
-      void navigate({ to: "/profile/", replace: true });
+      navigate({ to: '/profile/', replace: true });
       return;
     }
 
-    void navigate({ to: redirectTo, replace: true });
+    navigate({ to: redirectTo, replace: true });
   }, [
     user?.id,
     isAuthLoading,

@@ -1,22 +1,22 @@
 export type MessageEntity = {
   type:
-    | "bold"
-    | "italic"
-    | "underline"
-    | "strikethrough"
-    | "spoiler"
-    | "code"
-    | "pre"
-    | "text_link"
-    | "text_mention"
-    | "url"
-    | "email"
-    | "phone_number"
-    | "mention"
-    | "hashtag"
-    | "cashtag"
-    | "bot_command"
-    | "custom_emoji";
+    | 'bold'
+    | 'italic'
+    | 'underline'
+    | 'strikethrough'
+    | 'spoiler'
+    | 'code'
+    | 'pre'
+    | 'text_link'
+    | 'text_mention'
+    | 'url'
+    | 'email'
+    | 'phone_number'
+    | 'mention'
+    | 'hashtag'
+    | 'cashtag'
+    | 'bot_command'
+    | 'custom_emoji';
   offset: number;
   length: number;
   url?: string;
@@ -29,17 +29,15 @@ export type TelegramPost = {
   id: number;
   text_caption: string | null;
   text_entities: MessageEntity[] | MessageEntity | null;
-  media:
-    | { type: string; url: string; file_name: string; mime_type: string }[]
-    | null;
+  media: { type: string; url: string; file_name: string; mime_type: string }[] | null;
   tg_author_id: number | null;
   author_name: string;
   author_link: string;
   like_count: number | null;
   dislike_count: number | null;
   comments_count: number | null;
-  reaction_type: "like" | "dislike" | null;
-  user_reaction: "like" | "dislike" | null;
+  reaction_type: 'like' | 'dislike' | null;
+  user_reaction: 'like' | 'dislike' | null;
   is_favorite: boolean;
   created_at: string | null;
 };
@@ -56,7 +54,7 @@ export interface ImageModalProps {
 }
 
 export type MediaGridProps = {
-  media: TelegramPost["media"];
+  media: TelegramPost['media'];
   onPreview?: (url: string | null) => void;
 };
 
@@ -83,7 +81,7 @@ export type CommentUser = {
 };
 
 export type CommentMedia = {
-  type: "photo" | "video";
+  type: 'photo' | 'video';
   url: string;
   thumbnail_url?: string;
 };
@@ -119,3 +117,7 @@ export type Author = {
   label: string;
   id: number;
 };
+
+export interface CommentProps {
+  comment: CommentWithReplies;
+}

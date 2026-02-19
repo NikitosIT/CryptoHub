@@ -1,14 +1,17 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { api, type UserProfile } from "@/api";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import {
-  getCachedProfile,
-  setCachedProfile,
-} from "@/routes/profile/-utils/profileCache";
+import { api } from '@/api';
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { getCachedProfile, setCachedProfile } from '@/routes/profile/-utils/profileCache';
 
 export const profileQueryKey = (userId?: string) =>
-  userId ? (["profile", userId] as const) : (["profile"] as const);
+  userId ? (['profile', userId] as const) : (['profile'] as const);
+
+export interface UserProfile {
+  nickname: string | null;
+  profile_logo: string | null;
+  last_changed?: string | null;
+}
 
 export function useUserProfile() {
   const queryClient = useQueryClient();
