@@ -7,80 +7,38 @@ import {
   DialogContentText,
   DialogTitle,
   Stack,
-} from "@mui/material";
+} from '@mui/material';
+import { alpha, type Theme } from '@mui/material/styles';
 
-import { useCommentToggleLike } from "@/routes/posts/-comments/-api/useCommentToggleLike";
-import { useCommentItem } from "@/routes/posts/-comments/-hooks/useCommentItem";
-import {
-  getCommentAvatarUrl,
-  getCommentUserName,
-} from "@/routes/posts/-comments/-utils/commentItemUtils";
-import {
-  commentDeleteDialogCancelButtonStyles,
-  commentDeleteDialogContentStyles,
-  commentDeleteDialogDeleteButtonStyles,
-  commentDeleteDialogPaperStyles,
-  commentDeleteDialogTitleStyles,
-  getCommentItemStyles,
-} from "@/routes/posts/-comments/-utils/commentStyles";
-import type { CommentWithReplies } from "@/types/db";
+import { useCommentItem } from '@/routes/posts/-comments/-hooks/useCommentItem';
+import type { CommentWithReplies } from '@/types/db';
 
-import { ImageModal } from "../../-components/ImageModal";
-import { CommentActions } from "./CommentActions";
-import { CommentAvatar } from "./CommentAvatar";
-import { CommentContent } from "./CommentContent";
-import { CommentHeader } from "./CommentHeader";
-import { CommentParentContext } from "./CommentParentContext";
-
+import { ImageModal } from '../../-components/ImageModal';
+import { CommentActions } from './CommentActions';
+import { CommentAvatar } from './CommentAvatar';
+import { CommentContent } from './CommentContent';
+import { CommentHeader } from './CommentHeader';
+import { CommentParentContext } from './CommentParentContext';
+import { useCommentContext } from './comments-context';
 interface CommentItemProps {
   comment: CommentWithReplies;
   parentComment?: CommentWithReplies | null;
-  postId: number;
-  handleReplyClick: (comment: CommentWithReplies) => void;
-  handleEditClick: (comment: CommentWithReplies) => void;
-  handleJumpToComment: (commentId: number) => void;
-  highlightedCommentId: number | null;
 }
 
-export function CommentItem({
-  comment,
-  parentComment,
-  postId,
-  handleReplyClick,
-  handleEditClick,
-  handleJumpToComment,
-  highlightedCommentId,
-}: CommentItemProps) {
+export function CommentItem({ comment, parentComment }: CommentItemProps) {
+  const { previewMedia, handleMediaClick, handleCloseMediaPreview, isOwner } =
+    useCommentItem({
+      comment,
+    });
+
   const {
-    previewMedia,
-    openDeleteDialog,
-    handleDeleteClick,
+    highlightedCommentId,
+    deletingCommentId,
     handleDeleteConfirm,
     handleDeleteCancel,
-    handleCopy,
-    handleEdit,
-    handleReply,
-    handleMediaClick,
-    handleCloseMediaPreview,
-    isOwner,
-  } = useCommentItem({
-    comment,
-    postId,
-    onReplyClick: handleReplyClick,
-    onEditClick: handleEditClick,
-  });
-
-  const toggleCommentLike = useCommentToggleLike(postId);
-
-  const handleToggleLike = () => {
-    toggleCommentLike.mutate({ commentId: comment.id });
-  };
+  } = useCommentContext();
 
   const isReply = !!comment.parent_comment_id;
-  const userName = getCommentUserName(comment);
-  const avatarUrl = getCommentAvatarUrl(comment);
-  const parentUserName = getCommentUserName(parentComment ?? null);
-  const parentText = parentComment?.text || "";
 
   return (
     <>
@@ -95,47 +53,19 @@ export function CommentItem({
           )
         }
       >
-        <Stack
-          direction="row"
-          alignItems="flex-start"
-          spacing={{ xs: 0.75, sm: 0.875 }}
-        >
-          <CommentAvatar avatarUrl={avatarUrl} userName={userName} />
+        <Stack direction="row" alignItems="flex-start" spacing={{ xs: 0.75, sm: 0.875 }}>
+          <CommentAvatar comment={comment} />
 
           <Box sx={{ flex: 1 }}>
             {comment.parent_comment_id && parentComment ? (
-              <CommentParentContext
-                parentCommentId={comment.parent_comment_id}
-                parentUserName={parentUserName}
-                parentText={parentText}
-                parentMedia={parentComment.media}
-                handleJumpToComment={handleJumpToComment}
-              />
+              <CommentParentContext comment={comment} parentComment={parentComment} />
             ) : null}
 
-            <CommentHeader
-              userName={userName}
-              isOwner={isOwner}
-              createdAt={comment.created_at}
-              updatedAt={comment.updated_at}
-            />
+            <CommentHeader comment={comment} />
 
-            <CommentContent
-              text={comment.text}
-              media={comment.media}
-              onMediaClick={handleMediaClick}
-            />
+            <CommentContent comment={comment} onMediaClick={handleMediaClick} />
 
-            <CommentActions
-              isOwner={isOwner}
-              onReply={handleReply}
-              onEdit={handleEdit}
-              onDelete={handleDeleteClick}
-              onCopy={handleCopy}
-              onToggleLike={handleToggleLike}
-              likeCount={comment.like_count}
-              userHasLiked={!!comment.user_has_liked}
-            />
+            <CommentActions comment={comment} />
           </Box>
         </Stack>
       </Box>
@@ -145,24 +75,18 @@ export function CommentItem({
       ) : null}
 
       <Dialog
-        open={openDeleteDialog}
+        open={deletingCommentId === comment.id}
         onClose={handleDeleteCancel}
-        PaperProps={{ sx: commentDeleteDialogPaperStyles }}
+        slotProps={{ paper: { sx: commentDeleteDialogPaperStyles } }}
       >
-        <DialogTitle sx={commentDeleteDialogTitleStyles}>
-          Confirm Delete
-        </DialogTitle>
+        <DialogTitle sx={commentDeleteDialogTitleStyles}>Confirm Delete</DialogTitle>
         <DialogContent>
           <DialogContentText sx={commentDeleteDialogContentStyles}>
-            Are you sure you want to delete this comment? This action cannot be
-            undone.
+            Are you sure you want to delete this comment? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleDeleteCancel}
-            sx={commentDeleteDialogCancelButtonStyles}
-          >
+          <Button onClick={handleDeleteCancel} sx={commentDeleteDialogCancelButtonStyles}>
             Cancel
           </Button>
           <Button
@@ -177,3 +101,79 @@ export function CommentItem({
     </>
   );
 }
+
+const COMMENT_FONT_FAMILY = 'Inter, sans-serif';
+
+const commentTextStyles = {
+  fontFamily: COMMENT_FONT_FAMILY,
+};
+
+const getCommentItemStyles = (
+  theme: Theme,
+  isOwner: boolean,
+  isReply: boolean,
+  isJumpHighlighted: boolean,
+) => {
+  const isHighlighted = isOwner || isReply;
+  return {
+    width: 'fit-content',
+    maxWidth: { xs: '90%', sm: '60%', md: '70%' },
+    py: { xs: 0.5, sm: 0.625 },
+    px: isHighlighted ? { xs: 0.5, sm: 0.625 } : 0,
+    borderRadius: isHighlighted ? { xs: 1.25, sm: 1.5 } : 0,
+    borderLeft: isOwner
+      ? '2px solid'
+      : isReply
+        ? { xs: '1px solid', sm: '1.5px solid' }
+        : 'none',
+    borderLeftColor: isOwner
+      ? theme.palette.primary.main
+      : isReply
+        ? theme.palette.grey[700]
+        : 'transparent',
+    bgcolor: isJumpHighlighted
+      ? 'rgba(59, 130, 246, 0.2)'
+      : isOwner
+        ? alpha(theme.palette.primary.main, 0.08)
+        : isReply
+          ? alpha(theme.palette.grey[700], 0.15)
+          : 'transparent',
+    transition: 'background-color 1s ease',
+    mx: isHighlighted ? { xs: -0.5, sm: -0.75 } : 0,
+    mb: { xs: 1, sm: 1.25 },
+    ...commentTextStyles,
+  };
+};
+
+const commentDeleteDialogPaperStyles = {
+  bgcolor: 'grey.900',
+  color: 'common.white',
+  border: '1px solid',
+  borderColor: 'grey.800',
+};
+
+const commentDeleteDialogTitleStyles = {
+  color: 'common.white',
+  ...commentTextStyles,
+};
+
+const commentDeleteDialogContentStyles = {
+  color: 'grey.400',
+  ...commentTextStyles,
+};
+
+const commentDeleteDialogCancelButtonStyles = {
+  color: 'grey.400',
+  ...commentTextStyles,
+  '&:hover': {
+    bgcolor: 'grey.800',
+  },
+};
+
+const commentDeleteDialogDeleteButtonStyles = {
+  color: 'error.main',
+  ...commentTextStyles,
+  '&:hover': {
+    bgcolor: 'error.dark',
+  },
+};

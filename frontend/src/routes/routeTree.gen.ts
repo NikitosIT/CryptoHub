@@ -8,179 +8,179 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./__root";
-import { Route as PostsRouteImport } from "./posts";
-import { Route as IndexRouteImport } from "./index";
-import { Route as ProfileIndexRouteImport } from "./profile/index";
-import { Route as HelpIndexRouteImport } from "./help/index";
-import { Route as AuthIndexRouteImport } from "./auth/index";
-import { Route as ProfileTwofactorRouteImport } from "./profile/twofactor";
-import { Route as ProfileNotificationsRouteImport } from "./profile/notifications";
-import { Route as ProfileEditRouteImport } from "./profile/edit";
-import { Route as ProfileBecameAnalyticRouteImport } from "./profile/became-analytic";
-import { Route as AuthVerify2faRouteImport } from "./auth/verify-2fa";
-import { Route as AuthVerifyRouteImport } from "./auth/verify";
-import { Route as AuthSetnicknameRouteImport } from "./auth/setnickname";
-import { Route as AuthCallbackRouteImport } from "./auth/callback";
+import { Route as rootRouteImport } from './__root';
+import { Route as PostsRouteImport } from './posts';
+import { Route as IndexRouteImport } from './index';
+import { Route as ProfileIndexRouteImport } from './profile/index';
+import { Route as HelpIndexRouteImport } from './help/index';
+import { Route as AuthIndexRouteImport } from './auth/index';
+import { Route as ProfileTwofactorRouteImport } from './profile/twofactor';
+import { Route as ProfileNotificationsRouteImport } from './profile/notifications';
+import { Route as ProfileEditRouteImport } from './profile/edit';
+import { Route as ProfileBecameAnalyticRouteImport } from './profile/became-analytic';
+import { Route as AuthVerify2faRouteImport } from './auth/verify-2fa';
+import { Route as AuthVerifyRouteImport } from './auth/verify';
+import { Route as AuthSetnicknameRouteImport } from './auth/setnickname';
+import { Route as AuthCallbackRouteImport } from './auth/callback';
 
 const PostsRoute = PostsRouteImport.update({
-  id: "/posts",
-  path: "/posts",
+  id: '/posts',
+  path: '/posts',
   getParentRoute: () => rootRouteImport,
 } as any);
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ProfileIndexRoute = ProfileIndexRouteImport.update({
-  id: "/profile/",
-  path: "/profile/",
+  id: '/profile/',
+  path: '/profile/',
   getParentRoute: () => rootRouteImport,
 } as any);
 const HelpIndexRoute = HelpIndexRouteImport.update({
-  id: "/help/",
-  path: "/help/",
+  id: '/help/',
+  path: '/help/',
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthIndexRoute = AuthIndexRouteImport.update({
-  id: "/auth/",
-  path: "/auth/",
+  id: '/auth/',
+  path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ProfileTwofactorRoute = ProfileTwofactorRouteImport.update({
-  id: "/profile/twofactor",
-  path: "/profile/twofactor",
+  id: '/profile/twofactor',
+  path: '/profile/twofactor',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ProfileNotificationsRoute = ProfileNotificationsRouteImport.update({
-  id: "/profile/notifications",
-  path: "/profile/notifications",
+  id: '/profile/notifications',
+  path: '/profile/notifications',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ProfileEditRoute = ProfileEditRouteImport.update({
-  id: "/profile/edit",
-  path: "/profile/edit",
+  id: '/profile/edit',
+  path: '/profile/edit',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ProfileBecameAnalyticRoute = ProfileBecameAnalyticRouteImport.update({
-  id: "/profile/became-analytic",
-  path: "/profile/became-analytic",
+  id: '/profile/became-analytic',
+  path: '/profile/became-analytic',
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthVerify2faRoute = AuthVerify2faRouteImport.update({
-  id: "/auth/verify-2fa",
-  path: "/auth/verify-2fa",
+  id: '/auth/verify-2fa',
+  path: '/auth/verify-2fa',
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthVerifyRoute = AuthVerifyRouteImport.update({
-  id: "/auth/verify",
-  path: "/auth/verify",
+  id: '/auth/verify',
+  path: '/auth/verify',
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthSetnicknameRoute = AuthSetnicknameRouteImport.update({
-  id: "/auth/setnickname",
-  path: "/auth/setnickname",
+  id: '/auth/setnickname',
+  path: '/auth/setnickname',
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
-  id: "/auth/callback",
-  path: "/auth/callback",
+  id: '/auth/callback',
+  path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any);
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/posts": typeof PostsRoute;
-  "/auth/callback": typeof AuthCallbackRoute;
-  "/auth/setnickname": typeof AuthSetnicknameRoute;
-  "/auth/verify": typeof AuthVerifyRoute;
-  "/auth/verify-2fa": typeof AuthVerify2faRoute;
-  "/profile/became-analytic": typeof ProfileBecameAnalyticRoute;
-  "/profile/edit": typeof ProfileEditRoute;
-  "/profile/notifications": typeof ProfileNotificationsRoute;
-  "/profile/twofactor": typeof ProfileTwofactorRoute;
-  "/auth/": typeof AuthIndexRoute;
-  "/help/": typeof HelpIndexRoute;
-  "/profile/": typeof ProfileIndexRoute;
+  '/': typeof IndexRoute;
+  '/posts': typeof PostsRoute;
+  '/auth/callback': typeof AuthCallbackRoute;
+  '/auth/setnickname': typeof AuthSetnicknameRoute;
+  '/auth/verify': typeof AuthVerifyRoute;
+  '/auth/verify-2fa': typeof AuthVerify2faRoute;
+  '/profile/became-analytic': typeof ProfileBecameAnalyticRoute;
+  '/profile/edit': typeof ProfileEditRoute;
+  '/profile/notifications': typeof ProfileNotificationsRoute;
+  '/profile/twofactor': typeof ProfileTwofactorRoute;
+  '/auth/': typeof AuthIndexRoute;
+  '/help/': typeof HelpIndexRoute;
+  '/profile/': typeof ProfileIndexRoute;
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/posts": typeof PostsRoute;
-  "/auth/callback": typeof AuthCallbackRoute;
-  "/auth/setnickname": typeof AuthSetnicknameRoute;
-  "/auth/verify": typeof AuthVerifyRoute;
-  "/auth/verify-2fa": typeof AuthVerify2faRoute;
-  "/profile/became-analytic": typeof ProfileBecameAnalyticRoute;
-  "/profile/edit": typeof ProfileEditRoute;
-  "/profile/notifications": typeof ProfileNotificationsRoute;
-  "/profile/twofactor": typeof ProfileTwofactorRoute;
-  "/auth": typeof AuthIndexRoute;
-  "/help": typeof HelpIndexRoute;
-  "/profile": typeof ProfileIndexRoute;
+  '/': typeof IndexRoute;
+  '/posts': typeof PostsRoute;
+  '/auth/callback': typeof AuthCallbackRoute;
+  '/auth/setnickname': typeof AuthSetnicknameRoute;
+  '/auth/verify': typeof AuthVerifyRoute;
+  '/auth/verify-2fa': typeof AuthVerify2faRoute;
+  '/profile/became-analytic': typeof ProfileBecameAnalyticRoute;
+  '/profile/edit': typeof ProfileEditRoute;
+  '/profile/notifications': typeof ProfileNotificationsRoute;
+  '/profile/twofactor': typeof ProfileTwofactorRoute;
+  '/auth': typeof AuthIndexRoute;
+  '/help': typeof HelpIndexRoute;
+  '/profile': typeof ProfileIndexRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/posts": typeof PostsRoute;
-  "/auth/callback": typeof AuthCallbackRoute;
-  "/auth/setnickname": typeof AuthSetnicknameRoute;
-  "/auth/verify": typeof AuthVerifyRoute;
-  "/auth/verify-2fa": typeof AuthVerify2faRoute;
-  "/profile/became-analytic": typeof ProfileBecameAnalyticRoute;
-  "/profile/edit": typeof ProfileEditRoute;
-  "/profile/notifications": typeof ProfileNotificationsRoute;
-  "/profile/twofactor": typeof ProfileTwofactorRoute;
-  "/auth/": typeof AuthIndexRoute;
-  "/help/": typeof HelpIndexRoute;
-  "/profile/": typeof ProfileIndexRoute;
+  '/': typeof IndexRoute;
+  '/posts': typeof PostsRoute;
+  '/auth/callback': typeof AuthCallbackRoute;
+  '/auth/setnickname': typeof AuthSetnicknameRoute;
+  '/auth/verify': typeof AuthVerifyRoute;
+  '/auth/verify-2fa': typeof AuthVerify2faRoute;
+  '/profile/became-analytic': typeof ProfileBecameAnalyticRoute;
+  '/profile/edit': typeof ProfileEditRoute;
+  '/profile/notifications': typeof ProfileNotificationsRoute;
+  '/profile/twofactor': typeof ProfileTwofactorRoute;
+  '/auth/': typeof AuthIndexRoute;
+  '/help/': typeof HelpIndexRoute;
+  '/profile/': typeof ProfileIndexRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | "/"
-    | "/posts"
-    | "/auth/callback"
-    | "/auth/setnickname"
-    | "/auth/verify"
-    | "/auth/verify-2fa"
-    | "/profile/became-analytic"
-    | "/profile/edit"
-    | "/profile/notifications"
-    | "/profile/twofactor"
-    | "/auth/"
-    | "/help/"
-    | "/profile/";
+    | '/'
+    | '/posts'
+    | '/auth/callback'
+    | '/auth/setnickname'
+    | '/auth/verify'
+    | '/auth/verify-2fa'
+    | '/profile/became-analytic'
+    | '/profile/edit'
+    | '/profile/notifications'
+    | '/profile/twofactor'
+    | '/auth/'
+    | '/help/'
+    | '/profile/';
   fileRoutesByTo: FileRoutesByTo;
   to:
-    | "/"
-    | "/posts"
-    | "/auth/callback"
-    | "/auth/setnickname"
-    | "/auth/verify"
-    | "/auth/verify-2fa"
-    | "/profile/became-analytic"
-    | "/profile/edit"
-    | "/profile/notifications"
-    | "/profile/twofactor"
-    | "/auth"
-    | "/help"
-    | "/profile";
+    | '/'
+    | '/posts'
+    | '/auth/callback'
+    | '/auth/setnickname'
+    | '/auth/verify'
+    | '/auth/verify-2fa'
+    | '/profile/became-analytic'
+    | '/profile/edit'
+    | '/profile/notifications'
+    | '/profile/twofactor'
+    | '/auth'
+    | '/help'
+    | '/profile';
   id:
-    | "__root__"
-    | "/"
-    | "/posts"
-    | "/auth/callback"
-    | "/auth/setnickname"
-    | "/auth/verify"
-    | "/auth/verify-2fa"
-    | "/profile/became-analytic"
-    | "/profile/edit"
-    | "/profile/notifications"
-    | "/profile/twofactor"
-    | "/auth/"
-    | "/help/"
-    | "/profile/";
+    | '__root__'
+    | '/'
+    | '/posts'
+    | '/auth/callback'
+    | '/auth/setnickname'
+    | '/auth/verify'
+    | '/auth/verify-2fa'
+    | '/profile/became-analytic'
+    | '/profile/edit'
+    | '/profile/notifications'
+    | '/profile/twofactor'
+    | '/auth/'
+    | '/help/'
+    | '/profile/';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -199,96 +199,96 @@ export interface RootRouteChildren {
   ProfileIndexRoute: typeof ProfileIndexRoute;
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/posts": {
-      id: "/posts";
-      path: "/posts";
-      fullPath: "/posts";
+    '/posts': {
+      id: '/posts';
+      path: '/posts';
+      fullPath: '/posts';
       preLoaderRoute: typeof PostsRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
+    '/': {
+      id: '/';
+      path: '/';
+      fullPath: '/';
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/profile/": {
-      id: "/profile/";
-      path: "/profile";
-      fullPath: "/profile/";
+    '/profile/': {
+      id: '/profile/';
+      path: '/profile';
+      fullPath: '/profile/';
       preLoaderRoute: typeof ProfileIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/help/": {
-      id: "/help/";
-      path: "/help";
-      fullPath: "/help/";
+    '/help/': {
+      id: '/help/';
+      path: '/help';
+      fullPath: '/help/';
       preLoaderRoute: typeof HelpIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/auth/": {
-      id: "/auth/";
-      path: "/auth";
-      fullPath: "/auth/";
+    '/auth/': {
+      id: '/auth/';
+      path: '/auth';
+      fullPath: '/auth/';
       preLoaderRoute: typeof AuthIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/profile/twofactor": {
-      id: "/profile/twofactor";
-      path: "/profile/twofactor";
-      fullPath: "/profile/twofactor";
+    '/profile/twofactor': {
+      id: '/profile/twofactor';
+      path: '/profile/twofactor';
+      fullPath: '/profile/twofactor';
       preLoaderRoute: typeof ProfileTwofactorRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/profile/notifications": {
-      id: "/profile/notifications";
-      path: "/profile/notifications";
-      fullPath: "/profile/notifications";
+    '/profile/notifications': {
+      id: '/profile/notifications';
+      path: '/profile/notifications';
+      fullPath: '/profile/notifications';
       preLoaderRoute: typeof ProfileNotificationsRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/profile/edit": {
-      id: "/profile/edit";
-      path: "/profile/edit";
-      fullPath: "/profile/edit";
+    '/profile/edit': {
+      id: '/profile/edit';
+      path: '/profile/edit';
+      fullPath: '/profile/edit';
       preLoaderRoute: typeof ProfileEditRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/profile/became-analytic": {
-      id: "/profile/became-analytic";
-      path: "/profile/became-analytic";
-      fullPath: "/profile/became-analytic";
+    '/profile/became-analytic': {
+      id: '/profile/became-analytic';
+      path: '/profile/became-analytic';
+      fullPath: '/profile/became-analytic';
       preLoaderRoute: typeof ProfileBecameAnalyticRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/auth/verify-2fa": {
-      id: "/auth/verify-2fa";
-      path: "/auth/verify-2fa";
-      fullPath: "/auth/verify-2fa";
+    '/auth/verify-2fa': {
+      id: '/auth/verify-2fa';
+      path: '/auth/verify-2fa';
+      fullPath: '/auth/verify-2fa';
       preLoaderRoute: typeof AuthVerify2faRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/auth/verify": {
-      id: "/auth/verify";
-      path: "/auth/verify";
-      fullPath: "/auth/verify";
+    '/auth/verify': {
+      id: '/auth/verify';
+      path: '/auth/verify';
+      fullPath: '/auth/verify';
       preLoaderRoute: typeof AuthVerifyRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/auth/setnickname": {
-      id: "/auth/setnickname";
-      path: "/auth/setnickname";
-      fullPath: "/auth/setnickname";
+    '/auth/setnickname': {
+      id: '/auth/setnickname';
+      path: '/auth/setnickname';
+      fullPath: '/auth/setnickname';
       preLoaderRoute: typeof AuthSetnicknameRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    "/auth/callback": {
-      id: "/auth/callback";
-      path: "/auth/callback";
-      fullPath: "/auth/callback";
+    '/auth/callback': {
+      id: '/auth/callback';
+      path: '/auth/callback';
+      fullPath: '/auth/callback';
       preLoaderRoute: typeof AuthCallbackRouteImport;
       parentRoute: typeof rootRouteImport;
     };

@@ -1,8 +1,8 @@
-import type { User } from "@supabase/supabase-js";
+import type { User } from '@supabase/supabase-js';
 
-import { calculateAuthState } from "@/api";
-import { useSessionQuery } from "@/api/useSessionQuery";
-import { useTwoFactorStatus } from "@/routes/auth/-api/use2faApi";
+import { calculateAuthState } from '@/api';
+import { useSessionQuery } from '@/api/useSessionQuery';
+import { useTwoFactorStatus } from '@/routes/auth/-api/use2faApi';
 
 export interface UseAuthStateOptions {
   checkTwoFactor?: boolean;
@@ -14,10 +14,13 @@ export interface UseAuthStateReturn {
   hasPendingTwoFactor: boolean;
   isLoading: boolean;
 }
+export interface AuthStateData {
+  user: User | undefined;
+  hasPendingTwoFactor: boolean;
+  isAuthenticatedWith2FA: boolean;
+}
 
-export function useAuthState(
-  options: UseAuthStateOptions = {},
-): UseAuthStateReturn {
+export function useAuthState(options: UseAuthStateOptions = {}): UseAuthStateReturn {
   const { checkTwoFactor = false } = options;
 
   const sessionQuery = useSessionQuery();
@@ -28,8 +31,11 @@ export function useAuthState(
   );
   const twoFactorStatus = twoFactorQuery.data;
 
-  const { user, hasPendingTwoFactor, isAuthenticatedWith2FA } =
-    calculateAuthState(session, checkTwoFactor, twoFactorStatus);
+  const { user, hasPendingTwoFactor, isAuthenticatedWith2FA } = calculateAuthState(
+    session,
+    checkTwoFactor,
+    twoFactorStatus,
+  );
 
   const isTwoFactorLoading =
     checkTwoFactor && (twoFactorQuery.isLoading || twoFactorQuery.isFetching);

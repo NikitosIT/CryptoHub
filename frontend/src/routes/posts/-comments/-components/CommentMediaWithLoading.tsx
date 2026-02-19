@@ -1,27 +1,21 @@
-import { useEffect, useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import { useEffect, useState } from 'react';
+import type { SxProps, Theme } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
-import {
-  commentMediaContainerStyles,
-  commentMediaErrorOverlayStyles,
-  getCommentMediaLoadingOverlayStyles,
-} from "../-utils/commentStyles";
+type MediaType = 'photo' | 'video';
 
-interface MediaWithLoadingProps {
-  type: "photo" | "video";
+interface CommentMediaWithLoadingProps {
+  type: MediaType;
   src: string;
   alt?: string;
   onLoad?: () => void;
   onClick?: () => void;
-  sx?: object;
-  videoProps?: {
-    controls?: boolean;
-    muted?: boolean;
-    onLoadedData?: () => void;
-    onClick?: (e: React.MouseEvent) => void;
-  };
-  loadingSpinnerSize?: number;
-  loadingOverlaySx?: object;
+  sx?: SxProps<Theme>;
+  videoControls?: boolean;
+  videoMuted?: boolean;
+  onVideoClick?: (e: React.MouseEvent) => void;
+  spinnerSize?: number;
+  hideLoadingBorder?: boolean;
 }
 
 export function CommentMediaWithLoading({
@@ -31,43 +25,44 @@ export function CommentMediaWithLoading({
   onLoad,
   onClick,
   sx,
-  videoProps = {},
-  loadingSpinnerSize = 24,
-  loadingOverlaySx,
-}: MediaWithLoadingProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  videoControls,
+  videoMuted,
+  onVideoClick,
+  spinnerSize = 24,
+  hideLoadingBorder,
+}: CommentMediaWithLoadingProps) {
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>(() =>
+    getInitialStatus(src),
+  );
 
   useEffect(() => {
-    setHasError(false);
-    setIsLoading(src ? !src.startsWith("blob:") : false);
+    setStatus(getInitialStatus(src));
   }, [src]);
 
   if (!src) {
-    return <Box sx={commentMediaErrorOverlayStyles}>No source</Box>;
+    return <Box sx={errorStyles}>No source</Box>;
   }
 
   const handleLoad = () => {
-    setIsLoading(false);
-    setHasError(false);
+    setStatus('loaded');
     onLoad?.();
   };
 
-  const handleError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
+  const handleError = () => setStatus('error');
 
-  const mediaElementSx = {
+  const isLoading = status === 'loading';
+  const hasError = status === 'error';
+
+  const mediaSx: SxProps<Theme> = {
     opacity: isLoading ? 0 : 1,
-    transition: "opacity 0.2s ease",
-    display: hasError ? "none" : "block",
-    ...sx,
+    transition: 'opacity 0.2s ease',
+    display: hasError ? 'none' : 'block',
+    ...(sx as object),
   };
 
   return (
-    <Box sx={commentMediaContainerStyles}>
-      {type === "photo" ? (
+    <Box sx={{ position: 'relative' }}>
+      {type === 'photo' ? (
         <Box
           component="img"
           src={src}
@@ -77,7 +72,7 @@ export function CommentMediaWithLoading({
           onClick={onClick}
           loading="eager"
           decoding="async"
-          sx={mediaElementSx}
+          sx={mediaSx}
         />
       ) : (
         <Box
@@ -85,23 +80,52 @@ export function CommentMediaWithLoading({
           src={src}
           onLoadedData={handleLoad}
           onError={handleError}
-          onClick={videoProps.onClick}
-          sx={mediaElementSx}
-          controls={videoProps.controls}
-          muted={videoProps.muted}
+          onClick={onVideoClick}
+          controls={videoControls}
+          muted={videoMuted}
           preload="metadata"
+          sx={mediaSx}
         />
       )}
 
       {isLoading && !hasError ? (
-        <Box sx={getCommentMediaLoadingOverlayStyles(loadingOverlaySx)}>
-          <CircularProgress size={loadingSpinnerSize} sx={{ color: "grey.600" }} />
+        <Box sx={getLoadingStyles(hideLoadingBorder)}>
+          <CircularProgress size={spinnerSize} sx={{ color: 'grey.600' }} />
         </Box>
       ) : null}
 
-      {hasError ? (
-        <Box sx={commentMediaErrorOverlayStyles}>Failed to load</Box>
-      ) : null}
+      {hasError ? <Box sx={errorStyles}>Failed to load</Box> : null}
     </Box>
   );
 }
+
+function getInitialStatus(src: string): 'loading' | 'loaded' {
+  return src.startsWith('blob:') ? 'loaded' : 'loading';
+}
+
+const overlayBase = {
+  position: 'absolute' as const,
+  inset: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 1,
+  zIndex: 1,
+} as const;
+
+const errorStyles = {
+  ...overlayBase,
+  bgcolor: 'grey.800',
+  color: 'grey.400',
+  fontSize: '11px',
+  textAlign: 'center' as const,
+  padding: 1,
+  border: '1px solid',
+  borderColor: 'grey.800',
+};
+
+const getLoadingStyles = (hideBorder?: boolean) => ({
+  ...overlayBase,
+  bgcolor: 'grey.900',
+  ...(hideBorder ? {} : { border: '1px solid', borderColor: 'grey.800' }),
+});

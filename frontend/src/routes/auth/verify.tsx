@@ -1,12 +1,12 @@
-import { Container, Paper, Stack, Typography } from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
+import { Container, Paper, Stack, Typography } from '@mui/material';
+import { createFileRoute } from '@tanstack/react-router';
 
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { verifySearchSchema } from "@/lib/validatorSchemas";
-import { OtpForm } from "@/routes/auth/-components/OtpForm";
-import { useVerifyOTP } from "@/routes/auth/-hooks/useVerifyOTP";
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { verifySearchSchema } from '@/lib/validatorSchemas';
+import { OtpForm } from '@/routes/auth/-components/OtpForm';
+import { useVerifyOTP } from '@/routes/auth/-hooks/useVerifyOTP';
 
-export const Route = createFileRoute("/auth/verify")({
+export const Route = createFileRoute('/auth/verify')({
   validateSearch: verifySearchSchema,
   beforeLoad: createRouteGuard({
     requireNoAuth: false,
@@ -26,16 +26,13 @@ export function VerifyEmailPage() {
   } = useVerifyOTP();
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{ mt: { xs: 4, sm: 6, md: 10 }, px: { xs: 2, sm: 3 } }}
-    >
+    <Container maxWidth="sm" sx={{ mt: { xs: 4, sm: 6, md: 10 }, px: { xs: 2, sm: 3 } }}>
       <Paper
         sx={{
           p: { xs: 3, sm: 3.5, md: 4 },
           borderRadius: { xs: 2, sm: 2.5, md: 3 },
-          bgcolor: "rgba(30, 30, 30, 0.8)",
-          color: "white",
+          bgcolor: 'rgba(30, 30, 30, 0.8)',
+          color: 'white',
         }}
       >
         <Stack spacing={{ xs: 2, sm: 2.5, md: 3 }}>
@@ -43,8 +40,8 @@ export function VerifyEmailPage() {
             <Typography
               textAlign="center"
               sx={{
-                color: "white",
-                fontSize: { xs: "14px", sm: "16px" },
+                color: 'white',
+                fontSize: { xs: '14px', sm: '16px' },
               }}
             >
               Verifying authentication...
@@ -55,7 +52,7 @@ export function VerifyEmailPage() {
               errors={otpFormErrors}
               isSubmitting={isOtpSubmitting}
               onSubmit={(e) => {
-                void handleOtpSubmit(e);
+                handleOtpSubmit(e);
               }}
             />
           )}

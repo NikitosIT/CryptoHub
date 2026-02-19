@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const DEFAULT_COUNTDOWN_DURATION = 60000;
-const STORAGE_KEY_PREFIX = "countdown_";
+const STORAGE_KEY_PREFIX = 'countdown_';
 
 interface UseCountdownOptions {
   duration?: number;
@@ -14,7 +14,7 @@ function getStorageKey(key?: string): string | null {
 }
 
 function loadCountdownFromStorage(storageKey: string | null): number | null {
-  if (!storageKey || typeof window === "undefined") return null;
+  if (!storageKey || typeof window === 'undefined') return null;
 
   try {
     const stored = localStorage.getItem(storageKey);
@@ -30,16 +30,13 @@ function loadCountdownFromStorage(storageKey: string | null): number | null {
     localStorage.removeItem(storageKey);
     return null;
   } catch (error) {
-    console.error("Failed to load countdown from localStorage:", error);
+    console.error('Failed to load countdown from localStorage:', error);
     return null;
   }
 }
 
-function saveCountdownToStorage(
-  storageKey: string | null,
-  date: number | null,
-): void {
-  if (!storageKey || typeof window === "undefined") return;
+function saveCountdownToStorage(storageKey: string | null, date: number | null): void {
+  if (!storageKey || typeof window === 'undefined') return;
 
   try {
     if (date === null) {

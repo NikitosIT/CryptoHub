@@ -1,7 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { api, type UserNotifications } from "@/api";
-export const notificationsQueryKey = () => ["notifications"] as const;
+import { api } from '@/api';
+export const notificationsQueryKey = () => ['notifications'] as const;
+
+export interface UserNotifications {
+  id: number;
+  send_to: string | null;
+  send_to_all: boolean;
+  msg: string | null;
+  created_at: string;
+}
 
 function userNotifications(): Promise<UserNotifications[]> {
   return api.profile.getNotifications();

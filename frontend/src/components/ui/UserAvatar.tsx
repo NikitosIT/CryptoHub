@@ -1,6 +1,6 @@
-import { Avatar, Skeleton } from "@mui/material";
+import { Avatar, Skeleton } from '@mui/material';
 
-import { useAvatarUrl } from "@/hooks/useAvatarUrl";
+import { useAvatarUrl } from '@/hooks/useAvatarUrl';
 
 interface UserAvatarProps {
   size?: number;
@@ -11,7 +11,7 @@ interface UserAvatarProps {
 export function UserAvatar({
   size = 40,
   showSkeleton = true,
-  borderColor = "#fbbf24",
+  borderColor = '#fbbf24',
 }: UserAvatarProps) {
   const { avatarUrl, isLoading } = useAvatarUrl();
 
@@ -23,7 +23,7 @@ export function UserAvatar({
         height={size}
         sx={{
           border: `2px solid ${borderColor}`,
-          bgcolor: "rgba(251, 191, 36, 0.1)",
+          bgcolor: 'rgba(251, 191, 36, 0.1)',
         }}
       />
     );

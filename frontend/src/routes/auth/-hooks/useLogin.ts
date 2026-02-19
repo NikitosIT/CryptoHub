@@ -1,12 +1,12 @@
-import { type FieldErrors, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { z } from "zod";
+import { type FieldErrors, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { z } from 'zod';
 
-import { useCountdown } from "@/hooks/useCountdown";
-import { emailSchema } from "@/lib/validatorSchemas";
-import { useSendEmail } from "@/routes/auth/-api/signInWithOtp";
-import { validateRedirectTo } from "@/utils/redirectValidation";
+import { useCountdown } from '@/hooks/useCountdown';
+import { emailSchema } from '@/lib/validatorSchemas';
+import { useSendEmail } from '@/routes/auth/-api/signInWithOtp';
+import { validateRedirectTo } from '@/utils/redirectValidation';
 
 type LoginFormValues = { email: string };
 
@@ -19,7 +19,7 @@ type LoginSearchParams = {
 export function useLogin() {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: "/auth/" }) as LoginSearchParams;
+  const search = useSearch({ from: '/auth/' }) as LoginSearchParams;
   const {
     register,
     handleSubmit,
@@ -27,11 +27,11 @@ export function useLogin() {
     watch,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
-    defaultValues: { email: "" },
-    mode: "onTouched",
+    defaultValues: { email: '' },
+    mode: 'onTouched',
   });
 
-  const email = watch("email");
+  const email = watch('email');
   const countdown = useCountdown({
     storageKey: email || undefined,
   });
@@ -40,11 +40,11 @@ export function useLogin() {
     onSuccess: (email) => {
       countdown.start();
       const safeRedirectTo = validateRedirectTo(search.redirectTo);
-      void navigate({
-        to: "/auth/verify",
+      navigate({
+        to: '/auth/verify',
         search: {
           email,
-          mode: "email",
+          mode: 'email',
           ...(safeRedirectTo && { redirectTo: safeRedirectTo }),
         },
         replace: true,
@@ -61,7 +61,7 @@ export function useLogin() {
       errors.email ||
       (sendCodeMutation.error?.message
         ? {
-            type: "server",
+            type: 'server',
             message: sendCodeMutation.error.message,
           }
         : undefined),

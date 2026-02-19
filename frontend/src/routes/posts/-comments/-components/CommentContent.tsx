@@ -1,52 +1,36 @@
-import { useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import Linkify from "linkify-react";
+import { useState } from 'react';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import Linkify from 'linkify-react';
 
-import type { CommentMedia } from "@/types/db";
+import type { CommentMedia, CommentProps } from '@/types/db';
 
-import { getCommentMediaFullUrl } from "../-utils/commentMediaUtils";
-import {
-  commentContentMediaImageStyles,
-  commentContentMediaItemStyles,
-  commentContentMediaOverlayStyles,
-  commentContentReadMoreButtonStyles,
-  commentContentTextStyles,
-} from "../-utils/commentStyles";
-import { CommentMediaWithLoading } from "./CommentMediaWithLoading";
+import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
+import { CommentMediaWithLoading } from './CommentMediaWithLoading';
 
-interface CommentContentProps {
-  text: string | null;
-  media: CommentMedia[] | null;
-  onMediaClick: (mediaUrl: string, mediaType: "photo" | "video") => void;
+interface CommentContentProps extends CommentProps {
+  onMediaClick: (mediaUrl: string, mediaType: 'photo' | 'video') => void;
 }
 
-export function CommentContent({
-  text,
-  media,
-  onMediaClick,
-}: CommentContentProps) {
+export function CommentContent({ comment, onMediaClick }: CommentContentProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const commentText = (text || "").trim();
+  const media = comment.media;
+  const commentText = comment.text;
   const shouldTruncate = commentText.length > MAX_PREVIEW_LENGTH;
   const displayText =
     shouldTruncate && !isExpanded
-      ? commentText.slice(0, MAX_PREVIEW_LENGTH) + "..."
+      ? commentText.slice(0, MAX_PREVIEW_LENGTH) + '...'
       : commentText;
 
   return (
     <>
       {commentText ? (
         <Box>
-          <Typography
-            variant="body2"
-            sx={commentContentTextStyles}
-            component="div"
-          >
+          <Typography variant="body2" sx={commentContentTextStyles} component="div">
             <Linkify
               options={{
-                target: "_blank",
-                rel: "noopener noreferrer",
-                className: "comment-link",
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                className: 'comment-link',
               }}
             >
               {displayText}
@@ -58,7 +42,7 @@ export function CommentContent({
               size="small"
               sx={commentContentReadMoreButtonStyles}
             >
-              {isExpanded ? "Hide ..." : "Read more ..."}
+              {isExpanded ? 'Hide ...' : 'Read more ...'}
             </Button>
           ) : null}
         </Box>
@@ -88,16 +72,12 @@ export function CommentContent({
 interface CommentMediaProps {
   mediaItem: CommentMedia;
   index: number;
-  onMediaClick: (mediaUrl: string, mediaType: "photo" | "video") => void;
+  onMediaClick: (mediaUrl: string, mediaType: 'photo' | 'video') => void;
 }
 
 const MAX_PREVIEW_LENGTH = 200;
 
-function CommentMediaItem({
-  mediaItem,
-  index,
-  onMediaClick,
-}: CommentMediaProps) {
+function CommentMediaItem({ mediaItem, index, onMediaClick }: CommentMediaProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const mediaUrl = getCommentMediaFullUrl(mediaItem);
 
@@ -106,7 +86,7 @@ function CommentMediaItem({
   };
 
   const handleClick = () => {
-    if (mediaItem.type === "photo" && isLoaded) {
+    if (mediaItem.type === 'photo' && isLoaded) {
       onMediaClick(mediaUrl, mediaItem.type);
     }
   };
@@ -116,7 +96,7 @@ function CommentMediaItem({
       onClick={handleClick}
       sx={{
         ...commentContentMediaItemStyles,
-        cursor: mediaItem.type === "photo" && isLoaded ? "pointer" : "default",
+        cursor: mediaItem.type === 'photo' && isLoaded ? 'pointer' : 'default',
       }}
     >
       <CommentMediaWithLoading
@@ -125,22 +105,80 @@ function CommentMediaItem({
         alt={`Comment media ${index + 1}`}
         onLoad={handleLoad}
         sx={commentContentMediaImageStyles}
-        videoProps={{
-          controls: true,
-          onClick: (e) => e.stopPropagation(),
-        }}
-        loadingOverlaySx={{
-          border: "2px solid",
-          minWidth: 100,
-          minHeight: 100,
-        }}
+        videoControls
+        onVideoClick={(e) => e.stopPropagation()}
       />
-      {mediaItem.type === "photo" && isLoaded ? (
-        <Box
-          className="comment-media-overlay"
-          sx={commentContentMediaOverlayStyles}
-        />
+      {mediaItem.type === 'photo' && isLoaded ? (
+        <Box className="comment-media-overlay" sx={commentContentMediaOverlayStyles} />
       ) : null}
     </Box>
   );
 }
+
+const COMMENT_FONT_FAMILY = 'Inter, sans-serif';
+
+const commentTextStyles = {
+  fontFamily: COMMENT_FONT_FAMILY,
+};
+
+const commentContentTextStyles = {
+  color: 'grey.200',
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-word',
+  overflowWrap: 'break-word',
+  fontSize: { xs: '12px', sm: '13px' },
+  lineHeight: { xs: 1.4, sm: 1.5 },
+  ...commentTextStyles,
+  '& .comment-link': {
+    color: 'primary.light',
+    textDecoration: 'underline',
+    '&:hover': {
+      color: 'primary.main',
+    },
+  },
+};
+
+const commentContentReadMoreButtonStyles = {
+  mt: { xs: 0.25, sm: 0.5 },
+  p: 0,
+  minWidth: 'auto',
+  textTransform: 'none',
+  color: 'primary.light',
+  fontSize: { xs: '11px', sm: '0.75rem' },
+  '&:hover': {
+    bgcolor: 'transparent',
+    textDecoration: 'underline',
+  },
+};
+
+const commentContentMediaItemStyles = {
+  position: 'relative',
+  borderRadius: 1,
+  overflow: 'hidden',
+  '&:hover .comment-media-overlay': {
+    backgroundColor: 'rgba(0,0,0,0.1)',
+  },
+};
+
+const commentContentMediaImageStyles = {
+  maxWidth: { xs: 150, sm: 200 },
+  maxHeight: { xs: 150, sm: 200 },
+  objectFit: 'contain',
+  border: '2px solid',
+  borderColor: 'grey.800',
+  borderRadius: 1,
+  minWidth: { xs: 80, sm: 100 },
+  minHeight: { xs: 80, sm: 100 },
+  transition: 'border-color 0.2s ease',
+  '&:hover': {
+    borderColor: 'primary.light',
+  },
+};
+
+const commentContentMediaOverlayStyles = {
+  position: 'absolute',
+  inset: 0,
+  borderRadius: 1,
+  transition: 'background-color 0.2s ease',
+  pointerEvents: 'none',
+};

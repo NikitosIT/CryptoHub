@@ -1,10 +1,10 @@
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { useToggleReaction } from "@/routes/posts/-reactions/-api/useToggleReaction";
-import type { TelegramPost } from "@/types/db";
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { useToggleReaction } from '@/routes/posts/-reactions/-api/useToggleReaction';
+import type { TelegramPost } from '@/types/db';
 
-import { getReactionClasses, REACTIONS } from "../-utils/reactionStyles";
+import { getReactionClasses, REACTIONS } from '../-utils/reactionStyles';
 
-type ReactionType = "like" | "dislike";
+type ReactionType = 'like' | 'dislike';
 
 export function ReactionButton({ post }: { post: TelegramPost }) {
   const mutation = useToggleReaction();

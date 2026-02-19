@@ -1,8 +1,8 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse } from 'msw';
 
-import type { TelegramPost } from "@/types/db";
+import type { TelegramPost } from '@/types/db';
 
-const BASE = "http://localhost";
+const BASE = 'http://localhost';
 
 export type FetchTelegramPostsPayload = {
   cursor_created_at: string | null;
@@ -14,9 +14,9 @@ export type FetchTelegramPostsPayload = {
 };
 
 const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, apikey, Authorization",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, apikey, Authorization',
 } as const;
 
 function createMockPost(overrides: Partial<TelegramPost> = {}): TelegramPost {
@@ -26,15 +26,15 @@ function createMockPost(overrides: Partial<TelegramPost> = {}): TelegramPost {
     text_entities: null,
     media: null,
     tg_author_id: null,
-    author_name: "Author",
-    author_link: "",
+    author_name: 'Author',
+    author_link: '',
     like_count: 0,
     dislike_count: 0,
     comments_count: null,
     reaction_type: null,
     user_reaction: null,
     is_favorite: false,
-    created_at: "2025-01-01T12:00:00Z",
+    created_at: '2025-01-01T12:00:00Z',
     ...overrides,
   };
 }
@@ -43,7 +43,7 @@ function makeFirstPage(): TelegramPost[] {
   return Array.from({ length: 10 }, (_, i) =>
     createMockPost({
       id: i + 1,
-      author_name: "Author",
+      author_name: 'Author',
       created_at: `2025-01-01T12:00:0${i}Z`,
     }),
   );
@@ -53,7 +53,7 @@ function makeSecondPage(): TelegramPost[] {
   return Array.from({ length: 3 }, (_, i) =>
     createMockPost({
       id: 11 + i,
-      author_name: "Second Page Author",
+      author_name: 'Second Page Author',
       created_at: `2025-01-01T12:00:1${i}Z`,
     }),
   );
@@ -81,14 +81,14 @@ export const fetchTelegramPostsOptionsHandler = http.options(
 );
 
 const AUTHOR_LABEL_BY_ID: Record<number, string> = {
-  [-1001792822445]: "COIN 22",
+  [-1001792822445]: 'COIN 22',
 };
 
 function makeFilteredByToken(): TelegramPost[] {
   return Array.from({ length: 3 }, (_, i) =>
     createMockPost({
       id: 20 + i,
-      author_name: "Token Filter Author",
+      author_name: 'Token Filter Author',
       created_at: `2025-01-01T13:00:0${i}Z`,
     }),
   );
@@ -98,9 +98,9 @@ function makeModeLikedPosts(): TelegramPost[] {
   return Array.from({ length: 3 }, (_, i) =>
     createMockPost({
       id: 40 + i,
-      author_name: "Liked Author",
+      author_name: 'Liked Author',
       created_at: `2025-01-01T15:00:0${i}Z`,
-      user_reaction: "like",
+      user_reaction: 'like',
       like_count: 1,
     }),
   );
@@ -110,9 +110,9 @@ function makeModeDislikedPosts(): TelegramPost[] {
   return Array.from({ length: 3 }, (_, i) =>
     createMockPost({
       id: 50 + i,
-      author_name: "Disliked Author",
+      author_name: 'Disliked Author',
       created_at: `2025-01-01T16:00:0${i}Z`,
-      user_reaction: "dislike",
+      user_reaction: 'dislike',
       dislike_count: 1,
     }),
   );
@@ -122,26 +122,24 @@ function makeModeFavoritesPosts(): TelegramPost[] {
   return Array.from({ length: 3 }, (_, i) =>
     createMockPost({
       id: 60 + i,
-      author_name: "Favorites Author",
+      author_name: 'Favorites Author',
       created_at: `2025-01-01T17:00:0${i}Z`,
       is_favorite: true,
     }),
   );
 }
 
-export const tokenForecastsHandler = http.get(
-  `${BASE}/rest/v1/token_forecasts`,
-  () =>
-    HttpResponse.json(
-      [
-        {
-          token_name: "Bitcoin",
-          status: "approved",
-          created_at: "2025-01-01T00:00:00Z",
-        },
-      ],
-      { headers: { ...CORS_HEADERS, "Content-Range": "0-0/1" } },
-    ),
+export const tokenForecastsHandler = http.get(`${BASE}/rest/v1/token_forecasts`, () =>
+  HttpResponse.json(
+    [
+      {
+        token_name: 'Bitcoin',
+        status: 'approved',
+        created_at: '2025-01-01T00:00:00Z',
+      },
+    ],
+    { headers: { ...CORS_HEADERS, 'Content-Range': '0-0/1' } },
+  ),
 );
 
 export const fetchTelegramPostsHandler = http.post(
@@ -149,17 +147,15 @@ export const fetchTelegramPostsHandler = http.post(
   async ({ request }) => {
     const payload = (await request.json()) as FetchTelegramPostsPayload;
 
-    const hasCursor =
-      payload.cursor_id != null && payload.cursor_created_at != null;
+    const hasCursor = payload.cursor_id != null && payload.cursor_created_at != null;
     const hasAuthor = payload.author_id != null;
     const hasToken = payload.token_name != null;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const mode = payload.mode ?? "all";
+    const mode = payload.mode ?? 'all';
 
     let response: TelegramPost[];
     if (hasAuthor && payload.author_id != null) {
-      const authorName =
-        AUTHOR_LABEL_BY_ID[payload.author_id] ?? "Filtered Author";
+      const authorName = AUTHOR_LABEL_BY_ID[payload.author_id] ?? 'Filtered Author';
       response = Array.from({ length: 5 }, (_, i) =>
         createMockPost({
           id: 30 + i,
@@ -171,11 +167,11 @@ export const fetchTelegramPostsHandler = http.post(
       response = makeFilteredByToken();
     } else if (hasCursor) {
       response = makeSecondPage();
-    } else if (mode === "liked") {
+    } else if (mode === 'liked') {
       response = makeModeLikedPosts();
-    } else if (mode === "disliked") {
+    } else if (mode === 'disliked') {
       response = makeModeDislikedPosts();
-    } else if (mode === "favorites") {
+    } else if (mode === 'favorites') {
       response = makeModeFavoritesPosts();
     } else {
       response = makeFirstPage();
@@ -183,9 +179,7 @@ export const fetchTelegramPostsHandler = http.post(
 
     const last = response.at(-1) ?? null;
     const responseLastCursor =
-      last && last.created_at
-        ? { id: last.id, created_at: last.created_at }
-        : null;
+      last && last.created_at ? { id: last.id, created_at: last.created_at } : null;
 
     fetchTelegramPostsHistory.push({ payload, response, responseLastCursor });
 

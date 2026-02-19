@@ -25,7 +25,7 @@ export function useLogin() {
 
   const sendCodeMutation = useSendEmail({
     onSuccess: (email) => {
-      void navigate({
+      navigate({
         to: "/auth/verify",
         search: {
           email,

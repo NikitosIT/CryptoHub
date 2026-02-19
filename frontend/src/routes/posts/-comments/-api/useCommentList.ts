@@ -1,16 +1,15 @@
-import { type QueryClient, useQuery } from "@tanstack/react-query";
+import { type QueryClient, useQuery } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import type { Comment, CommentWithReplies } from "@/types/db";
+import { api } from '@/api';
+import type { Comment, CommentWithReplies } from '@/types/db';
 
-import { organizeComments } from "../-utils/commentUtils";
+import { organizeComments } from '../-utils/commentUtils';
 
 interface UseListCommentsOptions {
   enabled?: boolean;
 }
 
-export const commentsListQueryKey = (postId: number) =>
-  ["comments", postId] as const;
+export const commentsListQueryKey = (postId: number) => ['comments', postId] as const;
 
 export function getPreviousCommentsList(
   queryClient: QueryClient,
@@ -20,9 +19,7 @@ export function getPreviousCommentsList(
   return queryClient.getQueryData<CommentWithReplies[]>(queryKey);
 }
 
-async function fetchCommentsList(
-  postId: number,
-): Promise<CommentWithReplies[]> {
+async function fetchCommentsList(postId: number): Promise<CommentWithReplies[]> {
   const response = (await api.comments.list(postId)) as {
     success: boolean;
     data: Comment[];
@@ -31,10 +28,7 @@ async function fetchCommentsList(
   return organizeComments(comments);
 }
 
-export function useCommentsList(
-  postId: number,
-  options: UseListCommentsOptions = {},
-) {
+export function useCommentsList(postId: number, options: UseListCommentsOptions = {}) {
   const { enabled = true } = options;
 
   return useQuery({

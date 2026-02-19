@@ -1,9 +1,9 @@
-import type { TelegramPost } from "@/types/db";
+import type { TelegramPost } from '@/types/db';
 
-type UserReaction = "like" | "dislike" | null;
+type UserReaction = 'like' | 'dislike' | null;
 export function toggleReaction(
   post: TelegramPost,
-  type: "like" | "dislike"
+  type: 'like' | 'dislike',
 ): TelegramPost {
   const prev = post.user_reaction;
 
@@ -11,23 +11,23 @@ export function toggleReaction(
   let dislike = post.dislike_count ?? 0;
   let next: UserReaction = null;
 
-  if (type === "like") {
-    if (prev === "like") {
+  if (type === 'like') {
+    if (prev === 'like') {
       like--;
     } else {
       like++;
-      if (prev === "dislike") dislike--;
-      next = "like";
+      if (prev === 'dislike') dislike--;
+      next = 'like';
     }
   }
 
-  if (type === "dislike") {
-    if (prev === "dislike") {
+  if (type === 'dislike') {
+    if (prev === 'dislike') {
       dislike--;
     } else {
       dislike++;
-      if (prev === "like") like--;
-      next = "dislike";
+      if (prev === 'like') like--;
+      next = 'dislike';
     }
   }
 

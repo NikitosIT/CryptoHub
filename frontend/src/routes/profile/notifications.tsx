@@ -1,12 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
 
-import BackButton from "@/components/ui/BackButton";
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { formatRelativeTime } from "@/utils/formatDate";
+import BackButton from '@/components/ui/BackButton';
+import { createRouteGuard } from '@/hooks/routeGuards';
 
-import { useUserNotifications } from "./-api/useUserNotifications";
+import { useUserNotifications } from './-api/useUserNotifications';
 
-export const Route = createFileRoute("/profile/notifications")({
+export const Route = createFileRoute('/profile/notifications')({
   beforeLoad: createRouteGuard({ requireAuth: true }),
   component: Notifications,
 });
@@ -62,20 +61,11 @@ export function Notifications() {
                             alt="admin"
                           />
                         </div>
-                        <span className="text-xs font-medium text-blue-400">
-                          Admin
-                        </span>
+                        <span className="text-xs font-medium text-blue-400">Admin</span>
                       </>
                     )}
                   </div>
-                  <time
-                    className="text-xs text-zinc-500"
-                    dateTime={notification.created_at}
-                  >
-                    {formatRelativeTime(notification.created_at)}
-                  </time>
                 </div>
-
                 {notification.msg ? (
                   <p className="mb-3 text-sm leading-relaxed text-zinc-200">
                     {notification.msg}

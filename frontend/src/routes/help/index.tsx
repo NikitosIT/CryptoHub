@@ -1,8 +1,8 @@
-import EmailIcon from "@mui/icons-material/Email";
-import { Box, Container, Link, Paper, Stack, Typography } from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
+import EmailIcon from '@mui/icons-material/Email';
+import { Box, Container, Link, Paper, Stack, Typography } from '@mui/material';
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute("/help/")({
+export const Route = createFileRoute('/help/')({
   component: CryptoHelper,
 });
 
@@ -21,8 +21,8 @@ function CryptoHelper() {
         fontWeight={600}
         textAlign="center"
         sx={{
-          color: "white",
-          fontSize: { xs: "24px", sm: "28px", md: "32px" },
+          color: 'white',
+          fontSize: { xs: '24px', sm: '28px', md: '32px' },
           mb: { xs: 3, sm: 4, md: 5 },
         }}
       >
@@ -35,16 +35,16 @@ function CryptoHelper() {
           sx={{
             p: { xs: 3, sm: 3.5, md: 4 },
             borderRadius: { xs: 2, sm: 2.5, md: 3 },
-            bgcolor: "rgba(30, 30, 30, 0.8)",
-            color: "white",
+            bgcolor: 'rgba(30, 30, 30, 0.8)',
+            color: 'white',
           }}
         >
           <Typography
             variant="h6"
             fontWeight={600}
             sx={{
-              color: "white",
-              fontSize: { xs: "18px", sm: "20px" },
+              color: 'white',
+              fontSize: { xs: '18px', sm: '20px' },
               mb: { xs: 2, sm: 2.5 },
             }}
           >
@@ -54,8 +54,8 @@ function CryptoHelper() {
           <Typography
             variant="body2"
             sx={{
-              color: "rgba(255, 255, 255, 0.7)",
-              fontSize: { xs: "12px", sm: "14px" },
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: { xs: '12px', sm: '14px' },
               mb: { xs: 2, sm: 2.5 },
             }}
           >
@@ -73,17 +73,17 @@ function CryptoHelper() {
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 gap: 1.5,
-                color: "#fb923c",
-                textDecoration: "none",
-                fontSize: { xs: "14px", sm: "16px" },
+                color: '#fb923c',
+                textDecoration: 'none',
+                fontSize: { xs: '14px', sm: '16px' },
                 fontWeight: 500,
-                transition: "color 0.2s ease",
-                "&:hover": {
-                  color: "#f97316",
-                  textDecoration: "underline",
+                transition: 'color 0.2s ease',
+                '&:hover': {
+                  color: '#f97316',
+                  textDecoration: 'underline',
                 },
               }}
             >

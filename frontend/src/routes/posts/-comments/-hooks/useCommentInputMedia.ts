@@ -1,21 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useToast } from "@/hooks/useToast";
-import type { CommentWithReplies } from "@/types/db";
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const MAX_MEDIA_FILES = 3;
-interface UseCommentMediaProps {
-  postId: number;
-  editingComment: CommentWithReplies | null;
-}
+import { MAX_FILE_SIZE, MAX_MEDIA_FILES } from '@/constants/comments';
+import { useToast } from '@/hooks/useToast';
+
+import { useCommentContext } from '../-components/comments-context';
+import { buildMediaItems } from '../-utils/commentMediaUtils';
 
 const isMediaFile = (file: File) =>
-  file.type.startsWith("image/") || file.type.startsWith("video/");
+  file.type.startsWith('image/') || file.type.startsWith('video/');
 
-export function useCommentInputMedia({
-  postId,
-  editingComment,
-}: UseCommentMediaProps) {
+export function useCommentInputMedia() {
+  const { postId, editingComment } = useCommentContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -26,9 +21,7 @@ export function useCommentInputMedia({
     setSelectedFiles([]);
     setPreviews([]);
     setExistingMediaUrls([]);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }, []);
 
   useEffect(() => {
@@ -54,13 +47,11 @@ export function useCommentInputMedia({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (fileInputRef.current) fileInputRef.current.value = '';
 
     const oversizedFiles = files.filter((f) => f.size > MAX_FILE_SIZE);
     if (oversizedFiles.length > 0) {
-      showError(
-        `File(s) exceed 5MB: ${oversizedFiles.map((f) => f.name).join(", ")}`,
-      );
+      showError(`File(s) exceed 5MB: ${oversizedFiles.map((f) => f.name).join(', ')}`);
       return;
     }
 
@@ -68,39 +59,42 @@ export function useCommentInputMedia({
     if (validFiles.length === 0) return;
 
     setSelectedFiles((prev) => {
-      const currentTotal = prev.length + existingMediaUrls.length;
-      const availableSlots = MAX_MEDIA_FILES - currentTotal;
+      const available = MAX_MEDIA_FILES - prev.length - existingMediaUrls.length;
 
-      if (availableSlots <= 0) {
+      if (available <= 0) {
         showError(`Maximum ${MAX_MEDIA_FILES} media files allowed`);
         return prev;
       }
 
-      const filesToAdd = validFiles.slice(0, availableSlots);
+      const filesToAdd = validFiles.slice(0, available);
       if (filesToAdd.length < validFiles.length) {
-        showError(`Only ${availableSlots} more file(s) can be added`);
+        showError(`Only ${available} more file(s) can be added`);
       }
 
       return [...prev, ...filesToAdd];
     });
   };
 
-  const removeFile = (index: number) => {
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  const allMediaItems = useMemo(
+    () => buildMediaItems(editingComment, selectedFiles, previews, existingMediaUrls),
+    [editingComment, selectedFiles, previews, existingMediaUrls],
+  );
 
-  const removeExistingMedia = (index: number) => {
-    setExistingMediaUrls((prev) => prev.filter((_, i) => i !== index));
+  const handleMediaRemove = (item: (typeof allMediaItems)[number]) => {
+    if (item.isExisting) {
+      setExistingMediaUrls((prev) => prev.filter((url) => url !== item.url));
+    } else {
+      setSelectedFiles((prev) => prev.filter((_, i) => i !== item.index));
+    }
   };
 
   return {
     fileInputRef,
     selectedFiles,
-    previews,
     existingMediaUrls,
     handleFileSelect,
-    removeFile,
-    removeExistingMedia,
     clearAll,
+    allMediaItems,
+    handleMediaRemove,
   };
 }

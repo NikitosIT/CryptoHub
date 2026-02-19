@@ -1,12 +1,8 @@
-import {
-  type InfiniteData,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { TelegramPost } from "@/types/db";
+import type { TelegramPost } from '@/types/db';
 
-const POSTS_QUERY_KEY = ["posts"] as const;
+const POSTS_QUERY_KEY = ['posts'] as const;
 
 export function useCommentsUpdateCountCache() {
   const queryClient = useQueryClient();
@@ -19,11 +15,9 @@ export function useCommentsUpdateCountCache() {
     onMutate: async ({ postId, delta }) => {
       await queryClient.cancelQueries({ queryKey: POSTS_QUERY_KEY });
 
-      const previous = queryClient.getQueriesData<InfiniteData<TelegramPost[]>>(
-        {
-          queryKey: POSTS_QUERY_KEY,
-        }
-      );
+      const previous = queryClient.getQueriesData<InfiniteData<TelegramPost[]>>({
+        queryKey: POSTS_QUERY_KEY,
+      });
 
       queryClient.setQueriesData<InfiniteData<TelegramPost[]>>(
         { queryKey: POSTS_QUERY_KEY },
@@ -38,10 +32,10 @@ export function useCommentsUpdateCountCache() {
 
                 const newCount = Math.max((post.comments_count ?? 0) + delta, 0);
                 return { ...post, comments_count: newCount };
-              })
+              }),
             ),
           };
-        }
+        },
       );
 
       return { previous };

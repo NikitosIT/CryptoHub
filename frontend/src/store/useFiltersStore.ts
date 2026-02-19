@@ -1,11 +1,8 @@
-import { useMemo } from "react";
-import { create } from "zustand";
+import { useMemo } from 'react';
+import { create } from 'zustand';
 
-import {
-  type PostMode,
-  usePostsMode,
-} from "@/routes/posts/-hooks/usePostsMode";
-import type { Token } from "@/types/db";
+import { type PostMode, usePostsMode } from '@/routes/posts/-hooks/usePostsMode';
+import type { Token } from '@/types/db';
 
 interface FilterData {
   selectedAuthorId: number | null;
@@ -63,9 +60,7 @@ export function useSelectedAuthorId() {
   const selectedAuthorId = useFiltersStore(
     (state) => state.filters[mode].selectedAuthorId,
   );
-  const setSelectedAuthorId = useFiltersStore(
-    (state) => state.setSelectedAuthorId,
-  );
+  const setSelectedAuthorId = useFiltersStore((state) => state.setSelectedAuthorId);
 
   return useMemo(
     () => ({
@@ -78,9 +73,7 @@ export function useSelectedAuthorId() {
 
 export function useSelectedToken() {
   const { mode } = usePostsMode();
-  const selectedToken = useFiltersStore(
-    (state) => state.filters[mode].selectedToken,
-  );
+  const selectedToken = useFiltersStore((state) => state.filters[mode].selectedToken);
   const setSelectedToken = useFiltersStore((state) => state.setSelectedToken);
 
   return useMemo(

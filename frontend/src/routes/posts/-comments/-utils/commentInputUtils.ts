@@ -1,17 +1,17 @@
-import type { CommentWithReplies } from "@/types/db";
+import type { CommentWithReplies } from '@/types/db';
 
 export const MAX_COMMENT_LENGTH = 500;
 
 export function getCommentPlaceholder(
   editingComment: CommentWithReplies | null,
   replyingTo: CommentWithReplies | null,
-  replyingToUserName: string
+  replyingToUserName: string,
 ): string {
   if (editingComment) {
-    return "Editing comment...";
+    return 'Editing comment...';
   }
   if (replyingTo) {
     return `Reply to ${replyingToUserName}...`;
   }
-  return "Write a comment...";
+  return 'Write a comment...';
 }

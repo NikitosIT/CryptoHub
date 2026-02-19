@@ -1,16 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import { useToast } from "@/hooks/useToast";
-import { removeCommentFromList } from "@/routes/posts/-comments/-utils/commentUtils";
-import type { CommentWithReplies } from "@/types/db";
-import { getErrorMessage } from "@/utils/errorUtils";
+import { api } from '@/api';
+import { useToast } from '@/hooks/useToast';
+import { removeCommentFromList } from '@/routes/posts/-comments/-utils/commentUtils';
+import type { CommentWithReplies } from '@/types/db';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-import {
-  commentsListQueryKey,
-  getPreviousCommentsList,
-} from "./useCommentList";
-import { useCommentsUpdateCountCache } from "./useCommentsUpdateCountCache";
+import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
+import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
 
 type DeleteCommentVariables = {
   commentId: number;
@@ -19,7 +16,7 @@ type DeleteCommentVariables = {
 
 type MutationContext = {
   previousComments: CommentWithReplies[] | undefined;
-  queryKey: readonly ["comments", number];
+  queryKey: readonly ['comments', number];
 };
 
 export function useCommentDelete() {
@@ -52,10 +49,7 @@ export function useCommentDelete() {
       }
 
       showError(
-        getErrorMessage(
-          err,
-          "Failed to delete comment. Please try again later.",
-        ),
+        getErrorMessage(err, 'Failed to delete comment. Please try again later.'),
       );
     },
 

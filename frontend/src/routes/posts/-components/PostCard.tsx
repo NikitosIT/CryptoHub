@@ -1,12 +1,12 @@
-import { TG_LINK, TG_YOUTUBE } from "@/constants/links";
-import type { TelegramPost } from "@/types/db";
+import { TG_LINK, TG_YOUTUBE } from '@/constants/links';
+import type { TelegramPost } from '@/types/db';
 
-import { PostBody } from "./PostBody";
+import { PostBody } from './PostBody';
 
 export function PostCard({ post }: { post: TelegramPost }) {
   const authorLogo = `/authors/${post.tg_author_id}.jpg`;
   const hasLogo = !!post.tg_author_id;
-  const isYouTube = post.author_link.startsWith("@");
+  const isYouTube = post.author_link.startsWith('@');
 
   const linkUrl = isYouTube
     ? `${TG_YOUTUBE}${post.author_link}`
@@ -40,7 +40,7 @@ export function PostCard({ post }: { post: TelegramPost }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center text-sm font-semibold text-white truncate transition-colors duration-200 sm:text-base font-montserratt hover:text-blue-400"
-                style={{ lineHeight: "1.2" }}
+                style={{ lineHeight: '1.2' }}
                 title={post.author_name}
               >
                 {displayAuthorName}

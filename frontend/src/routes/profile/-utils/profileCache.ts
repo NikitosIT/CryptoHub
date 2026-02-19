@@ -4,7 +4,7 @@ export interface ProfileCacheData {
   last_changed?: string | null;
 }
 
-const PROFILE_STORAGE_KEY = "user_profile_cache";
+const PROFILE_STORAGE_KEY = 'user_profile_cache';
 
 export function getCachedProfile(): ProfileCacheData | null {
   try {

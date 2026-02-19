@@ -1,9 +1,9 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
 
-import { useUserProfile } from "@/routes/profile/-api/useUserProfile";
-import { getCachedProfile } from "@/routes/profile/-utils/profileCache";
+import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
+import { getCachedProfile } from '@/routes/profile/-utils/profileCache';
 
-import { useAuthState } from "../routes/auth/-hooks/useAuthState";
+import { useAuthState } from '../routes/auth/-hooks/useAuthState';
 
 export function useDisplayNickname() {
   const { isAuthenticatedWith2FA, isLoading } = useAuthState({
@@ -18,11 +18,10 @@ export function useDisplayNickname() {
     isLoading || !isAuthenticatedWith2FA
       ? null
       : profile?.nickname ||
-        queryClient.getQueryData<{ nickname: string | null } | null>([
-          "profile",
-        ])?.nickname ||
+        queryClient.getQueryData<{ nickname: string | null } | null>(['profile'])
+          ?.nickname ||
         getCachedProfile()?.nickname ||
-        "User";
+        'User';
 
   return {
     displayNickname,

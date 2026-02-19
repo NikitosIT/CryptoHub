@@ -1,12 +1,12 @@
-import { memo, useCallback, useEffect, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo } from 'react';
 
-import { useToast } from "@/hooks/useToast";
-import { useListAuthors } from "@/routes/authors/-api/useListAuthors";
-import { useSelectedAuthorId } from "@/store/useFiltersStore";
-import type { Author } from "@/types/db";
+import { useToast } from '@/hooks/useToast';
+import { useListAuthors } from '@/routes/authors/-api/useListAuthors';
+import { useSelectedAuthorId } from '@/store/useFiltersStore';
+import type { Author } from '@/types/db';
 
-import SelectFilter from "../../../components/filters/CustomSelectFilter";
-import FilterSkeleton from "../../../components/filters/FilterSkeleton";
+import SelectFilter from '../../../components/filters/CustomSelectFilter';
+import FilterSkeleton from '../../../components/filters/FilterSkeleton';
 
 function FilterAuthors() {
   const { selectedAuthorId, setSelectedAuthorId } = useSelectedAuthorId();
@@ -15,9 +15,7 @@ function FilterAuthors() {
 
   useEffect(() => {
     if (error) {
-      showError(
-        error instanceof Error ? error.message : "Failed to load authors list",
-      );
+      showError(error instanceof Error ? error.message : 'Failed to load authors list');
     }
   }, [error, showError]);
 

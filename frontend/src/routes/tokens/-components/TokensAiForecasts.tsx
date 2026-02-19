@@ -1,5 +1,5 @@
-import { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
@@ -11,12 +11,12 @@ import {
   IconButton,
   Stack,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { useToast } from "@/hooks/useToast";
-import { useTokensAiForecasts } from "@/routes/tokens/-api/useTokensAiForecasts";
-import { useSelectedToken } from "@/store/useFiltersStore";
-import { getErrorMessage } from "@/utils/errorUtils";
+import { useToast } from '@/hooks/useToast';
+import { useTokensAiForecasts } from '@/routes/tokens/-api/useTokensAiForecasts';
+import { useSelectedToken } from '@/store/useFiltersStore';
+import { getErrorMessage } from '@/utils/errorUtils';
 
 import {
   buttonForecastStyles,
@@ -25,7 +25,7 @@ import {
   forecastModalItemStyles,
   forecastModalStyles,
   SENTIMENT_COLORS,
-} from "../-utils/tokensStyles";
+} from '../-utils/tokensStyles';
 
 interface TokenForecast {
   token_name: string;
@@ -34,12 +34,12 @@ interface TokenForecast {
 }
 
 function isTokenForecast(data: unknown): data is TokenForecast {
-  if (typeof data !== "object" || data === null) return false;
+  if (typeof data !== 'object' || data === null) return false;
   const d = data as Record<string, unknown>;
   return (
-    typeof d.token_name === "string" &&
-    typeof d.sentiment === "string" &&
-    typeof d.forecast_text === "string"
+    typeof d.token_name === 'string' &&
+    typeof d.sentiment === 'string' &&
+    typeof d.forecast_text === 'string'
   );
 }
 
@@ -64,33 +64,28 @@ export default function TokensAiForecasts() {
       if (data) {
         setOpen(true);
       } else {
-        showError("Forecast for this token is not available yet.");
+        showError('Forecast for this token is not available yet.');
       }
     } catch (err) {
-      showError(
-        getErrorMessage(
-          err,
-          "Failed to load forecast. Please try again later.",
-        ),
-      );
+      showError(getErrorMessage(err, 'Failed to load forecast. Please try again later.'));
     }
   };
 
   return (
     <>
       <Button
-        onClick={() => void handleOpen()}
+        onClick={() => handleOpen()}
         disabled={!selectedToken || isLoading}
         variant="contained"
         sx={buttonForecastStyles}
       >
         {isLoading ? (
           <Box display="flex" alignItems="center" gap={1}>
-            <CircularProgress size={16} sx={{ color: "#fff" }} />
+            <CircularProgress size={16} sx={{ color: '#fff' }} />
             Loading...
           </Box>
         ) : (
-          "📈 AI Forecast"
+          '📈 AI Forecast'
         )}
       </Button>
 
@@ -103,23 +98,17 @@ export default function TokensAiForecasts() {
         slotProps={{
           backdrop: {
             sx: {
-              backgroundColor: "rgba(0, 0, 0, 0.8)",
-              backdropFilter: "blur(4px)",
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              backdropFilter: 'blur(4px)',
             },
           },
         }}
       >
         <DialogTitle sx={forecastModalStyles}>
           <Typography variant="h6" fontWeight={600}>
-            {forecast !== null
-              ? `Forecast for ${selectedToken?.value}`
-              : "AI Forecast"}
+            {forecast !== null ? `Forecast for ${selectedToken?.value}` : 'AI Forecast'}
           </Typography>
-          <IconButton
-            onClick={() => setOpen(false)}
-            size="small"
-            sx={closeButtonSx}
-          >
+          <IconButton onClick={() => setOpen(false)} size="small" sx={closeButtonSx}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -133,33 +122,29 @@ export default function TokensAiForecasts() {
 }
 
 function ForecastContent({ forecast }: { forecast: TokenForecast }) {
-  const sentiment = forecast.sentiment || "neutral";
-  const sentimentColor =
-    SENTIMENT_COLORS[sentiment] ?? SENTIMENT_COLORS.neutral;
+  const sentiment = forecast.sentiment || 'neutral';
+  const sentimentColor = SENTIMENT_COLORS[sentiment] ?? SENTIMENT_COLORS.neutral;
 
   return (
     <Stack spacing={2} alignItems="center">
       <Chip
         label={sentiment}
-        sx={{ ...sentimentColor, fontWeight: 500, textTransform: "capitalize" }}
+        sx={{ ...sentimentColor, fontWeight: 500, textTransform: 'capitalize' }}
       />
 
       <Typography
         variant="body1"
         sx={{
-          color: "#e5e7eb",
+          color: '#e5e7eb',
           lineHeight: 1.8,
-          whiteSpace: "pre-wrap",
-          textAlign: "center",
+          whiteSpace: 'pre-wrap',
+          textAlign: 'center',
         }}
       >
         {forecast.forecast_text}
       </Typography>
 
-      <Typography
-        variant="caption"
-        sx={{ color: "#6b7280", fontStyle: "italic" }}
-      >
+      <Typography variant="caption" sx={{ color: '#6b7280', fontStyle: 'italic' }}>
         Generated by AI
       </Typography>
     </Stack>

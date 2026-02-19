@@ -1,21 +1,24 @@
-import { useRef } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import { useToast } from "@/hooks/useToast";
+import { api } from '@/api';
+import { useToast } from '@/hooks/useToast';
 import {
   createBlobMediaFromFiles,
   getExistingMedia,
-} from "@/routes/posts/-comments/-utils/commentMediaUtils";
-import { updateCommentInList } from "@/routes/posts/-comments/-utils/commentUtils";
-import type { CommentMedia, CommentWithReplies } from "@/types/db";
-import { getErrorMessage } from "@/utils/errorUtils";
+} from '@/routes/posts/-comments/-utils/commentMediaUtils';
+import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtils';
+import type { CommentMedia, CommentWithReplies } from '@/types/db';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-import {
-  commentsListQueryKey,
-  getPreviousCommentsList,
-} from "./useCommentList";
-import { uploadCommentMedia } from "./useUploadMedia";
+import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
+import { uploadCommentMedia } from './useUploadMedia';
+
+export interface UpdateCommentParams {
+  commentId: number;
+  text: string;
+  media?: CommentMedia[] | null;
+}
 
 type UpdateCommentVariables = {
   commentId: number;
@@ -27,7 +30,7 @@ type UpdateCommentVariables = {
 
 type MutationContext = {
   previousComments: CommentWithReplies[] | undefined;
-  queryKey: readonly ["comments", number];
+  queryKey: readonly ['comments', number];
   blobUrls: string[];
 };
 
@@ -38,11 +41,7 @@ export function useCommentUpdate() {
   const existingMediaRef = useRef<CommentMedia[]>([]);
 
   return useMutation({
-    mutationFn: async ({
-      commentId,
-      text,
-      mediaFiles,
-    }: UpdateCommentVariables) => {
+    mutationFn: async ({ commentId, text, mediaFiles }: UpdateCommentVariables) => {
       const existingMedia = existingMediaRef.current;
       const newMedia = await uploadCommentMedia({ mediaFiles });
       const allMedia = [...existingMedia, ...newMedia];
@@ -72,8 +71,7 @@ export function useCommentUpdate() {
 
       existingMediaRef.current = existingMedia;
 
-      const { media: blobMedia, blobUrls } =
-        createBlobMediaFromFiles(mediaFiles);
+      const { media: blobMedia, blobUrls } = createBlobMediaFromFiles(mediaFiles);
       const optimisticMedia = [...existingMedia, ...blobMedia];
 
       queryClient.setQueriesData<CommentWithReplies[]>({ queryKey }, (old) => {
@@ -96,10 +94,7 @@ export function useCommentUpdate() {
       context?.blobUrls.forEach((url) => URL.revokeObjectURL(url));
 
       showError(
-        getErrorMessage(
-          err,
-          "Failed to update comment. Please try again later.",
-        ),
+        getErrorMessage(err, 'Failed to update comment. Please try again later.'),
       );
     },
 

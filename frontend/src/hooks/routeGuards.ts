@@ -1,7 +1,7 @@
-import { redirect } from "@tanstack/react-router";
+import { redirect } from '@tanstack/react-router';
 
-import { api } from "@/api";
-import { queryClient } from "@/main";
+import { api } from '@/api';
+import { queryClient } from '@/main';
 
 interface GuardOptions {
   requireAuth?: boolean;
@@ -28,8 +28,8 @@ export function createRouteGuard(options: GuardOptions = {}) {
 
   return async ({ location }: { location: { pathname: string } }) => {
     const currentPath = location.pathname;
-    const isVerify2FAPath = currentPath === "/auth/verify-2fa";
-    const isSetNicknamePath = currentPath === "/auth/setnickname";
+    const isVerify2FAPath = currentPath === '/auth/verify-2fa';
+    const isSetNicknamePath = currentPath === '/auth/setnickname';
     const { user, isAuthenticatedWith2FA, hasPendingTwoFactor } =
       await api.auth.getState(queryClient);
     const isAuthenticated = Boolean(user?.id);
@@ -40,26 +40,26 @@ export function createRouteGuard(options: GuardOptions = {}) {
       !isVerify2FAPath &&
       !allowTwoFactorNoAuth
     ) {
-      throwRedirect("/auth/verify-2fa");
+      throwRedirect('/auth/verify-2fa');
     }
 
     if (requireAuth) {
       if (!isAuthenticated) {
-        throwRedirect(redirectTo || "/auth/");
+        throwRedirect(redirectTo || '/auth/');
       }
     }
 
     if (requireNoAuth) {
       if (isAuthenticatedWith2FA) {
-        throwRedirect(redirectTo || "/profile/");
+        throwRedirect(redirectTo || '/profile/');
       }
     }
     if (isSetNicknamePath && isAuthenticated) {
-      throwRedirect("/profile/");
+      throwRedirect('/profile/');
     }
 
     if (isVerify2FAPath && isAuthenticatedWith2FA) {
-      throwRedirect("/profile/");
+      throwRedirect('/profile/');
     }
   };
 }

@@ -1,9 +1,9 @@
-import React from "react";
-import { type Control, Controller, type FieldErrors } from "react-hook-form";
-import { Alert, Box, Stack, Typography } from "@mui/material";
+import React from 'react';
+import { type Control, Controller, type FieldErrors } from 'react-hook-form';
+import { Alert, Box, Stack, Typography } from '@mui/material';
 
-import { AuthButton } from "@/components/ui/AuthButton";
-import { StyledOtpInput } from "@/components/ui/StyledOtpInput";
+import { AuthButton } from '@/components/ui/AuthButton';
+import { StyledOtpInput } from '@/components/ui/StyledOtpInput';
 
 type TwoFAFormValues = { code: string };
 
@@ -24,11 +24,7 @@ export function TwoFAForm({
 }: TwoFAFormProps) {
   return (
     <>
-      <Box
-        display="flex"
-        justifyContent="center"
-        sx={{ mb: { xs: 1.5, sm: 2 } }}
-      >
+      <Box display="flex" justifyContent="center" sx={{ mb: { xs: 1.5, sm: 2 } }}>
         <Box
           component="img"
           src="/others/google-authenticator.svg"
@@ -36,7 +32,7 @@ export function TwoFAForm({
           sx={{
             width: { xs: 48, sm: 56, md: 64 },
             height: { xs: 48, sm: 56, md: 64 },
-            objectFit: "contain",
+            objectFit: 'contain',
           }}
         />
       </Box>
@@ -46,8 +42,8 @@ export function TwoFAForm({
         fontWeight={600}
         textAlign="center"
         sx={{
-          color: "white",
-          fontSize: { xs: "20px", sm: "24px" },
+          color: 'white',
+          fontSize: { xs: '20px', sm: '24px' },
           mb: { xs: 1, sm: 0 },
         }}
       >
@@ -58,25 +54,25 @@ export function TwoFAForm({
         variant="body2"
         textAlign="center"
         sx={{
-          color: "rgba(255, 255, 255, 0.7)",
-          fontSize: { xs: "12px", sm: "14px" },
+          color: 'rgba(255, 255, 255, 0.7)',
+          fontSize: { xs: '12px', sm: '14px' },
           px: { xs: 1, sm: 0 },
         }}
       >
-        Enter the 6-digit code from Google Authenticator (or another generator)
-        to complete login.
+        Enter the 6-digit code from Google Authenticator (or another generator) to
+        complete login.
       </Typography>
 
       {errors.code?.message ? (
         <Alert
           severity="error"
           sx={{
-            bgcolor: "rgba(239, 68, 68, 0.1)",
-            color: "#ef4444",
-            border: "1px solid rgba(239, 68, 68, 0.3)",
-            fontSize: { xs: "12px", sm: "14px" },
-            "& .MuiAlert-icon": {
-              color: "#ef4444",
+            bgcolor: 'rgba(239, 68, 68, 0.1)',
+            color: '#ef4444',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            fontSize: { xs: '12px', sm: '14px' },
+            '& .MuiAlert-icon': {
+              color: '#ef4444',
             },
           }}
         >
@@ -86,11 +82,7 @@ export function TwoFAForm({
 
       <Box component="form" onSubmit={onSubmit}>
         <Stack spacing={{ xs: 1.5, sm: 2 }}>
-          <Box
-            display="flex"
-            justifyContent="center"
-            sx={{ py: { xs: 1.5, sm: 2 } }}
-          >
+          <Box display="flex" justifyContent="center" sx={{ py: { xs: 1.5, sm: 2 } }}>
             <Controller
               control={control}
               name="code"
@@ -116,9 +108,9 @@ export function TwoFAForm({
         variant="body2"
         textAlign="center"
         sx={{
-          color: "rgba(255, 255, 255, 0.7)",
+          color: 'rgba(255, 255, 255, 0.7)',
           mt: { xs: 1.5, sm: 2 },
-          fontSize: { xs: "12px", sm: "14px" },
+          fontSize: { xs: '12px', sm: '14px' },
           px: { xs: 1, sm: 0 },
         }}
       >

@@ -1,153 +1,96 @@
-import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { Box, IconButton, Stack, TextField, Typography } from "@mui/material";
-import { z } from "zod";
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
+import { z } from 'zod';
 
-import { SendIcon } from "@/components/ui/SendIcon";
-import { commentSchema } from "@/lib/validatorSchemas";
-import { useCommentKeyboard } from "@/routes/posts/-comments/-hooks/useCommentKeyboard";
+import { SendIcon } from '@/components/ui/SendIcon';
+import { commentSchema } from '@/lib/validatorSchemas';
+import { useCommentKeyboard } from '@/routes/posts/-comments/-hooks/useCommentKeyboard';
 import {
   getCommentPlaceholder,
   MAX_COMMENT_LENGTH,
-} from "@/routes/posts/-comments/-utils/commentInputUtils";
-import { getCommentUserName } from "@/routes/posts/-comments/-utils/commentItemUtils";
-import { buildMediaItems } from "@/routes/posts/-comments/-utils/commentMediaUtils";
-import {
-  commentInputErrorTextStyles,
-  commentinputFormBoxStyles,
-  commentInputTextFieldStyles,
-  commentMediaFileIconStyles,
-  getCommentInputSendButtonStyles,
-} from "@/routes/posts/-comments/-utils/commentStyles";
-import type { CommentWithReplies } from "@/types/db";
+} from '@/routes/posts/-comments/-utils/commentInputUtils';
+import { getCommentUserName } from '@/routes/posts/-comments/-utils/commentItemUtils';
 
-import { useCommentInputMedia } from "../-hooks/useCommentInputMedia";
-import { CommentEditPreview } from "./CommentEditPreview";
-import { CommentMediaPreviewItem } from "./CommentMediaPreviewItem";
-import { CommentReplyPreview } from "./CommentReplyPreview";
+import { useCommentInputMedia } from '../-hooks/useCommentInputMedia';
+import { CommentEditPreview } from './CommentEditPreview';
+import { CommentMediaPreviewItem } from './CommentMediaPreviewItem';
+import { CommentReplyPreview } from './CommentReplyPreview';
+import { useCommentContext } from './comments-context';
 
 type CommentFormData = z.infer<typeof commentSchema>;
 
-interface CommentInputProps {
-  postId: number;
-  onSubmit: (
-    text: string,
-    mediaFiles?: File[],
-    existingMediaUrls?: string[],
-  ) => void;
-  replyingTo: CommentWithReplies | null;
-  onCancelReply: () => void;
-  editingComment: CommentWithReplies | null;
-  onCancelEdit: () => void;
-  handleJumpToComment: (commentId: number) => void;
-}
+export const COMMENT_INPUT_ID = 'comment-dialog-text-input';
 
-export function CommentInput({
-  postId,
-  onSubmit,
-  replyingTo,
-  onCancelReply,
-  editingComment,
-  onCancelEdit,
-  handleJumpToComment,
-}: CommentInputProps) {
+export function CommentInput() {
+  const {
+    postId,
+    handleSubmit: onSubmit,
+    replyingTo,
+    editingComment,
+  } = useCommentContext();
+
   const fileInputId = `comment-media-input-${postId}`;
 
-  const { control, handleSubmit, watch, setValue, reset, setFocus } =
+  const { control, handleSubmit, watch, reset, setFocus, setValue } =
     useForm<CommentFormData>({
       resolver: zodResolver(commentSchema),
-      defaultValues: { text: "" },
+      defaultValues: { text: '' },
     });
 
-  const commentText = watch("text") || "";
+  const commentText = watch('text') || '';
   const isOverLimit = commentText.length > MAX_COMMENT_LENGTH;
 
   const {
     fileInputRef,
     selectedFiles,
-    previews,
+    allMediaItems,
     existingMediaUrls,
     handleFileSelect,
-    removeFile,
-    removeExistingMedia,
     clearAll,
-  } = useCommentInputMedia({ postId, editingComment });
+    handleMediaRemove,
+  } = useCommentInputMedia();
 
   useEffect(() => {
-    if (editingComment) {
-      setValue("text", editingComment.text || "");
-    } else if (!replyingTo) {
-      reset();
-    }
-    setTimeout(() => setFocus("text"), 0);
-  }, [editingComment, replyingTo, setValue, reset, setFocus]);
+    setValue('text', editingComment?.text ?? '');
+    setFocus('text');
+  }, [editingComment, setValue, setFocus]);
+
+  useEffect(() => {
+    setFocus('text');
+  }, [replyingTo, setFocus]);
 
   const onFormSubmit = (data: CommentFormData) => {
     onSubmit(
-      data.text ?? "",
+      data.text ?? '',
       selectedFiles.length > 0 ? selectedFiles : undefined,
       existingMediaUrls.length > 0 ? existingMediaUrls : undefined,
     );
     reset();
     clearAll();
-    setTimeout(() => setFocus("text"), 0);
+    setFocus('text');
   };
 
   const { handleKeyDown } = useCommentKeyboard({
-    onFormSubmit: () => void handleSubmit(onFormSubmit)(),
-    onCancel: () =>
-      editingComment
-        ? onCancelEdit()
-        : replyingTo
-          ? onCancelReply()
-          : undefined,
+    onFormSubmit: () => handleSubmit(onFormSubmit)(),
   });
 
-  const allMediaItems = buildMediaItems(
-    editingComment,
-    selectedFiles,
-    previews,
-    existingMediaUrls,
-  );
   const hasContent =
     commentText.trim().length > 0 ||
     selectedFiles.length > 0 ||
     existingMediaUrls.length > 0;
   const showSendButton = hasContent && !isOverLimit;
 
-  const handleMediaRemove = (item: (typeof allMediaItems)[number]) => {
-    if (item.isExisting) {
-      const idx = existingMediaUrls.indexOf(item.url);
-      if (idx !== -1) removeExistingMedia(idx);
-    } else {
-      removeFile(item.index);
-    }
-  };
-
   return (
-    <Box sx={{ p: { xs: 0.75, sm: 1 }, bgcolor: "grey.900" }}>
-      {replyingTo ? (
-        <CommentReplyPreview
-          replyingTo={replyingTo}
-          onCancel={onCancelReply}
-          handleJumpToComment={handleJumpToComment}
-        />
-      ) : null}
+    <Box sx={{ p: { xs: 0.75, sm: 1 }, bgcolor: 'grey.900' }}>
+      <CommentReplyPreview />
 
-      <CommentEditPreview
-        editingComment={editingComment}
-        onCancel={onCancelEdit}
-      />
+      <CommentEditPreview />
 
       {allMediaItems.length > 0 ? (
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          gap={1.5}
-          sx={{ mb: { xs: 0.75, sm: 1 } }}
-        >
+        <Stack direction="row" flexWrap="wrap" gap={1.5} sx={{ mb: { xs: 0.75, sm: 1 } }}>
           {allMediaItems.map((item) => (
             <CommentMediaPreviewItem
               key={item.id}
@@ -177,7 +120,7 @@ export function CommentInput({
           <AttachFileIcon sx={{ fontSize: { xs: 20, sm: 22 } }} />
         </IconButton>
 
-        <Box sx={{ flex: 1, position: "relative" }}>
+        <Box sx={{ flex: 1, position: 'relative' }}>
           <Controller
             name="text"
             control={control}
@@ -186,17 +129,7 @@ export function CommentInput({
                 {...field}
                 value={value}
                 inputRef={ref}
-                onFocus={(e) => {
-                  if (
-                    editingComment &&
-                    e.target instanceof HTMLTextAreaElement
-                  ) {
-                    e.target.setSelectionRange(
-                      e.target.value.length,
-                      e.target.value.length,
-                    );
-                  }
-                }}
+                slotProps={{ input: { id: COMMENT_INPUT_ID } }}
                 onKeyDown={handleKeyDown}
                 placeholder={getCommentPlaceholder(
                   editingComment,
@@ -204,8 +137,6 @@ export function CommentInput({
                   getCommentUserName(replyingTo),
                 )}
                 multiline
-                minRows={1}
-                maxRows={4}
                 fullWidth
                 variant="outlined"
                 size="small"
@@ -216,7 +147,7 @@ export function CommentInput({
 
           {showSendButton ? (
             <IconButton
-              onClick={() => void handleSubmit(onFormSubmit)()}
+              onClick={() => handleSubmit(onFormSubmit)()}
               sx={getCommentInputSendButtonStyles(true)}
               aria-label="Send comment"
             >
@@ -229,8 +160,8 @@ export function CommentInput({
               variant="caption"
               sx={{
                 ...commentInputErrorTextStyles,
-                position: "relative",
-                bottom: { xs: "-18px", sm: "-20px" },
+                position: 'relative',
+                bottom: { xs: '-18px', sm: '-20px' },
                 left: 0,
               }}
             >
@@ -242,3 +173,70 @@ export function CommentInput({
     </Box>
   );
 }
+
+const COMMENT_FONT_FAMILY = 'Inter, sans-serif';
+
+const commentTextStyles = {
+  fontFamily: COMMENT_FONT_FAMILY,
+};
+
+const commentInputTextFieldStyles = {
+  '& .MuiOutlinedInput-root': {
+    bgcolor: 'grey.800',
+    color: 'common.white',
+    ...commentTextStyles,
+    fontSize: { xs: '16px', sm: '14px' },
+    paddingRight: { xs: '48px', sm: '52px' },
+    borderRadius: { xs: '20px', sm: '8px' },
+    '&.Mui-focused fieldset': {
+      borderColor: 'primary.main',
+      borderWidth: '1px',
+    },
+  },
+};
+
+const commentMediaFileIconStyles = {
+  color: 'grey.400',
+  flexShrink: 0,
+  '&:hover': {
+    color: 'grey.300',
+    bgcolor: 'rgba(255, 255, 255, 0.05)',
+  },
+};
+
+const commentinputFormBoxStyles = {
+  display: 'flex',
+  alignItems: 'flex-end',
+  gap: { xs: 0.75, sm: 1 },
+  position: 'relative',
+};
+
+const getCommentInputSendButtonStyles = (show: boolean) => ({
+  position: 'absolute',
+  right: { xs: '8px', sm: '10px' },
+  top: '50%',
+  transform: 'translateY(-50%)',
+  width: { xs: '16px', sm: '32px' },
+  height: { xs: '16px', sm: '32px' },
+  padding: 0,
+  borderRadius: '50%',
+  bgcolor: show ? 'primary.main' : 'transparent',
+  color: 'common.white',
+  opacity: show ? 1 : 0,
+  pointerEvents: show ? 'auto' : 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  '&:hover': {
+    bgcolor: show ? 'primary.dark' : undefined,
+  },
+  transition: 'all 0.2s ease',
+  zIndex: 1,
+});
+
+const commentInputErrorTextStyles = {
+  color: 'error.main',
+  fontSize: { xs: '11px', sm: '12px' },
+  ...commentTextStyles,
+};

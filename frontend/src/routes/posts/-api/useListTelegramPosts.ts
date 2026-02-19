@@ -1,18 +1,27 @@
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import { useSelectedAuthorId, useSelectedToken } from "@/store/useFiltersStore";
+import { api } from '@/api';
+import { useSelectedAuthorId, useSelectedToken } from '@/store/useFiltersStore';
 
-import { usePostsMode } from "../-hooks/usePostsMode";
+import { usePostsMode } from '../-hooks/usePostsMode';
+
+export interface FetchTelegramPostParams {
+  cursorId: number | null;
+  cursorCreatedAt: string | null;
+  limit?: number;
+  mode?: 'all' | 'liked' | 'disliked' | 'favorites';
+  authorId?: number | null;
+  tokenName?: string | null;
+}
 
 export const PAGE_SIZE = 10;
 
 const postsQueryKey = (
   authorId: number | null,
   tokenName: string | null,
-  mode: "all" | "liked" | "disliked" | "favorites",
+  mode: 'all' | 'liked' | 'disliked' | 'favorites',
 ) => {
-  const key = ["posts", authorId, tokenName, mode] as const;
+  const key = ['posts', authorId, tokenName, mode] as const;
   return key;
 };
 

@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import type { TelegramPost } from "@/types/db";
-import { cancelDebounce, debounceAsync } from "@/utils/debounceAsync";
+import { api } from '@/api';
+import type { TelegramPost } from '@/types/db';
+import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
 
-import { findPostInCache } from "../-utils/findPostInCache";
-import { updatePostInCache } from "../-utils/updatePostinCache";
+import { findPostInCache } from '../-utils/findPostInCache';
+import { updatePostInCache } from '../-utils/updatePostinCache';
 
 type FavoriteState = boolean;
 const initialFavoriteMap = new Map<string, FavoriteState>();

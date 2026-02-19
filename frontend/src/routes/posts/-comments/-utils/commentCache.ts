@@ -1,6 +1,6 @@
-import type { useQueryClient } from "@tanstack/react-query";
+import type { useQueryClient } from '@tanstack/react-query';
 
-import type { CommentWithReplies } from "@/types/db";
+import type { CommentWithReplies } from '@/types/db';
 
 export function findCommentInCache(
   queryClient: ReturnType<typeof useQueryClient>,

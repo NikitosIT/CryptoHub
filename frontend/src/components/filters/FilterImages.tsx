@@ -1,4 +1,4 @@
-import { Paper, type PaperProps } from "@mui/material";
+import { Paper, type PaperProps } from '@mui/material';
 
 export function AuthorImg({ id, label }: { id: number; label: string }) {
   return (
@@ -33,7 +33,7 @@ export function DropdownPaper(props: PaperProps) {
     <Paper
       {...props}
       sx={{
-        bgcolor: "#121212",
+        bgcolor: '#121212',
         borderRadius: 1.5,
         mt: 0.5,
       }}

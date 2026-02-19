@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import type { InfiniteData } from "@tanstack/react-query";
-import { useQuery } from "@tanstack/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { InfiniteData } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import FavoriteButton from "@/routes/posts/-reactions/-components/FavoriteButton";
-import type { TelegramPost } from "@/types/db";
+import FavoriteButton from '@/routes/posts/-reactions/-components/FavoriteButton';
+import type { TelegramPost } from '@/types/db';
 
-import { createPost, createQueryClientWithPost } from "./testUtils";
+import { createPost, createQueryClientWithPost } from './testUtils';
 
 const mockToggleFavorite = vi.fn();
 
-vi.mock("@/api", () => ({
+vi.mock('@/api', () => ({
   api: {
     reactions: {
       toggleFavorite: (...args: unknown[]) => mockToggleFavorite(...args),
@@ -23,7 +23,7 @@ vi.mock("@/api", () => ({
 }));
 
 const mockUseAuthState = vi.fn();
-vi.mock("@/routes/auth/-hooks/useAuthState", () => ({
+vi.mock('@/routes/auth/-hooks/useAuthState', () => ({
   useAuthState: (options: unknown) => mockUseAuthState(options),
 }));
 
@@ -51,7 +51,7 @@ function FavoriteButtonWithPostsQuery({
   initialData: InfiniteData<TelegramPost[]>;
 }) {
   const { data } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ['posts'],
     queryFn: () =>
       Promise.resolve({
         pages: [] as TelegramPost[][],
@@ -64,16 +64,16 @@ function FavoriteButtonWithPostsQuery({
   return <FavoriteButton post={postFromCache} />;
 }
 
-describe("FavoriteButton", () => {
+describe('FavoriteButton', () => {
   const addedResponse = {
     success: true,
-    status: "added",
+    status: 'added',
     is_favorite: true,
   } as const;
 
   const removedResponse = {
     success: true,
-    status: "removed",
+    status: 'removed',
     is_favorite: false,
   } as const;
 
@@ -81,11 +81,11 @@ describe("FavoriteButton", () => {
     mockToggleFavorite.mockReset();
   });
 
-  it("when user clicks add-to-favorites, button becomes yellow and request is sent with correct payload and mock response", async () => {
+  it('when user clicks add-to-favorites, button becomes yellow and request is sent with correct payload and mock response', async () => {
     const post = createPost({ id: 42, is_favorite: false });
     const queryClient = createQueryClientWithPost(post);
     mockUseAuthState.mockReturnValue({
-      user: { id: "user-1" },
+      user: { id: 'user-1' },
       isAuthenticatedWith2FA: true,
       hasPendingTwoFactor: false,
       isLoading: false,
@@ -94,32 +94,30 @@ describe("FavoriteButton", () => {
 
     render(<FavoriteButtonFromCache post={post} queryClient={queryClient} />);
 
-    const button = screen.getByRole("button", { name: /add to favorites/i });
-    expect(button).toHaveAttribute("aria-pressed", "false");
-    expect(button).not.toHaveClass("bg-yellow-400");
+    const button = screen.getByRole('button', { name: /add to favorites/i });
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+    expect(button).not.toHaveClass('bg-yellow-400');
 
     const user = userEvent.setup();
     await user.click(button);
 
     await waitFor(() => {
-      expect(button).toHaveClass("bg-yellow-400");
-      expect(button).toHaveAttribute("aria-pressed", "true");
+      expect(button).toHaveClass('bg-yellow-400');
+      expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
     await waitFor(() => {
       expect(mockToggleFavorite).toHaveBeenCalledTimes(1);
       expect(mockToggleFavorite).toHaveBeenCalledWith(42);
     });
-    expect(await mockToggleFavorite.mock.results[0].value).toEqual(
-      addedResponse,
-    );
+    expect(await mockToggleFavorite.mock.results[0].value).toEqual(addedResponse);
   });
 
-  it("when already favorite, click removes reaction: button loses yellow and request is sent with correct payload and mock response", async () => {
+  it('when already favorite, click removes reaction: button loses yellow and request is sent with correct payload and mock response', async () => {
     const post = createPost({ id: 99, is_favorite: true });
     const queryClient = createQueryClientWithPost(post);
     mockUseAuthState.mockReturnValue({
-      user: { id: "user-2" },
+      user: { id: 'user-2' },
       isAuthenticatedWith2FA: true,
       hasPendingTwoFactor: false,
       isLoading: false,
@@ -128,30 +126,28 @@ describe("FavoriteButton", () => {
 
     render(<FavoriteButtonFromCache post={post} queryClient={queryClient} />);
 
-    const button = screen.getByRole("button", {
+    const button = screen.getByRole('button', {
       name: /remove from favorites/i,
     });
-    expect(button).toHaveAttribute("aria-pressed", "true");
-    expect(button).toHaveClass("bg-yellow-400");
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+    expect(button).toHaveClass('bg-yellow-400');
 
     const user = userEvent.setup();
     await user.click(button);
 
     await waitFor(() => {
-      expect(button).toHaveClass("bg-transparent");
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveClass('bg-transparent');
+      expect(button).toHaveAttribute('aria-pressed', 'false');
     });
 
     await waitFor(() => {
       expect(mockToggleFavorite).toHaveBeenCalledTimes(1);
       expect(mockToggleFavorite).toHaveBeenCalledWith(99);
     });
-    expect(await mockToggleFavorite.mock.results[0].value).toEqual(
-      removedResponse,
-    );
+    expect(await mockToggleFavorite.mock.results[0].value).toEqual(removedResponse);
   });
 
-  it("when not logged in, click does nothing: no API call and button state unchanged", async () => {
+  it('when not logged in, click does nothing: no API call and button state unchanged', async () => {
     const post = createPost({ id: 10, is_favorite: false });
     const queryClient = createQueryClientWithPost(post);
     mockUseAuthState.mockReturnValue({
@@ -167,15 +163,15 @@ describe("FavoriteButton", () => {
       </QueryClientProvider>,
     );
 
-    const button = screen.getByRole("button", { name: /add to favorites/i });
-    expect(button).toHaveAttribute("aria-pressed", "false");
-    expect(button).not.toHaveClass("bg-yellow-400");
+    const button = screen.getByRole('button', { name: /add to favorites/i });
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+    expect(button).not.toHaveClass('bg-yellow-400');
 
     const user = userEvent.setup();
     await user.click(button);
 
-    expect(button).toHaveAttribute("aria-pressed", "false");
-    expect(button).not.toHaveClass("bg-yellow-400");
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+    expect(button).not.toHaveClass('bg-yellow-400');
     expect(mockToggleFavorite).not.toHaveBeenCalled();
   });
 });

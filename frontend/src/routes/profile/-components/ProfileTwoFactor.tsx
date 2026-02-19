@@ -1,4 +1,4 @@
-import { type Control, Controller } from "react-hook-form";
+import { type Control, Controller } from 'react-hook-form';
 import {
   Alert,
   Box,
@@ -8,11 +8,11 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import BackButton from "@/components/ui/BackButton";
-import { useTwoFactorHook } from "@/routes/auth/-hooks/use2FAHook";
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
+import BackButton from '@/components/ui/BackButton';
+import { useTwoFactorHook } from '@/routes/auth/-hooks/use2FAHook';
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 
 import {
   alertStylesProfile,
@@ -22,15 +22,13 @@ import {
   profile2FAWithCard,
   qrlFormStyles,
   successAlertStylesProfile,
-} from "../-utils/profileStyles";
+} from '../-utils/profileStyles';
 
 const statusAlertStyles = (enabled: boolean) => ({
-  bgcolor: enabled ? "rgba(34, 197, 94, 0.1)" : "rgba(59, 130, 246, 0.1)",
-  color: enabled ? "#22c55e" : "#3b82f6",
-  border: `1px solid ${
-    enabled ? "rgba(34, 197, 94, 0.3)" : "rgba(59, 130, 246, 0.3)"
-  }`,
-  "& .MuiAlert-icon": { color: enabled ? "#22c55e" : "#3b82f6" },
+  bgcolor: enabled ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+  color: enabled ? '#22c55e' : '#3b82f6',
+  border: `1px solid ${enabled ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+  '& .MuiAlert-icon': { color: enabled ? '#22c55e' : '#3b82f6' },
 });
 
 export default function ProfileTwoFactor() {
@@ -49,13 +47,13 @@ export default function ProfileTwoFactor() {
       justifyContent="center"
       sx={{ px: 2, mt: 5 }}
     >
-      <Box sx={{ maxWidth: 520, width: "100%" }}>
+      <Box sx={{ maxWidth: 520, width: '100%' }}>
         <Box sx={{ mb: 2 }}>
           <BackButton />
         </Box>
         <Paper elevation={6} sx={profile2FAWithCard}>
           <Stack spacing={3}>
-            <Typography variant="h5" fontWeight={600} sx={{ color: "white" }}>
+            <Typography variant="h5" fontWeight={600} sx={{ color: 'white' }}>
               Two-Factor Authentication
             </Typography>
 
@@ -65,19 +63,19 @@ export default function ProfileTwoFactor() {
               </Box>
             ) : (
               <>
-                <Typography sx={{ color: "#a1a1aa", lineHeight: 1.6 }}>
-                  Additional login verification will protect your account. After
-                  enabling, use a code generator app (such as Google
-                  Authenticator or Authy) to verify login.
+                <Typography sx={{ color: '#a1a1aa', lineHeight: 1.6 }}>
+                  Additional login verification will protect your account. After enabling,
+                  use a code generator app (such as Google Authenticator or Authy) to
+                  verify login.
                 </Typography>
 
                 <Alert
-                  severity={twoFactor.isTwoFactorEnabled ? "success" : "info"}
+                  severity={twoFactor.isTwoFactorEnabled ? 'success' : 'info'}
                   sx={statusAlertStyles(twoFactor.isTwoFactorEnabled)}
                 >
                   {twoFactor.isTwoFactorEnabled
-                    ? "2FA enabled — a code from the app will be required when logging in."
-                    : "2FA disabled — enable for additional protection."}
+                    ? '2FA enabled — a code from the app will be required when logging in.'
+                    : '2FA disabled — enable for additional protection.'}
                 </Alert>
 
                 {twoFactor.errorMessage !== null && (
@@ -105,11 +103,11 @@ export default function ProfileTwoFactor() {
                     {twoFactor.qrUrl === null && (
                       <Button
                         variant="contained"
-                        onClick={() => void twoFactor.handleStartSetup()}
+                        onClick={() => twoFactor.handleStartSetup()}
                         disabled={twoFactor.isRequesting}
                         sx={buttonQrlStyles}
                       >
-                        {twoFactor.isRequesting ? "Loading..." : "Enable 2FA"}
+                        {twoFactor.isRequesting ? 'Loading...' : 'Enable 2FA'}
                       </Button>
                     )}
 
@@ -118,7 +116,7 @@ export default function ProfileTwoFactor() {
                         qrUrl={twoFactor.qrUrl}
                         control={twoFactor.control}
                         error={twoFactor.codeFormErrors.code?.message}
-                        onSubmit={(e) => void twoFactor.handleConfirmSetup(e)}
+                        onSubmit={(e) => twoFactor.handleConfirmSetup(e)}
                         isVerifying={twoFactor.isVerifying}
                       />
                     )}
@@ -127,9 +125,9 @@ export default function ProfileTwoFactor() {
 
                 {twoFactor.isTwoFactorEnabled === true && (
                   <Stack spacing={2}>
-                    <Typography sx={{ color: "rgba(255, 255, 255, 0.9)" }}>
-                      To disable 2FA, enter the current code from the app and
-                      confirm the action.
+                    <Typography sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+                      To disable 2FA, enter the current code from the app and confirm the
+                      action.
                     </Typography>
 
                     {!twoFactor.disableMode ? (
@@ -144,7 +142,7 @@ export default function ProfileTwoFactor() {
                       <DisableForm
                         control={twoFactor.control}
                         error={twoFactor.codeFormErrors.code?.message}
-                        onSubmit={(e) => void twoFactor.handleDisableSubmit(e)}
+                        onSubmit={(e) => twoFactor.handleDisableSubmit(e)}
                         onCancel={twoFactor.handleCancelDisable}
                         isDisabling={twoFactor.isDisabling}
                       />
@@ -174,7 +172,7 @@ function CodeInput({ control, error }: CodeInputProps) {
         <TextField
           {...field}
           label="6-digit code"
-          inputProps={{ inputMode: "numeric", maxLength: 6 }}
+          inputProps={{ inputMode: 'numeric', maxLength: 6 }}
           fullWidth
           autoFocus
           error={Boolean(error)}
@@ -194,31 +192,20 @@ type QrCodeSetupProps = {
   isVerifying: boolean;
 };
 
-function QrCodeSetup({
-  qrUrl,
-  control,
-  error,
-  onSubmit,
-  isVerifying,
-}: QrCodeSetupProps) {
+function QrCodeSetup({ qrUrl, control, error, onSubmit, isVerifying }: QrCodeSetupProps) {
   return (
     <Stack spacing={2} alignItems="center">
-      <Typography sx={{ color: "rgba(255, 255, 255, 0.9)" }}>
+      <Typography sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>
         Scan the QR code in the app:
       </Typography>
 
-      <Box
-        component="img"
-        src={qrUrl}
-        alt="QR code for 2FA"
-        sx={qrlFormStyles}
-      />
+      <Box component="img" src={qrUrl} alt="QR code for 2FA" sx={qrlFormStyles} />
 
-      <Typography variant="body2" sx={{ color: "#a1a1aa" }}>
+      <Typography variant="body2" sx={{ color: '#a1a1aa' }}>
         Then enter the code from the app to complete setup.
       </Typography>
 
-      <Box component="form" onSubmit={onSubmit} sx={{ width: "100%" }}>
+      <Box component="form" onSubmit={onSubmit} sx={{ width: '100%' }}>
         <Stack spacing={2}>
           <CodeInput control={control} error={error} />
           <Button
@@ -227,7 +214,7 @@ function QrCodeSetup({
             disabled={isVerifying}
             sx={buttonQrlStyles}
           >
-            {isVerifying ? "Verifying..." : "Confirm"}
+            {isVerifying ? 'Verifying...' : 'Confirm'}
           </Button>
         </Stack>
       </Box>
@@ -260,18 +247,18 @@ function DisableForm({
             variant="contained"
             disabled={isDisabling}
             sx={{
-              backgroundColor: "#f87171",
-              "&:hover": { backgroundColor: "#ef4444" },
+              backgroundColor: '#f87171',
+              '&:hover': { backgroundColor: '#ef4444' },
             }}
           >
-            {isDisabling ? "Disabling..." : "Confirm"}
+            {isDisabling ? 'Disabling...' : 'Confirm'}
           </Button>
           <Button
             variant="text"
             onClick={onCancel}
             sx={{
-              color: "rgba(255, 255, 255, 0.7)",
-              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+              color: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
             }}
           >
             Cancel

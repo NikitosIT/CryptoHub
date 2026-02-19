@@ -1,6 +1,6 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from '@mui/material';
 
-import { useAuthCallback } from "../-hooks/useAuthCallback";
+import { useAuthCallback } from '../-hooks/useAuthCallback';
 
 export default function AuthCallback() {
   const { isLoading, isProfileError } = useAuthCallback();
@@ -14,13 +14,13 @@ export default function AuthCallback() {
         justifyContent="center"
         gap={3}
         sx={{
-          height: "100vh",
-          bgcolor: "black",
-          color: "white",
+          height: '100vh',
+          bgcolor: 'black',
+          color: 'white',
         }}
       >
-        <CircularProgress sx={{ color: "#fb923c" }} />
-        <Typography variant="body1" sx={{ fontSize: { xs: "1rem", sm: "1.125rem" } }}>
+        <CircularProgress sx={{ color: '#fb923c' }} />
+        <Typography variant="body1" sx={{ fontSize: { xs: '1rem', sm: '1.125rem' } }}>
           Check profile...
         </Typography>
       </Box>
@@ -34,10 +34,10 @@ export default function AuthCallback() {
         alignItems="center"
         justifyContent="center"
         sx={{
-          height: "100vh",
-          bgcolor: "black",
-          color: "#ef4444",
-          fontSize: "0.875rem",
+          height: '100vh',
+          bgcolor: 'black',
+          color: '#ef4444',
+          fontSize: '0.875rem',
         }}
       >
         Profile loading failed. Redirecting…

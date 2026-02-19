@@ -1,28 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { useAuthState } from "@/routes/auth/-hooks/useAuthState";
-import { useCommentCreate } from "@/routes/posts/-comments/-api/useCommentCreate";
-import { useCommentUpdate } from "@/routes/posts/-comments/-api/useCommentUpdate";
-import type { CommentWithReplies } from "@/types/db";
+import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import { useCommentCreate } from '@/routes/posts/-comments/-api/useCommentCreate';
+import { useCommentDelete } from '@/routes/posts/-comments/-api/useCommentDelete';
+import { useCommentUpdate } from '@/routes/posts/-comments/-api/useCommentUpdate';
+import type { CommentWithReplies } from '@/types/db';
 
 export function useCommentsModal(postId: number) {
   const [replyingTo, setReplyingTo] = useState<CommentWithReplies | null>(null);
-  const [editingComment, setEditingComment] =
-    useState<CommentWithReplies | null>(null);
-  const [highlightedCommentId, setHighlightedCommentId] = useState<
-    number | null
-  >(null);
+  const [editingComment, setEditingComment] = useState<CommentWithReplies | null>(null);
+
+  const [deletingCommentId, setDeletingCommentId] = useState<number | null>(null);
+  const [highlightedCommentId, setHighlightedCommentId] = useState<number | null>(null);
 
   const createComment = useCommentCreate();
   const updateComment = useCommentUpdate();
+  const deleteComment = useCommentDelete();
+
   const { user } = useAuthState();
   const currentUserId = user?.id;
+
   const handleJumpToComment = (commentId: number) => {
     const element = document.getElementById(`comment-${commentId}`);
     if (element) {
       element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
+        behavior: 'smooth',
+        block: 'center',
       });
       setHighlightedCommentId(commentId);
     }
@@ -37,8 +40,7 @@ export function useCommentsModal(postId: number) {
       return;
     }
 
-    const hasContent =
-      text.trim() || mediaFiles?.length || existingMediaUrls?.length;
+    const hasContent = text.trim() || mediaFiles?.length || existingMediaUrls?.length;
     if (!hasContent) {
       return;
     }
@@ -83,6 +85,24 @@ export function useCommentsModal(postId: number) {
     setEditingComment(null);
   };
 
+  const handleDeleteClick = (commentId: number) => {
+    setDeletingCommentId(commentId);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (deletingCommentId !== null) {
+      deleteComment.mutate({
+        commentId: deletingCommentId,
+        postId,
+      });
+      setDeletingCommentId(null);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeletingCommentId(null);
+  };
+
   useEffect(() => {
     if (highlightedCommentId !== null) {
       const timer = setTimeout(() => {
@@ -95,9 +115,13 @@ export function useCommentsModal(postId: number) {
   return {
     replyingTo,
     editingComment,
+    deletingCommentId,
     handleSubmit,
     handleReplyClick,
     handleEditClick,
+    handleDeleteClick,
+    handleDeleteConfirm,
+    handleDeleteCancel,
     cancelReply,
     cancelEdit,
     handleJumpToComment,

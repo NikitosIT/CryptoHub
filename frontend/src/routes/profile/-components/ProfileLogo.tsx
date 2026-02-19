@@ -1,8 +1,8 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button } from '@mui/material';
 
-import { UserAvatar } from "@/components/ui/UserAvatar";
+import { UserAvatar } from '@/components/ui/UserAvatar';
 
-import { useUploadProfileLogo } from "../-api/useUploadProfileLogo";
+import { useUploadProfileLogo } from '../-api/useUploadProfileLogo';
 
 export default function ProfileLogo() {
   const { uploadLogo, isUploading } = useUploadProfileLogo();
@@ -12,7 +12,7 @@ export default function ProfileLogo() {
     if (!file) return;
 
     uploadLogo(file).catch((error) => {
-      console.error("Failed to upload profile logo:", error);
+      console.error('Failed to upload profile logo:', error);
     });
   };
   return (
@@ -24,16 +24,16 @@ export default function ProfileLogo() {
         component="label"
         disabled={isUploading}
         sx={{
-          borderColor: "#fb923c",
-          color: "#fb923c",
-          textTransform: "none",
-          "&:hover": {
-            borderColor: "#f97316",
-            backgroundColor: "rgba(251, 146, 60, 0.1)",
+          borderColor: '#fb923c',
+          color: '#fb923c',
+          textTransform: 'none',
+          '&:hover': {
+            borderColor: '#f97316',
+            backgroundColor: 'rgba(251, 146, 60, 0.1)',
           },
         }}
       >
-        {isUploading ? "Loading..." : "Change photo"}
+        {isUploading ? 'Loading...' : 'Change photo'}
         <input type="file" accept="image/*" hidden onChange={handleChange} />
       </Button>
     </Box>

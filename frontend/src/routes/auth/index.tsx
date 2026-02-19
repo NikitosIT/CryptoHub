@@ -1,20 +1,13 @@
-import {
-  Box,
-  Container,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { createFileRoute } from "@tanstack/react-router";
+import { Box, Container, Paper, Stack, TextField, Typography } from '@mui/material';
+import { createFileRoute } from '@tanstack/react-router';
 
-import { AuthButton } from "@/components/ui/AuthButton";
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { loginSearchSchema } from "@/lib/validatorSchemas";
-import AuthGoogle from "@/routes/auth/-components/AuthGoogle";
-import { useLogin } from "@/routes/auth/-hooks/useLogin";
+import { AuthButton } from '@/components/ui/AuthButton';
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { loginSearchSchema } from '@/lib/validatorSchemas';
+import AuthGoogle from '@/routes/auth/-components/AuthGoogle';
+import { useLogin } from '@/routes/auth/-hooks/useLogin';
 
-export const Route = createFileRoute("/auth/")({
+export const Route = createFileRoute('/auth/')({
   validateSearch: loginSearchSchema,
   beforeLoad: createRouteGuard({
     requireNoAuth: true,
@@ -27,23 +20,20 @@ export function EmailAuth() {
   const { register, handleSubmit, formErrors, isPending } = useLogin();
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ mt: { xs: 4, sm: 6, md: 10 }, px: { xs: 2, sm: 3 } }}
-    >
+    <Container maxWidth="lg" sx={{ mt: { xs: 4, sm: 6, md: 10 }, px: { xs: 2, sm: 3 } }}>
       <Stack
-        direction={{ xs: "column", md: "row" }}
+        direction={{ xs: 'column', md: 'row' }}
         spacing={{ xs: 4, sm: 5, md: 6 }}
         justifyContent="center"
-        alignItems={{ xs: "stretch", md: "flex-start" }}
+        alignItems={{ xs: 'stretch', md: 'flex-start' }}
       >
         <Paper
           sx={{
             p: { xs: 3, sm: 3.5, md: 4 },
             borderRadius: { xs: 2, sm: 2.5, md: 3 },
-            width: { xs: "100%", md: 400 },
-            bgcolor: "rgba(30, 30, 30, 0.8)",
-            color: "white",
+            width: { xs: '100%', md: 400 },
+            bgcolor: 'rgba(30, 30, 30, 0.8)',
+            color: 'white',
           }}
         >
           <Typography variant="h5" fontWeight={600} textAlign="center" mb={3}>
@@ -53,7 +43,7 @@ export function EmailAuth() {
           <Box
             component="form"
             onSubmit={(e) => {
-              void handleSubmit(e);
+              handleSubmit(e);
             }}
             display="flex"
             flexDirection="column"
@@ -62,17 +52,13 @@ export function EmailAuth() {
             <TextField
               label="Email"
               type="email"
-              {...register("email")}
+              {...register('email')}
               error={!!formErrors.email}
-              helperText={formErrors.email?.message || ""}
+              helperText={formErrors.email?.message || ''}
               fullWidth
             />
 
-            <AuthButton
-              type="submit"
-              isLoading={isPending}
-              loadingText="Sending..."
-            >
+            <AuthButton type="submit" isLoading={isPending} loadingText="Sending...">
               Get code
             </AuthButton>
           </Box>

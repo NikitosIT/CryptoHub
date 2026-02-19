@@ -1,10 +1,9 @@
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton } from '@mui/material';
 
-import { useCommentsModalPersistence } from "@/routes/posts/-comments/-hooks/useCommentsModalPersistence";
-import type { TelegramPost } from "@/types/db";
+import type { TelegramPost } from '@/types/db';
 
-import { commentOpenButtonStyles } from "../-utils/commentStyles";
-import { CommentModal } from "./CommentModal";
+import { useCommentsModalPersistence } from '../-store/useCommentsModalStore';
+import { CommentModal } from './CommentModal';
 
 interface CommentButtonProps {
   post: TelegramPost;
@@ -19,9 +18,7 @@ export function CommentOpenButton({ post }: CommentButtonProps) {
       <IconButton
         onClick={open}
         aria-label={
-          commentsCount > 0
-            ? `Open comments (${commentsCount})`
-            : "Open comments"
+          commentsCount > 0 ? `Open comments (${commentsCount})` : 'Open comments'
         }
         sx={commentOpenButtonStyles}
       >
@@ -30,13 +27,9 @@ export function CommentOpenButton({ post }: CommentButtonProps) {
           color="primary"
           overlap="circular"
           invisible={commentsCount === 0}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <Box
-            component="img"
-            src="/links_logo/comments.svg"
-            alt="Comments"
-          />
+          <Box component="img" src="/links_logo/comments.svg" alt="Comments" />
         </Badge>
       </IconButton>
 
@@ -44,3 +37,20 @@ export function CommentOpenButton({ post }: CommentButtonProps) {
     </>
   );
 }
+
+const commentOpenButtonStyles = {
+  color: 'grey.400',
+  transition: 'all 0.2s ease',
+  '& img': {
+    width: 30,
+    height: 30,
+    filter: 'brightness(0) saturate(100%) invert(60%)',
+    transition: 'filter 0.2s ease',
+  },
+  '&:hover': {
+    color: 'common.white',
+    '& img': {
+      filter: 'brightness(0) saturate(100%) invert(100%)',
+    },
+  },
+};
