@@ -38,9 +38,19 @@ export function CommentHeader({ comment }: CommentProps) {
         }}
       >
         {formatRelativeTime(createdAt)}
-        {updatedAt !== createdAt && ' (edited)'}
+        {isEdited(createdAt, updatedAt) && ' (edited)'}
       </Typography>
     </Stack>
+  );
+}
+
+const EDITED_THRESHOLD_MS = 1000;
+
+function isEdited(createdAt: string, updatedAt: string): boolean {
+  if (createdAt === updatedAt) return false;
+  return (
+    Math.abs(new Date(updatedAt).getTime() - new Date(createdAt).getTime()) >
+    EDITED_THRESHOLD_MS
   );
 }
 
