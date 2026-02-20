@@ -97,9 +97,5 @@ export function useCommentUpdate() {
         getErrorMessage(err, 'Failed to update comment. Please try again later.'),
       );
     },
-
-    onSuccess: (_, __, context) => {
-      context.blobUrls.forEach((url) => URL.revokeObjectURL(url));
-    },
   });
 }

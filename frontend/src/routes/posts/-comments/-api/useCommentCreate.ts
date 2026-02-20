@@ -122,8 +122,6 @@ export function useCommentCreate() {
     },
 
     onSuccess: (response, { postId }, context) => {
-      context.blobUrls.forEach((url) => URL.revokeObjectURL(url));
-
       if (response.success && response.data) {
         const realComment = response.data as CommentWithReplies;
 
@@ -132,7 +130,7 @@ export function useCommentCreate() {
           (old) =>
             old?.map((comment) =>
               comment.id === context.optimisticCommentId
-                ? { ...realComment, replies: comment.replies }
+                ? { ...realComment, media: comment.media, replies: comment.replies }
                 : comment,
             ),
         );

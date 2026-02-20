@@ -27,22 +27,13 @@ export function NicknameForm({
   resetOnSuccess = false,
   containerSx,
 }: NicknameFormProps) {
-  const {
-    register,
-    handleSubmit,
-    errors,
-    isPending,
-    isDisabled,
-    isError,
-    error,
-    canChangeNickname,
-    nextChangeDate,
-  } = useNicknameForm({
-    defaultNickname,
-    onSuccess,
-    onError,
-    resetOnSuccess,
-  });
+  const { register, handleSubmit, errors, isPending, isDisabled, isError, error } =
+    useNicknameForm({
+      defaultNickname,
+      onSuccess,
+      onError,
+      resetOnSuccess,
+    });
 
   return (
     <Box
@@ -63,20 +54,7 @@ export function NicknameForm({
         error={!!errors.nickname || isError}
         helperText={errors.nickname?.message || error?.message || ' '}
         fullWidth
-        disabled={!canChangeNickname}
       />
-
-      {!canChangeNickname && nextChangeDate ? (
-        <Box
-          sx={{
-            fontSize: '0.875rem',
-            color: 'rgba(255, 255, 255, 0.7)',
-            textAlign: 'center',
-          }}
-        >
-          Next nickname change available: {nextChangeDate}
-        </Box>
-      ) : null}
 
       <AuthButton
         type="submit"

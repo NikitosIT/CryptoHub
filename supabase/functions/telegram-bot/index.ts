@@ -13,7 +13,12 @@ if (!SUPABASE_URL || !SERVICE_KEY || !TG_TOKEN) {
   Deno.exit(0);
 }
 const sb = createClient(SUPABASE_URL, SERVICE_KEY, {
-  global: { fetch: (url) => fetch(url) },
+  global: {
+    headers: {
+      apikey: SERVICE_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+    },
+  },
 });
 
 async function safeParse(req: Request) {

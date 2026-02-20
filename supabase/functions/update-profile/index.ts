@@ -48,32 +48,11 @@ Deno.serve(async (req) => {
 
     const { data: profile, error: profileErr } = await supabase
       .from("profiles")
-      .select("id, nickname, last_changed, profile_logo")
+      .select("id, nickname, profile_logo")
       .eq("id", userId)
       .maybeSingle();
 
     if (profileErr) throw profileErr;
-
-    if (nickname && profile?.last_changed) {
-      const lastChanged = new Date(profile.last_changed);
-      const now = new Date();
-      const daysSinceChange = Math.floor(
-        (now.getTime() - lastChanged.getTime()) / (1000 * 60 * 60 * 24),
-      );
-      const daysRequired = 14;
-
-      if (daysSinceChange < daysRequired) {
-        const nextChangeDate = new Date(lastChanged);
-        nextChangeDate.setDate(nextChangeDate.getDate() + daysRequired);
-        const nextChangeDateStr = nextChangeDate.toISOString().split("T")[0];
-
-        return errorResponse(
-          `You can only change your nickname once every 14 days. The next change is available: ${nextChangeDateStr}`,
-          400,
-          req,
-        );
-      }
-    }
 
     if (!profile) {
       const { error: insertErr } = await supabase.from("profiles").insert({
@@ -81,14 +60,9 @@ Deno.serve(async (req) => {
         nickname: nickname || null,
         profile_logo: profile_logo || null,
         created_at: new Date().toISOString(),
-        last_changed: new Date().toISOString(),
       });
 
       if (insertErr) throw insertErr;
-
-      const nextChangeDate = new Date();
-      nextChangeDate.setDate(nextChangeDate.getDate() + 14);
-      const nextChangeDateStr = nextChangeDate.toISOString().split("T")[0];
 
       return jsonResponse(
         {
@@ -96,7 +70,6 @@ Deno.serve(async (req) => {
           message: "Profile created successfully",
           nickname,
           profile_logo,
-          next_nickname_change_date: nextChangeDateStr,
         },
         200,
         req,
@@ -104,23 +77,13 @@ Deno.serve(async (req) => {
     }
 
     const updates: Record<string, string | null> = {};
-    let nextChangeDate: Date | null = null;
 
     if (nickname) {
       updates.nickname = nickname;
-      const newLastChanged = new Date();
-      updates.last_changed = newLastChanged.toISOString();
-      nextChangeDate = new Date(newLastChanged);
-      nextChangeDate.setDate(nextChangeDate.getDate() + 14);
-    } else if (profile.last_changed) {
-      const lastChanged = new Date(profile.last_changed);
-      nextChangeDate = new Date(lastChanged);
-      nextChangeDate.setDate(nextChangeDate.getDate() + 14);
     }
-
-    const oldProfileLogo = profile.profile_logo;
-
-    if (profile_logo) updates.profile_logo = profile_logo;
+    if (profile_logo) {
+      updates.profile_logo = profile_logo;
+    }
 
     const { error: updateErr } = await supabase
       .from("profiles")
@@ -128,6 +91,8 @@ Deno.serve(async (req) => {
       .eq("id", userId);
 
     if (updateErr) throw updateErr;
+
+    const oldProfileLogo = profile.profile_logo;
 
     if (profile_logo && oldProfileLogo && oldProfileLogo !== profile_logo) {
       const { data: otherProfiles, error: checkError } = await supabase
@@ -151,16 +116,11 @@ Deno.serve(async (req) => {
       }
     }
 
-    const nextChangeDateStr = nextChangeDate
-      ? nextChangeDate.toISOString().split("T")[0]
-      : null;
-
     return jsonResponse(
       {
         success: true,
         nickname: nickname ?? profile.nickname,
         profile_logo: profile_logo ?? profile.profile_logo,
-        next_nickname_change_date: nextChangeDateStr,
       },
       200,
       req,

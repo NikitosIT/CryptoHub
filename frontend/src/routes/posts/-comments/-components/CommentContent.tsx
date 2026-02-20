@@ -151,24 +151,30 @@ const commentContentReadMoreButtonStyles = {
   },
 };
 
+const MEDIA_SIZE = {
+  minWidth: { xs: 80, sm: 100 },
+  minHeight: { xs: 80, sm: 100 },
+  maxWidth: { xs: 150, sm: 200 },
+  maxHeight: { xs: 150, sm: 200 },
+};
+
 const commentContentMediaItemStyles = {
   position: 'relative',
   borderRadius: 1,
   overflow: 'hidden',
+  ...MEDIA_SIZE,
   '&:hover .comment-media-overlay': {
     backgroundColor: 'rgba(0,0,0,0.1)',
   },
 };
 
 const commentContentMediaImageStyles = {
-  maxWidth: { xs: 150, sm: 200 },
-  maxHeight: { xs: 150, sm: 200 },
-  objectFit: 'contain',
+  width: '100%',
+  height: '100%',
+  objectFit: 'contain' as const,
   border: '2px solid',
   borderColor: 'grey.800',
   borderRadius: 1,
-  minWidth: { xs: 80, sm: 100 },
-  minHeight: { xs: 80, sm: 100 },
   transition: 'border-color 0.2s ease',
   '&:hover': {
     borderColor: 'primary.light',
