@@ -1,6 +1,7 @@
 import { redirect } from '@tanstack/react-router';
 
 import { api } from '@/api';
+import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
 import { queryClient } from '@/main';
 
 interface GuardOptions {
@@ -55,7 +56,11 @@ export function createRouteGuard(options: GuardOptions = {}) {
       }
     }
     if (isSetNicknamePath && isAuthenticated) {
-      throwRedirect('/profile/');
+      const cached = queryClient.getQueryData<UserProfile | null>(profileQueryKey(user?.id));
+      const profile = cached ?? (await api.profile.get(user?.id));
+      if (profile?.nickname) {
+        throwRedirect('/profile/');
+      }
     }
 
     if (isVerify2FAPath && isAuthenticatedWith2FA) {

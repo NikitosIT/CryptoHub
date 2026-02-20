@@ -14,10 +14,7 @@ import type { FetchTelegramPostParams } from '@/routes/posts/-api/useListTelegra
 import type { CreateCommentParams } from '@/routes/posts/-comments/-api/useCommentCreate.ts';
 import type { UpdateCommentParams } from '@/routes/posts/-comments/-api/useCommentUpdate.ts';
 import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-api/useToggleReaction.ts';
-import type {
-  UpdateProfilePayload,
-  UpdateProfileResponse,
-} from '@/routes/profile/-api/useUpdateProfile.ts';
+import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
 import type { UserNotifications } from '@/routes/profile/-api/useUserNotifications.ts';
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { Author, CommentMedia, TelegramPost, Token } from '@/types/db';
@@ -336,8 +333,8 @@ async function uploadProfileLogo(file: File, encryption: string): Promise<void> 
   if (uploadError) throw uploadError;
 }
 
-function updateProfile(payload: UpdateProfilePayload): Promise<UpdateProfileResponse> {
-  return performFunctionRequest<UpdateProfileResponse>({
+function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
+  return performFunctionRequest<UpdateProfile>({
     functionName: 'update-profile',
     body: payload,
     requireAuth: true,

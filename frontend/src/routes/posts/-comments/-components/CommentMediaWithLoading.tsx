@@ -36,7 +36,7 @@ export function CommentMediaWithLoading({
   );
 
   useEffect(() => {
-    setStatus(getInitialStatus(src));
+    setStatus((prev) => (prev === 'loaded' ? 'loaded' : getInitialStatus(src)));
   }, [src]);
 
   if (!src) {

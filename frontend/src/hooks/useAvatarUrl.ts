@@ -6,6 +6,8 @@ import { getPublicAvatarUrl } from '@/utils/storage';
 
 import { useAuthState } from '../routes/auth/-hooks/useAuthState';
 
+const DEFAULT_AVATAR_PATH = '/others/man.png';
+
 export function useAvatarUrl() {
   const queryClient = useQueryClient();
   const { user } = useAuthState({
@@ -33,7 +35,7 @@ export function useAvatarUrl() {
       return getPublicAvatarUrl(localStorageCached.profile_logo);
     }
 
-    return null;
+    return DEFAULT_AVATAR_PATH;
   })();
 
   return {
