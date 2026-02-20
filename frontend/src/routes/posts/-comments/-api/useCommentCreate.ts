@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { organizeComments } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { UserProfile } from '@/routes/profile/-api/useUserProfile';
+import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
 import type { CommentMedia, CommentWithReplies } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
@@ -68,7 +68,7 @@ export function useCommentCreate() {
       await queryClient.cancelQueries({ queryKey });
 
       const previousComments = getPreviousCommentsList(queryClient, postId);
-      const profile = queryClient.getQueryData<UserProfile>(['profile']);
+      const profile = queryClient.getQueryData<UserProfile>(profileQueryKey(userId));
       const { media: optimisticMedia, blobUrls } = createBlobMediaFromFiles(mediaFiles);
 
       const optimisticCommentId = Date.now();

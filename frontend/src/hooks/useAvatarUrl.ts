@@ -6,7 +6,7 @@ import { getPublicAvatarUrl } from '@/utils/storage';
 
 import { useAuthState } from '../routes/auth/-hooks/useAuthState';
 
-const DEFAULT_AVATAR_PATH = '/others/man.png';
+export const DEFAULT_AVATAR_PATH = '/others/man.png';
 
 export function useAvatarUrl() {
   const queryClient = useQueryClient();

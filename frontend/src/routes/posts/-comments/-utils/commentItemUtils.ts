@@ -1,9 +1,10 @@
+import { DEFAULT_AVATAR_PATH } from '@/hooks/useAvatarUrl';
 import type { CommentWithReplies } from '@/types/db';
 import { getPublicAvatarUrl } from '@/utils/storage';
 
 export function getCommentAvatarUrl(comment: CommentWithReplies): string | null {
   const avatarUuid = comment.user?.raw_user_meta_data?.avatar_url;
-  return avatarUuid ? getPublicAvatarUrl(avatarUuid) : null;
+  return avatarUuid ? getPublicAvatarUrl(avatarUuid) : DEFAULT_AVATAR_PATH;
 }
 
 export function getCommentUserName(comment: CommentWithReplies | null): string {
