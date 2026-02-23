@@ -18,15 +18,6 @@ import { useTokensAiForecasts } from '@/routes/tokens/-api/useTokensAiForecasts'
 import { useSelectedToken } from '@/store/useFiltersStore';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-import {
-  buttonForecastStyles,
-  closeButtonSx,
-  dialogPaperSx,
-  forecastModalItemStyles,
-  forecastModalStyles,
-  SENTIMENT_COLORS,
-} from '../-utils/tokensStyles';
-
 interface TokenForecast {
   token_name: string;
   sentiment: string;
@@ -150,3 +141,90 @@ function ForecastContent({ forecast }: { forecast: TokenForecast }) {
     </Stack>
   );
 }
+
+const buttonForecastStyles = {
+  backgroundColor: '#0f0f0f',
+  color: '#fafafa',
+  border: '1px solid #262626',
+  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
+  '&:hover': {
+    backgroundColor: '#171717',
+    borderColor: '#404040',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
+  },
+  '&.Mui-disabled': {
+    backgroundColor: 'rgba(15, 15, 15, 0.6)',
+    color: 'rgba(250, 250, 250, 0.5)',
+    borderColor: '#262626',
+  },
+};
+
+const forecastModalStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  borderBottom: '1px solid #27272a',
+  pb: 2,
+  color: '#fff',
+};
+
+const forecastModalItemStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 2,
+  pt: 3,
+  color: '#fff',
+  overflowY: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: '4px',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
+  },
+};
+
+const SENTIMENT_COLORS: Record<
+  string,
+  { bgcolor: string; color: string; border: string }
+> = {
+  positive: {
+    bgcolor: 'rgba(34, 197, 94, 0.1)',
+    color: '#22c55e',
+    border: '1px solid rgba(34, 197, 94, 0.3)',
+  },
+  negative: {
+    bgcolor: 'rgba(239, 68, 68, 0.1)',
+    color: '#ef4444',
+    border: '1px solid rgba(239, 68, 68, 0.3)',
+  },
+  neutral: {
+    bgcolor: 'rgba(156, 163, 175, 0.1)',
+    color: '#9ca3af',
+    border: '1px solid rgba(156, 163, 175, 0.3)',
+  },
+};
+
+const dialogPaperSx = {
+  background: 'linear-gradient(to bottom, #18181b, #000)',
+  border: '1px solid #27272a',
+  borderRadius: '16px',
+  maxHeight: '80vh',
+  display: 'flex',
+  flexDirection: 'column',
+};
+
+const closeButtonSx = {
+  color: '#a1a1aa',
+  '&:hover': {
+    color: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+};

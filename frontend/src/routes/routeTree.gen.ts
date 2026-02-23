@@ -13,11 +13,13 @@ import { Route as PostsRouteImport } from './posts';
 import { Route as IndexRouteImport } from './index';
 import { Route as ProfileIndexRouteImport } from './profile/index';
 import { Route as HelpIndexRouteImport } from './help/index';
+import { Route as CalculatorIndexRouteImport } from './calculator/index';
 import { Route as AuthIndexRouteImport } from './auth/index';
 import { Route as ProfileTwofactorRouteImport } from './profile/twofactor';
 import { Route as ProfileNotificationsRouteImport } from './profile/notifications';
 import { Route as ProfileEditRouteImport } from './profile/edit';
-import { Route as ProfileBecameAnalyticRouteImport } from './profile/became-analytic';
+import { Route as CalculatorSpotRouteImport } from './calculator/spot';
+import { Route as CalculatorFuturesRouteImport } from './calculator/futures';
 import { Route as AuthVerify2faRouteImport } from './auth/verify-2fa';
 import { Route as AuthVerifyRouteImport } from './auth/verify';
 import { Route as AuthSetnicknameRouteImport } from './auth/setnickname';
@@ -43,6 +45,11 @@ const HelpIndexRoute = HelpIndexRouteImport.update({
   path: '/help/',
   getParentRoute: () => rootRouteImport,
 } as any);
+const CalculatorIndexRoute = CalculatorIndexRouteImport.update({
+  id: '/calculator/',
+  path: '/calculator/',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/auth/',
   path: '/auth/',
@@ -63,9 +70,14 @@ const ProfileEditRoute = ProfileEditRouteImport.update({
   path: '/profile/edit',
   getParentRoute: () => rootRouteImport,
 } as any);
-const ProfileBecameAnalyticRoute = ProfileBecameAnalyticRouteImport.update({
-  id: '/profile/became-analytic',
-  path: '/profile/became-analytic',
+const CalculatorSpotRoute = CalculatorSpotRouteImport.update({
+  id: '/calculator/spot',
+  path: '/calculator/spot',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const CalculatorFuturesRoute = CalculatorFuturesRouteImport.update({
+  id: '/calculator/futures',
+  path: '/calculator/futures',
   getParentRoute: () => rootRouteImport,
 } as any);
 const AuthVerify2faRoute = AuthVerify2faRouteImport.update({
@@ -96,11 +108,13 @@ export interface FileRoutesByFullPath {
   '/auth/setnickname': typeof AuthSetnicknameRoute;
   '/auth/verify': typeof AuthVerifyRoute;
   '/auth/verify-2fa': typeof AuthVerify2faRoute;
-  '/profile/became-analytic': typeof ProfileBecameAnalyticRoute;
+  '/calculator/futures': typeof CalculatorFuturesRoute;
+  '/calculator/spot': typeof CalculatorSpotRoute;
   '/profile/edit': typeof ProfileEditRoute;
   '/profile/notifications': typeof ProfileNotificationsRoute;
   '/profile/twofactor': typeof ProfileTwofactorRoute;
   '/auth/': typeof AuthIndexRoute;
+  '/calculator/': typeof CalculatorIndexRoute;
   '/help/': typeof HelpIndexRoute;
   '/profile/': typeof ProfileIndexRoute;
 }
@@ -111,11 +125,13 @@ export interface FileRoutesByTo {
   '/auth/setnickname': typeof AuthSetnicknameRoute;
   '/auth/verify': typeof AuthVerifyRoute;
   '/auth/verify-2fa': typeof AuthVerify2faRoute;
-  '/profile/became-analytic': typeof ProfileBecameAnalyticRoute;
+  '/calculator/futures': typeof CalculatorFuturesRoute;
+  '/calculator/spot': typeof CalculatorSpotRoute;
   '/profile/edit': typeof ProfileEditRoute;
   '/profile/notifications': typeof ProfileNotificationsRoute;
   '/profile/twofactor': typeof ProfileTwofactorRoute;
   '/auth': typeof AuthIndexRoute;
+  '/calculator': typeof CalculatorIndexRoute;
   '/help': typeof HelpIndexRoute;
   '/profile': typeof ProfileIndexRoute;
 }
@@ -127,11 +143,13 @@ export interface FileRoutesById {
   '/auth/setnickname': typeof AuthSetnicknameRoute;
   '/auth/verify': typeof AuthVerifyRoute;
   '/auth/verify-2fa': typeof AuthVerify2faRoute;
-  '/profile/became-analytic': typeof ProfileBecameAnalyticRoute;
+  '/calculator/futures': typeof CalculatorFuturesRoute;
+  '/calculator/spot': typeof CalculatorSpotRoute;
   '/profile/edit': typeof ProfileEditRoute;
   '/profile/notifications': typeof ProfileNotificationsRoute;
   '/profile/twofactor': typeof ProfileTwofactorRoute;
   '/auth/': typeof AuthIndexRoute;
+  '/calculator/': typeof CalculatorIndexRoute;
   '/help/': typeof HelpIndexRoute;
   '/profile/': typeof ProfileIndexRoute;
 }
@@ -144,11 +162,13 @@ export interface FileRouteTypes {
     | '/auth/setnickname'
     | '/auth/verify'
     | '/auth/verify-2fa'
-    | '/profile/became-analytic'
+    | '/calculator/futures'
+    | '/calculator/spot'
     | '/profile/edit'
     | '/profile/notifications'
     | '/profile/twofactor'
     | '/auth/'
+    | '/calculator/'
     | '/help/'
     | '/profile/';
   fileRoutesByTo: FileRoutesByTo;
@@ -159,11 +179,13 @@ export interface FileRouteTypes {
     | '/auth/setnickname'
     | '/auth/verify'
     | '/auth/verify-2fa'
-    | '/profile/became-analytic'
+    | '/calculator/futures'
+    | '/calculator/spot'
     | '/profile/edit'
     | '/profile/notifications'
     | '/profile/twofactor'
     | '/auth'
+    | '/calculator'
     | '/help'
     | '/profile';
   id:
@@ -174,11 +196,13 @@ export interface FileRouteTypes {
     | '/auth/setnickname'
     | '/auth/verify'
     | '/auth/verify-2fa'
-    | '/profile/became-analytic'
+    | '/calculator/futures'
+    | '/calculator/spot'
     | '/profile/edit'
     | '/profile/notifications'
     | '/profile/twofactor'
     | '/auth/'
+    | '/calculator/'
     | '/help/'
     | '/profile/';
   fileRoutesById: FileRoutesById;
@@ -190,11 +214,13 @@ export interface RootRouteChildren {
   AuthSetnicknameRoute: typeof AuthSetnicknameRoute;
   AuthVerifyRoute: typeof AuthVerifyRoute;
   AuthVerify2faRoute: typeof AuthVerify2faRoute;
-  ProfileBecameAnalyticRoute: typeof ProfileBecameAnalyticRoute;
+  CalculatorFuturesRoute: typeof CalculatorFuturesRoute;
+  CalculatorSpotRoute: typeof CalculatorSpotRoute;
   ProfileEditRoute: typeof ProfileEditRoute;
   ProfileNotificationsRoute: typeof ProfileNotificationsRoute;
   ProfileTwofactorRoute: typeof ProfileTwofactorRoute;
   AuthIndexRoute: typeof AuthIndexRoute;
+  CalculatorIndexRoute: typeof CalculatorIndexRoute;
   HelpIndexRoute: typeof HelpIndexRoute;
   ProfileIndexRoute: typeof ProfileIndexRoute;
 }
@@ -229,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/calculator/': {
+      id: '/calculator/';
+      path: '/calculator';
+      fullPath: '/calculator/';
+      preLoaderRoute: typeof CalculatorIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/auth/': {
       id: '/auth/';
       path: '/auth';
@@ -257,11 +290,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileEditRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    '/profile/became-analytic': {
-      id: '/profile/became-analytic';
-      path: '/profile/became-analytic';
-      fullPath: '/profile/became-analytic';
-      preLoaderRoute: typeof ProfileBecameAnalyticRouteImport;
+    '/calculator/spot': {
+      id: '/calculator/spot';
+      path: '/calculator/spot';
+      fullPath: '/calculator/spot';
+      preLoaderRoute: typeof CalculatorSpotRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/calculator/futures': {
+      id: '/calculator/futures';
+      path: '/calculator/futures';
+      fullPath: '/calculator/futures';
+      preLoaderRoute: typeof CalculatorFuturesRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/auth/verify-2fa': {
@@ -302,11 +342,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSetnicknameRoute: AuthSetnicknameRoute,
   AuthVerifyRoute: AuthVerifyRoute,
   AuthVerify2faRoute: AuthVerify2faRoute,
-  ProfileBecameAnalyticRoute: ProfileBecameAnalyticRoute,
+  CalculatorFuturesRoute: CalculatorFuturesRoute,
+  CalculatorSpotRoute: CalculatorSpotRoute,
   ProfileEditRoute: ProfileEditRoute,
   ProfileNotificationsRoute: ProfileNotificationsRoute,
   ProfileTwofactorRoute: ProfileTwofactorRoute,
   AuthIndexRoute: AuthIndexRoute,
+  CalculatorIndexRoute: CalculatorIndexRoute,
   HelpIndexRoute: HelpIndexRoute,
   ProfileIndexRoute: ProfileIndexRoute,
 };
