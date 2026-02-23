@@ -2,11 +2,16 @@ import { useMemo } from 'react';
 import { create } from 'zustand';
 
 import { type PostMode, usePostsMode } from '@/routes/posts/-hooks/usePostsMode';
-import type { Token } from '@/types/db';
+
+export interface SelectedToken {
+  label: string;
+  value: string;
+  imageUrl: string;
+}
 
 interface FilterData {
   selectedAuthorId: number | null;
-  selectedToken: Token | null;
+  selectedToken: SelectedToken | null;
 }
 
 type FiltersByMode = Record<PostMode, FilterData>;
@@ -14,7 +19,7 @@ type FiltersByMode = Record<PostMode, FilterData>;
 interface FiltersStore {
   filters: FiltersByMode;
   setSelectedAuthorId: (mode: PostMode, id: number | null) => void;
-  setSelectedToken: (mode: PostMode, token: Token | null) => void;
+  setSelectedToken: (mode: PostMode, token: SelectedToken | null) => void;
 }
 
 const defaultFilterData: FilterData = {
@@ -28,7 +33,6 @@ export const useFiltersStore = create<FiltersStore>()((set) => ({
     liked: { ...defaultFilterData },
     disliked: { ...defaultFilterData },
     favorites: { ...defaultFilterData },
-    selectedToken: null,
   },
   setSelectedAuthorId: (mode, id) => {
     set((state) => ({
@@ -79,7 +83,7 @@ export function useSelectedToken() {
   return useMemo(
     () => ({
       selectedToken,
-      setSelectedToken: (token: Token | null) => setSelectedToken(mode, token),
+      setSelectedToken: (token: SelectedToken | null) => setSelectedToken(mode, token),
     }),
     [mode, selectedToken, setSelectedToken],
   );

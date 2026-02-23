@@ -7,10 +7,11 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PostsTelegram } from '@/routes/posts/-components/PostsTelegram';
-import type { Author, Token } from '@/types/db';
+import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens';
+import type { Author } from '@/types/db';
 
 const mockAuthorsList = vi.fn();
-const mockTokensList = vi.fn();
+const mockCryptoTokens = vi.fn();
 const mockPostsList = vi.fn();
 
 vi.mock('@/api', async (importOriginal) => {
@@ -25,7 +26,7 @@ vi.mock('@/api', async (importOriginal) => {
       },
       tokens: {
         ...mod.api.tokens,
-        list: () => mockTokensList(),
+        crypto: () => mockCryptoTokens(),
       },
       posts: {
         ...mod.api.posts,
@@ -49,13 +50,14 @@ const authorFromApi: Author = {
   id: -1001389304944,
 };
 
-const tokenFromApi: Token = {
-  label: 'XLM',
-  value: 'XLM',
-  cmc: 'https://coinmarketcap.com/currencies/stellar/',
-  coinglass: 'https://www.coinglass.com/ru/currencies/XLM',
-  homelink: 'https://https://stellar.org/',
-  xlink: 'https://x.com/StellarOrg',
+const tokenFromApi: CryptoTokens = {
+  id: 'stellar',
+  symbol: 'XLM',
+  name: 'Stellar',
+  image: 'https://assets.coingecko.com/coins/images/100/small/Stellar_symbol_black_RGB.png',
+  current_price: 0.12,
+  market_cap: 3_500_000_000,
+  market_cap_rank: 25,
 };
 
 function createWrapper() {
@@ -76,7 +78,7 @@ describe('Filters on main page (mocked api)', () => {
     vi.clearAllMocks();
     mockUsePostsMode.mockReturnValue({ mode: 'all' as const });
     mockAuthorsList.mockResolvedValue([authorFromApi]);
-    mockTokensList.mockResolvedValue([tokenFromApi]);
+    mockCryptoTokens.mockResolvedValue([tokenFromApi]);
     mockPostsList.mockResolvedValue([]);
   });
 
@@ -93,11 +95,11 @@ describe('Filters on main page (mocked api)', () => {
       expect(mockAuthorsList).toHaveBeenCalled();
     });
     await waitFor(() => {
-      expect(mockTokensList).toHaveBeenCalled();
+      expect(mockCryptoTokens).toHaveBeenCalled();
     });
 
     expect(mockAuthorsList).toHaveBeenCalledTimes(1);
-    expect(mockTokensList).toHaveBeenCalledTimes(1);
+    expect(mockCryptoTokens).toHaveBeenCalledTimes(1);
 
     await waitFor(() => {
       expect(
@@ -152,6 +154,6 @@ describe('Filters on main page (mocked api)', () => {
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
-    expect(screen.getByText(tokenFromApi.label)).toBeInTheDocument();
+    expect(screen.getByText(tokenFromApi.name)).toBeInTheDocument();
   });
 });

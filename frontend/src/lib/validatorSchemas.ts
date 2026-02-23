@@ -31,3 +31,20 @@ export const verifySearchSchema = z.object({
 export const loginSearchSchema = z.object({
   redirectTo: z.string().optional(),
 });
+
+export const calcSpotSchema = z.object({
+  entryPrice: z.number().positive('Price cannot be negative'),
+  margin: z.number().positive('Price cannot be negative'),
+  exitPrice: z.number().positive('Price cannot be negative'),
+});
+
+export type SpotFormData = z.infer<typeof calcSpotSchema>;
+
+export const calcFuturesSchema = z.object({
+  margin: z.number().positive(),
+  leverage: z.number().max(200).positive(),
+  entryPrice: z.number().positive(),
+  sellPrice: z.number().positive(),
+});
+
+export type FuturesFormData = z.infer<typeof calcFuturesSchema>;

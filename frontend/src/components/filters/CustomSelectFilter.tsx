@@ -1,5 +1,5 @@
 import type React from 'react';
-import { memo, useCallback, useMemo } from 'react';
+import { Children, forwardRef, memo, useCallback, useMemo } from 'react';
 import {
   Autocomplete,
   Box,
@@ -9,8 +9,43 @@ import {
   Typography,
 } from '@mui/material';
 import type { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
+import { List, type RowComponentProps } from 'react-window';
 
-import { AuthorImg, DropdownPaper, TokenImg } from './FilterImages';
+import { DropdownPaper, OptionImage } from './FilterImages';
+
+const ROW_HEIGHT = 42;
+const MAX_VISIBLE_ROWS = 8;
+
+interface VirtualRowData {
+  items: React.ReactNode[];
+}
+
+function VirtualRow({ index, style, items }: RowComponentProps<VirtualRowData>) {
+  return <div style={style}>{items[index]}</div>;
+}
+
+const VirtualizedListbox = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
+  function VirtualizedListbox(props, ref) {
+    const { children, ownerState, ...other } = props as React.HTMLAttributes<HTMLElement> & {
+      ownerState?: unknown;
+    };
+    const items = Children.toArray(children);
+    const height = Math.min(items.length, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
+
+    return (
+      <div ref={ref} {...other}>
+        <List<VirtualRowData>
+          rowCount={items.length}
+          rowHeight={ROW_HEIGHT}
+          rowProps={{ items }}
+          rowComponent={VirtualRow}
+          style={{ height }}
+          overscanCount={5}
+        />
+      </div>
+    );
+  },
+);
 
 interface SelectFilterProps<T> {
   label: string;
@@ -19,13 +54,13 @@ interface SelectFilterProps<T> {
   onChange: (value: T | null) => void;
   getOptionLabel?: (opt: T) => string;
   isOptionEqual?: (a: T, b: T) => boolean;
-  showLogos?: boolean;
 }
 
-type OptionType = {
+export type OptionType = {
   label: string;
   id?: number;
   value?: string;
+  imageUrl?: string;
 };
 
 function SelectFilter<T extends OptionType>({
@@ -33,7 +68,6 @@ function SelectFilter<T extends OptionType>({
   options,
   value,
   onChange,
-  showLogos,
 }: SelectFilterProps<T>) {
   const renderOption = useCallback(
     (props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
@@ -41,10 +75,7 @@ function SelectFilter<T extends OptionType>({
       return (
         <Box component="li" key={key} {...rest} sx={optionSx}>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            {showLogos ? <TokenImg label={option.label} /> : null}
-            {!showLogos && option.id !== undefined && (
-              <AuthorImg id={option.id} label={option.label} />
-            )}
+            <OptionImage option={option} />
             <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
               {option.label}
             </Typography>
@@ -52,22 +83,13 @@ function SelectFilter<T extends OptionType>({
         </Box>
       );
     },
-    [showLogos],
+    [],
   );
 
   const startAdornment = useMemo(() => {
     if (!value) return null;
-
-    if (showLogos) {
-      return <TokenImg label={value.label} />;
-    }
-
-    if (value.id != null) {
-      return <AuthorImg id={value.id} label={value.label} />;
-    }
-
-    return null;
-  }, [value, showLogos]);
+    return <OptionImage option={value} />;
+  }, [value]);
 
   const renderInput = useCallback(
     (params: AutocompleteRenderInputParams) => (
@@ -97,7 +119,10 @@ function SelectFilter<T extends OptionType>({
       options={options}
       value={value}
       onChange={(_: unknown, val: T | null) => onChange(val)}
-      slots={{ paper: DropdownPaper }}
+      slots={{
+        paper: DropdownPaper,
+        listbox: VirtualizedListbox,
+      }}
       renderOption={renderOption}
       renderInput={renderInput}
       sx={autocompleteSx}

@@ -42,7 +42,6 @@ function FilterAuthors() {
         options={safeAuthors}
         value={selectedAuthor}
         onChange={handleChange}
-        showLogos={false}
       />
     </div>
   );

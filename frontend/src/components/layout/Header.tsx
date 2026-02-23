@@ -20,6 +20,7 @@ export default function Header() {
   const location = useLocation();
   const isProfilePath = location.pathname.startsWith('/profile');
   const isAuthPath = location.pathname.startsWith('/auth');
+  const isCalculator = location.pathname.startsWith('/calculator');
 
   const shouldShowLogin =
     !isLoading && !isProfilePath && (!isAuthenticatedWith2FA || hasPendingTwoFactor);
@@ -47,6 +48,24 @@ export default function Header() {
   return (
     <header className="relative px-4 mt-2 mb-4 sm:mt-3 sm:mb-6">
       {shouldShowHelp ? <Helper onHelpClick={onHelpClick} /> : null}
+      {!isCalculator ? (
+        <nav
+          className="absolute top-0 flex items-center h-full left-6 sm:left-4"
+          aria-label="Calculator"
+        >
+          <Link
+            className="flex items-center text-white transition-colors hover:text-blue-400"
+            to="/calculator/spot"
+            aria-label="Calculator"
+          >
+            <img
+              className="object-contain w-7 h-7 sm:w-8 sm:h-8"
+              src="/others/calculator.png"
+              alt="Calculator"
+            />
+          </Link>
+        </nav>
+      ) : null}
       <div className="flex justify-center mb-3 sm:mb-4">
         <Link
           to="/"

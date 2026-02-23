@@ -2,7 +2,6 @@ import type { Session } from '@supabase/supabase-js';
 import { type QueryClient } from '@tanstack/react-query';
 
 import { ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES } from '@/constants/comments.ts';
-import { CMC_LINK, COINGLASS_LINK, HOME_LINK, X_LINK } from '@/constants/links';
 import {
   COMMENT_MEDIA_BUCKET,
   USER_AVATARS_BUCKET,
@@ -25,6 +24,7 @@ import {
   type TwoFactorStatusResponse,
 } from '../routes/auth/-api/use2faApi.ts';
 import { getRequestAuth, getSession } from './getSession';
+import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
 
 interface FunctionRequestOptions {
   functionName: string;
@@ -341,35 +341,6 @@ function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
   });
 }
 
-async function listTokens(): Promise<Token[]> {
-  const { data, error } = await supabase.from('cryptotokens').select('*').overrideTypes<
-    Array<{
-      token_name: string;
-      cmc_link: string;
-      home_link: string;
-      x_link: string;
-    }>
-  >();
-  if (error) {
-    throw error instanceof Error ? error : new Error(String(error));
-  }
-  return data.map(
-    (token: {
-      token_name: string;
-      cmc_link: string;
-      home_link: string;
-      x_link: string;
-    }) => ({
-      label: token.token_name,
-      value: token.token_name,
-      cmc: `${CMC_LINK}${token.cmc_link}`,
-      coinglass: `${COINGLASS_LINK}${token.token_name}`,
-      homelink: `${HOME_LINK}${token.home_link}`,
-      xlink: `${X_LINK}${token.x_link}`,
-    }),
-  );
-}
-
 async function getTokenForecast(
   tokenName: string,
 ): Promise<Record<string, unknown> | null> {
@@ -523,6 +494,14 @@ async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
   return calculateAuthState(session, true, twoFactorStatus);
 }
 
+export async function cryptoTokens(): Promise<CryptoTokens[]> {
+  return performFunctionRequest<CryptoTokens[]>({
+    functionName: 'crypto-tokens',
+    body: {},
+    requireAuth: false,
+  });
+}
+
 export const api = {
   comments: {
     create: createComment,
@@ -545,7 +524,7 @@ export const api = {
     clearVerification: clearTwoFactorVerification,
   },
   tokens: {
-    list: listTokens,
+    crypto: cryptoTokens,
     getForecast: getTokenForecast,
   },
   authors: {
