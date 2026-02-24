@@ -20,7 +20,6 @@ export default function Header() {
   const location = useLocation();
   const isProfilePath = location.pathname.startsWith('/profile');
   const isAuthPath = location.pathname.startsWith('/auth');
-  const isCalculator = location.pathname.startsWith('/calculator');
 
   const shouldShowLogin =
     !isLoading && !isProfilePath && (!isAuthenticatedWith2FA || hasPendingTwoFactor);
@@ -48,7 +47,7 @@ export default function Header() {
   return (
     <header className="relative px-4 mt-2 mb-4 sm:mt-3 sm:mb-6">
       {shouldShowHelp ? <Helper onHelpClick={onHelpClick} /> : null}
-      {!isCalculator ? (
+      {!isProfilePath ? (
         <nav
           className="absolute top-0 flex items-center h-full left-6 sm:left-4"
           aria-label="Calculator"
