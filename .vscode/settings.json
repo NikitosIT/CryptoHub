@@ -14,5 +14,8 @@
   "eslint.workingDirectories": [
     { "directory": "frontend", "changeProcessCWD": true },
     { "directory": "admin", "changeProcessCWD": true }
-  ]
+  ],
+  "deno.enable": true,
+  "deno.enablePaths": ["supabase/functions"],
+  "deno.importMap": "supabase/import_map.json"
 }
