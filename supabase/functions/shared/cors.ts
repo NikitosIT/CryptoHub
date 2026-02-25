@@ -3,7 +3,7 @@ const getAllowedOrigin = (requestOrigin: string | null): string => {
 
   if (!allowedOriginsEnv) {
     console.warn(
-      "⚠️ ALLOWED_ORIGINS not set. Using permissive CORS (development mode)."
+      "⚠️ ALLOWED_ORIGINS not set. Using permissive CORS (development mode).",
     );
     return requestOrigin || "*";
   }
@@ -25,7 +25,7 @@ const getAllowedOrigin = (requestOrigin: string | null): string => {
 };
 
 export function getCorsHeaders(
-  requestOrigin: string | null = null
+  requestOrigin: string | null = null,
 ): Record<string, string> {
   const allowedOrigin = getAllowedOrigin(requestOrigin);
 
@@ -51,7 +51,7 @@ export function getCorsHeadersWithJson(requestOrigin: string | null = null) {
 }
 
 export function handleOptions(
-  reqOrOrigin: Request | string | null = null
+  reqOrOrigin: Request | string | null = null,
 ): Response {
   const origin =
     reqOrOrigin instanceof Request
@@ -63,15 +63,3 @@ export function handleOptions(
     headers: getCorsHeaders(origin),
   });
 }
-
-export const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-};
-
-export const corsHeadersWithJson = {
-  ...corsHeaders,
-  "Content-Type": "application/json",
-};

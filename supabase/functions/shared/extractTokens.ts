@@ -59,7 +59,8 @@ export async function extractTokensLLM(text: string): Promise<string[]> {
   if (hasText) {
     content.push({
       type: "text",
-      text: `Задача: извлечь крипто-тикеры из текста и изображений. ` +
+      text:
+        `Задача: извлечь крипто-тикеры из текста и изображений. ` +
         `Верни только через функцию collect_tokens.\n\n` +
         `TEXT:\n${text}\n`,
     });
@@ -80,11 +81,10 @@ export async function extractTokensLLM(text: string): Promise<string[]> {
       content: "ПАМЯТКА: ответь ТОЛЬКО через вызов функции collect_tokens.",
     },
   ];
-  const tokens2 = await callOnce(retryMessages, /*forceTool*/ false);
+  const tokens2 = await callOnce(retryMessages, false);
   return postProcess(tokens2);
 }
 
-/** Один вызов chat.completions с вытаскиванием tool_calls */
 async function callOnce(
   messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
   forceTool: boolean,
@@ -110,13 +110,14 @@ async function callOnce(
     for (const call of msg.tool_calls) {
       if (call.type === "function" && call.function.name === "collect_tokens") {
         try {
-          const parsed = JSON.parse(call.function.arguments || "{}") as Partial<
-            CollectTokensArgs
-          >;
+          const parsed = JSON.parse(
+            call.function.arguments || "{}",
+          ) as Partial<CollectTokensArgs>;
           if (Array.isArray(parsed.tokens)) {
             out.push(...parsed.tokens.map(String));
           }
         } catch (_e) {
+          //catch
         }
       }
     }

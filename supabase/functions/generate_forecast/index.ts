@@ -30,9 +30,7 @@ async function tavilySearch(query: string, maxResults = 5) {
 
     if (!res.ok) {
       const errorText = await res.text().catch(() => "Unknown error");
-      throw new Error(
-        `Tavily search failed (${res.status}): ${errorText}`,
-      );
+      throw new Error(`Tavily search failed (${res.status}): ${errorText}`);
     }
     return await res.json();
   } catch (err) {
@@ -113,11 +111,13 @@ site:reddit.com
     );
   }
 
-  const sources = search.results
-    ?.map((r: { title?: string; url?: string }) =>
-      `• ${r.title || "Untitled"}\n${r.url || ""}`
-    )
-    .join("\n\n") ?? "Нет источников";
+  const sources =
+    search.results
+      ?.map(
+        (r: { title?: string; url?: string }) =>
+          `• ${r.title || "Untitled"}\n${r.url || ""}`,
+      )
+      .join("\n\n") ?? "Нет источников";
 
   const prompt = `
 Ты — профессиональный криптоаналитик и финансовый исследователь.
@@ -194,10 +194,9 @@ Sentiment: positive | neutral | negative
     ? sentimentMatch[1].toLowerCase()
     : "neutral";
 
-  const forecast = text.replace(
-    /Sentiment:\s*(positive|neutral|negative)/i,
-    "",
-  ).trim();
+  const forecast = text
+    .replace(/Sentiment:\s*(positive|neutral|negative)/i, "")
+    .trim();
 
   const { error: insertError } = await supabase.from("token_forecasts").insert([
     {
@@ -232,6 +231,7 @@ Deno.serve(async (req) => {
     try {
       json = await req.json();
     } catch (_) {
+      ///catch error
     }
 
     const token_name = json?.token_name?.trim();
@@ -250,7 +250,12 @@ Deno.serve(async (req) => {
       .select("token_name");
 
     if (error) throw error;
-    if (!tokens?.length) {
+
+    const tokenNames = (tokens ?? [])
+      .map((t) => t.token_name?.trim())
+      .filter((name): name is string => Boolean(name));
+
+    if (!tokenNames.length) {
       return jsonResponse({
         success: true,
         message: "No tokens found to process",
@@ -260,14 +265,14 @@ Deno.serve(async (req) => {
       });
     }
 
-    console.log(`🧠 Found ${tokens.length} tokens. Generating forecasts...`);
+    console.log(`🧠 Found ${tokenNames.length} tokens. Generating forecasts...`);
     let processed = 0;
     let skipped = 0;
     let failed = 0;
 
-    for (const t of tokens) {
+    for (const token_name of tokenNames) {
       try {
-        const result = await generateForecast(t.token_name);
+        const result = await generateForecast(token_name);
         if (result?.skipped) {
           skipped++;
         } else {
@@ -276,7 +281,7 @@ Deno.serve(async (req) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (err) {
         failed++;
-        safeLogError(err, `Ошибка генерации для ${t.token_name}`);
+        safeLogError(err, `Ошибка генерации для ${token_name}`);
       }
     }
 
@@ -286,7 +291,7 @@ Deno.serve(async (req) => {
       processed,
       skipped,
       failed,
-      total: tokens.length,
+      total: tokenNames.length,
     });
   } catch (err: unknown) {
     safeLogError(err, "Ошибка генерации прогноза");

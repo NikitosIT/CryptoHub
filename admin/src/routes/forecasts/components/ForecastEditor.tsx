@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TokenForecast } from "../types/admins";
+import type { TokenForecast } from "../../../types/admins";
 
 interface ForecastEditorProps {
   forecast: TokenForecast;

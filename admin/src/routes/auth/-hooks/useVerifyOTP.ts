@@ -1,11 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
-import { codeSchema } from "@/lib/validatorSchemas";
 import { useVerifyOtp } from "@/routes/auth/-api/signInWithOtp";
 import { useSessionQuery } from "@/api/useSessionQuery";
-
-import { useCodeForm } from "./useCodeForm";
 
 type OtpFormValues = { code: string };
 
@@ -17,7 +14,6 @@ type VerifySearchParams = {
 
 export function useVerifyOTP() {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   const search = useSearch({ from: "/auth/verify" }) as VerifySearchParams;
   const email: string | null = search.email ?? null;
   const isEmailLogin = search.mode === "email" || Boolean(email);
@@ -25,12 +21,6 @@ export function useVerifyOTP() {
   const verifyOtp = useVerifyOtp();
   const sessionQuery = useSessionQuery();
   const session = sessionQuery.data;
-
-  const {
-    control,
-    codeFormErrors: otpFormErrors,
-    handleSubmit,
-  } = useCodeForm({ schema: codeSchema });
 
   const isOtpSuccess = verifyOtp.isSuccess;
 
@@ -66,9 +56,7 @@ export function useVerifyOTP() {
   return {
     showOTPField,
     isAuthLoading: sessionQuery.isLoading,
-    control,
-    otpFormErrors,
     isOtpSubmitting: verifyOtp.isPending,
-    handleOtpSubmit: handleSubmit(onSubmit),
+    onSubmit,
   };
 }

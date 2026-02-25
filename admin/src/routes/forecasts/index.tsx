@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { useForecasts } from "@/api/useForecasts";
+import { useAdminAuth } from "@/routes/auth/-api/useAdminAuth";
+import { useForecastMutations } from "@/routes/forecasts/api/useForecastMutations";
+import { useForecasts } from "@/routes/forecasts/api/useForecasts";
 import { createRouteGuard } from "@/hooks/routeGuards";
 import { getSentimentStyles, getSentimentLabel } from "../../utils/sentiment";
-import { ForecastEditor } from "@/components/ForecastEditor";
+import { ForecastEditor } from "./components/ForecastEditor";
 
 export const Route = createFileRoute("/forecasts/")({
   beforeLoad: createRouteGuard({
@@ -16,20 +17,18 @@ export const Route = createFileRoute("/forecasts/")({
 export default function AdminForecastsWrapper() {
   const { authorized, logout } = useAdminAuth();
   const [editingId, setEditingId] = useState<number | null>(null);
-  const {
-    forecasts,
-    loading,
-    actionLoading,
-    error: forecastsError,
-    updateStatus,
-    updateText,
-  } = useForecasts(authorized, logout);
+  const { forecasts, loading, error: forecastsError } = useForecasts(
+    authorized,
+    logout,
+  );
+  const { updateStatus, updateText, actionLoading } =
+    useForecastMutations(logout);
 
   return (
     <div className="max-w-6xl min-h-screen p-4 mx-auto text-white bg-black sm:p-6 md:p-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-4xl font-bold text-white">
-          🧠 AI Прогнозы (Админка)
+          🧑‍💻 AI Прогнозы (Админка)
         </h1>
       </div>
 

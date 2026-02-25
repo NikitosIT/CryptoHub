@@ -1,14 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Controller } from "react-hook-form";
 import { z } from "zod";
 
 import { createRouteGuard } from "@/hooks/routeGuards";
 import { useVerifyOTP } from "@/routes/auth/-hooks/useVerifyOTP";
+import { useCodeForm } from "./-hooks/useCodeForm";
+import { codeSchema } from "@/lib/validatorSchemas";
 
 const verifySearchSchema = z.object({
   redirectTo: z.string().optional(),
   mode: z.literal("email").optional(),
-  email: z.string().email().optional(),
+  email: z.email(),
 });
 
 export const Route = createFileRoute("/auth/verify")({
@@ -20,14 +21,11 @@ export const Route = createFileRoute("/auth/verify")({
 });
 
 function VerifyEmailPage() {
-  const {
-    showOTPField,
-    control,
-    otpFormErrors,
-    isOtpSubmitting,
-    handleOtpSubmit,
-    isAuthLoading,
-  } = useVerifyOTP();
+  const { register, codeFormErrors, handleSubmit } = useCodeForm({
+    schema: codeSchema,
+  });
+  const { showOTPField, isOtpSubmitting, onSubmit, isAuthLoading } =
+    useVerifyOTP();
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-black">
@@ -41,7 +39,7 @@ function VerifyEmailPage() {
             <p className="text-sm">Verifying authentication...</p>
           </div>
         ) : (
-          <form onSubmit={handleOtpSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label
                 htmlFor="code"
@@ -49,30 +47,21 @@ function VerifyEmailPage() {
               >
                 Код подтверждения
               </label>
-              <Controller
-                control={control}
-                name="code"
-                render={({ field }) => (
-                  <input
-                    id="code"
-                    type="text"
-                    placeholder="Введите 6-значный код"
-                    value={field.value}
-                    onChange={(e) => {
-                      const value = e.target.value
-                        .replace(/\D/g, "")
-                        .slice(0, 6);
-                      field.onChange(value);
-                    }}
-                    disabled={isOtpSubmitting}
-                    maxLength={6}
-                    className="w-full p-3 text-2xl tracking-widest text-center text-white border rounded bg-white/5 border-orange-500/30 focus:outline-none focus:border-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  />
-                )}
+              <input
+                id="code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                disabled={isOtpSubmitting}
+                maxLength={6}
+                className="w-full p-3 text-2xl tracking-widest text-center text-white border rounded bg-white/5 border-orange-500/30 focus:outline-none focus:border-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                {...register("code", {
+                  setValueAs: (v) => (v ?? "").replace(/\D/g, "").slice(0, 6),
+                })}
               />
-              {otpFormErrors.code && (
+              {codeFormErrors.code && (
                 <p className="mt-1 text-sm text-red-400">
-                  {otpFormErrors.code.message}
+                  {codeFormErrors.code.message}
                 </p>
               )}
             </div>

@@ -12,27 +12,21 @@ function MainPage() {
         </p>
 
         <div className="grid gap-6 mt-12 sm:grid-cols-2">
-          <Link
-            to="/forecasts"
-            className="p-6 transition-all bg-gray-900 border rounded-xl border-orange-500/20 hover:border-orange-500/40 hover:bg-gray-800"
-          >
+          <Link to="/forecasts" className={linkStyles}>
             <div className="flex items-center gap-4 mb-4">
-              <div className="text-4xl">🧠</div>
+              <div className="text-4xl">🧑‍💻</div>
               <h2 className="text-2xl font-semibold text-orange-400">
                 AI Прогнозы
               </h2>
             </div>
             <p className="text-gray-400">
-              Просматривайте и управляйте прогнозами от AI. Одобряйте или
+              Просмотр и управление прогнозов от AI. Одобряйте, изменяйте или
               отклоняйте прогнозы перед публикацией.
             </p>
           </Link>
-          <Link
-            to="/notifications"
-            className="p-6 transition-all bg-gray-900 border rounded-xl border-orange-500/20 hover:border-orange-500/40 hover:bg-gray-800"
-          >
+          <Link to="/notifications" className={linkStyles}>
             <div className="flex items-center gap-4 mb-4">
-              <div className="text-4xl">🧠</div>
+              <div className="text-4xl">💬</div>
               <h2 className="text-2xl font-semibold text-orange-400">
                 Сообщения пользователям
               </h2>
@@ -41,6 +35,15 @@ function MainPage() {
               Отправляйте сообщения пользователям сайта
             </p>
           </Link>
+          <Link to="/tokens/" className={linkStyles}>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="text-4xl">🪙</div>
+              <h2 className="text-2xl font-semibold text-orange-400">
+                Список криптовалют
+              </h2>
+            </div>
+            <p className="text-gray-400">Для просмотра и создания прогноза</p>
+          </Link>
         </div>
       </div>
     </div>
@@ -48,3 +51,6 @@ function MainPage() {
 }
 
 export default MainPage;
+
+const linkStyles =
+  "p-6 transition-all bg-gray-900 border rounded-xl border-orange-500/20 hover:border-orange-500/40 hover:bg-gray-800";
