@@ -2,8 +2,8 @@ import type { Session } from "@supabase/supabase-js";
 
 import { supabase } from "@/lib/supabaseClient";
 import type { ForecastsResponse, CheckEmailResponse } from "@/types/admins";
-import { USER_AVATARS_BUCKET, USER_LOGO_PREFIX } from "@/constans/userLogo";
 import { useMutation } from "@tanstack/react-query";
+import { CryptoTokens } from "@/routes/tokens/api/useListCryptoTokens";
 
 interface FunctionRequestOptions {
   functionName: string;
@@ -201,6 +201,30 @@ async function listProfiles(): Promise<UserInfo[]> {
   return (data ?? []) as UserInfo[];
 }
 
+export async function cryptoTokens(): Promise<CryptoTokens[]> {
+  return performFunctionRequest<CryptoTokens[]>({
+    functionName: "crypto-tokens",
+    body: {},
+    requireAuth: true,
+  });
+}
+
+export function insertCryptoToken(tokenName: string) {
+  return performFunctionRequest({
+    functionName: "admin_cryptotokens",
+    body: { token_name: tokenName },
+    requireAuth: true,
+  });
+}
+
+export function insertCryptoTokens(tokenNames: string[]) {
+  return performFunctionRequest({
+    functionName: "admin_cryptotokens",
+    body: { token_names: tokenNames },
+    requireAuth: true,
+  });
+}
+
 export const api = {
   admin: {
     checkEmail: checkAdminEmail,
@@ -218,6 +242,11 @@ export const api = {
     verifyOtp,
     signOut,
     onStateChange: onAuthStateChange,
+  },
+  tokens: {
+    cryptoTokens,
+    insertOne: insertCryptoToken,
+    insertAll: insertCryptoTokens,
   },
 } as const;
 

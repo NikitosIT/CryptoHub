@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 
-import { useAdminAuth } from "@/hooks/useAdminAuth";
 import ThemeToggle from "./ThemeToggle";
+import { useAdminAuth } from "@/routes/auth/-api/useAdminAuth";
 
-function Header() {
+export default function Header() {
   const { authorized, logout } = useAdminAuth();
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -22,15 +22,20 @@ function Header() {
           <div className="flex items-center gap-6">
             <Link
               to="/"
-              className="text-2xl font-bold text-white transition-colors hover:text-orange-500 sm:text-3xl"
+              className="flex items-center gap-2 text-2xl font-bold text-white transition-colors hover:text-orange-500 sm:text-3xl"
             >
-              🧠 Admin Panel
+              <img
+                src="/free-icon-admin-with-cogwheels-78948.png"
+                alt="Admin"
+                className="w-8 h-8 sm:w-9 sm:h-9"
+              />
+              Admin Panel
             </Link>
             {authorized && (
               <nav className="hidden gap-4 sm:flex">
                 <Link
                   to="/forecasts"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-orange-500 hover:bg-gray-900"
+                  className={linkStyles}
                   activeProps={{
                     className: "text-orange-500 bg-gray-900",
                   }}
@@ -39,12 +44,21 @@ function Header() {
                 </Link>
                 <Link
                   to="/notifications"
-                  className="px-3 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-orange-500 hover:bg-gray-900"
+                  className={linkStyles}
                   activeProps={{
                     className: "text-orange-500 bg-gray-900",
                   }}
                 >
                   Notifications
+                </Link>
+                <Link
+                  to="/tokens/"
+                  className={linkStyles}
+                  activeProps={{
+                    className: "text-orange-500 bg-gray-900",
+                  }}
+                >
+                  Tokens
                 </Link>
               </nav>
             )}
@@ -63,7 +77,6 @@ function Header() {
         </div>
       </header>
 
-      {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
@@ -98,4 +111,5 @@ function Header() {
   );
 }
 
-export default Header;
+const linkStyles =
+  "px-3 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-orange-500 hover:bg-gray-900";

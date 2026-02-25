@@ -20,8 +20,6 @@ export type RawComment = {
   like_count?: number | string | null;
 };
 
-export { corsHeaders } from "../shared/cors.ts";
-
 export function parseNumber(value: unknown): number | null {
   if (value === null || value === undefined) return null;
   if (typeof value === "number" && Number.isFinite(value)) return value;

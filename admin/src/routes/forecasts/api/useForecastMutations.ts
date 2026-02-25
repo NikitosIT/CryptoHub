@@ -1,16 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
 import type { TokenForecast } from "@/types/admins";
 
-export const forecastsQueryKey = () => ["admin", "forecasts"] as const;
+import { isAuthError } from "../utils/utils";
+import { forecastsQueryKey } from "./useForecasts";
 
-const isAuthError = (error: unknown): boolean =>
-  error instanceof Error &&
-  (error.message.includes("Authentication required") ||
-    error.message.includes("Unauthorized"));
-
-export function useForecasts(authorized: boolean, onUnauthorized?: () => void) {
+export function useForecastMutations(onUnauthorized?: () => void) {
   const queryClient = useQueryClient();
 
   const handleAuthError = (error: unknown) => {
@@ -18,27 +14,6 @@ export function useForecasts(authorized: boolean, onUnauthorized?: () => void) {
       onUnauthorized?.();
     }
   };
-
-  const {
-    data: forecasts = [],
-    isLoading: loading,
-    error,
-  } = useQuery({
-    queryKey: forecastsQueryKey(),
-    queryFn: async () => {
-      const response = await api.admin.forecasts.list();
-      if (response.success && response.forecasts) {
-        return response.forecasts;
-      }
-      throw new Error(response.error || "Failed to load forecasts");
-    },
-    enabled: authorized,
-    retry: (_, err) => !isAuthError(err),
-    throwOnError: (err) => {
-      handleAuthError(err);
-      return false;
-    },
-  });
 
   const statusMutation = useMutation({
     mutationFn: async ({
@@ -73,19 +48,19 @@ export function useForecasts(authorized: boolean, onUnauthorized?: () => void) {
     onError: handleAuthError,
   });
 
+  const actionLoading =
+    (statusMutation.isPending && statusMutation.variables
+      ? statusMutation.variables.id
+      : null) ??
+    (textMutation.isPending && textMutation.variables
+      ? textMutation.variables.id
+      : null);
+
   return {
-    forecasts,
-    loading,
-    actionLoading:
-      statusMutation.isPending && statusMutation.variables
-        ? statusMutation.variables.id
-        : textMutation.isPending && textMutation.variables
-          ? textMutation.variables.id
-          : null,
-    error: error ? (error as Error).message : null,
     updateStatus: (id: number, status: "approved" | "rejected") =>
       statusMutation.mutateAsync({ id, status }),
     updateText: (id: number, text: string) =>
       textMutation.mutateAsync({ id, text }),
+    actionLoading,
   };
 }

@@ -11,6 +11,7 @@ interface UseCodeFormOptions {
 
 export function useCodeForm({ schema }: UseCodeFormOptions) {
   const {
+    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -28,6 +29,7 @@ export function useCodeForm({ schema }: UseCodeFormOptions) {
   const codeFormErrors: FieldErrors<CodeFormValues> = { code: errors.code };
 
   return {
+    register,
     control: control as Control<CodeFormValues>,
     codeFormErrors,
     codeValue,
@@ -36,4 +38,3 @@ export function useCodeForm({ schema }: UseCodeFormOptions) {
     reset,
   };
 }
-

@@ -56,7 +56,9 @@ export function createRouteGuard(options: GuardOptions = {}) {
       }
     }
     if (isSetNicknamePath && isAuthenticated) {
-      const cached = queryClient.getQueryData<UserProfile | null>(profileQueryKey(user?.id));
+      const cached = queryClient.getQueryData<UserProfile | null>(
+        profileQueryKey(user?.id),
+      );
       const profile = cached ?? (await api.profile.get(user?.id));
       if (profile?.nickname) {
         throwRedirect('/profile/');

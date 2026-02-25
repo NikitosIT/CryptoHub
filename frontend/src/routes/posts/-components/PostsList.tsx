@@ -4,6 +4,7 @@ import { PAGE_SIZE, useTelegramPosts } from '@/routes/posts/-api/useListTelegram
 import { useSelectedAuthorId } from '@/store/useFiltersStore';
 
 import FeedSkeleton from './FeedSkeleton';
+import NoPostsTokenMessage from './NoPostsMessage';
 import { PostCard } from './PostCard';
 
 export default function PostsList() {
@@ -67,6 +68,7 @@ export default function PostsList() {
           />
         </button>
       ) : null}
+      {posts.length === 0 && <NoPostsTokenMessage />}
     </div>
   );
 }

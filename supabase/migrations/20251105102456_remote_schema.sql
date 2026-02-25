@@ -84,7 +84,6 @@ select distinct
   p.like_count,
   p.dislike_count,
 
-  -- 🟢 текущая реакция пользователя (like/dislike)
   (
     select r.reaction_type
     from public.reactions r
@@ -93,7 +92,6 @@ select distinct
     limit 1
   ) as user_reaction,
 
-  -- 🟡 признак избранного
   exists (
     select 1
     from public.favorites f
@@ -107,7 +105,6 @@ left join public.cryptotokens ct on ct.token_name = any(p.crypto_tokens)
 where
   (p_cursor_created_at is null or (p.created_at, p.id) < (p_cursor_created_at, coalesce(p_cursor_id, 9223372036854775807)))
 
-  -- 🔹 фильтры по лайкам, дизлайкам и избранным
   and (
     (not p_only_liked and not p_only_disliked and not p_only_favorites)
     or (

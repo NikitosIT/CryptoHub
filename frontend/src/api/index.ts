@@ -16,7 +16,8 @@ import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-api/useTo
 import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
 import type { UserNotifications } from '@/routes/profile/-api/useUserNotifications.ts';
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
-import type { Author, CommentMedia, TelegramPost, Token } from '@/types/db';
+import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
+import type { Author, CommentMedia, TelegramPost } from '@/types/db';
 
 import {
   type EnableTwoFactorResponse,
@@ -24,7 +25,6 @@ import {
   type TwoFactorStatusResponse,
 } from '../routes/auth/-api/use2faApi.ts';
 import { getRequestAuth, getSession } from './getSession';
-import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
 
 interface FunctionRequestOptions {
   functionName: string;

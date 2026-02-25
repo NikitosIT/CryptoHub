@@ -1,5 +1,6 @@
 import type React from 'react';
-import { Children, forwardRef, memo, useCallback, useMemo } from 'react';
+import { Children, forwardRef, memo } from 'react';
+import { List, type RowComponentProps } from 'react-window';
 import {
   Autocomplete,
   Box,
@@ -9,7 +10,6 @@ import {
   Typography,
 } from '@mui/material';
 import type { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
-import { List, type RowComponentProps } from 'react-window';
 
 import { DropdownPaper, OptionImage } from './FilterImages';
 
@@ -26,9 +26,11 @@ function VirtualRow({ index, style, items }: RowComponentProps<VirtualRowData>) 
 
 const VirtualizedListbox = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
   function VirtualizedListbox(props, ref) {
-    const { children, ownerState, ...other } = props as React.HTMLAttributes<HTMLElement> & {
-      ownerState?: unknown;
-    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { children, ownerState, ...other } =
+      props as React.HTMLAttributes<HTMLElement> & {
+        ownerState?: unknown;
+      };
     const items = Children.toArray(children);
     const height = Math.min(items.length, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
 
@@ -69,51 +71,44 @@ function SelectFilter<T extends OptionType>({
   value,
   onChange,
 }: SelectFilterProps<T>) {
-  const renderOption = useCallback(
-    (props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key }, option: T) => {
-      const { key, ...rest } = props;
-      return (
-        <Box component="li" key={key} {...rest} sx={optionSx}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <OptionImage option={option} />
-            <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
-              {option.label}
-            </Typography>
-          </Stack>
-        </Box>
-      );
-    },
-    [],
+  const renderOption = (
+    props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
+    option: T,
+  ) => {
+    const { key, ...rest } = props;
+    return (
+      <Box component="li" key={key} {...rest} sx={optionSx}>
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <OptionImage option={option} />
+          <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
+            {option.label}
+          </Typography>
+        </Stack>
+      </Box>
+    );
+  };
+
+  const startAdornment = value ? <OptionImage option={value} /> : null;
+
+  const renderInput = (params: AutocompleteRenderInputParams) => (
+    <TextField
+      {...params}
+      label={label}
+      slotProps={{
+        input: {
+          ...params.InputProps,
+          startAdornment: (
+            <>
+              {startAdornment ? (
+                <InputAdornment position="start">{startAdornment}</InputAdornment>
+              ) : null}
+              {params.InputProps.startAdornment}
+            </>
+          ),
+        },
+      }}
+    />
   );
-
-  const startAdornment = useMemo(() => {
-    if (!value) return null;
-    return <OptionImage option={value} />;
-  }, [value]);
-
-  const renderInput = useCallback(
-    (params: AutocompleteRenderInputParams) => (
-      <TextField
-        {...params}
-        label={label}
-        slotProps={{
-          input: {
-            ...params.InputProps,
-            startAdornment: (
-              <>
-                {startAdornment ? (
-                  <InputAdornment position="start">{startAdornment}</InputAdornment>
-                ) : null}
-                {params.InputProps.startAdornment}
-              </>
-            ),
-          },
-        }}
-      />
-    ),
-    [label, startAdornment],
-  );
-
   return (
     <Autocomplete
       options={options}

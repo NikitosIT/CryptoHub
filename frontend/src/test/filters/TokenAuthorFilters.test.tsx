@@ -54,7 +54,8 @@ const tokenFromApi: CryptoTokens = {
   id: 'stellar',
   symbol: 'XLM',
   name: 'Stellar',
-  image: 'https://assets.coingecko.com/coins/images/100/small/Stellar_symbol_black_RGB.png',
+  image:
+    'https://assets.coingecko.com/coins/images/100/small/Stellar_symbol_black_RGB.png',
   current_price: 0.12,
   market_cap: 3_500_000_000,
   market_cap_rank: 25,
