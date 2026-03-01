@@ -5,7 +5,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    'Missing required environment variables: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY',
+    'Missing required environment variables: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY!',
   );
 }
 
