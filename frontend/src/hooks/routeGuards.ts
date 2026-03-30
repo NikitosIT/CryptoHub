@@ -29,6 +29,7 @@ export function createRouteGuard(options: GuardOptions) {
 
   return async ({ location }: { location: { pathname: string } }) => {
     const currentPath = location.pathname;
+    // TODO create seperate object ROUTES and write all routes into. Then use ROUTES instead of '/auth/verify-2fa' etc.
     const isVerify2FAPath = currentPath === '/auth/verify-2fa';
     const isSetNicknamePath = currentPath === '/auth/setnickname';
     const { user, isAuthenticatedWith2FA, hasPendingTwoFactor } =

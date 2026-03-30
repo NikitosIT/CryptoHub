@@ -23,8 +23,11 @@ import {
   commentsLikeRequests,
   commentsListRequests,
   commentsUpdateRequests,
+  createCommentHandler,
+  deleteCommentHandler,
+  listCommentsHandler,
   resetCommentsHandlersHistory,
-  userCommentsHandler,
+  updateCommentHandler,
 } from '@/test/mocks/commentsHandlers';
 import type { TelegramPost } from '@/types/db';
 
@@ -41,7 +44,13 @@ vi.mock('@/api/getSession', async (importOriginal) => {
   };
 });
 
-const server = setupServer(userCommentsHandler, commentsLikeHandler);
+const server = setupServer(
+  listCommentsHandler,
+  createCommentHandler,
+  updateCommentHandler,
+  deleteCommentHandler,
+  commentsLikeHandler,
+);
 
 function createWrapper(initialProfile?: { nickname: string | null }) {
   const queryClient = new QueryClient({

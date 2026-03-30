@@ -4,6 +4,7 @@ import { getSession } from '@/api/getSession';
 
 export const sessionQueryKey = () => ['session'] as const;
 
+// todo move to auth
 export function useSessionQuery() {
   return useQuery({
     queryKey: sessionQueryKey(),

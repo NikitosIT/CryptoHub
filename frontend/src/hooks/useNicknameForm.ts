@@ -4,7 +4,6 @@ import { z } from 'zod';
 
 import { nicknameSchema } from '@/lib/validatorSchemas';
 import { useUpdateProfile } from '@/routes/profile/-api/useUpdateProfile';
-
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import { useRequiredAuth } from '../routes/auth/-hooks/useRequiredAuth';

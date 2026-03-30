@@ -1,3 +1,4 @@
+import { env } from '@/config/env';
 import { COMMENT_MEDIA_BUCKET } from '@/constants/storage';
 import type { CommentMedia, CommentWithReplies } from '@/types/db';
 
@@ -21,7 +22,7 @@ export function getCommentMediaFullUrl(
     return url;
   }
 
-  return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${COMMENT_MEDIA_BUCKET}/${url}`;
+  return `${env.supabaseUrl}/storage/v1/object/public/${COMMENT_MEDIA_BUCKET}/${url}`;
 }
 
 function fileToMediaType(file: File): 'photo' | 'video' {

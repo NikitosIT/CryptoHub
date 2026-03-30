@@ -1,6 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import { type QueryClient } from '@tanstack/react-query';
 
+import { env } from '@/config/env';
 import { ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES } from '@/constants/comments.ts';
 import {
   COMMENT_MEDIA_BUCKET,
@@ -28,50 +29,43 @@ import {
 } from '../routes/auth/-api/use2faApi.ts';
 import { getRequestAuth, getSession } from './getSession';
 
-type Action = 'create' | 'update' | 'delete' | 'list';
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 interface FunctionRequestOptions<TBody = unknown> {
   functionName: string;
-  action?: Action;
+  method?: HttpMethod;
+  query?: Record<string, string>;
   body?: TBody;
   requireAuth?: boolean;
 }
 
-interface ImportMetaEnv {
-  VITE_SUPABASE_FUNCTIONS_URL?: string;
-  VITE_SUPABASE_URL?: string;
-  VITE_SUPABASE_ANON_KEY?: string;
-}
-
-async function performFunctionRequest<TResponse, TBody = unknown>({
+async function functionRequest<TResponse, TBody = unknown>({
   functionName,
-  action,
+  method = 'POST',
+  query,
   body,
   requireAuth = false,
 }: FunctionRequestOptions<TBody>): Promise<TResponse> {
-  const env = import.meta.env as ImportMetaEnv;
-  const functionsBaseUrl =
-    env.VITE_SUPABASE_FUNCTIONS_URL ??
-    (env.VITE_SUPABASE_URL ? `${env.VITE_SUPABASE_URL}/functions/v1` : undefined);
-  const anonKey = env.VITE_SUPABASE_ANON_KEY;
+  const { supabaseFunctionsUrl, supabaseAnonKey } = env;
 
-  if (!functionsBaseUrl) throw new Error('Functions URL is not set');
-  if (!anonKey) throw new Error('Anon key is not set');
-
-  const url = action
-    ? `${functionsBaseUrl}/${functionName}?action=${action}`
-    : `${functionsBaseUrl}/${functionName}`;
+  const params = query ? `?${new URLSearchParams(query)}` : '';
+  const url = `${supabaseFunctionsUrl}/${functionName}${params}`;
 
   const { accessToken } = await getRequestAuth();
   if (requireAuth && !accessToken) throw new Error('Authentication required');
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
-    apikey: anonKey,
-    Authorization: `Bearer ${accessToken ?? anonKey}`,
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${accessToken ?? supabaseAnonKey}`,
   };
 
-  const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  const hasBody = method !== 'GET' && body !== undefined;
+  const res = await fetch(url, {
+    method,
+    headers,
+    body: hasBody ? JSON.stringify(body) : undefined,
+  });
   const data: unknown = await res.json();
 
   if (!res.ok) {
@@ -130,9 +124,8 @@ function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
 
 function createComment(params: CreateCommentParams) {
   const { postId, text, parentCommentId, media } = params;
-  return performFunctionRequest<{ success: boolean; data: unknown }>({
+  return functionRequest<{ success: boolean; data: unknown }>({
     functionName: 'user-comments',
-    action: 'create',
     requireAuth: true,
     body: {
       post_id: postId,
@@ -145,9 +138,9 @@ function createComment(params: CreateCommentParams) {
 
 function updateComment(params: UpdateCommentParams) {
   const { commentId, text, media } = params;
-  return performFunctionRequest<{ success: boolean; data: unknown }>({
+  return functionRequest<{ success: boolean; data: unknown }>({
     functionName: 'user-comments',
-    action: 'update',
+    method: 'PATCH',
     requireAuth: true,
     body: {
       comment_id: commentId,
@@ -158,9 +151,9 @@ function updateComment(params: UpdateCommentParams) {
 }
 
 function deleteComment(commentId: number) {
-  return performFunctionRequest<{ success: boolean }>({
+  return functionRequest<{ success: boolean }>({
     functionName: 'user-comments',
-    action: 'delete',
+    method: 'DELETE',
     requireAuth: true,
     body: {
       comment_id: commentId,
@@ -169,17 +162,15 @@ function deleteComment(commentId: number) {
 }
 
 function listComments(postId: number) {
-  return performFunctionRequest<{ success: boolean; data: unknown[] }>({
+  return functionRequest<{ success: boolean; data: unknown[] }>({
     functionName: 'user-comments',
-    action: 'list',
-    body: {
-      post_id: postId,
-    },
+    method: 'GET',
+    query: { post_id: String(postId) },
   });
 }
 
 function toggleFavorite(postId: number) {
-  return performFunctionRequest<{ success: boolean }>({
+  return functionRequest<{ success: boolean }>({
     functionName: 'toggle-favorites',
     requireAuth: true,
     body: {
@@ -189,7 +180,7 @@ function toggleFavorite(postId: number) {
 }
 
 function toggleCommentsLike(commentId: number) {
-  return performFunctionRequest<{
+  return functionRequest<{
     success: boolean;
     status: 'added' | 'removed';
     like_count: number;
@@ -204,7 +195,7 @@ function toggleCommentsLike(commentId: number) {
 
 function toggleReactions(params: ToggleReactionsParams) {
   const { postId, reactionType } = params;
-  return performFunctionRequest<{ success: boolean }>({
+  return functionRequest<{ success: boolean }>({
     functionName: 'toggle-reactions',
     requireAuth: true,
     body: {
@@ -215,7 +206,7 @@ function toggleReactions(params: ToggleReactionsParams) {
 }
 
 function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
-  return performFunctionRequest<TwoFactorStatusResponse>({
+  return functionRequest<TwoFactorStatusResponse>({
     functionName: 'get-2fa-status',
     body: {},
     requireAuth: true,
@@ -223,7 +214,7 @@ function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
 }
 
 function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
-  return performFunctionRequest<EnableTwoFactorResponse>({
+  return functionRequest<EnableTwoFactorResponse>({
     functionName: 'enable-2fa',
     body: {},
     requireAuth: true,
@@ -233,7 +224,7 @@ function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
 function verifyTwoFactorSetup(code: string): Promise<{
   success?: boolean;
 }> {
-  return performFunctionRequest<{
+  return functionRequest<{
     success?: boolean;
   }>({
     functionName: 'verify-2fa-setup',
@@ -243,7 +234,7 @@ function verifyTwoFactorSetup(code: string): Promise<{
 }
 
 function verifyLogin2FA(code: string): Promise<VerifyLogin2FA> {
-  return performFunctionRequest<VerifyLogin2FA>({
+  return functionRequest<VerifyLogin2FA>({
     functionName: 'verify-login-2fa',
     body: { code },
     requireAuth: true,
@@ -253,7 +244,7 @@ function verifyLogin2FA(code: string): Promise<VerifyLogin2FA> {
 function disableTwoFactor(code: string): Promise<{
   success?: boolean;
 }> {
-  return performFunctionRequest<{ success?: boolean }>({
+  return functionRequest<{ success?: boolean }>({
     functionName: 'disable-2fa',
     body: { code },
     requireAuth: true,
@@ -267,7 +258,7 @@ export interface TwoFactorApiResponse {
 }
 
 function clearTwoFactorVerification(): Promise<TwoFactorApiResponse> {
-  return performFunctionRequest<TwoFactorApiResponse>({
+  return functionRequest<TwoFactorApiResponse>({
     functionName: 'clear-2fa-verification',
     body: {},
     requireAuth: true,
@@ -308,7 +299,7 @@ async function uploadProfileLogo(file: File, encryption: string): Promise<void> 
 }
 
 function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
-  return performFunctionRequest<UpdateProfile>({
+  return functionRequest<UpdateProfile>({
     functionName: 'update-profile',
     body: payload,
     requireAuth: true,
@@ -341,6 +332,7 @@ async function listAuthors(): Promise<Author[]> {
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
+  // TODO remove mapping
   return data.map((author: { author_name: string; tg_author_id: number }) => ({
     label: author.author_name,
     id: author.tg_author_id,
@@ -469,7 +461,7 @@ async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
 }
 
 export async function cryptoTokens(): Promise<CryptoTokens[]> {
-  return performFunctionRequest<CryptoTokens[]>({
+  return functionRequest<CryptoTokens[]>({
     functionName: 'crypto-tokens',
     body: {},
     requireAuth: false,

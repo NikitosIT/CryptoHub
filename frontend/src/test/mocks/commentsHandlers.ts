@@ -4,7 +4,7 @@ const BASE = 'http://localhost';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, apikey, Authorization',
 } as const;
 
@@ -95,60 +95,63 @@ const defaultListComment = createMockComment({
 
 let nextCommentId = 1000;
 
-export const userCommentsHandler = http.post(
+export const listCommentsHandler = http.get(
+  `${BASE}/user-comments`,
+  ({ request }) => {
+    const url = new URL(request.url);
+    const postId = Number(url.searchParams.get('post_id'));
+    const payload: CommentsListPayload = { post_id: postId };
+    commentsListRequests.push({ payload });
+    const response: CommentsListResponse = {
+      success: true,
+      data: [defaultListComment],
+    };
+    return HttpResponse.json(response, { headers: CORS_HEADERS });
+  },
+);
+
+export const createCommentHandler = http.post(
   `${BASE}/user-comments`,
   async ({ request }) => {
-    const url = new URL(request.url);
-    const action = url.searchParams.get('action');
-    const body = (await request.json()) as Record<string, unknown>;
+    const payload = (await request.json()) as CommentsCreatePayload;
+    commentsCreateRequests.push({ payload });
+    const comment: MockComment = createMockComment({
+      id: nextCommentId++,
+      post_id: payload.post_id,
+      parent_comment_id: payload.parent_comment_id,
+      text: payload.text,
+      media: payload.media,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
+    const response: CommentsCreateResponse = { success: true, data: comment };
+    return HttpResponse.json(response, { headers: CORS_HEADERS });
+  },
+);
 
-    if (action === 'list') {
-      const payload = body as unknown as CommentsListPayload;
-      commentsListRequests.push({ payload });
-      const response: CommentsListResponse = {
-        success: true,
-        data: [defaultListComment],
-      };
-      return HttpResponse.json(response, { headers: CORS_HEADERS });
-    }
+export const updateCommentHandler = http.patch(
+  `${BASE}/user-comments`,
+  async ({ request }) => {
+    const payload = (await request.json()) as CommentsUpdatePayload;
+    commentsUpdateRequests.push({ payload });
+    const comment: MockComment = createMockComment({
+      id: payload.comment_id,
+      text: payload.text,
+      media: payload.media,
+      updated_at: new Date().toISOString(),
+    });
+    const response: CommentsUpdateResponse = { success: true, data: comment };
+    return HttpResponse.json(response, { headers: CORS_HEADERS });
+  },
+);
 
-    if (action === 'create') {
-      const payload = body as unknown as CommentsCreatePayload;
-      commentsCreateRequests.push({ payload });
-      const comment: MockComment = createMockComment({
-        id: nextCommentId++,
-        post_id: payload.post_id,
-        parent_comment_id: payload.parent_comment_id,
-        text: payload.text,
-        media: payload.media,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
-      const response: CommentsCreateResponse = { success: true, data: comment };
-      return HttpResponse.json(response, { headers: CORS_HEADERS });
-    }
-
-    if (action === 'update') {
-      const payload = body as unknown as CommentsUpdatePayload;
-      commentsUpdateRequests.push({ payload });
-      const comment: MockComment = createMockComment({
-        id: payload.comment_id,
-        text: payload.text,
-        media: payload.media,
-        updated_at: new Date().toISOString(),
-      });
-      const response: CommentsUpdateResponse = { success: true, data: comment };
-      return HttpResponse.json(response, { headers: CORS_HEADERS });
-    }
-
-    if (action === 'delete') {
-      const payload = body as unknown as CommentsDeletePayload;
-      commentsDeleteRequests.push({ payload });
-      const response: CommentsDeleteResponse = { success: true };
-      return HttpResponse.json(response, { headers: CORS_HEADERS });
-    }
-
-    return HttpResponse.json({ error: 'unexpected action' }, { status: 400 });
+export const deleteCommentHandler = http.delete(
+  `${BASE}/user-comments`,
+  async ({ request }) => {
+    const payload = (await request.json()) as CommentsDeletePayload;
+    commentsDeleteRequests.push({ payload });
+    const response: CommentsDeleteResponse = { success: true };
+    return HttpResponse.json(response, { headers: CORS_HEADERS });
   },
 );
 
