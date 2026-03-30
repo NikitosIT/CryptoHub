@@ -1,6 +1,6 @@
 import { Box, type BoxProps } from '@mui/material';
 
-export interface SendIconProps extends Omit<BoxProps, 'component' | 'src' | 'alt'> {
+export interface SendIconProps extends BoxProps {
   size?: 'small' | 'medium' | 'large';
 }
 

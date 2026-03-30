@@ -18,3 +18,18 @@ export function getErrorMessage(
   }
   return fallback;
 }
+
+export function parseError(data: unknown): {
+  message: string;
+  remainingAttempts?: number;
+} {
+  if (typeof data === 'object' && data !== null) {
+    const d = data as Record<string, unknown>;
+    return {
+      message: typeof d.error === 'string' ? d.error : 'Request failed',
+      remainingAttempts:
+        typeof d.remainingAttempts === 'number' ? d.remainingAttempts : undefined,
+    };
+  }
+  return { message: 'Request failed' };
+}

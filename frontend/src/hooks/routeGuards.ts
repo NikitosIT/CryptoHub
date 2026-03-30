@@ -1,8 +1,8 @@
 import { redirect } from '@tanstack/react-router';
 
 import { api } from '@/api';
-import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
 import { queryClient } from '@/main';
+import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
 
 interface GuardOptions {
   requireAuth?: boolean;
@@ -11,7 +11,7 @@ interface GuardOptions {
   redirectTo?: string;
 }
 
-function throwRedirect(to: string): never {
+function throwRedirect(to: string) {
   // eslint-disable-next-line @typescript-eslint/only-throw-error
   throw redirect({
     to,
@@ -19,7 +19,7 @@ function throwRedirect(to: string): never {
   });
 }
 
-export function createRouteGuard(options: GuardOptions = {}) {
+export function createRouteGuard(options: GuardOptions) {
   const {
     requireAuth = false,
     requireNoAuth = false,

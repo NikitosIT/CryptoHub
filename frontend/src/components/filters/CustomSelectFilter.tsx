@@ -17,20 +17,20 @@ const ROW_HEIGHT = 42;
 const MAX_VISIBLE_ROWS = 8;
 
 interface VirtualRowData {
-  items: React.ReactNode[];
+  items: readonly React.ReactNode[];
 }
+
+type ListboxProps = React.HTMLAttributes<HTMLElement> & {
+  children?: React.ReactNode;
+  ownerState?: unknown;
+};
 
 function VirtualRow({ index, style, items }: RowComponentProps<VirtualRowData>) {
   return <div style={style}>{items[index]}</div>;
 }
 
-const VirtualizedListbox = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
-  function VirtualizedListbox(props, ref) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { children, ownerState, ...other } =
-      props as React.HTMLAttributes<HTMLElement> & {
-        ownerState?: unknown;
-      };
+const VirtualizedListbox = forwardRef<HTMLDivElement, ListboxProps>(
+  function VirtualizedListbox({ children, ...other }, ref) {
     const items = Children.toArray(children);
     const height = Math.min(items.length, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
 
@@ -49,8 +49,11 @@ const VirtualizedListbox = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLE
   },
 );
 
-interface SelectFilterProps<T> {
+type BaseOption = {
   label: string;
+};
+
+interface SelectFilterProps<T> extends BaseOption {
   options: T[];
   value: T | null;
   onChange: (value: T | null) => void;
@@ -58,26 +61,19 @@ interface SelectFilterProps<T> {
   isOptionEqual?: (a: T, b: T) => boolean;
 }
 
-export type OptionType = {
-  label: string;
-  id?: number;
-  value?: string;
+export type OptionType = BaseOption & {
+  id: number;
   imageUrl?: string;
 };
-
 function SelectFilter<T extends OptionType>({
   label,
   options,
   value,
   onChange,
 }: SelectFilterProps<T>) {
-  const renderOption = (
-    props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
-    option: T,
-  ) => {
-    const { key, ...rest } = props;
+  const renderOption = (props: React.HTMLAttributes<HTMLLIElement>, option: T) => {
     return (
-      <Box component="li" key={key} {...rest} sx={optionSx}>
+      <Box component="li" {...props} sx={optionSx}>
         <Stack direction="row" spacing={1.5} alignItems="center">
           <OptionImage option={option} />
           <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
@@ -113,7 +109,7 @@ function SelectFilter<T extends OptionType>({
     <Autocomplete
       options={options}
       value={value}
-      onChange={(_: unknown, val: T | null) => onChange(val)}
+      onChange={(_, val) => onChange(val)}
       slots={{
         paper: DropdownPaper,
         listbox: VirtualizedListbox,
@@ -125,7 +121,7 @@ function SelectFilter<T extends OptionType>({
   );
 }
 
-export default memo(SelectFilter) as typeof SelectFilter;
+export default memo(SelectFilter);
 
 const autocompleteSx = {
   width: '100%',

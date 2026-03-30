@@ -16,6 +16,13 @@ export type EnableTwoFactorResponse = {
   qrUrl: string;
 };
 
+export interface VerifyLogin2FA {
+  verified?: boolean;
+  is_verified_for_current_session?: boolean;
+  error?: string;
+  remainingAttempts?: number;
+}
+
 export const twoFactorStatusQueryKey = (userId?: string | null) =>
   ['twoFactorStatus', userId] as const;
 

@@ -18,81 +18,71 @@ import type { UserNotifications } from '@/routes/profile/-api/useUserNotificatio
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
 import type { Author, CommentMedia, TelegramPost } from '@/types/db';
+import { parseError } from '@/utils/errorUtils.ts';
 
 import {
   type EnableTwoFactorResponse,
   twoFactorStatusQueryKey,
   type TwoFactorStatusResponse,
+  type VerifyLogin2FA,
 } from '../routes/auth/-api/use2faApi.ts';
 import { getRequestAuth, getSession } from './getSession';
 
-interface FunctionRequestOptions {
+type Action = 'create' | 'update' | 'delete' | 'list';
+
+interface FunctionRequestOptions<TBody = unknown> {
   functionName: string;
-  action?: string;
-  body: unknown;
+  action?: Action;
+  body?: TBody;
   requireAuth?: boolean;
 }
 
-function performFunctionRequest<T>({
+interface ImportMetaEnv {
+  VITE_SUPABASE_FUNCTIONS_URL?: string;
+  VITE_SUPABASE_URL?: string;
+  VITE_SUPABASE_ANON_KEY?: string;
+}
+
+async function performFunctionRequest<TResponse, TBody = unknown>({
   functionName,
   action,
   body,
   requireAuth = false,
-}: FunctionRequestOptions): Promise<T> {
-  const functionsBaseUrl: string =
-    (import.meta.env.VITE_SUPABASE_FUNCTIONS_URL as string | undefined) ||
-    `${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1`;
+}: FunctionRequestOptions<TBody>): Promise<TResponse> {
+  const env = import.meta.env as ImportMetaEnv;
+  const functionsBaseUrl =
+    env.VITE_SUPABASE_FUNCTIONS_URL ??
+    (env.VITE_SUPABASE_URL ? `${env.VITE_SUPABASE_URL}/functions/v1` : undefined);
+  const anonKey = env.VITE_SUPABASE_ANON_KEY;
 
-  if (!functionsBaseUrl) {
-    throw new Error('VITE_SUPABASE_FUNCTIONS_URL or VITE_SUPABASE_URL must be set');
-  }
+  if (!functionsBaseUrl) throw new Error('Functions URL is not set');
+  if (!anonKey) throw new Error('Anon key is not set');
 
   const url = action
     ? `${functionsBaseUrl}/${functionName}?action=${action}`
     : `${functionsBaseUrl}/${functionName}`;
 
-  const promise = (async () => {
-    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-    if (!anonKey) {
-      throw new Error('VITE_SUPABASE_ANON_KEY is not set');
-    }
+  const { accessToken } = await getRequestAuth();
+  if (requireAuth && !accessToken) throw new Error('Authentication required');
 
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-      apikey: anonKey,
-    };
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    apikey: anonKey,
+    Authorization: `Bearer ${accessToken ?? anonKey}`,
+  };
 
-    const { accessToken } = await getRequestAuth();
-    const token = accessToken ?? anonKey;
-    headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  const data: unknown = await res.json();
 
-    if (requireAuth && !accessToken) {
-      throw new Error('Authentication required');
-    }
+  if (!res.ok) {
+    const errorInfo = parseError(data);
+    const error = new Error(errorInfo.message) as Error & { remainingAttempts?: number };
+    if (errorInfo.remainingAttempts !== undefined)
+      error.remainingAttempts = errorInfo.remainingAttempts;
+    throw error;
+  }
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    });
-
-    const data = (await res.json()) as {
-      error?: string;
-      remainingAttempts?: number;
-    } & T;
-    if (!res.ok) {
-      const error = new Error(data.error || 'Request failed') as Error & {
-        remainingAttempts?: number;
-      };
-      if (data.remainingAttempts !== undefined) {
-        error.remainingAttempts = data.remainingAttempts;
-      }
-      throw error;
-    }
-    return data as T;
-  })();
-
-  return promise;
+  return data as TResponse;
 }
 
 function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
@@ -101,12 +91,8 @@ function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
   }
 
   const uploadPromises = files.map(async (file) => {
-    const isImage = ALLOWED_IMAGE_TYPES.includes(
-      file.type as (typeof ALLOWED_IMAGE_TYPES)[number],
-    );
-    const isVideo = ALLOWED_VIDEO_TYPES.includes(
-      file.type as (typeof ALLOWED_VIDEO_TYPES)[number],
-    );
+    const isImage = ALLOWED_IMAGE_TYPES.includes(file.type);
+    const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type);
 
     if (!isImage && !isVideo) {
       throw new Error(
@@ -256,18 +242,8 @@ function verifyTwoFactorSetup(code: string): Promise<{
   });
 }
 
-function verifyLogin2FA(code: string): Promise<{
-  verified?: boolean;
-  is_verified_for_current_session?: boolean;
-  error?: string;
-  remainingAttempts?: number;
-}> {
-  return performFunctionRequest<{
-    verified?: boolean;
-    is_verified_for_current_session?: boolean;
-    error?: string;
-    remainingAttempts?: number;
-  }>({
+function verifyLogin2FA(code: string): Promise<VerifyLogin2FA> {
+  return performFunctionRequest<VerifyLogin2FA>({
     functionName: 'verify-login-2fa',
     body: { code },
     requireAuth: true,
@@ -284,16 +260,14 @@ function disableTwoFactor(code: string): Promise<{
   });
 }
 
-function clearTwoFactorVerification(): Promise<{
+export interface TwoFactorApiResponse {
   success: boolean;
   message?: string;
   error?: string;
-}> {
-  return performFunctionRequest<{
-    success: boolean;
-    message?: string;
-    error?: string;
-  }>({
+}
+
+function clearTwoFactorVerification(): Promise<TwoFactorApiResponse> {
+  return performFunctionRequest<TwoFactorApiResponse>({
     functionName: 'clear-2fa-verification',
     body: {},
     requireAuth: true,

@@ -6,10 +6,10 @@ export const ALLOWED_IMAGE_TYPES = [
   'image/png',
   'image/gif',
   'image/webp',
-] as const;
+] as readonly string[];
 export const ALLOWED_VIDEO_TYPES = [
   'video/mp4',
   'video/webm',
   'video/ogg',
   'video/quicktime',
-] as const;
+] as readonly string[];

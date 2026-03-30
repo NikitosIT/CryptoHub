@@ -1,4 +1,5 @@
 import { Paper, type PaperProps } from '@mui/material';
+
 import type { OptionType } from './CustomSelectFilter';
 
 export function AuthorImg({ id, label }: { id: number; label: string }) {
@@ -38,8 +39,5 @@ export function OptionImage({ option }: { option: OptionType }) {
       />
     );
   }
-  if (option.id !== undefined) {
-    return <AuthorImg id={option.id} label={option.label} />;
-  }
-  return null;
+  return <AuthorImg id={option.id} label={option.label} />;
 }
