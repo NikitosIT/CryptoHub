@@ -12,34 +12,27 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const action = url.searchParams.get("action");
-
-    if (!action) {
-      return errorResponse("Missing action parameter", 400, req);
-    }
-
-    const body = await parseRequestBody(req);
-
-    switch (action) {
-      case "create":
+    switch (req.method) {
+      case "GET": {
+        const url = new URL(req.url);
+        const postId = url.searchParams.get("post_id");
+        if (!postId) return errorResponse("Missing post_id", 400, req);
+        return await handleListComments(req, { post_id: Number(postId) });
+      }
+      case "POST": {
+        const body = await parseRequestBody(req);
         return await handleCreateComment(req, body);
-      case "update":
+      }
+      case "PATCH": {
+        const body = await parseRequestBody(req);
         return await handleUpdateComment(req, body);
-      case "delete":
+      }
+      case "DELETE": {
+        const body = await parseRequestBody(req);
         return await handleDeleteComment(req, body);
-      case "list":
-        try {
-          return await handleListComments(req, body);
-        } catch (err) {
-          if (err instanceof Response && err.status === 401) {
-            safeLogError("Unexpected 401 in listComments", "user-comments");
-            return errorResponse("Internal server error", 500, req);
-          }
-          throw err;
-        }
+      }
       default:
-        return errorResponse("Invalid action", 400, req);
+        return errorResponse("Method not allowed", 405, req);
     }
   } catch (err: unknown) {
     if (err instanceof Response) {
