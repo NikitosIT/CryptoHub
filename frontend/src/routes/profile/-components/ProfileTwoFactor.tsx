@@ -13,7 +13,7 @@ import {
 import BackButton from '@/components/ui/BackButton';
 import { useTwoFactorHook } from '@/routes/auth/-hooks/use2FAHook';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
-import type { Code } from '@/types/db';
+import type { OTPCode } from '@/types/db';
 
 import {
   alertStylesProfile,
@@ -160,7 +160,7 @@ export default function ProfileTwoFactor() {
 }
 
 export type ShareTwoFaProps = {
-  control: Control<{ code: Code }>;
+  control: Control<{ code: OTPCode }>;
   error?: string;
   onSubmit?: (e: React.FormEvent) => void;
 };

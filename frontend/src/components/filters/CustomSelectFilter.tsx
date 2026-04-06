@@ -61,11 +61,7 @@ interface SelectFilterProps<T> extends BaseOption {
   isOptionEqual?: (a: T, b: T) => boolean;
 }
 
-export type OptionType = BaseOption & {
-  id: number;
-  imageUrl?: string;
-};
-function SelectFilter<T extends OptionType>({
+function SelectFilter<T extends BaseOption>({
   label,
   options,
   value,
@@ -125,7 +121,7 @@ function SelectFilter<T extends OptionType>({
   );
 }
 
-export default memo(SelectFilter);
+export default memo(SelectFilter) as typeof SelectFilter;
 
 const autocompleteSx = {
   width: '100%',

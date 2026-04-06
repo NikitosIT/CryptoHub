@@ -45,7 +45,7 @@ export function useAuthCallback() {
     if (isAuthLoading || user?.id === undefined) return;
 
     if (!user.id) {
-      navigate({ to: ROUTES.AUTH.INDEX, replace: true });
+      navigate({ to: '/auth', replace: true });
       return;
     }
 

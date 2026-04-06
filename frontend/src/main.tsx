@@ -46,6 +46,12 @@ export const persister = createAsyncStoragePersister({
 export { queryClient };
 const router = createRouter({ routeTree });
 
+declare module '@tanstack/router-core' {
+  interface Register {
+    router: typeof router;
+  }
+}
+
 function RootWithProviders() {
   useAuthListener();
   return <RouterProvider router={router} />;

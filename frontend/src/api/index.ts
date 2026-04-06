@@ -22,7 +22,7 @@ import type { UserNotifications } from '@/routes/profile/-api/useUserNotificatio
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
 import type { TokenForecast } from '@/routes/tokens/-api/useTokensAiForecasts.ts';
-import type { Code, Email, TelegramPost } from '@/types/db';
+import type { Email, OTPCode, TelegramPost } from '@/types/db';
 import { parseError } from '@/utils/errorUtils.ts';
 
 import {
@@ -309,7 +309,7 @@ function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
   });
 }
 
-async function getTokenForecast(tokenName: string): Promise<TokenForecast | null> {
+async function getTokenForecast(tokenName: string) {
   if (!tokenName) return null;
 
   const { data, error } = await supabase
@@ -325,7 +325,7 @@ async function getTokenForecast(tokenName: string): Promise<TokenForecast | null
   return data[0] ?? null;
 }
 
-async function listAuthors(): Promise<Author[]> {
+async function listAuthors() {
   const { data, error } = await supabase
     .from('authors')
     .select('label:author_name, id:tg_author_id')
@@ -336,9 +336,7 @@ async function listAuthors(): Promise<Author[]> {
   return data;
 }
 
-async function fetchTelegramPost(
-  params: FetchTelegramPostParams,
-): Promise<TelegramPost[]> {
+async function fetchTelegramPost(params: FetchTelegramPostParams) {
   const {
     cursorCreatedAt,
     cursorId,
@@ -369,7 +367,7 @@ async function fetchTelegramPost(
   return data ?? [];
 }
 
-async function signInWithOtp(email: Email): Promise<string> {
+async function signInWithOtp(email: Email) {
   const { error } = await supabase.auth.signInWithOtp({ email });
   if (error) {
     throw new Error(error.message);
@@ -377,7 +375,7 @@ async function signInWithOtp(email: Email): Promise<string> {
   return email;
 }
 
-async function verifyOtp(email: Email, code: Code): Promise<Session> {
+async function verifyOtp(email: Email, code: OTPCode) {
   const { data, error } = await supabase.auth.verifyOtp({
     email,
     token: code,
@@ -390,7 +388,7 @@ async function verifyOtp(email: Email, code: Code): Promise<Session> {
   return data.session;
 }
 
-async function signOut(): Promise<void> {
+async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
@@ -404,7 +402,7 @@ function onAuthStateChange(callback: (event: string, session: Session | null) =>
   };
 }
 
-export async function getSession(): Promise<Session | null> {
+export async function getSession() {
   const { data: sessionData } = await supabase.auth.getSession();
   return sessionData.session ?? null;
 }
