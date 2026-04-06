@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { api } from '@/api';
 import { persister, queryClient } from '@/main';
 
-import { sessionQueryKey } from './useSessionQuery';
+import { sessionQueryKey } from '../-api/useSessionQuery';
 
 // TODO move to auth
 export function useAuthListener() {

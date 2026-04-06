@@ -1,13 +1,15 @@
-import { calcSpotSchema, type SpotFormData } from '@/lib/validatorSchemas';
-import { useSpotStore } from '@/routes/calculator/-store/useSpotStore';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
 
-import { CalculatorTabs } from './-layout/CalculatorTabs';
+import { ROUTES } from '@/constants/routesPath';
+import { calcSpotSchema, type SpotFormData } from '@/lib/validatorSchemas';
+import { useSpotStore } from '@/routes/calculator/-store/useSpotStore';
+
 import CalculatorButtons from './-layout/CalculatorButtons';
+import { CalculatorTabs } from './-layout/CalculatorTabs';
 
-export const Route = createFileRoute('/calculator/spot')({
+export const Route = createFileRoute(ROUTES.CALCULATOR.SPOT)({
   component: CalculatorSpot,
 });
 

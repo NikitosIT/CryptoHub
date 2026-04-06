@@ -30,7 +30,7 @@ function VirtualRow({ index, style, items }: RowComponentProps<VirtualRowData>) 
 }
 
 const VirtualizedListbox = forwardRef<HTMLDivElement, ListboxProps>(
-  function VirtualizedListbox({ children, ...other }, ref) {
+  function VirtualizedListbox({ children, ownerState: _ownerState, ...other }, ref) {
     const items = Children.toArray(children);
     const height = Math.min(items.length, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
 
@@ -71,9 +71,13 @@ function SelectFilter<T extends OptionType>({
   value,
   onChange,
 }: SelectFilterProps<T>) {
-  const renderOption = (props: React.HTMLAttributes<HTMLLIElement>, option: T) => {
+  const renderOption = (
+    liProps: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
+    option: T,
+  ) => {
+    const { key, ...restLiProps } = liProps;
     return (
-      <Box component="li" {...props} sx={optionSx}>
+      <Box component="li" key={key} {...restLiProps} sx={optionSx}>
         <Stack direction="row" spacing={1.5} alignItems="center">
           <OptionImage option={option} />
           <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>

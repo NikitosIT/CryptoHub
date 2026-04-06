@@ -1,6 +1,6 @@
-import { useLocation } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from '@tanstack/react-router';
+import { AnimatePresence, motion } from 'framer-motion';
 const spotHelpText = [
   { label: 'Margin', desc: 'Total amount you invest in USD.' },
   { label: 'Entry Price', desc: 'Current price of the token when you buy.' },

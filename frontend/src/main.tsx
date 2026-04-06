@@ -8,9 +8,9 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 
-import { useAuthListener } from './api/useAuthListener';
 import { ToastProvider } from './hooks/useToast';
 import { supabase } from './lib/supabaseClient';
+import { useAuthListener } from './routes/auth/-hooks/useAuthListener';
 import { routeTree } from './routes/routeTree.gen';
 import { theme } from './theme';
 

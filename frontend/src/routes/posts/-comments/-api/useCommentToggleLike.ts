@@ -4,10 +4,10 @@ import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { CommentWithReplies } from '@/types/db';
 import { debounceAsync } from '@/utils/debounceAsync';
 import { getErrorMessage } from '@/utils/errorUtils';
 
+import type { CommentWithReplies } from '../-types/comments-db';
 import { findCommentInCache } from '../-utils/commentCache';
 import { commentsListQueryKey } from './useCommentList';
 

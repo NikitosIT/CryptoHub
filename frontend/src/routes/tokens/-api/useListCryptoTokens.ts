@@ -1,5 +1,6 @@
-import { api } from '@/api';
 import { useQuery } from '@tanstack/react-query';
+
+import { api } from '@/api';
 
 export interface CryptoTokens {
   id: string;

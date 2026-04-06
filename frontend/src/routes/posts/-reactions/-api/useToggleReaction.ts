@@ -2,17 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/api';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import type { PostId } from '@/types/db';
 import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
 
 import { toggleReaction } from '../-hooks/useToggleReactionHook';
+import type { UserReaction } from '../-types/reactions-type';
 import { findPostInCache } from '../-utils/findPostInCache';
 import { updatePostInCache } from '../-utils/updatePostinCache';
 
-type UserReaction = 'like' | 'dislike' | null;
-export interface ToggleReactionsParams {
-  postId: number;
-  reactionType: UserReaction;
-}
 const initialReactionMap = new Map<string, UserReaction>();
 
 export function useToggleReaction() {
@@ -24,8 +21,8 @@ export function useToggleReaction() {
       postId,
       reactionType,
     }: {
-      postId: number;
-      reactionType: 'like' | 'dislike';
+      postId: PostId;
+      reactionType: UserReaction;
     }) => {
       const key = `${postId}:${user?.id}`;
 
@@ -58,14 +55,14 @@ export function useToggleReaction() {
       postId,
       reactionType,
     }: {
-      postId: number;
-      reactionType: 'like' | 'dislike';
+      postId: PostId;
+      reactionType: UserReaction;
     }) => {
       const key = `${postId}:${userId}`;
 
       if (!initialReactionMap.has(key)) {
         const post = findPostInCache(queryClient, postId);
-        initialReactionMap.set(key, post?.user_reaction ?? null);
+        initialReactionMap.set(key, post?.user_reaction);
       }
       updatePostInCache(queryClient, postId, (post) =>
         toggleReaction(post, reactionType),

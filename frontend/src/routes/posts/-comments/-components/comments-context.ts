@@ -1,9 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import type { CommentWithReplies } from '@/types/db';
+import type { PostId } from '@/types/db';
+
+import type { CommentWithReplies } from '../-types/comments-db';
 
 interface CommentContextType {
-  postId: number;
+  postId: PostId;
   handleSubmit: (text: string, mediaFiles?: File[], existingMediaUrls?: string[]) => void;
   replyingTo: CommentWithReplies | null;
   cancelReply: () => void;

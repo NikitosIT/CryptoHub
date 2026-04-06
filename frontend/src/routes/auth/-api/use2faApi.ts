@@ -7,18 +7,20 @@ type TwoFactorPayload = {
   userId?: string | null;
 };
 
-export type TwoFactorStatusResponse = {
-  enabled: boolean;
-  is_verified_for_current_session: boolean;
+type IsVerifyForCS = {
+  is_verified_for_current_session?: boolean;
 };
+
+export interface TwoFactorStatusResponse extends IsVerifyForCS {
+  enabled: boolean;
+}
 
 export type EnableTwoFactorResponse = {
   qrUrl: string;
 };
 
-export interface VerifyLogin2FA {
+export interface VerifyLogin2FA extends IsVerifyForCS {
   verified?: boolean;
-  is_verified_for_current_session?: boolean;
   error?: string;
   remainingAttempts?: number;
 }

@@ -1,7 +1,7 @@
 const DEFAULT_DELAY_MS = 500;
 
 interface PendingCall<T> {
-  timer: ReturnType<typeof setTimeout>;
+  timer?: ReturnType<typeof setTimeout>;
   resolvers: Array<{ resolve: (v: T) => void; reject: (e: unknown) => void }>;
 }
 
@@ -20,7 +20,6 @@ export function debounceAsync<T>(
       existing.resolvers.push({ resolve, reject });
     } else {
       pending.set(key, {
-        timer: null!,
         resolvers: [{ resolve, reject }],
       } as PendingCall<unknown>);
     }
@@ -30,7 +29,7 @@ export function debounceAsync<T>(
       pending.delete(key);
       fn()
         .then((result) => entry.resolvers.forEach((r) => r.resolve(result)))
-        .catch((error) => entry.resolvers.forEach((r) => r.reject(error)));
+        .catch((error: unknown) => entry.resolvers.forEach((r) => r.reject(error)));
     }, delayMs);
   });
 }

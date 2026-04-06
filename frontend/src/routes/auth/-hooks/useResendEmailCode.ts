@@ -1,5 +1,6 @@
 import { useToast } from '@/hooks/useToast';
 import { useResendCode } from '@/routes/auth/-api/signInWithOtp';
+import type { NullableEmail } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 interface UseResendEmailCodeOptions {
@@ -11,7 +12,7 @@ export function useResendEmailCode(options: UseResendEmailCodeOptions = {}) {
   const resendCode = useResendCode();
   const { showError, showSuccess } = useToast();
 
-  const resend = async (email: string | null) => {
+  const resend = async (email: NullableEmail) => {
     if (!email) {
       showError('Email not found. Please try logging in again.');
       return;

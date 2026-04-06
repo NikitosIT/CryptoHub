@@ -10,16 +10,17 @@ import {
 } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { useSessionQuery } from '@/api/useSessionQuery';
 import BackButton from '@/components/ui/BackButton';
 import { NicknameForm } from '@/components/ui/NicknameForm';
+import { ROUTES } from '@/constants/routesPath';
 import { createRouteGuard } from '@/hooks/routeGuards';
 import { useToast } from '@/hooks/useToast';
+import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 import ProfileLogo from '@/routes/profile/-components/ProfileLogo';
 
 import { profileEditCard, profileEmailBackground } from './-utils/profileStyles';
 
-export const Route = createFileRoute('/profile/edit')({
+export const Route = createFileRoute(ROUTES.PROFILE.EDIT)({
   beforeLoad: createRouteGuard({ requireAuth: true }),
   component: ProfileEditName,
 });

@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Linkify from 'linkify-react';
 
-import type { CommentMedia, CommentProps } from '@/types/db';
-
+import type { CommentMedia, CommentProps, TypeMedia } from '../-types/comments-db';
 import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
 import { CommentMediaWithLoading } from './CommentMediaWithLoading';
 
 interface CommentContentProps extends CommentProps {
-  onMediaClick: (mediaUrl: string, mediaType: 'photo' | 'video') => void;
+  onMediaClick: (mediaUrl: string, mediaType: TypeMedia) => void;
 }
 
 export function CommentContent({ comment, onMediaClick }: CommentContentProps) {
@@ -72,7 +71,7 @@ export function CommentContent({ comment, onMediaClick }: CommentContentProps) {
 interface CommentMediaProps {
   mediaItem: CommentMedia;
   index: number;
-  onMediaClick: (mediaUrl: string, mediaType: 'photo' | 'video') => void;
+  onMediaClick: (mediaUrl: string, mediaType: TypeMedia) => void;
 }
 
 const MAX_PREVIEW_LENGTH = 200;

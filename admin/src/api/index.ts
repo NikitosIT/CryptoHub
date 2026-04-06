@@ -5,17 +5,17 @@ import type { ForecastsResponse, CheckEmailResponse } from "@/types/admins";
 import { useMutation } from "@tanstack/react-query";
 import { CryptoTokens } from "@/routes/tokens/api/useListCryptoTokens";
 
-interface FunctionRequestOptions {
+interface FunctionRequestOptions<TBody> {
   functionName: string;
-  body: unknown;
+  body: TBody;
   requireAuth?: boolean;
 }
 
-async function performFunctionRequest<T>({
+async function performFunctionRequest<T, TBody = unknown>({
   functionName,
   body,
   requireAuth = false,
-}: FunctionRequestOptions): Promise<T> {
+}: FunctionRequestOptions<TBody>): Promise<T> {
   const functionsBaseUrl: string =
     (import.meta.env.VITE_SUPABASE_FUNCTIONS_URL as string | undefined) ||
     `${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1`;

@@ -1,7 +1,11 @@
 import { RemoveScroll } from 'react-remove-scroll';
 
 import { useEscapeKey } from '@/hooks/useEscapeKey';
-import type { ImageModalProps } from '@/types/db';
+
+interface ImageModalProps {
+  url: string;
+  onClose: () => void;
+}
 
 export function ImageModal({ url, onClose }: ImageModalProps) {
   useEscapeKey(onClose);

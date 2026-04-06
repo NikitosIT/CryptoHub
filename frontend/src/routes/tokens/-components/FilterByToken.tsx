@@ -40,7 +40,7 @@ function FilterTokens() {
 
   return (
     <div className="w-full">
-      <SelectFilter<SelectedToken>
+      <SelectFilter
         label="Select token"
         options={tokens}
         value={selectedToken}

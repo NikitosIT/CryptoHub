@@ -1,16 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/api';
-import type { TelegramPost } from '@/types/db';
+import type { PostId, TelegramPost } from '@/types/db';
 import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
 
 import { findPostInCache } from '../-utils/findPostInCache';
 import { updatePostInCache } from '../-utils/updatePostinCache';
 
-type FavoriteState = boolean;
-const initialFavoriteMap = new Map<string, FavoriteState>();
+const initialFavoriteMap = new Map<string, boolean>();
 
-function toggleFavorite(post: TelegramPost): TelegramPost {
+function toggleFavorite(post: TelegramPost) {
   return {
     ...post,
     is_favorite: !post.is_favorite,
@@ -25,7 +24,7 @@ export function useToggleFavorite() {
       postId,
       userId,
     }: {
-      postId: number;
+      postId: PostId;
       userId: string;
     }): Promise<void> => {
       const key = `favorite:${postId}:${userId}`;

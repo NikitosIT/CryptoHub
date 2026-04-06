@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 
-import type { CommentMedia } from '@/types/db';
-
+import type { CommentMedia } from '../-types/comments-db';
 import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
 import { CommentMediaWithLoading } from './CommentMediaWithLoading';
 

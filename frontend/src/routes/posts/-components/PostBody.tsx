@@ -2,17 +2,20 @@ import { useMemo, useState } from 'react';
 import { toHTML } from '@telegraf/entity';
 import type { MessageEntity } from '@telegraf/entity/types/types';
 
-import type { MediaGridProps, TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types/db';
 
 import { formatRelativeTime } from '../../../utils/formatDate';
 import { CommentOpenButton } from '../-comments/-components/CommentOpenButton';
 import FavoriteButton from '../-reactions/-components/FavoriteButton';
 import { ReactionButton } from '../-reactions/-components/ReactionButton';
-import { normalizeEntities } from '../-utils/normalizeEntities';
 import { processLinks } from '../-utils/processLinks';
 import { sanitizeHtml } from '../-utils/sanitizeHtml';
 import { DocumentIcon } from './DocumentIcon';
 import { ImageModal } from './ImageModal';
+type MediaGridProps = {
+  media: TelegramPost['media'];
+  onPreview?: (url: string | null) => void;
+};
 
 export function PostBody({ post }: { post: TelegramPost }) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -20,7 +23,7 @@ export function PostBody({ post }: { post: TelegramPost }) {
   const caption = post.text_caption ?? '';
 
   const finalHtml = useMemo(() => {
-    const entities: MessageEntity[] = normalizeEntities(post.text_entities);
+    const entities: MessageEntity[] = post.text_entities ?? [];
     const rawHtml = toHTML({ text: caption, entities });
     const safeHtml = sanitizeHtml(rawHtml);
     return processLinks(safeHtml);

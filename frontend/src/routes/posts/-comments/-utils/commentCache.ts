@@ -1,10 +1,11 @@
-import type { useQueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 
-import type { CommentWithReplies } from '@/types/db';
+import type { commentsListQueryKey } from '../-api/useCommentList';
+import type { CommentWithReplies } from '../-types/comments-db';
 
 export function findCommentInCache(
-  queryClient: ReturnType<typeof useQueryClient>,
-  queryKey: readonly unknown[],
+  queryClient: QueryClient,
+  queryKey: ReturnType<typeof commentsListQueryKey>,
   commentId: number,
 ): CommentWithReplies | null {
   const comments = queryClient.getQueryData<CommentWithReplies[]>(queryKey);

@@ -1,9 +1,8 @@
 import { memo, useCallback, useEffect, useMemo } from 'react';
 
 import { useToast } from '@/hooks/useToast';
-import { useListAuthors } from '@/routes/authors/-api/useListAuthors';
+import { type Author, useListAuthors } from '@/routes/authors/-api/useListAuthors';
 import { useSelectedAuthorId } from '@/store/useFiltersStore';
-import type { Author } from '@/types/db';
 
 import SelectFilter from '../../../components/filters/CustomSelectFilter';
 import FilterSkeleton from '../../../components/filters/FilterSkeleton';
@@ -37,7 +36,7 @@ function FilterAuthors() {
 
   return (
     <div className="w-full">
-      <SelectFilter<Author>
+      <SelectFilter
         label="Select author"
         options={safeAuthors}
         value={selectedAuthor}

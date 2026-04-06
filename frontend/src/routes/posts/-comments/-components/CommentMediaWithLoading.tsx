@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import type { SxProps, Theme } from '@mui/material';
 import { Box, CircularProgress } from '@mui/material';
 
-type MediaType = 'photo' | 'video';
+import type { TypeMedia } from '../-types/comments-db';
 
 interface CommentMediaWithLoadingProps {
-  type: MediaType;
+  type: TypeMedia;
   src: string;
   alt?: string;
   onLoad?: () => void;

@@ -10,15 +10,19 @@ import {
 } from '@/constants/storage';
 import { supabase } from '@/lib/supabaseClient';
 import type { AuthStateData } from '@/routes/auth/-hooks/useAuthState.ts';
+import { calculateAuthState } from '@/routes/auth/utils/calculateAuthState.ts';
+import type { Author } from '@/routes/authors/-api/useListAuthors.ts';
 import type { FetchTelegramPostParams } from '@/routes/posts/-api/useListTelegramPosts.ts';
 import type { CreateCommentParams } from '@/routes/posts/-comments/-api/useCommentCreate.ts';
 import type { UpdateCommentParams } from '@/routes/posts/-comments/-api/useCommentUpdate.ts';
-import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-api/useToggleReaction.ts';
+import type { CommentMedia } from '@/routes/posts/-comments/-types/comments-db.ts';
+import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-types/reactions-type.ts';
 import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
 import type { UserNotifications } from '@/routes/profile/-api/useUserNotifications.ts';
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
-import type { Author, CommentMedia, TelegramPost } from '@/types/db';
+import type { TokenForecast } from '@/routes/tokens/-api/useTokensAiForecasts.ts';
+import type { Code, Email, TelegramPost } from '@/types/db';
 import { parseError } from '@/utils/errorUtils.ts';
 
 import {
@@ -27,7 +31,6 @@ import {
   type TwoFactorStatusResponse,
   type VerifyLogin2FA,
 } from '../routes/auth/-api/use2faApi.ts';
-import { getRequestAuth, getSession } from './getSession';
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
@@ -51,13 +54,13 @@ async function functionRequest<TResponse, TBody = unknown>({
   const params = query ? `?${new URLSearchParams(query)}` : '';
   const url = `${supabaseFunctionsUrl}/${functionName}${params}`;
 
-  const { accessToken } = await getRequestAuth();
-  if (requireAuth && !accessToken) throw new Error('Authentication required');
+  const session = await getSession();
+  if (requireAuth && !session?.access_token) throw new Error('Authentication required');
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     apikey: supabaseAnonKey,
-    Authorization: `Bearer ${accessToken ?? supabaseAnonKey}`,
+    Authorization: `Bearer ${session?.access_token ?? supabaseAnonKey}`,
   };
 
   const hasBody = method !== 'GET' && body !== undefined;
@@ -254,7 +257,7 @@ function disableTwoFactor(code: string): Promise<{
 export interface TwoFactorApiResponse {
   success: boolean;
   message?: string;
-  error?: string;
+  error?: Error;
 }
 
 function clearTwoFactorVerification(): Promise<TwoFactorApiResponse> {
@@ -306,9 +309,7 @@ function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
   });
 }
 
-async function getTokenForecast(
-  tokenName: string,
-): Promise<Record<string, unknown> | null> {
+async function getTokenForecast(tokenName: string): Promise<TokenForecast | null> {
   if (!tokenName) return null;
 
   const { data, error } = await supabase
@@ -318,25 +319,21 @@ async function getTokenForecast(
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
     .limit(1)
-    .maybeSingle()
-    .overrideTypes<Record<string, unknown> | null>();
+    .overrideTypes<TokenForecast[]>();
 
   if (error) throw new Error(error.message);
-  return data ?? null;
+  return data[0] ?? null;
 }
 
 async function listAuthors(): Promise<Author[]> {
   const { data, error } = await supabase
     .from('authors')
-    .select('author_name, tg_author_id');
+    .select('label:author_name, id:tg_author_id')
+    .overrideTypes<Author[]>();
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
-  // TODO remove mapping
-  return data.map((author: { author_name: string; tg_author_id: number }) => ({
-    label: author.author_name,
-    id: author.tg_author_id,
-  }));
+  return data;
 }
 
 async function fetchTelegramPost(
@@ -372,7 +369,7 @@ async function fetchTelegramPost(
   return data ?? [];
 }
 
-async function signInWithOtp(email: string): Promise<string> {
+async function signInWithOtp(email: Email): Promise<string> {
   const { error } = await supabase.auth.signInWithOtp({ email });
   if (error) {
     throw new Error(error.message);
@@ -380,7 +377,7 @@ async function signInWithOtp(email: string): Promise<string> {
   return email;
 }
 
-async function verifyOtp(email: string, code: string): Promise<Session> {
+async function verifyOtp(email: Email, code: Code): Promise<Session> {
   const { data, error } = await supabase.auth.verifyOtp({
     email,
     token: code,
@@ -407,28 +404,9 @@ function onAuthStateChange(callback: (event: string, session: Session | null) =>
   };
 }
 
-function calculateAuthState(
-  session: Session | null,
-  checkTwoFactor: boolean,
-  twoFactorStatus: TwoFactorStatusResponse | null | undefined,
-): AuthStateData {
-  const user = session?.user;
-  const isAuthenticated = Boolean(user?.id);
-  const shouldCheckTwoFactor = checkTwoFactor && isAuthenticated;
-
-  const isTwoFactorEnabled = shouldCheckTwoFactor && (twoFactorStatus?.enabled ?? false);
-  const isTwoFactorVerified = shouldCheckTwoFactor
-    ? (twoFactorStatus?.is_verified_for_current_session ?? false)
-    : true;
-
-  const hasPendingTwoFactor = isTwoFactorEnabled && !isTwoFactorVerified;
-  const isAuthenticatedWith2FA = isAuthenticated && !hasPendingTwoFactor;
-
-  return {
-    user,
-    hasPendingTwoFactor,
-    isAuthenticatedWith2FA,
-  };
+export async function getSession(): Promise<Session | null> {
+  const { data: sessionData } = await supabase.auth.getSession();
+  return sessionData.session ?? null;
 }
 
 async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
@@ -514,5 +492,3 @@ export const api = {
     getNotifications,
   },
 } as const;
-
-export { calculateAuthState };

@@ -3,10 +3,11 @@ import { Box, Typography } from '@mui/material';
 
 import { AuthButton } from '@/components/ui/AuthButton';
 import { StyledOtpInput } from '@/components/ui/StyledOtpInput';
+import type { Code } from '@/types/db';
 
 import ResendEmailCode from './ResendEmailCode';
 
-type OtpFormValues = { code: string };
+type OtpFormValues = { code: Code };
 
 interface OtpFormProps {
   control: Control<OtpFormValues>;

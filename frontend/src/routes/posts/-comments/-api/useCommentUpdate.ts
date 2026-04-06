@@ -8,31 +8,33 @@ import {
   getExistingMedia,
 } from '@/routes/posts/-comments/-utils/commentMediaUtils';
 import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { CommentMedia, CommentWithReplies } from '@/types/db';
+import type { PostId } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
+import type {
+  CommentMedia,
+  CommentWithReplies,
+  MutationContext,
+} from '../-types/comments-db';
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { uploadCommentMedia } from './useUploadMedia';
 
-export interface UpdateCommentParams {
+interface ShareUpdateParams {
   commentId: number;
   text: string;
+}
+
+export interface UpdateCommentParams extends ShareUpdateParams {
   media?: CommentMedia[] | null;
 }
 
-type UpdateCommentVariables = {
-  commentId: number;
-  text: string;
-  postId: number;
+interface UpdateCommentVariables extends ShareUpdateParams {
+  postId: PostId;
   mediaFiles?: File[];
   existingMediaUrls?: string[];
-};
+}
 
-type MutationContext = {
-  previousComments: CommentWithReplies[] | undefined;
-  queryKey: readonly ['comments', number];
-  blobUrls: string[];
-};
+type MutationUpdateContext = Omit<MutationContext, 'optimisticCommentId'>;
 
 export function useCommentUpdate() {
   const queryClient = useQueryClient();
@@ -59,7 +61,7 @@ export function useCommentUpdate() {
       postId,
       mediaFiles,
       existingMediaUrls,
-    }): Promise<MutationContext> => {
+    }): Promise<MutationUpdateContext> => {
       const queryKey = commentsListQueryKey(postId);
       await queryClient.cancelQueries({ queryKey });
 

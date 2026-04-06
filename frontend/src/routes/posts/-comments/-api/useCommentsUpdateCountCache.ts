@@ -1,6 +1,6 @@
 import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { TelegramPost } from '@/types/db';
+import type { PostId, TelegramPost } from '@/types/db';
 
 const POSTS_QUERY_KEY = ['posts'] as const;
 
@@ -8,7 +8,7 @@ export function useCommentsUpdateCountCache() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId, delta }: { postId: number; delta: 1 | -1 }) => {
+    mutationFn: ({ postId, delta }: { postId: PostId; delta: 1 | -1 }) => {
       return Promise.resolve({ postId, delta });
     },
 

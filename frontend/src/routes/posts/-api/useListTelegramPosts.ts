@@ -3,23 +3,28 @@ import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '@/api';
 import { useSelectedAuthorId, useSelectedToken } from '@/store/useFiltersStore';
 
-import { usePostsMode } from '../-hooks/usePostsMode';
+import { type PostMode, usePostsMode } from '../-hooks/usePostsMode';
 
 export interface FetchTelegramPostParams {
-  cursorId: number | null;
-  cursorCreatedAt: string | null;
+  cursorId: number | undefined;
+  cursorCreatedAt: string | undefined;
   limit?: number;
-  mode?: 'all' | 'liked' | 'disliked' | 'favorites';
+  mode?: PostMode;
   authorId?: number | null;
   tokenName?: string | null;
 }
+
+type Cursor = {
+  createdAt?: string;
+  id?: number;
+};
 
 export const PAGE_SIZE = 10;
 
 const postsQueryKey = (
   authorId: number | null,
   tokenName: string | null,
-  mode: 'all' | 'liked' | 'disliked' | 'favorites',
+  mode: PostMode,
 ) => {
   const key = ['posts', authorId, tokenName, mode] as const;
   return key;
@@ -38,16 +43,11 @@ export function useTelegramPosts() {
 
   const query = useInfiniteQuery({
     queryKey,
-    initialPageParam: { createdAt: null, id: null } as {
-      createdAt: string | null;
-      id: number | null;
-    },
+    initialPageParam: {} as Cursor,
     queryFn: ({ pageParam }) => {
-      const { createdAt, id } = pageParam;
-
       return api.posts.list({
-        cursorId: id,
-        cursorCreatedAt: createdAt,
+        cursorId: pageParam.id,
+        cursorCreatedAt: pageParam.createdAt,
         limit: PAGE_SIZE,
         mode,
         authorId,
@@ -58,7 +58,7 @@ export function useTelegramPosts() {
     getNextPageParam: (lastPage) => {
       if (!lastPage.length) return undefined;
       const last = lastPage[lastPage.length - 1];
-      return { createdAt: last.created_at, id: last.id };
+      return { createdAt: last?.created_at ?? undefined, id: last?.id ?? undefined };
     },
 
     staleTime: 5 * 60 * 1000,

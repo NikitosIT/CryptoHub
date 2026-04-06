@@ -11,9 +11,9 @@ import {
 import { alpha, type Theme } from '@mui/material/styles';
 
 import { useCommentItem } from '@/routes/posts/-comments/-hooks/useCommentItem';
-import type { CommentWithReplies } from '@/types/db';
 
 import { ImageModal } from '../../-components/ImageModal';
+import type { CommentWithReplies } from '../-types/comments-db';
 import { CommentActions } from './CommentActions';
 import { CommentAvatar } from './CommentAvatar';
 import { CommentContent } from './CommentContent';

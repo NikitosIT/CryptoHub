@@ -17,11 +17,7 @@ export function useToast() {
   const { enqueueSnackbar } = useSnackbar();
 
   return {
-    showToast: (
-      message: string,
-      severity: VariantType,
-      duration?: number,
-    ) =>
+    showToast: (message: string, severity: VariantType, duration?: number) =>
       enqueueSnackbar(message, {
         variant: severity,
         ...(duration !== undefined && { autoHideDuration: duration }),

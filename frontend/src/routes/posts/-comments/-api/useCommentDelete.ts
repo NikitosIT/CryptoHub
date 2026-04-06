@@ -3,21 +3,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { removeCommentFromList } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { CommentWithReplies } from '@/types/db';
+import type { PostId } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
+import type { CommentWithReplies, MutationContext } from '../-types/comments-db';
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
 
 type DeleteCommentVariables = {
   commentId: number;
-  postId: number;
+  postId: PostId;
 };
 
-type MutationContext = {
-  previousComments: CommentWithReplies[] | undefined;
-  queryKey: readonly ['comments', number];
-};
+type MutationDeleteContext = Pick<MutationContext, 'previousComments' | 'queryKey'>;
 
 export function useCommentDelete() {
   const queryClient = useQueryClient();
@@ -29,7 +27,7 @@ export function useCommentDelete() {
       return api.comments.delete(commentId);
     },
 
-    onMutate: async ({ commentId, postId }): Promise<MutationContext> => {
+    onMutate: async ({ commentId, postId }): Promise<MutationDeleteContext> => {
       const queryKey = commentsListQueryKey(postId);
 
       await queryClient.cancelQueries({ queryKey });

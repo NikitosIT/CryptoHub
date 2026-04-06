@@ -4,11 +4,7 @@ import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useToggleFavorite } from '@/routes/posts/-reactions/-api/useToggleFavorite';
 import type { TelegramPost } from '@/types/db';
 
-interface FavoriteProps {
-  post: TelegramPost;
-}
-
-function FavoriteButtonComponent({ post }: FavoriteProps) {
+function FavoriteButtonComponent({ post }: { post: TelegramPost }) {
   const { user } = useAuthState({
     checkTwoFactor: false,
   });

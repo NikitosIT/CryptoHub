@@ -1,15 +1,19 @@
-import type { SpotFormData } from '@/lib/validatorSchemas';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface CryptoSpot {
+import type { SpotFormData } from '@/lib/validatorSchemas';
+
+export interface ShareCryptoType {
   margin: number | null;
   entryPrice: number | null;
   exitPrice: number | null;
   profit: number | null;
 
-  calculator: (data: SpotFormData) => void;
   reset: () => void;
+}
+
+interface CryptoSpot extends ShareCryptoType {
+  calculator: (data: SpotFormData) => void;
 }
 
 export const useSpotStore = create<CryptoSpot>()(

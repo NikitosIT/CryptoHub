@@ -8,9 +8,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import { EditIcon } from 'lucide-react';
 
-import { useSessionQuery } from '@/api/useSessionQuery';
 import { UserAvatar } from '@/components/ui/UserAvatar';
+import { ROUTES } from '@/constants/routesPath';
 import { createRouteGuard } from '@/hooks/routeGuards';
+import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
 import { LogoutButton } from '@/routes/profile/-components/LogoutButton';
 
@@ -25,7 +26,7 @@ import {
   profileSettingName,
 } from './-utils/profileStyles';
 
-export const Route = createFileRoute('/profile/')({
+export const Route = createFileRoute(ROUTES.PROFILE.INDEX)({
   beforeLoad: createRouteGuard({
     requireAuth: true,
     redirectTo: '/auth/',

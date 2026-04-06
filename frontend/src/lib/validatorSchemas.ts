@@ -44,7 +44,7 @@ export const calcFuturesSchema = z.object({
   margin: z.number().positive(),
   leverage: z.number().max(200).positive(),
   entryPrice: z.number().positive(),
-  sellPrice: z.number().positive(),
+  exitPrice: z.number().positive(),
 });
 
 export type FuturesFormData = z.infer<typeof calcFuturesSchema>;

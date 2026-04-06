@@ -1,5 +1,6 @@
 import { api } from '@/api';
-import type { CommentMedia } from '@/types/db';
+
+import type { CommentMedia } from '../-types/comments-db';
 
 export async function uploadCommentMedia({
   mediaFiles,

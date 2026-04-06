@@ -2,9 +2,10 @@ import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useToggleReaction } from '@/routes/posts/-reactions/-api/useToggleReaction';
 import type { TelegramPost } from '@/types/db';
 
+import type { UserReaction } from '../-types/reactions-type';
 import { getReactionClasses, REACTIONS } from '../-utils/reactionStyles';
 
-type ReactionType = 'like' | 'dislike';
+type ReactionType = Exclude<UserReaction, null | undefined>;
 
 export function ReactionButton({ post }: { post: TelegramPost }) {
   const mutation = useToggleReaction();
@@ -13,7 +14,7 @@ export function ReactionButton({ post }: { post: TelegramPost }) {
   const userReaction = user?.id ? post.user_reaction : null;
   const canHover = Boolean(user?.id);
 
-  const handleReaction = (reactionType: ReactionType) => {
+  const handleReaction = (reactionType: UserReaction) => {
     if (!user?.id) return;
     mutation.mutate({ postId: post.id, reactionType });
   };

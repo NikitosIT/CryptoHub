@@ -2,12 +2,13 @@ import { Box, Container, Paper, Stack, TextField, Typography } from '@mui/materi
 import { createFileRoute } from '@tanstack/react-router';
 
 import { AuthButton } from '@/components/ui/AuthButton';
+import { ROUTES } from '@/constants/routesPath';
 import { createRouteGuard } from '@/hooks/routeGuards';
 import { loginSearchSchema } from '@/lib/validatorSchemas';
 import AuthGoogle from '@/routes/auth/-components/AuthGoogle';
 import { useLogin } from '@/routes/auth/-hooks/useLogin';
 
-export const Route = createFileRoute('/auth/')({
+export const Route = createFileRoute(ROUTES.AUTH.INDEX)({
   validateSearch: loginSearchSchema,
   beforeLoad: createRouteGuard({
     requireNoAuth: true,

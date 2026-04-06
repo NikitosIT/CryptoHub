@@ -13,6 +13,7 @@ import {
 import BackButton from '@/components/ui/BackButton';
 import { useTwoFactorHook } from '@/routes/auth/-hooks/use2FAHook';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import type { Code } from '@/types/db';
 
 import {
   alertStylesProfile,
@@ -158,10 +159,13 @@ export default function ProfileTwoFactor() {
   );
 }
 
-type CodeInputProps = {
-  control: Control<{ code: string }>;
+export type ShareTwoFaProps = {
+  control: Control<{ code: Code }>;
   error?: string;
+  onSubmit?: (e: React.FormEvent) => void;
 };
+
+type CodeInputProps = Omit<ShareTwoFaProps, 'onSubmit'>;
 
 function CodeInput({ control, error }: CodeInputProps) {
   return (
@@ -184,13 +188,10 @@ function CodeInput({ control, error }: CodeInputProps) {
   );
 }
 
-type QrCodeSetupProps = {
+interface QrCodeSetupProps extends ShareTwoFaProps {
   qrUrl: string;
-  control: Control<{ code: string }>;
-  error?: string;
-  onSubmit: (e: React.FormEvent) => void;
   isVerifying: boolean;
-};
+}
 
 function QrCodeSetup({ qrUrl, control, error, onSubmit, isVerifying }: QrCodeSetupProps) {
   return (
@@ -222,13 +223,10 @@ function QrCodeSetup({ qrUrl, control, error, onSubmit, isVerifying }: QrCodeSet
   );
 }
 
-type DisableFormProps = {
-  control: Control<{ code: string }>;
-  error?: string;
-  onSubmit: (e: React.FormEvent) => void;
+interface DisableFormProps extends ShareTwoFaProps {
   onCancel: () => void;
   isDisabling: boolean;
-};
+}
 
 function DisableForm({
   control,

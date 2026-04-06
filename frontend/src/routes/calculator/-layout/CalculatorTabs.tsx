@@ -1,7 +1,7 @@
 import { Link, useLocation } from '@tanstack/react-router';
+import { motion } from 'framer-motion';
 
 import HelpInfo from './HelpInfo';
-import { motion } from 'framer-motion';
 
 interface CalculatorTabsProps {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 import { Stack, Typography } from '@mui/material';
 
-import type { CommentProps } from '@/types/db';
 import { formatRelativeTime } from '@/utils/formatDate';
 
 import { useCommentItem } from '../-hooks/useCommentItem';
+import type { CommentProps } from '../-types/comments-db';
 import { getCommentUserName } from '../-utils/commentItemUtils';
 
 export function CommentHeader({ comment }: CommentProps) {

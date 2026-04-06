@@ -4,35 +4,34 @@ import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { organizeComments } from '@/routes/posts/-comments/-utils/commentUtils';
 import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
-import type { CommentMedia, CommentWithReplies } from '@/types/db';
+import type { PostId } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
+import type {
+  CommentMedia,
+  CommentWithReplies,
+  MutationContext,
+} from '../-types/comments-db';
 import { createBlobMediaFromFiles } from '../-utils/commentMediaUtils';
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
 import { uploadCommentMedia } from './useUploadMedia';
-export interface CreateCommentParams {
-  postId: number;
+
+interface ShareCommentsParams {
+  postId: PostId;
   text: string;
   parentCommentId?: number | null;
+}
+
+export interface CreateCommentParams extends ShareCommentsParams {
   media?: CommentMedia[] | null;
 }
 
-type CommentVariables = {
-  postId: number;
+interface CommentVariables extends ShareCommentsParams {
   commentId?: number;
-  text: string;
   userId: string;
-  parentCommentId?: number | null;
   mediaFiles?: File[];
-};
-
-type MutationContext = {
-  previousComments: CommentWithReplies[] | undefined;
-  queryKey: readonly ['comments', number];
-  blobUrls: string[];
-  optimisticCommentId: number;
-};
+}
 
 export function useCommentCreate() {
   const queryClient = useQueryClient();

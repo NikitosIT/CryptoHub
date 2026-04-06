@@ -1,10 +1,8 @@
 import type { TelegramPost } from '@/types/db';
 
-type UserReaction = 'like' | 'dislike' | null;
-export function toggleReaction(
-  post: TelegramPost,
-  type: 'like' | 'dislike',
-): TelegramPost {
+import type { UserReaction } from '../-types/reactions-type';
+
+export function toggleReaction(post: TelegramPost, type: UserReaction): TelegramPost {
   const prev = post.user_reaction;
 
   let like = post.like_count ?? 0;

@@ -1,24 +1,25 @@
 import type { User } from '@supabase/supabase-js';
 
-import { calculateAuthState } from '@/api';
-import { useSessionQuery } from '@/api/useSessionQuery';
 import { useTwoFactorStatus } from '@/routes/auth/-api/use2faApi';
+import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 
-export interface UseAuthStateOptions {
+import { calculateAuthState } from '../utils/calculateAuthState';
+
+interface UseAuthStateOptions {
   checkTwoFactor?: boolean;
 }
 
-export interface UseAuthStateReturn {
-  isAuthenticatedWith2FA: boolean;
+interface BaseAuthState {
   user: User | undefined;
-  hasPendingTwoFactor: boolean;
-  isLoading: boolean;
+  hasPendingTwoFactor?: boolean;
+  isAuthenticatedWith2FA?: boolean;
 }
-export interface AuthStateData {
-  user: User | undefined;
-  hasPendingTwoFactor: boolean;
-  isAuthenticatedWith2FA: boolean;
+
+export interface UseAuthStateReturn extends BaseAuthState {
+  isLoading?: boolean;
 }
+
+export type AuthStateData = BaseAuthState;
 
 export function useAuthState(options: UseAuthStateOptions = {}): UseAuthStateReturn {
   const { checkTwoFactor = false } = options;

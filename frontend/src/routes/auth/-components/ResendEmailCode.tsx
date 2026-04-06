@@ -2,21 +2,18 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useSearch } from '@tanstack/react-router';
 
 import { AuthButton } from '@/components/ui/AuthButton';
+import { ROUTES } from '@/constants/routesPath';
 import { useCountdown } from '@/hooks/useCountdown';
 import { useResendEmailCode } from '@/routes/auth/-hooks/useResendEmailCode';
+import type { NullableEmail } from '@/types/db';
 
+import type { VerifySearchParams } from '../-hooks/useVerifyOTP';
 import { CountdownDisplay } from './CountdownDisplay';
-
-type VerifySearchParams = {
-  email?: string;
-  redirectTo?: string;
-  mode?: 'email';
-};
 
 export default function ResendEmailCode() {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: '/auth/verify' }) as VerifySearchParams;
-  const email: string | null = search.email ?? null;
+  const search = useSearch({ from: ROUTES.AUTH.VERIFY }) as VerifySearchParams;
+  const email: NullableEmail = search.email ?? null;
 
   const countdown = useCountdown({
     storageKey: email || undefined,

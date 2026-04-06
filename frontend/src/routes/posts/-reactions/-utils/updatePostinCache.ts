@@ -23,7 +23,9 @@ export function updatePostInCache(
         updated = true;
 
         const nextPage = [...page];
-        nextPage[index] = updater(nextPage[index]);
+        const post = nextPage[index];
+        if (!post) return page;
+        nextPage[index] = updater(post);
 
         return nextPage;
       }),

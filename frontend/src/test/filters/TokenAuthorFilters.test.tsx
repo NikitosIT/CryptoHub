@@ -6,9 +6,9 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { Author } from '@/routes/authors/-api/useListAuthors';
 import { PostsTelegram } from '@/routes/posts/-components/PostsTelegram';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens';
-import type { Author } from '@/types/db';
 
 const mockAuthorsList = vi.fn();
 const mockCryptoTokens = vi.fn();

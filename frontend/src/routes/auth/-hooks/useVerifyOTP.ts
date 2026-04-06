@@ -1,27 +1,29 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 
+import { ROUTES } from '@/constants/routesPath';
 import { useToast } from '@/hooks/useToast';
 import { codeSchema } from '@/lib/validatorSchemas';
 import { useVerifyOtp } from '@/routes/auth/-api/signInWithOtp';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import type { Code, Email, NullableEmail } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import { useCodeForm } from './useCodeForm';
 
-type OtpFormValues = { code: string };
+type OtpFormValues = { code: Code };
 
-type VerifySearchParams = {
+export type VerifySearchParams = {
   redirectTo?: string;
   mode?: 'email';
-  email?: string;
+  email?: Email;
 };
 
 export function useVerifyOTP() {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: '/auth/verify' }) as VerifySearchParams;
-  const email: string | null = search.email ?? null;
+  const search = useSearch({ from: ROUTES.AUTH.VERIFY }) as VerifySearchParams;
+  const email: NullableEmail = search.email ?? null;
   const isEmailLogin = search.mode === 'email' || Boolean(email);
   const { showError } = useToast();
 
@@ -55,21 +57,21 @@ export function useVerifyOTP() {
     if (isAuthLoading) return;
 
     if (!isEmailLogin && !user?.id) {
-      navigate({ to: '/auth/', replace: true });
+      navigate({ to: ROUTES.AUTH.INDEX, replace: true });
       return;
     }
 
     if (isEmailLogin && isOtpSuccess) {
       if (hasPendingTwoFactor) {
-        navigate({ to: '/auth/verify-2fa', replace: true });
+        navigate({ to: ROUTES.AUTH.VERIFY2FA, replace: true });
       } else if (isAuthenticatedWith2FA) {
-        navigate({ to: '/auth/callback', replace: true });
+        navigate({ to: ROUTES.AUTH.CALLBACK, replace: true });
       }
       return;
     }
 
     if (isAuthenticatedWith2FA && !hasPendingTwoFactor && !isEmailLogin) {
-      navigate({ to: '/auth/callback', replace: true });
+      navigate({ to: ROUTES.AUTH.CALLBACK, replace: true });
     }
   }, [
     isAuthLoading,

@@ -1,6 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, Paper, Stack, Typography } from '@mui/material';
-
 import { alpha, type Theme } from '@mui/material/styles';
 
 import { getCommentUserName } from '@/routes/posts/-comments/-utils/commentItemUtils';

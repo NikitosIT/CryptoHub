@@ -1,12 +1,8 @@
-import type { InfiniteData } from '@tanstack/react-query';
-import type { QueryClient } from '@tanstack/react-query';
+import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 
 import type { TelegramPost } from '@/types/db';
 
-export function findPostInCache(
-  queryClient: QueryClient,
-  postId: number,
-): TelegramPost | null {
+export function findPostInCache(queryClient: QueryClient, postId: number) {
   const all = queryClient.getQueriesData<InfiniteData<TelegramPost[]>>({
     queryKey: ['posts'],
   });

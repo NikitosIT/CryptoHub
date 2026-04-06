@@ -13,9 +13,8 @@ import {
   MenuItem,
 } from '@mui/material';
 
-import type { CommentProps } from '@/types/db';
-
 import { useCommentItem } from '../-hooks/useCommentItem';
+import type { CommentProps } from '../-types/comments-db';
 import { useCommentContext } from './comments-context';
 
 export function CommentActionsMenu({ comment }: CommentProps) {

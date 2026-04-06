@@ -14,25 +14,12 @@ import {
 } from '@mui/material';
 
 import { useToast } from '@/hooks/useToast';
-import { useTokensAiForecasts } from '@/routes/tokens/-api/useTokensAiForecasts';
+import {
+  type TokenForecast,
+  useTokensAiForecasts,
+} from '@/routes/tokens/-api/useTokensAiForecasts';
 import { useSelectedToken } from '@/store/useFiltersStore';
 import { getErrorMessage } from '@/utils/errorUtils';
-
-interface TokenForecast {
-  token_name: string;
-  sentiment: string;
-  forecast_text: string;
-}
-
-function isTokenForecast(data: unknown): data is TokenForecast {
-  if (typeof data !== 'object' || data === null) return false;
-  const d = data as Record<string, unknown>;
-  return (
-    typeof d.token_name === 'string' &&
-    typeof d.sentiment === 'string' &&
-    typeof d.forecast_text === 'string'
-  );
-}
 
 export default function TokensAiForecasts() {
   const { selectedToken } = useSelectedToken();
@@ -40,7 +27,7 @@ export default function TokensAiForecasts() {
   const { showError } = useToast();
 
   const { data: forecastData, isLoading, refetch } = useTokensAiForecasts();
-  const forecast = isTokenForecast(forecastData) ? forecastData : null;
+  const forecast = forecastData ?? null;
 
   const handleOpen = async () => {
     if (!selectedToken) return;

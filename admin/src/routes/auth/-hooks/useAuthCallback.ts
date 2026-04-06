@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
-import { useSessionQuery } from "@/api/useSessionQuery";
+import { useSessionQuery } from "@/routes/auth/-api/useSessionQuery";
 
 export function useAuthCallback() {
   const navigate = useNavigate();

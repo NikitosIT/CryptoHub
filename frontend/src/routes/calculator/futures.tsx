@@ -1,20 +1,21 @@
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
+import { motion } from 'framer-motion';
 
+import { ROUTES } from '@/constants/routesPath';
 import { calcFuturesSchema, type FuturesFormData } from '@/lib/validatorSchemas';
 
-import { CalculatorTabs } from './-layout/CalculatorTabs';
-import { useFuturesStore, type PositionType } from './-store/useFuturesStore';
-import { numberInputClass } from './spot';
 import CalculatorButtons from './-layout/CalculatorButtons';
-import { motion } from 'framer-motion';
-export const Route = createFileRoute('/calculator/futures')({
+import { CalculatorTabs } from './-layout/CalculatorTabs';
+import { type PositionType, useFuturesStore } from './-store/useFuturesStore';
+import { numberInputClass } from './spot';
+export const Route = createFileRoute(ROUTES.CALCULATOR.FUTURES)({
   component: CalculatorFutures,
 });
 
 export function CalculatorFutures() {
-  const { calculator, profit, entryPrice, sellPrice, position, setPosition, reset } =
+  const { calculator, profit, entryPrice, exitPrice, position, setPosition, reset } =
     useFuturesStore();
   const {
     register,
@@ -116,7 +117,7 @@ export function CalculatorFutures() {
         </div>
         <div>
           <input
-            {...register('sellPrice', { valueAsNumber: true })}
+            {...register('exitPrice', { valueAsNumber: true })}
             type="number"
             step="any"
             placeholder="Exit price $"
@@ -126,7 +127,7 @@ export function CalculatorFutures() {
 
         <CalculatorButtons handleReset={handleReset} />
       </form>
-      {profit != null && entryPrice != null && sellPrice != null && (
+      {profit != null && entryPrice != null && exitPrice != null && (
         <div className="p-3 mt-4 text-center sm:p-4 sm:mt-6 rounded-xl bg-zinc-700">
           <p className="text-xs sm:text-sm text-zinc-300">
             {position === 'long' ? 'Long' : 'Short'} Profit

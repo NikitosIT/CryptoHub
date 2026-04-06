@@ -18,8 +18,7 @@ export function useDisplayNickname() {
     isLoading || !isAuthenticatedWith2FA
       ? null
       : profile?.nickname ||
-        queryClient.getQueryData<{ nickname: string | null } | null>(['profile'])
-          ?.nickname ||
+        queryClient.getQueryData<{ nickname: string | null }>(['profile'])?.nickname ||
         getCachedProfile()?.nickname ||
         'User';
 

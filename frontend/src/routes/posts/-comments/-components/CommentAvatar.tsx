@@ -1,7 +1,6 @@
 import { Avatar } from '@mui/material';
 
-import type { CommentProps } from '@/types/db';
-
+import type { CommentProps } from '../-types/comments-db';
 import { getCommentAvatarUrl, getCommentUserName } from '../-utils/commentItemUtils';
 
 export function CommentAvatar({ comment }: CommentProps) {

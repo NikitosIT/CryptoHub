@@ -7,9 +7,8 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
 
     /* Bundler mode */
@@ -27,7 +26,7 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["src", "../admin"]
 }

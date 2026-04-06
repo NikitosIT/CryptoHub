@@ -1,12 +1,13 @@
 import { env } from '@/config/env';
 import { COMMENT_MEDIA_BUCKET } from '@/constants/storage';
-import type { CommentMedia, CommentWithReplies } from '@/types/db';
+
+import type { CommentMedia, CommentWithReplies, TypeMedia } from '../-types/comments-db';
 
 const ABSOLUTE_URL_PREFIXES = ['blob:', 'http://', 'https://', '/'];
 
 export type MediaItem = {
   id: string;
-  type: 'photo' | 'video';
+  type: TypeMedia;
   url: string;
   index: number;
   isExisting: boolean;
@@ -25,7 +26,7 @@ export function getCommentMediaFullUrl(
   return `${env.supabaseUrl}/storage/v1/object/public/${COMMENT_MEDIA_BUCKET}/${url}`;
 }
 
-function fileToMediaType(file: File): 'photo' | 'video' {
+function fileToMediaType(file: File): TypeMedia {
   return file.type.startsWith('video/') ? 'video' : 'photo';
 }
 
@@ -76,7 +77,7 @@ export function createBlobMediaFromFiles(mediaFiles?: File[]): {
   const blobUrls = mediaFiles.map((f) => URL.createObjectURL(f));
   const media: CommentMedia[] = mediaFiles.map((f, i) => ({
     type: fileToMediaType(f),
-    url: blobUrls[i],
+    url: blobUrls[i] || '',
   }));
 
   return { media, blobUrls };

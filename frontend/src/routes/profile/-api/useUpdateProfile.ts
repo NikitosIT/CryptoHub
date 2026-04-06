@@ -5,12 +5,7 @@ import { useRequiredAuth } from '@/routes/auth/-hooks/useRequiredAuth';
 import { setCachedProfile } from '@/routes/profile/-utils/profileCache';
 
 import { profileQueryKey, type UserProfile } from './useUserProfile';
-
-export interface UpdateProfile {
-  nickname?: string | null;
-  profile_logo?: string | null;
-}
-
+export type UpdateProfile = Omit<UserProfile, 'last_changed'>;
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
   const { userId } = useRequiredAuth();
@@ -31,8 +26,7 @@ export const useUpdateProfile = () => {
       );
 
       const optimisticProfile: UserProfile = {
-        nickname: previousProfile?.nickname ?? null,
-        profile_logo: previousProfile?.profile_logo ?? null,
+        ...previousProfile,
         ...payload,
       };
 
@@ -47,8 +41,7 @@ export const useUpdateProfile = () => {
         profileQueryKey(userId),
       );
       const confirmed: UserProfile = {
-        nickname: current?.nickname ?? null,
-        profile_logo: current?.profile_logo ?? null,
+        ...current,
         ...payload,
       };
       queryClient.setQueryData(profileQueryKey(userId), confirmed);

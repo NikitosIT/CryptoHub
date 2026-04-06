@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 
+import { ROUTES } from '@/constants/routesPath';
 import { useToast } from '@/hooks/useToast';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
@@ -13,7 +14,7 @@ type CallbackSearchParams = {
 export function useAuthCallback() {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: '/auth/callback' }) as CallbackSearchParams;
+  const search = useSearch({ from: ROUTES.AUTH.CALLBACK }) as CallbackSearchParams;
   const { showError } = useToast();
 
   const {
@@ -37,20 +38,20 @@ export function useAuthCallback() {
     if (validatedRedirect) {
       return validatedRedirect;
     }
-    return profileNickname ? '/profile/' : '/auth/setnickname';
+    return profileNickname ? ROUTES.PROFILE.INDEX : ROUTES.AUTH.SETNICKNAME;
   }, [searchRedirectTo, profileNickname]);
 
   useEffect(() => {
     if (isAuthLoading || user?.id === undefined) return;
 
     if (!user.id) {
-      navigate({ to: '/auth/', replace: true });
+      navigate({ to: ROUTES.AUTH.INDEX, replace: true });
       return;
     }
 
     if (hasPendingTwoFactor) {
       navigate({
-        to: '/auth/verify-2fa',
+        to: ROUTES.AUTH.VERIFY2FA,
         replace: true,
       });
       return;
@@ -65,7 +66,7 @@ export function useAuthCallback() {
           : 'Failed to load profile. Please try again later.';
       showError(errorMessage);
 
-      navigate({ to: '/profile/', replace: true });
+      navigate({ to: ROUTES.PROFILE.INDEX, replace: true });
       return;
     }
 

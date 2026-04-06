@@ -1,8 +1,7 @@
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import Linkify from 'linkify-react';
 
-import type { CommentWithReplies } from '@/types/db';
-
+import type { CommentWithReplies } from '../-types/comments-db';
 import { getCommentUserName } from '../-utils/commentItemUtils';
 import { CommentMediaThumbnails } from './CommentMediaThumbnails';
 import { useCommentContext } from './comments-context';

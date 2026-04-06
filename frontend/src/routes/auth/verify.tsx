@@ -1,12 +1,13 @@
 import { Container, Paper, Stack, Typography } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
 
+import { ROUTES } from '@/constants/routesPath';
 import { createRouteGuard } from '@/hooks/routeGuards';
 import { verifySearchSchema } from '@/lib/validatorSchemas';
 import { OtpForm } from '@/routes/auth/-components/OtpForm';
 import { useVerifyOTP } from '@/routes/auth/-hooks/useVerifyOTP';
 
-export const Route = createFileRoute('/auth/verify')({
+export const Route = createFileRoute(ROUTES.AUTH.VERIFY)({
   validateSearch: verifySearchSchema,
   beforeLoad: createRouteGuard({
     requireNoAuth: false,

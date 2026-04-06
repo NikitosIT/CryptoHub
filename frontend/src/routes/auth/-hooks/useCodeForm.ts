@@ -3,7 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { ZodString } from 'zod';
 import { z } from 'zod';
 
-type CodeFormValues = { code: string };
+import type { Code } from '@/types/db';
+
+type CodeFormValues = { code: Code };
 
 interface UseCodeFormOptions {
   schema: ZodString;

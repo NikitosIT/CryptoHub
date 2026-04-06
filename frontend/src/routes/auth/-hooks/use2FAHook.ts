@@ -11,9 +11,10 @@ import {
 } from '@/routes/auth/-api/use2faApi';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useCodeForm } from '@/routes/auth/-hooks/useCodeForm';
+import type { Code } from '@/types/db';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-type CodeForm = { code: string };
+type CodeForm = { code: Code };
 
 export function useTwoFactorHook() {
   const [qrUrl, setQrUrl] = useState<string | null>(null);

@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import BackButton from '@/components/ui/BackButton';
+import { ROUTES } from '@/constants/routesPath';
 import { createRouteGuard } from '@/hooks/routeGuards';
 
 import { useUserNotifications } from './-api/useUserNotifications';
 
-export const Route = createFileRoute('/profile/notifications')({
+export const Route = createFileRoute(ROUTES.PROFILE.NOTIFICATIONS)({
   beforeLoad: createRouteGuard({ requireAuth: true }),
   component: Notifications,
 });

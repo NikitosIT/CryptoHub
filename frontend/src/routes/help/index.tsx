@@ -2,7 +2,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import { Box, Container, Link, Paper, Stack, Typography } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/help/')({
+import { ROUTES } from '@/constants/routesPath';
+
+export const Route = createFileRoute(ROUTES.HELP)({
   component: CryptoHelper,
 });
 

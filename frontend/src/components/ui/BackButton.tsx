@@ -1,13 +1,16 @@
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import { IconButton, Tooltip } from '@mui/material';
+import { useRouter } from '@tanstack/react-router';
 
 export default function BackButton() {
+  const router = useRouter();
   return (
     <div className="flex items-center">
       <Tooltip title="Back" arrow>
         <IconButton
           onClick={() => {
-            window.history.back();
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+            router.history.back();
           }}
           sx={{
             color: '#fb923c',
