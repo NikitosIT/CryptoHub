@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/api';
-import type { PostId, TelegramPost } from '@/types/db';
+import type { PostId, TelegramPost } from '@/types';
 import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
 
 import { findPostInCache } from '../-utils/findPostInCache';

@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import FavoriteButton from '@/routes/posts/-reactions/-components/FavoriteButton';
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 import { createPost, createQueryClientWithPost } from './testUtils';
 

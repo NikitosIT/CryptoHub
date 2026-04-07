@@ -8,7 +8,7 @@ import {
   getExistingMedia,
 } from '@/routes/posts/-comments/-utils/commentMediaUtils';
 import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import type {

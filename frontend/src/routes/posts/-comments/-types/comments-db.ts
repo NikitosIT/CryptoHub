@@ -1,4 +1,4 @@
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 
 export interface MutationContext {
   previousComments: CommentWithReplies[] | undefined;

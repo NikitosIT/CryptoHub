@@ -22,7 +22,7 @@ import type { UserNotifications } from '@/routes/profile/-api/useUserNotificatio
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
 import type { TokenForecast } from '@/routes/tokens/-api/useTokensAiForecasts.ts';
-import type { Code, Email, TelegramPost } from '@/types/db';
+import type { Code, Email, TelegramPost } from '@/types/index.ts';
 import { parseError } from '@/utils/errorUtils.ts';
 
 import {
@@ -309,7 +309,7 @@ function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
   });
 }
 
-async function getTokenForecast(tokenName: string): Promise<TokenForecast | null> {
+async function getTokenForecast(tokenName: string) {
   if (!tokenName) return null;
 
   const { data, error } = await supabase
@@ -325,7 +325,7 @@ async function getTokenForecast(tokenName: string): Promise<TokenForecast | null
   return data[0] ?? null;
 }
 
-async function listAuthors(): Promise<Author[]> {
+async function listAuthors() {
   const { data, error } = await supabase
     .from('authors')
     .select('label:author_name, id:tg_author_id')

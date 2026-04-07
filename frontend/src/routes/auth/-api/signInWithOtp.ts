@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { api } from '@/api';
-import type { Code, Email, NullableEmail } from '@/types/db';
+import type { Code, Email, NullableEmail } from '@/types';
 
 interface SignOtp {
   email: NullableEmail;

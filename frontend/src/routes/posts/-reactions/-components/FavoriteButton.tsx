@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useToggleFavorite } from '@/routes/posts/-reactions/-api/useToggleFavorite';
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 function FavoriteButtonComponent({ post }: { post: TelegramPost }) {
   const { user } = useAuthState({

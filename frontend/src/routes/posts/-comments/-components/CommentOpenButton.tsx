@@ -1,6 +1,6 @@
 import { Badge, Box, IconButton } from '@mui/material';
 
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 import { useCommentsModalPersistence } from '../-store/useCommentsModalStore';
 import { CommentModal } from './CommentModal';

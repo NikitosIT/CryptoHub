@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 const BASE = 'http://localhost';
 

@@ -5,7 +5,7 @@ import { AuthButton } from '@/components/ui/AuthButton';
 import { ROUTES } from '@/constants/routesPath';
 import { useCountdown } from '@/hooks/useCountdown';
 import { useResendEmailCode } from '@/routes/auth/-hooks/useResendEmailCode';
-import type { NullableEmail } from '@/types/db';
+import type { NullableEmail } from '@/types';
 
 import type { VerifySearchParams } from '../-hooks/useVerifyOTP';
 import { CountdownDisplay } from './CountdownDisplay';

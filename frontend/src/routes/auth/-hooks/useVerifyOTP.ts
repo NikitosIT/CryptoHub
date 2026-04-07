@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/useToast';
 import { codeSchema } from '@/lib/validatorSchemas';
 import { useVerifyOtp } from '@/routes/auth/-api/signInWithOtp';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
-import type { Code, Email, NullableEmail } from '@/types/db';
+import type { Code, Email, NullableEmail } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import { useCodeForm } from './useCodeForm';

@@ -1,7 +1,7 @@
 import { type QueryClient, useQuery } from '@tanstack/react-query';
 
 import { api } from '@/api';
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 
 import type { Comment, CommentWithReplies } from '../-types/comments-db';
 import { organizeComments } from '../-utils/commentUtils';

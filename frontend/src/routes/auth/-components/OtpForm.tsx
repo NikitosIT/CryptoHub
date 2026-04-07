@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 
 import { AuthButton } from '@/components/ui/AuthButton';
 import { StyledOtpInput } from '@/components/ui/StyledOtpInput';
-import type { Code } from '@/types/db';
+import type { Code } from '@/types';
 
 import ResendEmailCode from './ResendEmailCode';
 

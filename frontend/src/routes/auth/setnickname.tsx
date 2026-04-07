@@ -32,7 +32,7 @@ function SetNickname() {
           buttonText="Continue"
           loadingText="Saving..."
           onSuccess={() => {
-            navigate({ to: '/profile/', replace: true });
+            navigate({ to: ROUTES.PROFILE.INDEX, replace: true });
           }}
         />
       </Paper>

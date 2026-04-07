@@ -1,5 +1,5 @@
 import { TG_LINK, TG_YOUTUBE } from '@/constants/links';
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 import { PostBody } from './PostBody';
 

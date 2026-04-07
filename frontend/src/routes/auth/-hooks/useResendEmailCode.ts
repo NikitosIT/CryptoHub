@@ -1,6 +1,6 @@
 import { useToast } from '@/hooks/useToast';
 import { useResendCode } from '@/routes/auth/-api/signInWithOtp';
-import type { NullableEmail } from '@/types/db';
+import type { NullableEmail } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 interface UseResendEmailCodeOptions {

@@ -11,7 +11,7 @@ import {
 } from '@/routes/auth/-api/use2faApi';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useCodeForm } from '@/routes/auth/-hooks/useCodeForm';
-import type { Code } from '@/types/db';
+import type { Code } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 type CodeForm = { code: Code };

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { removeCommentFromList } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import type { CommentWithReplies, MutationContext } from '../-types/comments-db';

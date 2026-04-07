@@ -22,7 +22,7 @@ import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useCommentsList } from '@/routes/posts/-comments/-api/useCommentList';
 import { useCommentsModal } from '@/routes/posts/-comments/-hooks/useCommentsModal';
 import { buildParentMap } from '@/routes/posts/-comments/-utils/commentUtils';
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import { CommentInput } from './CommentInput';

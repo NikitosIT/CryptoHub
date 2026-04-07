@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { ZodString } from 'zod';
 import { z } from 'zod';
 
-import type { Code } from '@/types/db';
+import type { Code } from '@/types';
 
 type CodeFormValues = { code: Code };
 

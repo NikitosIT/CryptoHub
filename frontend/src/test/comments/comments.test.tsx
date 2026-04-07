@@ -29,7 +29,7 @@ import {
   resetCommentsHandlersHistory,
   updateCommentHandler,
 } from '@/test/mocks/commentsHandlers';
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 const mockUseAuthState = vi.fn();
 vi.mock('@/routes/auth/-hooks/useAuthState', () => ({

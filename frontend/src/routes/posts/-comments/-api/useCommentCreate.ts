@@ -4,7 +4,7 @@ import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { organizeComments } from '@/routes/posts/-comments/-utils/commentUtils';
 import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import type {

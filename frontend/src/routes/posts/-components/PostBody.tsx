@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { toHTML } from '@telegraf/entity';
 import type { MessageEntity } from '@telegraf/entity/types/types';
 
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 import { formatRelativeTime } from '../../../utils/formatDate';
 import { CommentOpenButton } from '../-comments/-components/CommentOpenButton';

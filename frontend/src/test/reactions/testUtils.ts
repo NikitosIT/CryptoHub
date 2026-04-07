@@ -1,7 +1,7 @@
 import type { InfiniteData } from '@tanstack/react-query';
 import { QueryClient } from '@tanstack/react-query';
 
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 export function createPost(overrides: Partial<TelegramPost> = {}): TelegramPost {
   return {

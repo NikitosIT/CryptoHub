@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/api';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
 
 import { toggleReaction } from '../-hooks/useToggleReactionHook';

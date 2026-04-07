@@ -13,7 +13,7 @@ import {
 import BackButton from '@/components/ui/BackButton';
 import { useTwoFactorHook } from '@/routes/auth/-hooks/use2FAHook';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
-import type { Code } from '@/types/db';
+import type { Code } from '@/types';
 
 import {
   alertStylesProfile,

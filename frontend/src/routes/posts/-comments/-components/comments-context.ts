@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { PostId } from '@/types/db';
+import type { PostId } from '@/types';
 
 import type { CommentWithReplies } from '../-types/comments-db';
 

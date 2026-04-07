@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { useCountdown } from '@/hooks/useCountdown';
 import { emailSchema } from '@/lib/validatorSchemas';
 import { useSendEmail } from '@/routes/auth/-api/signInWithOtp';
-import type { Email } from '@/types/db';
+import type { Email } from '@/types';
 import { validateRedirectTo } from '@/utils/redirectValidation';
 
 type LoginFormValues = { email: Email };

@@ -19,7 +19,7 @@ function FilterTokens() {
     }
   }, [error, showError]);
 
-  const tokens: SelectedToken[] = useMemo(
+  const tokens = useMemo<SelectedToken[]>(
     () =>
       (rawTokens ?? []).map((t) => ({
         label: t.name,

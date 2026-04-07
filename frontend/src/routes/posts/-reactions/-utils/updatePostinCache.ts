@@ -1,6 +1,6 @@
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 export function updatePostInCache(
   qc: QueryClient,

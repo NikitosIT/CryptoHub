@@ -1,6 +1,6 @@
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useToggleReaction } from '@/routes/posts/-reactions/-api/useToggleReaction';
-import type { TelegramPost } from '@/types/db';
+import type { TelegramPost } from '@/types';
 
 import type { UserReaction } from '../-types/reactions-type';
 import { getReactionClasses, REACTIONS } from '../-utils/reactionStyles';
