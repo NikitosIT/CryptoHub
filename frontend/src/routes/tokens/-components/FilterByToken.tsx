@@ -19,15 +19,13 @@ function FilterTokens() {
     }
   }, [error, showError]);
 
-  const tokens = useMemo<SelectedToken[]>(
-    () =>
-      (rawTokens ?? []).map((t) => ({
-        label: t.name,
-        value: t.symbol,
-        imageUrl: t.image,
-      })),
-    [rawTokens],
-  );
+  const tokens = useMemo<SelectedToken[]>(() => {
+    return (rawTokens ?? []).map((t) => ({
+      label: t.name,
+      value: t.symbol,
+      imageUrl: t.image,
+    }));
+  }, [rawTokens]);
 
   const handleChange = useCallback(
     (val: SelectedToken | null) => {

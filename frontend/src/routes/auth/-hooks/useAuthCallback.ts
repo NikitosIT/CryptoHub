@@ -1,20 +1,14 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 
-import { ROUTES } from '@/constants/routesPath';
 import { useToast } from '@/hooks/useToast';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useUserProfile } from '@/routes/profile/-api/useUserProfile';
-import { validateRedirectTo } from '@/utils/redirectValidation';
-
-type CallbackSearchParams = {
-  redirectTo?: string;
-};
 
 export function useAuthCallback() {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: ROUTES.AUTH.CALLBACK }) as CallbackSearchParams;
+
+  const search = useSearch({ from: '/auth/callback' });
   const { showError } = useToast();
 
   const {
@@ -33,31 +27,28 @@ export function useAuthCallback() {
   const searchRedirectTo = search.redirectTo;
   const profileNickname = profile?.nickname;
 
-  const redirectTo = useMemo(() => {
-    const validatedRedirect = validateRedirectTo(searchRedirectTo);
-    if (validatedRedirect) {
-      return validatedRedirect;
+  const redirectToPath = useMemo(() => {
+    if (searchRedirectTo) {
+      return searchRedirectTo;
     }
-    return profileNickname ? ROUTES.PROFILE.INDEX : ROUTES.AUTH.SETNICKNAME;
+    return profileNickname ? '/profile/' : '/auth/setnickname';
   }, [searchRedirectTo, profileNickname]);
 
   useEffect(() => {
     if (isAuthLoading || user?.id === undefined) return;
 
     if (!user.id) {
-      navigate({ to: ROUTES.AUTH.INDEX, replace: true });
+      void navigate({ to: '/auth', replace: true });
       return;
     }
 
     if (hasPendingTwoFactor) {
-      navigate({
-        to: ROUTES.AUTH.VERIFY2FA,
+      void navigate({
+        to: '/auth/verify-2fa',
         replace: true,
       });
       return;
     }
-
-    if (isProfileLoading) return;
 
     if (isProfileError) {
       const errorMessage =
@@ -66,11 +57,11 @@ export function useAuthCallback() {
           : 'Failed to load profile. Please try again later.';
       showError(errorMessage);
 
-      navigate({ to: ROUTES.PROFILE.INDEX, replace: true });
+      void navigate({ to: '/profile', replace: true });
       return;
     }
 
-    navigate({ to: redirectTo, replace: true });
+    void navigate({ to: redirectToPath, replace: true });
   }, [
     user?.id,
     isAuthLoading,
@@ -78,7 +69,7 @@ export function useAuthCallback() {
     hasPendingTwoFactor,
     isProfileError,
     profileError,
-    redirectTo,
+    redirectToPath,
     navigate,
     showError,
   ]);

@@ -1,4 +1,4 @@
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link, useMatch } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 
 import HelpInfo from './HelpInfo';
@@ -8,11 +8,19 @@ interface CalculatorTabsProps {
 }
 
 export function CalculatorTabs({ children }: CalculatorTabsProps) {
-  const location = useLocation();
+  const isSpotActive = !!useMatch({
+    from: '/calculator/spot',
+    shouldThrow: false,
+  });
+
+  const isFuturesActive = useMatch({
+    from: '/calculator/futures',
+    shouldThrow: false,
+  });
 
   const tabs = [
-    { label: 'Spot', path: '/calculator/spot' },
-    { label: 'Futures', path: '/calculator/futures' },
+    { label: 'Spot', path: '/calculator/spot', isActive: isSpotActive },
+    { label: 'Futures', path: '/calculator/futures', isActive: isFuturesActive },
   ];
 
   return (
@@ -25,44 +33,31 @@ export function CalculatorTabs({ children }: CalculatorTabsProps) {
           <HelpInfo />
         </div>
         <div className="relative flex items-center justify-center p-1 mx-auto shadow-inner bg-zinc-100 rounded-xl w-fit">
-          {tabs.map((tab) => {
-            const isActive = location.pathname === tab.path;
-            return (
-              <Link
-                key={tab.path}
-                to={tab.path}
-                className="relative z-10 flex items-center justify-center min-w-[80px] sm:min-w-[100px] px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 hover:text-zinc-900"
+          {tabs.map((tab) => (
+            <Link
+              key={tab.path}
+              to={tab.path}
+              className="relative z-10 flex items-center justify-center min-w-[80px] sm:min-w-[100px] px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 hover:text-zinc-900"
+            >
+              {tab.isActive && (
+                <motion.div
+                  layoutId="calculatorTabHighlight"
+                  className="absolute inset-0 bg-orange-500 rounded-lg shadow-md"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30, mass: 0.8 }}
+                />
+              )}
+              <motion.span
+                className={`relative z-10 ${tab.isActive ? 'text-white' : 'text-zinc-500'}`}
+                animate={{
+                  scale: tab.isActive ? 1.02 : 1,
+                  fontWeight: tab.isActive ? 600 : 500,
+                }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="calculatorTabHighlight"
-                    className="absolute inset-0 bg-orange-500 rounded-lg shadow-md "
-                    transition={{
-                      type: 'spring',
-                      stiffness: 400,
-                      damping: 30,
-                      mass: 0.8,
-                    }}
-                  />
-                )}
-
-                <motion.span
-                  className={`relative z-10 ${isActive ? 'text-white' : 'text-zinc-500'}`}
-                  animate={{
-                    scale: isActive ? 1.02 : 1,
-                    fontWeight: isActive ? 600 : 500,
-                  }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 400,
-                    damping: 25,
-                  }}
-                >
-                  {tab.label}
-                </motion.span>
-              </Link>
-            );
-          })}
+                {tab.label}
+              </motion.span>
+            </Link>
+          ))}
         </div>
         {children}
         <span className="block px-2 mt-4 text-center sm:mt-6 sm:text-sm">

@@ -7,7 +7,7 @@ import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtil
 import { debounceAsync } from '@/utils/debounceAsync';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-import type { CommentWithReplies } from '../-types/comments-db';
+import type { CommentWithReplies } from '../-types';
 import { findCommentInCache } from '../-utils/commentCache';
 import { commentsListQueryKey } from './useCommentList';
 

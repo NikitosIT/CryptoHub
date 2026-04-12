@@ -1,23 +1,26 @@
 import { useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 
-import type { CommentMedia } from '../-types/comments-db';
+import type { CommentMedia } from '../-types';
 import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
 import { CommentMediaWithLoading } from './CommentMediaWithLoading';
+type ThumbnailMetrics = {
+  dimension: number;
+  icon: number;
+  spinner: number;
+};
 
 type ThumbnailSize = 'small' | 'medium';
-
 interface MediaThumbnailsProps {
   media: CommentMedia[];
   maxThumbnails?: number;
   size?: ThumbnailSize;
 }
 
-const SIZES: Record<ThumbnailSize, { dimension: number; icon: number; spinner: number }> =
-  {
-    small: { dimension: 32, icon: 12, spinner: 12 },
-    medium: { dimension: 40, icon: 14, spinner: 16 },
-  };
+const SIZES: Record<ThumbnailSize, ThumbnailMetrics> = {
+  small: { dimension: 32, icon: 12, spinner: 12 },
+  medium: { dimension: 40, icon: 14, spinner: 16 },
+};
 
 function MediaThumbnailItem({
   mediaItem,

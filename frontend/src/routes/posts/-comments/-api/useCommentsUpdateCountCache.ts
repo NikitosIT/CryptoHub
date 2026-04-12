@@ -1,6 +1,8 @@
 import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { PostId, TelegramPost } from '@/types';
+import type { PostId } from '@/types';
+
+import type { TelegramPost } from '../../-types/post-types';
 
 const POSTS_QUERY_KEY = ['posts'] as const;
 

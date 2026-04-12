@@ -9,7 +9,6 @@ export default function BackButton() {
       <Tooltip title="Back" arrow>
         <IconButton
           onClick={() => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
             router.history.back();
           }}
           sx={{

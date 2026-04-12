@@ -52,7 +52,7 @@ export default function TokensAiForecasts() {
   return (
     <>
       <Button
-        onClick={() => handleOpen()}
+        onClick={() => void handleOpen()}
         disabled={!selectedToken || isLoading}
         variant="contained"
         sx={buttonForecastStyles}

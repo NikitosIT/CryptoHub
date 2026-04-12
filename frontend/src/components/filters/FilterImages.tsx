@@ -1,8 +1,12 @@
 import { Paper, type PaperProps } from '@mui/material';
 
-import type { OptionType } from './CustomSelectFilter';
+interface FilterOption {
+  id?: number;
+  imageUrl?: string;
+  label: string;
+}
 
-export function AuthorImg({ id, label }: { id: number; label: string }) {
+export function AuthorImg({ id, label }: FilterOption) {
   return (
     <img
       className="object-cover w-6 h-6 rounded-full shrink-0"
@@ -29,7 +33,7 @@ export function DropdownPaper(props: PaperProps) {
   );
 }
 
-export function OptionImage({ option }: { option: OptionType }) {
+export function OptionImage({ option }: { option: FilterOption }) {
   if (option.imageUrl) {
     return (
       <img

@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import { formatRelativeTime } from '@/utils/formatDate';
 
 import { useCommentItem } from '../-hooks/useCommentItem';
-import type { CommentProps } from '../-types/comments-db';
+import type { CommentProps } from '../-types';
 import { getCommentUserName } from '../-utils/commentItemUtils';
 
 export function CommentHeader({ comment }: CommentProps) {

@@ -11,11 +11,7 @@ import { updateCommentInList } from '@/routes/posts/-comments/-utils/commentUtil
 import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-import type {
-  CommentMedia,
-  CommentWithReplies,
-  MutationContext,
-} from '../-types/comments-db';
+import type { CommentMedia, CommentWithReplies, MutationContext } from '../-types';
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { uploadCommentMedia } from './useUploadMedia';
 

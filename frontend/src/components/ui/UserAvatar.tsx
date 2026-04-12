@@ -13,9 +13,9 @@ export function UserAvatar({
   showSkeleton = true,
   borderColor = '#fbbf24',
 }: UserAvatarProps) {
-  const { avatarUrl, isLoading } = useAvatarUrl();
+  const { avatarUrl } = useAvatarUrl();
 
-  if (showSkeleton && isLoading) {
+  if (showSkeleton) {
     return (
       <Skeleton
         variant="circular"

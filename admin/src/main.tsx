@@ -22,6 +22,11 @@ const queryClient = new QueryClient({
 
 export { queryClient };
 const router = createRouter({ routeTree });
+declare module "@tanstack/router-core" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 function RootWithProviders() {
   useAuthListener();

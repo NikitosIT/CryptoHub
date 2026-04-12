@@ -9,28 +9,28 @@ import {
   USER_LOGO_PREFIX,
 } from '@/constants/storage';
 import { supabase } from '@/lib/supabaseClient';
-import type { AuthStateData } from '@/routes/auth/-hooks/useAuthState.ts';
+import { twoFactorStatusQueryKey } from '@/routes/auth/-api/use2faApi';
+import type {
+  EnableTwoFactorResponse,
+  TwoFactorApiResponse,
+  TwoFactorStatusResponse,
+  VerifyLogin2FA,
+} from '@/routes/auth/-types';
 import { calculateAuthState } from '@/routes/auth/utils/calculateAuthState.ts';
 import type { Author } from '@/routes/authors/-api/useListAuthors.ts';
 import type { FetchTelegramPostParams } from '@/routes/posts/-api/useListTelegramPosts.ts';
 import type { CreateCommentParams } from '@/routes/posts/-comments/-api/useCommentCreate.ts';
 import type { UpdateCommentParams } from '@/routes/posts/-comments/-api/useCommentUpdate.ts';
-import type { CommentMedia } from '@/routes/posts/-comments/-types/comments-db.ts';
-import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-types/reactions-type.ts';
+import type { Comment } from '@/routes/posts/-comments/-types';
+import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-types';
+import type { TelegramPost } from '@/routes/posts/-types/post-types.ts';
 import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
 import type { UserNotifications } from '@/routes/profile/-api/useUserNotifications.ts';
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
 import type { TokenForecast } from '@/routes/tokens/-api/useTokensAiForecasts.ts';
-import type { Code, Email, TelegramPost } from '@/types/index.ts';
+import type { Email, OTPCode } from '@/types';
 import { parseError } from '@/utils/errorUtils.ts';
-
-import {
-  type EnableTwoFactorResponse,
-  twoFactorStatusQueryKey,
-  type TwoFactorStatusResponse,
-  type VerifyLogin2FA,
-} from '../routes/auth/-api/use2faApi.ts';
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
@@ -48,7 +48,7 @@ async function functionRequest<TResponse, TBody = unknown>({
   query,
   body,
   requireAuth = false,
-}: FunctionRequestOptions<TBody>): Promise<TResponse> {
+}: FunctionRequestOptions<TBody>) {
   const { supabaseFunctionsUrl, supabaseAnonKey } = env;
 
   const params = query ? `?${new URLSearchParams(query)}` : '';
@@ -82,7 +82,7 @@ async function functionRequest<TResponse, TBody = unknown>({
   return data as TResponse;
 }
 
-function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
+function uploadCommentMedia(files: File[]) {
   if (files.length === 0) {
     return Promise.resolve([]);
   }
@@ -127,7 +127,7 @@ function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
 
 function createComment(params: CreateCommentParams) {
   const { postId, text, parentCommentId, media } = params;
-  return functionRequest<{ success: boolean; data: unknown }>({
+  return functionRequest<{ success: boolean; data: Comment }>({
     functionName: 'user-comments',
     requireAuth: true,
     body: {
@@ -141,7 +141,7 @@ function createComment(params: CreateCommentParams) {
 
 function updateComment(params: UpdateCommentParams) {
   const { commentId, text, media } = params;
-  return functionRequest<{ success: boolean; data: unknown }>({
+  return functionRequest<{ success: boolean; data: Comment }>({
     functionName: 'user-comments',
     method: 'PATCH',
     requireAuth: true,
@@ -165,7 +165,7 @@ function deleteComment(commentId: number) {
 }
 
 function listComments(postId: number) {
-  return functionRequest<{ success: boolean; data: unknown[] }>({
+  return functionRequest<{ success: boolean; data: Comment[] }>({
     functionName: 'user-comments',
     method: 'GET',
     query: { post_id: String(postId) },
@@ -224,9 +224,7 @@ function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
   });
 }
 
-function verifyTwoFactorSetup(code: string): Promise<{
-  success?: boolean;
-}> {
+function verifyTwoFactorSetup(code: string) {
   return functionRequest<{
     success?: boolean;
   }>({
@@ -236,7 +234,7 @@ function verifyTwoFactorSetup(code: string): Promise<{
   });
 }
 
-function verifyLogin2FA(code: string): Promise<VerifyLogin2FA> {
+function verifyLogin2FA(code: string) {
   return functionRequest<VerifyLogin2FA>({
     functionName: 'verify-login-2fa',
     body: { code },
@@ -244,9 +242,7 @@ function verifyLogin2FA(code: string): Promise<VerifyLogin2FA> {
   });
 }
 
-function disableTwoFactor(code: string): Promise<{
-  success?: boolean;
-}> {
+function disableTwoFactor(code: string) {
   return functionRequest<{ success?: boolean }>({
     functionName: 'disable-2fa',
     body: { code },
@@ -254,13 +250,7 @@ function disableTwoFactor(code: string): Promise<{
   });
 }
 
-export interface TwoFactorApiResponse {
-  success: boolean;
-  message?: string;
-  error?: Error;
-}
-
-function clearTwoFactorVerification(): Promise<TwoFactorApiResponse> {
+function clearTwoFactorVerification() {
   return functionRequest<TwoFactorApiResponse>({
     functionName: 'clear-2fa-verification',
     body: {},
@@ -268,7 +258,7 @@ function clearTwoFactorVerification(): Promise<TwoFactorApiResponse> {
   });
 }
 
-async function getUserProfile(userId: string | undefined): Promise<UserProfile | null> {
+async function getUserProfile(userId: string | undefined) {
   const { data, error } = await supabase
     .from('profiles')
     .select('nickname, profile_logo, last_changed')
@@ -280,7 +270,7 @@ async function getUserProfile(userId: string | undefined): Promise<UserProfile |
   return data as UserProfile | null;
 }
 
-async function getNotifications(): Promise<UserNotifications[]> {
+async function getNotifications() {
   const { data, error } = await supabase
     .from('notification_users')
     .select('id, send_to, send_to_all, msg, created_at')
@@ -291,7 +281,7 @@ async function getNotifications(): Promise<UserNotifications[]> {
   return data as UserNotifications[];
 }
 
-async function uploadProfileLogo(file: File, encryption: string): Promise<void> {
+async function uploadProfileLogo(file: File, encryption: string) {
   const { error: uploadError } = await supabase.storage
     .from(USER_AVATARS_BUCKET)
     .upload(`${USER_LOGO_PREFIX}${encryption}.png`, file, {
@@ -301,7 +291,7 @@ async function uploadProfileLogo(file: File, encryption: string): Promise<void> 
   if (uploadError) throw uploadError;
 }
 
-function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
+function updateProfile(payload: UpdateProfile) {
   return functionRequest<UpdateProfile>({
     functionName: 'update-profile',
     body: payload,
@@ -336,9 +326,7 @@ async function listAuthors() {
   return data;
 }
 
-async function fetchTelegramPost(
-  params: FetchTelegramPostParams,
-): Promise<TelegramPost[]> {
+async function fetchTelegramPost(params: FetchTelegramPostParams) {
   const {
     cursorCreatedAt,
     cursorId,
@@ -369,7 +357,7 @@ async function fetchTelegramPost(
   return data ?? [];
 }
 
-async function signInWithOtp(email: Email): Promise<string> {
+async function signInWithOtp(email: Email) {
   const { error } = await supabase.auth.signInWithOtp({ email });
   if (error) {
     throw new Error(error.message);
@@ -377,7 +365,7 @@ async function signInWithOtp(email: Email): Promise<string> {
   return email;
 }
 
-async function verifyOtp(email: Email, code: Code): Promise<Session> {
+async function verifyOtp(email: Email, code: OTPCode) {
   const { data, error } = await supabase.auth.verifyOtp({
     email,
     token: code,
@@ -390,7 +378,7 @@ async function verifyOtp(email: Email, code: Code): Promise<Session> {
   return data.session;
 }
 
-async function signOut(): Promise<void> {
+async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
@@ -404,12 +392,12 @@ function onAuthStateChange(callback: (event: string, session: Session | null) =>
   };
 }
 
-export async function getSession(): Promise<Session | null> {
+export async function getSession() {
   const { data: sessionData } = await supabase.auth.getSession();
   return sessionData.session ?? null;
 }
 
-async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
+async function getAuthState(queryClient?: QueryClient) {
   const session = await getSession();
   const userId = session?.user.id;
 
@@ -438,7 +426,7 @@ async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
   return calculateAuthState(session, true, twoFactorStatus);
 }
 
-export async function cryptoTokens(): Promise<CryptoTokens[]> {
+export async function cryptoTokens() {
   return functionRequest<CryptoTokens[]>({
     functionName: 'crypto-tokens',
     body: {},

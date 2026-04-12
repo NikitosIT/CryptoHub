@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { TelegramPost } from '@/types';
+import type { TelegramPost } from '@/routes/posts/-types/post-types';
 
 const BASE = 'http://localhost';
 

@@ -1,11 +1,14 @@
-import { Outlet, useLocation } from "@tanstack/react-router";
+import { Outlet, useLocation, useMatch } from "@tanstack/react-router";
 import Header from "./Header";
 import { useThemeStore } from "@/store/useThemeStore";
 import { useEffect } from "react";
 
 export function MainLayout() {
-  const location = useLocation();
-  const isAuthPage = location.pathname === "/auth";
+  const isAuthPage = useMatch({
+    from: "/auth/",
+    shouldThrow: false,
+  });
+
   const theme = useThemeStore((s) => s.theme);
   useEffect(() => {
     const root = document.documentElement;

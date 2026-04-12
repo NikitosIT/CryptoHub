@@ -2,14 +2,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { ROUTES } from '@/constants/routesPath';
 import { calcSpotSchema, type SpotFormData } from '@/lib/validatorSchemas';
 import { useSpotStore } from '@/routes/calculator/-store/useSpotStore';
 
 import CalculatorButtons from './-layout/CalculatorButtons';
 import { CalculatorTabs } from './-layout/CalculatorTabs';
 
-export const Route = createFileRoute(ROUTES.CALCULATOR.SPOT)({
+export const Route = createFileRoute('/calculator/spot')({
   component: CalculatorSpot,
 });
 
@@ -33,7 +32,7 @@ export function CalculatorSpot() {
   };
   return (
     <CalculatorTabs>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+      <form onSubmit={void handleSubmit(onSubmit)} className="mt-6 space-y-4">
         <div>
           <input
             {...register('margin', { valueAsNumber: true })}

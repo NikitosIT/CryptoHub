@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { SxProps, Theme } from '@mui/material';
 import { Box, CircularProgress } from '@mui/material';
 
-import type { TypeMedia } from '../-types/comments-db';
+import type { TypeMedia } from '../-types';
 
 interface CommentMediaWithLoadingProps {
   type: TypeMedia;

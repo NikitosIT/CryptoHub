@@ -4,6 +4,7 @@ import { api } from '@/api';
 import { useSelectedAuthorId, useSelectedToken } from '@/store/useFiltersStore';
 
 import { type PostMode, usePostsMode } from '../-hooks/usePostsMode';
+import type { TelegramPost } from '../-types/post-types';
 
 export interface FetchTelegramPostParams {
   cursorId: number | undefined;
@@ -43,8 +44,11 @@ export function useTelegramPosts() {
 
   const query = useInfiniteQuery({
     queryKey,
-    initialPageParam: {} as Cursor,
-    queryFn: ({ pageParam }) => {
+    initialPageParam: {
+      id: undefined,
+      createdAt: undefined,
+    },
+    queryFn: ({ pageParam }: { pageParam: Cursor }) => {
       return api.posts.list({
         cursorId: pageParam.id,
         cursorCreatedAt: pageParam.createdAt,
@@ -55,7 +59,7 @@ export function useTelegramPosts() {
       });
     },
 
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: TelegramPost[]) => {
       if (!lastPage.length) return undefined;
       const last = lastPage[lastPage.length - 1];
       return { createdAt: last?.created_at ?? undefined, id: last?.id ?? undefined };

@@ -1,29 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { api } from '@/api';
 
-type TwoFactorPayload = {
-  code: string;
-  userId?: string | null;
-};
-
-type IsVerifyForCS = {
-  is_verified_for_current_session?: boolean;
-};
-
-export interface TwoFactorStatusResponse extends IsVerifyForCS {
-  enabled: boolean;
-}
-
-export type EnableTwoFactorResponse = {
-  qrUrl: string;
-};
-
-export interface VerifyLogin2FA extends IsVerifyForCS {
-  verified?: boolean;
-  error?: string;
-  remainingAttempts?: number;
-}
+import type { TwoFactorPayload, TwoFactorStatusResponse } from '../-types';
 
 export const twoFactorStatusQueryKey = (userId?: string | null) =>
   ['twoFactorStatus', userId] as const;
@@ -103,7 +87,7 @@ export function useDisableTwoFactor() {
 }
 
 function updateTwoFactorCache(
-  queryClient: ReturnType<typeof useQueryClient>,
+  queryClient: QueryClient,
   userId: string | null | undefined,
   status: { enabled: boolean },
 ) {
@@ -113,5 +97,5 @@ function updateTwoFactorCache(
       is_verified_for_current_session: true,
     });
   }
-  queryClient.invalidateQueries({ queryKey: twoFactorStatusQueryKey() });
+  void queryClient.invalidateQueries({ queryKey: twoFactorStatusQueryKey() });
 }

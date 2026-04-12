@@ -15,7 +15,7 @@ interface BaseAuthState {
   isAuthenticatedWith2FA?: boolean;
 }
 
-export interface UseAuthStateReturn extends BaseAuthState {
+interface UseAuthStateReturn extends BaseAuthState {
   isLoading?: boolean;
 }
 

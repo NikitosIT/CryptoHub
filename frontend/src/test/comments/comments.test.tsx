@@ -16,6 +16,7 @@ import {
 } from 'vitest';
 
 import { CommentOpenButton } from '@/routes/posts/-comments/-components/CommentOpenButton';
+import type { TelegramPost } from '@/routes/posts/-types/post-types';
 import {
   commentsCreateRequests,
   commentsDeleteRequests,
@@ -29,7 +30,6 @@ import {
   resetCommentsHandlersHistory,
   updateCommentHandler,
 } from '@/test/mocks/commentsHandlers';
-import type { TelegramPost } from '@/types';
 
 const mockUseAuthState = vi.fn();
 vi.mock('@/routes/auth/-hooks/useAuthState', () => ({

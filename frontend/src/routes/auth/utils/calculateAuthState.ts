@@ -1,7 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 
-import type { TwoFactorStatusResponse } from '../-api/use2faApi';
 import type { AuthStateData } from '../-hooks/useAuthState';
+import type { TwoFactorStatusResponse } from '../-types';
 
 export function calculateAuthState(
   session: Session | null,

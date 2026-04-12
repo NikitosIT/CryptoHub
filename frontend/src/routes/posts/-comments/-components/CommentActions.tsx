@@ -5,7 +5,7 @@ import { Button, Stack } from '@mui/material';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useCommentToggleLike } from '@/routes/posts/-comments/-api/useCommentToggleLike';
 
-import type { CommentProps } from '../-types/comments-db';
+import type { CommentProps } from '../-types';
 import { CommentActionsMenu } from './CommentActionsMenu';
 import { useCommentContext } from './comments-context';
 

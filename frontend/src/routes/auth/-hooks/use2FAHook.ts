@@ -11,10 +11,10 @@ import {
 } from '@/routes/auth/-api/use2faApi';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useCodeForm } from '@/routes/auth/-hooks/useCodeForm';
-import type { Code } from '@/types';
+import type { OTPCode } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-type CodeForm = { code: Code };
+type CodeForm = { code: OTPCode };
 
 export function useTwoFactorHook() {
   const [qrUrl, setQrUrl] = useState<string | null>(null);
@@ -136,7 +136,7 @@ export function useVerify2FA() {
 
     try {
       await verifyMutation.mutateAsync({ code, userId: user.id });
-      navigate({ to: '/auth/callback', replace: true });
+      void navigate({ to: '/auth/callback', replace: true });
     } catch (err) {
       const remaining = (err as { remainingAttempts?: number }).remainingAttempts;
       const message =

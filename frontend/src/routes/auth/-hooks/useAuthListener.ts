@@ -5,7 +5,6 @@ import { persister, queryClient } from '@/main';
 
 import { sessionQueryKey } from '../-api/useSessionQuery';
 
-// TODO move to auth
 export function useAuthListener() {
   useEffect(() => {
     const subscription = api.auth.onStateChange((event, session) => {

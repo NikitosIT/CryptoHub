@@ -1,13 +1,13 @@
 import type { MouseEvent } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import { Box, IconButton, Tooltip } from '@mui/material';
-import { Link, useLocation, useNavigate } from '@tanstack/react-router';
+import { Link, useMatch, useNavigate } from '@tanstack/react-router';
 
 import { UserAvatar } from '@/components/ui/UserAvatar';
 import { useDisplayNickname } from '@/hooks/useDisplayNickname';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 
-import { useHeaderNavigation } from '../../hooks/useHeaderNavigation';
+import { useHeaderNavigation } from '../../routes/auth/-api/useClearAuthState';
 
 export default function Header() {
   const { isAuthenticatedWith2FA, hasPendingTwoFactor, isLoading } = useAuthState({
@@ -17,9 +17,16 @@ export default function Header() {
   const { displayNickname } = useDisplayNickname();
   const { handleLoginClick, isOnVerificationPage } = useHeaderNavigation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const isProfilePath = location.pathname.startsWith('/profile');
-  const isAuthPath = location.pathname.startsWith('/auth');
+
+  const isProfilePath = useMatch({
+    from: '/profile/',
+    shouldThrow: false,
+  });
+
+  const isAuthPath = useMatch({
+    from: '/auth/',
+    shouldThrow: false,
+  });
 
   const shouldShowLogin =
     !isLoading && !isProfilePath && (!isAuthenticatedWith2FA || hasPendingTwoFactor);
@@ -35,14 +42,14 @@ export default function Header() {
 
   const onLoginClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (isOnVerificationPage && hasPendingTwoFactor) {
-      handleLoginClick(e);
+      void handleLoginClick(e);
       return;
     }
 
-    navigate({ to: '/auth/', replace: true });
+    void navigate({ to: '/auth', replace: true });
   };
 
-  const onHelpClick = () => navigate({ to: '/help' });
+  const onHelpClick = () => void navigate({ to: '/help' });
 
   return (
     <header className="relative px-4 mt-2 mb-4 sm:mt-3 sm:mb-6">
@@ -98,7 +105,7 @@ export default function Header() {
             <li>
               <Link
                 className="flex items-center gap-1.5 sm:gap-2 text-white transition-colors hover:text-blue-400"
-                to="/profile/"
+                to="/profile"
               >
                 <div className="w-7 h-7 sm:w-8 sm:h-8">
                   <UserAvatar size={28} showSkeleton={false} />

@@ -6,7 +6,7 @@ import { removeCommentFromList } from '@/routes/posts/-comments/-utils/commentUt
 import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-import type { CommentWithReplies, MutationContext } from '../-types/comments-db';
+import type { CommentWithReplies, MutationContext } from '../-types';
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
 

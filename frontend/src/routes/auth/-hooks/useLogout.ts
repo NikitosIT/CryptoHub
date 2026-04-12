@@ -1,3 +1,5 @@
+import { useNavigate } from '@tanstack/react-router';
+
 import { api } from '@/api';
 import { useToast } from '@/hooks/useToast';
 import { persister } from '@/main';
@@ -11,6 +13,7 @@ export function useLogout() {
   const { user } = useAuthState();
   const { data: twoFactorStatus } = useTwoFactorStatus(user?.id);
   const isTwoFactorEnabled = twoFactorStatus?.enabled ?? false;
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     if (isTwoFactorEnabled) {
@@ -25,12 +28,12 @@ export function useLogout() {
       await api.auth.signOut();
       localStorage.removeItem('user_profile_cache');
       persister.removeClient();
-      window.location.href = '/auth/';
+      void navigate({ to: '/auth', replace: true });
     } catch (error) {
       const errorMessage = getErrorMessage(error, 'Failed to log out.');
       showError(errorMessage);
       setTimeout(() => {
-        window.location.href = '/auth/';
+        void navigate({ to: '/auth', replace: true });
       }, 1000);
     }
   };

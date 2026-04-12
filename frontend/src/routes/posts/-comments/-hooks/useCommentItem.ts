@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 
-import type { CommentProps, TypeMedia } from '../-types/comments-db';
+import type { CommentProps, TypeMedia } from '../-types';
 import { isCommentOwner } from '../-utils/commentItemUtils';
 
 export function useCommentItem({ comment }: CommentProps) {

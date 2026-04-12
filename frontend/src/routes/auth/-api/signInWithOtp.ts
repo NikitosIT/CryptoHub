@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { api } from '@/api';
-import type { Code, Email, NullableEmail } from '@/types';
+import type { Email, NullableEmail, OTPCode } from '@/types/index';
 
 interface SignOtp {
   email: NullableEmail;
-  code: Code;
+  code: OTPCode;
 }
 
 export const useSendEmail = (options?: {

@@ -7,11 +7,7 @@ import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUser
 import type { PostId } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-import type {
-  CommentMedia,
-  CommentWithReplies,
-  MutationContext,
-} from '../-types/comments-db';
+import type { CommentMedia, CommentWithReplies } from '../-types';
 import { createBlobMediaFromFiles } from '../-utils/commentMediaUtils';
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
@@ -55,13 +51,7 @@ export function useCommentCreate() {
       });
     },
 
-    onMutate: async ({
-      postId,
-      text,
-      userId,
-      parentCommentId,
-      mediaFiles,
-    }): Promise<MutationContext> => {
+    onMutate: async ({ postId, text, userId, parentCommentId, mediaFiles }) => {
       const queryKey = commentsListQueryKey(postId);
 
       await queryClient.cancelQueries({ queryKey });
@@ -121,7 +111,7 @@ export function useCommentCreate() {
     },
 
     onSuccess: (response, { postId }, context) => {
-      if (response.success && response.data) {
+      if (response.success) {
         const realComment = response.data as CommentWithReplies;
 
         queryClient.setQueriesData<CommentWithReplies[]>(

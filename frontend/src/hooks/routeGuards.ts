@@ -1,18 +1,25 @@
-import { redirect } from '@tanstack/react-router';
+import { redirect, type RegisteredRouter, type ToOptions } from '@tanstack/react-router';
 
 import { api } from '@/api';
-import { ROUTES } from '@/constants/routesPath';
 import { queryClient } from '@/main';
 import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
+
+export type RouteTo = ToOptions<RegisteredRouter>['to'];
 
 interface GuardOptions {
   requireAuth?: boolean;
   requireNoAuth?: boolean;
   allowTwoFactorNoAuth?: boolean;
-  redirectTo?: string;
+  redirectTo?: RouteTo;
 }
 
-function throwRedirect(to: string) {
+interface CurrentLocation {
+  location: {
+    pathname: string;
+  };
+}
+
+function throwRedirect(to: RouteTo) {
   // eslint-disable-next-line @typescript-eslint/only-throw-error
   throw redirect({
     to,
@@ -28,11 +35,12 @@ export function createRouteGuard(options: GuardOptions) {
     redirectTo,
   } = options;
 
-  return async ({ location }: { location: { pathname: string } }) => {
+  return async ({ location }: CurrentLocation) => {
     const currentPath = location.pathname;
-    // TODO create seperate object ROUTES and write all routes into. Then use ROUTES instead of '/auth/verify-2fa' etc.
-    const isVerify2FAPath = currentPath === ROUTES.AUTH.VERIFY2FA;
-    const isSetNicknamePath = currentPath === ROUTES.AUTH.SETNICKNAME;
+    const isVerify2FAPath = currentPath === '/auth/verify-2fa';
+
+    const isSetNicknamePath = currentPath === '/auth/setnickname';
+
     const { user, isAuthenticatedWith2FA, hasPendingTwoFactor } =
       await api.auth.getState(queryClient);
     const isAuthenticated = Boolean(user?.id);
@@ -43,18 +51,18 @@ export function createRouteGuard(options: GuardOptions) {
       !isVerify2FAPath &&
       !allowTwoFactorNoAuth
     ) {
-      throwRedirect(ROUTES.AUTH.VERIFY2FA);
+      throwRedirect('/auth/verify-2fa');
     }
 
     if (requireAuth) {
       if (!isAuthenticated) {
-        throwRedirect(redirectTo || ROUTES.AUTH.INDEX);
+        throwRedirect(redirectTo || '/auth');
       }
     }
 
     if (requireNoAuth) {
       if (isAuthenticatedWith2FA) {
-        throwRedirect(redirectTo || ROUTES.PROFILE.INDEX);
+        throwRedirect(redirectTo || '/profile');
       }
     }
     if (isSetNicknamePath && isAuthenticated) {
@@ -63,12 +71,12 @@ export function createRouteGuard(options: GuardOptions) {
       );
       const profile = cached ?? (await api.profile.get(user?.id));
       if (profile?.nickname) {
-        throwRedirect(ROUTES.PROFILE.INDEX);
+        throwRedirect('/profile');
       }
     }
 
     if (isVerify2FAPath && isAuthenticatedWith2FA) {
-      throwRedirect(ROUTES.PROFILE.INDEX);
+      throwRedirect('/profile');
     }
   };
 }

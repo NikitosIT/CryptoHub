@@ -7,20 +7,15 @@ import { useCountdown } from '@/hooks/useCountdown';
 import { emailSchema } from '@/lib/validatorSchemas';
 import { useSendEmail } from '@/routes/auth/-api/signInWithOtp';
 import type { Email } from '@/types';
-import { validateRedirectTo } from '@/utils/redirectValidation';
 
 type LoginFormValues = { email: Email };
 
 const loginFormSchema = z.object({ email: emailSchema });
 
-type LoginSearchParams = {
-  redirectTo?: string;
-};
-
 export function useLogin() {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: '/auth/' }) as LoginSearchParams;
+
+  const search = useSearch({ from: '/auth/' });
   const {
     register,
     handleSubmit,
@@ -40,8 +35,8 @@ export function useLogin() {
   const sendCodeMutation = useSendEmail({
     onSuccess: (email) => {
       countdown.start();
-      const safeRedirectTo = validateRedirectTo(search.redirectTo);
-      navigate({
+      const safeRedirectTo = search.redirectTo;
+      void navigate({
         to: '/auth/verify',
         search: {
           email,

@@ -1,12 +1,6 @@
 import { api } from '@/api';
 
-import type { CommentMedia } from '../-types/comments-db';
-
-export async function uploadCommentMedia({
-  mediaFiles,
-}: {
-  mediaFiles?: File[];
-}): Promise<CommentMedia[]> {
+export async function uploadCommentMedia({ mediaFiles }: { mediaFiles?: File[] }) {
   if (!mediaFiles || mediaFiles.length === 0) {
     return [];
   }

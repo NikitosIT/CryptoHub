@@ -6,7 +6,7 @@ import type { PostId } from '@/types';
 import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
 
 import { toggleReaction } from '../-hooks/useToggleReactionHook';
-import type { UserReaction } from '../-types/reactions-type';
+import type { UserReaction } from '../-types';
 import { findPostInCache } from '../-utils/findPostInCache';
 import { updatePostInCache } from '../-utils/updatePostinCache';
 

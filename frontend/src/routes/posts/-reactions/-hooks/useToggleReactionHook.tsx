@@ -1,8 +1,7 @@
-import type { TelegramPost } from '@/types';
+import type { TelegramPost } from '../../-types/post-types';
+import type { UserReaction } from '../-types';
 
-import type { UserReaction } from '../-types/reactions-type';
-
-export function toggleReaction(post: TelegramPost, type: UserReaction): TelegramPost {
+export function toggleReaction(post: TelegramPost, type: UserReaction) {
   const prev = post.user_reaction;
 
   let like = post.like_count ?? 0;

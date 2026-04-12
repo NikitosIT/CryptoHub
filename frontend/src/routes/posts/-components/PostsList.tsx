@@ -3,6 +3,7 @@ import { useListAuthors } from '@/routes/authors/-api/useListAuthors';
 import { PAGE_SIZE, useTelegramPosts } from '@/routes/posts/-api/useListTelegramPosts';
 import { useSelectedAuthorId } from '@/store/useFiltersStore';
 
+import type { TelegramPost } from '../-types/post-types';
 import FeedSkeleton from './FeedSkeleton';
 import NoPostsTokenMessage from './NoPostsMessage';
 import { PostCard } from './PostCard';
@@ -41,13 +42,13 @@ export default function PostsList() {
 
   return (
     <div>
-      {posts.map((post) => (
+      {posts.map((post: TelegramPost) => (
         <PostCard key={post.id} post={post} />
       ))}
 
       {shouldShowLoadMore ? (
         <button
-          onClick={() => fetchNextPage()}
+          onClick={() => void fetchNextPage()}
           disabled={isFetchingNextPage}
           className="w-full py-3 mt-4 text-sm text-gray-400 border rounded-lg cursor-pointer hover:text-white disabled:opacity-50"
         >

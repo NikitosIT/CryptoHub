@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Linkify from 'linkify-react';
 
-import type { CommentMedia, CommentProps, TypeMedia } from '../-types/comments-db';
+import type { CommentMedia, CommentProps, TypeMedia } from '../-types';
 import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
 import { CommentMediaWithLoading } from './CommentMediaWithLoading';
 

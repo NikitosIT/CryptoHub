@@ -2,12 +2,11 @@ import { useMemo, useState } from 'react';
 import { toHTML } from '@telegraf/entity';
 import type { MessageEntity } from '@telegraf/entity/types/types';
 
-import type { TelegramPost } from '@/types';
-
 import { formatRelativeTime } from '../../../utils/formatDate';
 import { CommentOpenButton } from '../-comments/-components/CommentOpenButton';
 import FavoriteButton from '../-reactions/-components/FavoriteButton';
 import { ReactionButton } from '../-reactions/-components/ReactionButton';
+import type { TelegramPost } from '../-types/post-types';
 import { processLinks } from '../-utils/processLinks';
 import { sanitizeHtml } from '../-utils/sanitizeHtml';
 import { DocumentIcon } from './DocumentIcon';

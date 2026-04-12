@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import { useCommentItem } from '../-hooks/useCommentItem';
-import type { CommentProps } from '../-types/comments-db';
+import type { CommentProps } from '../-types';
 import { useCommentContext } from './comments-context';
 
 export function CommentActionsMenu({ comment }: CommentProps) {
@@ -27,7 +27,7 @@ export function CommentActionsMenu({ comment }: CommentProps) {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(comment.text || '');
+    void navigator.clipboard.writeText(comment.text || '');
   };
 
   return (

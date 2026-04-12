@@ -1,4 +1,4 @@
-import type { Comment, CommentWithReplies } from '../-types/comments-db';
+import type { Comment, CommentWithReplies } from '../-types';
 
 export function organizeComments(comments: Comment[]) {
   return [...comments].sort(

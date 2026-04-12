@@ -178,3 +178,9 @@ export const disableButtonStyles = {
     backgroundColor: 'rgba(239,68,68,0.1)',
   },
 };
+
+export const buttonStyle = {
+  bgcolor: '#18181b',
+  color: '#fff',
+  border: '1px solid #27272a',
+};

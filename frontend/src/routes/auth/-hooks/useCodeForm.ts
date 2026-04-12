@@ -3,9 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { ZodString } from 'zod';
 import { z } from 'zod';
 
-import type { Code } from '@/types';
+import type { OTPCode } from '@/types';
 
-type CodeFormValues = { code: Code };
+type CodeFormValues = { code: OTPCode };
 
 interface UseCodeFormOptions {
   schema: ZodString;

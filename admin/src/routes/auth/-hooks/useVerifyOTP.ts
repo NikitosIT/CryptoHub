@@ -37,7 +37,7 @@ export function useVerifyOTP() {
     if (sessionQuery.isLoading) return;
 
     if (!isEmailLogin && !session) {
-      void navigate({ to: "/auth/", replace: true });
+      void navigate({ to: "/auth", replace: true });
       return;
     }
 

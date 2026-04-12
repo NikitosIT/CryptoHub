@@ -3,14 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 
-import { ROUTES } from '@/constants/routesPath';
 import { calcFuturesSchema, type FuturesFormData } from '@/lib/validatorSchemas';
 
 import CalculatorButtons from './-layout/CalculatorButtons';
 import { CalculatorTabs } from './-layout/CalculatorTabs';
 import { type PositionType, useFuturesStore } from './-store/useFuturesStore';
 import { numberInputClass } from './spot';
-export const Route = createFileRoute(ROUTES.CALCULATOR.FUTURES)({
+export const Route = createFileRoute('/calculator/futures')({
   component: CalculatorFutures,
 });
 
@@ -85,7 +84,7 @@ export function CalculatorFutures() {
           </span>
         </button>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={void handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <input
             {...register('margin', { valueAsNumber: true })}

@@ -13,7 +13,7 @@ import {
 import BackButton from '@/components/ui/BackButton';
 import { useTwoFactorHook } from '@/routes/auth/-hooks/use2FAHook';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
-import type { Code } from '@/types';
+import type { OTPCode } from '@/types';
 
 import {
   alertStylesProfile,
@@ -104,7 +104,7 @@ export default function ProfileTwoFactor() {
                     {twoFactor.qrUrl === null && (
                       <Button
                         variant="contained"
-                        onClick={() => twoFactor.handleStartSetup()}
+                        onClick={() => void twoFactor.handleStartSetup()}
                         disabled={twoFactor.isRequesting}
                         sx={buttonQrlStyles}
                       >
@@ -117,7 +117,7 @@ export default function ProfileTwoFactor() {
                         qrUrl={twoFactor.qrUrl}
                         control={twoFactor.control}
                         error={twoFactor.codeFormErrors.code?.message}
-                        onSubmit={(e) => twoFactor.handleConfirmSetup(e)}
+                        onSubmit={(e) => void twoFactor.handleConfirmSetup(e)}
                         isVerifying={twoFactor.isVerifying}
                       />
                     )}
@@ -143,7 +143,7 @@ export default function ProfileTwoFactor() {
                       <DisableForm
                         control={twoFactor.control}
                         error={twoFactor.codeFormErrors.code?.message}
-                        onSubmit={(e) => twoFactor.handleDisableSubmit(e)}
+                        onSubmit={(e) => void twoFactor.handleDisableSubmit(e)}
                         onCancel={twoFactor.handleCancelDisable}
                         isDisabling={twoFactor.isDisabling}
                       />
@@ -160,7 +160,7 @@ export default function ProfileTwoFactor() {
 }
 
 export type ShareTwoFaProps = {
-  control: Control<{ code: Code }>;
+  control: Control<{ code: OTPCode }>;
   error?: string;
   onSubmit?: (e: React.FormEvent) => void;
 };

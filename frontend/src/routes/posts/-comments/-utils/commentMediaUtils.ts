@@ -1,7 +1,7 @@
 import { env } from '@/config/env';
 import { COMMENT_MEDIA_BUCKET } from '@/constants/storage';
 
-import type { CommentMedia, CommentWithReplies, TypeMedia } from '../-types/comments-db';
+import type { CommentMedia, CommentWithReplies, TypeMedia } from '../-types';
 
 const ABSOLUTE_URL_PREFIXES = ['blob:', 'http://', 'https://', '/'];
 

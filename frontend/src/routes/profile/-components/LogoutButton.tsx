@@ -10,6 +10,8 @@ import {
 
 import { useLogout } from '@/routes/auth/-hooks/useLogout';
 
+import { buttonStyle } from '../-utils/profileStyles';
+
 export function LogoutButton() {
   const [openDialog, setOpenDialog] = useState(false);
   const { handleLogout } = useLogout();
@@ -41,17 +43,7 @@ export function LogoutButton() {
         Logout
       </Button>
 
-      <Dialog
-        open={openDialog}
-        onClose={handleCancel}
-        PaperProps={{
-          sx: {
-            bgcolor: '#18181b',
-            color: '#fff',
-            border: '1px solid #27272a',
-          },
-        }}
-      >
+      <Dialog open={openDialog} onClose={handleCancel} sx={buttonStyle}>
         <DialogTitle sx={{ color: '#fff' }}>Confirm Logout</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: '#a1a1aa' }}>
@@ -73,7 +65,7 @@ export function LogoutButton() {
           </Button>
           <Button
             onClick={() => {
-              handleConfirm();
+              void handleConfirm();
             }}
             sx={{
               color: '#ef4444',

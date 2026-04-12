@@ -5,7 +5,7 @@ import { useCommentCreate } from '@/routes/posts/-comments/-api/useCommentCreate
 import { useCommentDelete } from '@/routes/posts/-comments/-api/useCommentDelete';
 import { useCommentUpdate } from '@/routes/posts/-comments/-api/useCommentUpdate';
 
-import type { CommentWithReplies } from '../-types/comments-db';
+import type { CommentWithReplies } from '../-types';
 
 export function useCommentsModal(postId: number) {
   const [replyingTo, setReplyingTo] = useState<CommentWithReplies | null>(null);

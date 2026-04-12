@@ -1,6 +1,6 @@
 import { TG_LINK, TG_YOUTUBE } from '@/constants/links';
-import type { TelegramPost } from '@/types';
 
+import type { TelegramPost } from '../-types/post-types';
 import { PostBody } from './PostBody';
 
 export function PostCard({ post }: { post: TelegramPost }) {
@@ -22,7 +22,6 @@ export function PostCard({ post }: { post: TelegramPost }) {
       <div className="flex justify-center">
         <div className="w-full max-w-2xl px-2 sm:px-4">
           <article key={post.id}>
-            {/* Author - above post, left */}
             <header className="flex items-center gap-2 mt-3 mb-3 sm:gap-3 sm:mt-4 sm:mb-4">
               {hasLogo ? (
                 <img
@@ -47,7 +46,6 @@ export function PostCard({ post }: { post: TelegramPost }) {
               </a>
             </header>
 
-            {/* Post content */}
             <div>
               <PostBody post={post} />
             </div>

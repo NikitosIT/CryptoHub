@@ -8,7 +8,7 @@ export default function NoPostsTokenMessage() {
   const { isLoading } = useAuthState();
   const { data: postsData } = useTelegramPosts();
 
-  const hasPosts = postsData?.pages.some((page) => page.length > 0) ?? false;
+  const hasPosts = postsData?.pages.some((page) => page.length > 0);
   if (isLoading) return null;
   if (!hasPosts) {
     const message = selectedToken ? (
@@ -20,7 +20,7 @@ export default function NoPostsTokenMessage() {
       'No posts yet'
     );
     return (
-      <p className="px-6 py-3 mt-6 text-base text-center text-gray-400 rounded-xl shadow-inner shadow-black/30">
+      <p className="px-6 py-3 mt-6 text-base text-center text-gray-400 shadow-inner rounded-xl shadow-black/30">
         ❌ {message}
       </p>
     );

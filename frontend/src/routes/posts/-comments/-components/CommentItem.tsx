@@ -13,7 +13,7 @@ import { alpha, type Theme } from '@mui/material/styles';
 import { useCommentItem } from '@/routes/posts/-comments/-hooks/useCommentItem';
 
 import { ImageModal } from '../../-components/ImageModal';
-import type { CommentWithReplies } from '../-types/comments-db';
+import type { CommentWithReplies } from '../-types';
 import { CommentActions } from './CommentActions';
 import { CommentAvatar } from './CommentAvatar';
 import { CommentContent } from './CommentContent';

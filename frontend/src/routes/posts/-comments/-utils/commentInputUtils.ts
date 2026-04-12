@@ -1,4 +1,4 @@
-import type { CommentWithReplies } from '../-types/comments-db';
+import type { CommentWithReplies } from '../-types';
 
 export const MAX_COMMENT_LENGTH = 500;
 

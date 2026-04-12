@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 
 import type { PostId } from '@/types';
 
-import type { CommentWithReplies } from '../-types/comments-db';
+import type { CommentWithReplies } from '../-types';
 
 interface CommentContextType {
   postId: PostId;

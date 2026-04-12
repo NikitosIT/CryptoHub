@@ -39,7 +39,7 @@ export function NicknameForm({
     <Box
       component="form"
       onSubmit={(e) => {
-        handleSubmit(e);
+        void handleSubmit(e);
       }}
       display="flex"
       flexDirection="column"

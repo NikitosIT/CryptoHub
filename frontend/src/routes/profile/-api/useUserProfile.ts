@@ -8,8 +8,8 @@ export const profileQueryKey = (userId?: string) =>
   userId ? (['profile', userId] as const) : (['profile'] as const);
 
 export interface UserProfile {
-  nickname: string | null;
-  profile_logo: string | null;
+  nickname?: string | null;
+  profile_logo?: string | null;
   last_changed?: string | null;
 }
 
