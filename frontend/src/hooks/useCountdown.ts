@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { DEFAULT_COUNTDOWN_DURATION, STORAGE_KEY_PREFIX } from '@/constants/countdown';
+const DEFAULT_COUNTDOWN_DURATION = 60000;
+const STORAGE_KEY_PREFIX = 'countdown_';
 
 interface UseCountdownOptions {
   duration?: number;
@@ -12,7 +13,7 @@ function getStorageKey(key?: string) {
   return `${STORAGE_KEY_PREFIX}${key}`;
 }
 
-function loadCountdownFromStorage(storageKey: string | null){
+function loadCountdownFromStorage(storageKey: string | null) {
   if (!storageKey || typeof window === 'undefined') return null;
 
   try {

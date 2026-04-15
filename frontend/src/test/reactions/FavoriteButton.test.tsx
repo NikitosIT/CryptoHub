@@ -7,7 +7,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import FavoriteButton from '@/routes/posts/-reactions/-components/FavoriteButton';
+import FavoriteButton from '@/routes/posts/-entities/-reactions/-components/FavoriteButton';
 import type { TelegramPost } from '@/routes/posts/-types/post-types';
 
 import { createPost, createQueryClientWithPost } from './testUtils';

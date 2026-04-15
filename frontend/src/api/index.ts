@@ -2,7 +2,6 @@ import type { Session } from '@supabase/supabase-js';
 import { type QueryClient } from '@tanstack/react-query';
 
 import { env } from '@/config/env';
-import { ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES } from '@/constants/comments.ts';
 import {
   COMMENT_MEDIA_BUCKET,
   USER_AVATARS_BUCKET,
@@ -16,13 +15,17 @@ import type {
   TwoFactorStatusResponse,
   VerifyLogin2FA,
 } from '@/routes/auth/-types';
-import { calculateAuthState } from '@/routes/auth/utils/calculateAuthState.ts';
+import { calculateAuthState } from '@/routes/auth/-utils/calculateAuthState';
 import type { Author } from '@/routes/authors/-api/useListAuthors.ts';
 import type { FetchTelegramPostParams } from '@/routes/posts/-api/useListTelegramPosts.ts';
-import type { CreateCommentParams } from '@/routes/posts/-comments/-api/useCommentCreate.ts';
-import type { UpdateCommentParams } from '@/routes/posts/-comments/-api/useCommentUpdate.ts';
-import type { Comment } from '@/routes/posts/-comments/-types';
-import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-types';
+import type { CreateCommentParams } from '@/routes/posts/-entities/-comments/-api/useCommentCreate';
+import type { UpdateCommentParams } from '@/routes/posts/-entities/-comments/-api/useCommentUpdate';
+import type { Comment } from '@/routes/posts/-entities/-comments/-types';
+import {
+  ALLOWED_IMAGE_TYPES,
+  ALLOWED_VIDEO_TYPES,
+} from '@/routes/posts/-entities/-comments/constants/comments';
+import type { ToggleReactionsParams } from '@/routes/posts/-entities/-reactions/-types';
 import type { TelegramPost } from '@/routes/posts/-types/post-types.ts';
 import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
 import type { UserNotifications } from '@/routes/profile/-api/useUserNotifications.ts';

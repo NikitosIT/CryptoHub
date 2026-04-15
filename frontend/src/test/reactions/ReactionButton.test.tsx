@@ -7,7 +7,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ReactionButton } from '@/routes/posts/-reactions/-components/ReactionButton';
+import { ReactionButton } from '@/routes/posts/-entities/-reactions/-components/ReactionButton';
 import type { TelegramPost } from '@/types';
 
 import { createPost, createQueryClientWithPost } from './testUtils';

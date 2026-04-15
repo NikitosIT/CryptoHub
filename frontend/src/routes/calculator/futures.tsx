@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 
 import { calcFuturesSchema, type FuturesFormData } from '@/lib/validatorSchemas';
 
-import CalculatorButtons from './-layout/CalculatorButtons';
-import { CalculatorTabs } from './-layout/CalculatorTabs';
+import CalculatorButtons from './-components/CalculatorButtons';
+import { CalculatorTabs } from './-components/CalculatorTabs';
 import { type PositionType, useFuturesStore } from './-store/useFuturesStore';
 import { numberInputClass } from './spot';
 export const Route = createFileRoute('/calculator/futures')({

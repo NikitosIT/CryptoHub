@@ -6,9 +6,9 @@ import { TG_MEDIA_BUCKET } from '@/constants/storage';
 import { resolvePublicStorageUrl } from '@/utils/storage';
 
 import { formatRelativeTime } from '../../../utils/formatDate';
-import { CommentOpenButton } from '../-comments/-components/CommentOpenButton';
-import FavoriteButton from '../-reactions/-components/FavoriteButton';
-import { ReactionButton } from '../-reactions/-components/ReactionButton';
+import { CommentOpenButton } from '../-entities/-comments/-components/CommentOpenButton';
+import FavoriteButton from '../-entities/-reactions/-components/FavoriteButton';
+import { ReactionButton } from '../-entities/-reactions/-components/ReactionButton';
 import type { TelegramPost } from '../-types/post-types';
 import { processLinks } from '../-utils/processLinks';
 import { sanitizeHtml } from '../-utils/sanitizeHtml';

@@ -15,7 +15,7 @@ import {
   vi,
 } from 'vitest';
 
-import { CommentOpenButton } from '@/routes/posts/-comments/-components/CommentOpenButton';
+import { CommentOpenButton } from '@/routes/posts/-entities/-comments/-components/CommentOpenButton';
 import type { TelegramPost } from '@/routes/posts/-types/post-types';
 import {
   commentsCreateRequests,

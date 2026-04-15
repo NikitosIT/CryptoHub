@@ -5,8 +5,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { calcSpotSchema, type SpotFormData } from '@/lib/validatorSchemas';
 import { useSpotStore } from '@/routes/calculator/-store/useSpotStore';
 
-import CalculatorButtons from './-layout/CalculatorButtons';
-import { CalculatorTabs } from './-layout/CalculatorTabs';
+import CalculatorButtons from './-components/CalculatorButtons';
+import { CalculatorTabs } from './-components/CalculatorTabs';
 
 export const Route = createFileRoute('/calculator/spot')({
   component: CalculatorSpot,

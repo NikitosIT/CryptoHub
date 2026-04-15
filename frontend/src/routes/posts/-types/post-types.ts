@@ -1,6 +1,6 @@
 import type { MessageEntity } from '@telegraf/entity/types/types';
 
-import type { UserReaction } from '../-reactions/-types';
+import type { UserReaction } from '../-entities/-reactions/-types';
 
 export type TelegramPost = {
   id: number;

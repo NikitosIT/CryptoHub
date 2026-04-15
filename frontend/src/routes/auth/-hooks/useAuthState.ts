@@ -3,7 +3,7 @@ import type { User } from '@supabase/supabase-js';
 import { useTwoFactorStatus } from '@/routes/auth/-api/use2faApi';
 import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 
-import { calculateAuthState } from '../utils/calculateAuthState';
+import { calculateAuthState } from '../-utils/calculateAuthState';
 
 interface UseAuthStateOptions {
   checkTwoFactor?: boolean;
