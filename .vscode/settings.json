@@ -1,6 +1,7 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.formatOnSave": true,
+  "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never",
     "source.fixAll.eslint": "always"
@@ -15,6 +16,7 @@
     { "directory": "frontend", "changeProcessCWD": true },
     { "directory": "admin", "changeProcessCWD": true }
   ],
+  "editor.rulers": [90],
   "deno.enable": true,
   "deno.enablePaths": ["supabase/functions"],
   "deno.importMap": "supabase/import_map.json"
