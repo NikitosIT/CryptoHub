@@ -13,9 +13,10 @@ export function UserAvatar({
   showSkeleton = true,
   borderColor = '#fbbf24',
 }: UserAvatarProps) {
-  const { avatarUrl } = useAvatarUrl();
+  const { avatarUrl, isLoading } = useAvatarUrl();
 
-  if (showSkeleton) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (showSkeleton && isLoading) {
     return (
       <Skeleton
         variant="circular"

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Badge, Box, IconButton } from '@mui/material';
 
 import type { TelegramPost } from '../../-types/post-types';
@@ -8,7 +9,7 @@ interface CommentButtonProps {
   post: TelegramPost;
 }
 
-export function CommentOpenButton({ post }: CommentButtonProps) {
+function CommentOpenButtonComponent({ post }: CommentButtonProps) {
   const { isOpen, open, close } = useCommentsModalPersistence(post.id);
   const commentsCount = post.comments_count ?? 0;
 
@@ -31,11 +32,16 @@ export function CommentOpenButton({ post }: CommentButtonProps) {
           <Box component="img" src="/links_logo/comments.svg" alt="Comments" />
         </Badge>
       </IconButton>
-
-      <CommentModal postId={post.id} isOpen={isOpen} onClose={close} />
+      {isOpen ? <CommentModal postId={post.id} isOpen={isOpen} onClose={close} /> : null}
     </>
   );
 }
+
+export const CommentOpenButton = memo(CommentOpenButtonComponent, (prev, next) => {
+  return (
+    prev.post.id === next.post.id && prev.post.comments_count === next.post.comments_count
+  );
+});
 
 const commentOpenButtonStyles = {
   color: 'grey.400',

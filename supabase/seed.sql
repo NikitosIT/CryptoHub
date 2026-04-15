@@ -10,3 +10,8 @@ VALUES
   ('КРИПТО ИЛЬЯ', 'https://t.me/crypto_ilya', -1001579090675),
   ('COIN 22', 'https://t.me/COIN22T', -1001792822445)
 ON CONFLICT DO NOTHING;
+
+INSERT INTO public.admin_users (id, email)
+SELECT id, email
+FROM auth.users
+ON CONFLICT (id) DO NOTHING;

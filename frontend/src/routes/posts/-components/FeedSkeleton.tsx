@@ -1,69 +1,17 @@
-import { Box, Skeleton } from '@mui/material';
-
 export default function FeedSkeleton() {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        maxWidth: '42rem',
-        mx: 'auto',
-        mt: 12,
-        gap: 3,
-      }}
-    >
-      {Array.from({ length: 3 }).map((_, i) => (
-        <Box
-          key={i}
-          sx={{
-            width: '100%',
-            p: 2.5,
-            border: '1px solid rgba(55, 65, 81, 0.5)',
-            borderRadius: 2,
-            bgcolor: '#171717',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-          }}
+    <div className="flex flex-col items-center justify-center w-full max-w-2xl gap-3 mx-auto mt-12">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          className="w-full p-4 border shadow-sm rounded-xl border-gray-700/50 bg-neutral-900"
         >
-          <Skeleton
-            variant="rectangular"
-            height={192}
-            sx={{
-              mb: 2,
-              borderRadius: 1.5,
-              bgcolor: 'rgba(38, 38, 38, 0.8)',
-            }}
-          />
-          <Skeleton
-            variant="text"
-            width="75%"
-            height={12}
-            sx={{
-              mb: 1.5,
-              bgcolor: 'rgba(38, 38, 38, 0.8)',
-            }}
-          />
-          <Skeleton
-            variant="text"
-            width="50%"
-            height={12}
-            sx={{
-              mb: 1.5,
-              bgcolor: 'rgba(38, 38, 38, 0.8)',
-            }}
-          />
-          <Skeleton
-            variant="text"
-            width="33%"
-            height={12}
-            sx={{
-              bgcolor: 'rgba(38, 38, 38, 0.8)',
-            }}
-          />
-        </Box>
+          <div className="w-full h-48 mb-3 rounded-lg bg-neutral-800 animate-pulse" />
+          <div className="w-3/4 h-3 mb-2 rounded bg-neutral-800 animate-pulse" />
+          <div className="w-1/2 h-3 mb-2 rounded bg-neutral-800 animate-pulse" />
+          <div className="w-1/3 h-3 rounded bg-neutral-800 animate-pulse" />
+        </div>
       ))}
-    </Box>
+    </div>
   );
 }

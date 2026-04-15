@@ -1,11 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import type { TokenForecast } from "@/types/admins";
 
 import { isAuthError } from "../utils/utils";
 import { forecastsQueryKey } from "./useForecasts";
 
+export interface TokenForecast {
+  id: number;
+  token_name: string;
+  forecast_text: string;
+  sentiment: "positive" | "neutral" | "negative";
+  source_url: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+}
+
+type Status = "approved" | "rejected";
 export function useForecastMutations(onUnauthorized?: () => void) {
   const queryClient = useQueryClient();
 
@@ -16,13 +26,7 @@ export function useForecastMutations(onUnauthorized?: () => void) {
   };
 
   const statusMutation = useMutation({
-    mutationFn: async ({
-      id,
-      status,
-    }: {
-      id: number;
-      status: "approved" | "rejected";
-    }) => {
+    mutationFn: async ({ id, status }: { id: number; status: Status }) => {
       await api.admin.forecasts.updateStatus(id, status);
       return { id };
     },
@@ -48,19 +52,25 @@ export function useForecastMutations(onUnauthorized?: () => void) {
     onError: handleAuthError,
   });
 
-  const actionLoading =
-    (statusMutation.isPending && statusMutation.variables
-      ? statusMutation.variables.id
-      : null) ??
-    (textMutation.isPending && textMutation.variables
-      ? textMutation.variables.id
-      : null);
+  const statusLoadingId = statusMutation.isPending
+    ? (statusMutation.variables?.id ?? null)
+    : null;
+
+  const textLoadingId = textMutation.isPending
+    ? (textMutation.variables?.id ?? null)
+    : null;
+
+  const actionLoading = statusLoadingId ?? textLoadingId;
+
+  const updateText = (id: number, text: string) =>
+    textMutation.mutateAsync({ id, text });
+
+  const updateStatus = (id: number, status: Status) =>
+    statusMutation.mutateAsync({ id, status });
 
   return {
-    updateStatus: (id: number, status: "approved" | "rejected") =>
-      statusMutation.mutateAsync({ id, status }),
-    updateText: (id: number, text: string) =>
-      textMutation.mutateAsync({ id, text }),
+    updateStatus,
+    updateText,
     actionLoading,
   };
 }

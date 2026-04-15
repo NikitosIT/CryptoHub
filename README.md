@@ -8,7 +8,7 @@ The project uses **Supabase as a backend** — authentication, database, API, an
 
 ---
 
-## 🧱 Tech stack
+## Tech stack
 
 ### Frontend
 
@@ -35,26 +35,25 @@ The project uses **Supabase as a backend** — authentication, database, API, an
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 Authentication (Google OAuth + Email OTP)
-- 🔑 Optional Two-Factor Authentication (TOTP)
-- 📰 Telegram posts feed with pagination
-- 🤖 AI-based token detection (OpenAI)
-- 👍 Reactions & favorites (optimistic updates)
-- 💬 Comments with media attachments
-- 🔍 Filters by token and author
-- 👤 User profile with avatar
+- Authentication (Google OAuth + Email OTP)
+- Optional Two-Factor Authentication (TOTP)
+- Telegram posts feed with pagination
+- AI-based token detection (OpenAI)
+- Reactions & favorites (optimistic updates)
+- Comments with media attachments
+- Filters by token and author
+- User profile with avatar
 
 ---
 
-## 🚀 Setup & install
+## Setup & install
 
 From the project root:
 
 ```bash
 cd frontend
-
 ```
 
 Install dependencies:
@@ -93,7 +92,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 Replace `your_supabase_project_url` and `your_supabase_anon_key` with the values from your [Supabase](https://supabase.com) project (Settings → API).
 
-## 🗄️ Supabase setup
+## Supabase setup
 
 **This project expects the Supabase backend to have:**
 Auth enabled (Email + Google)

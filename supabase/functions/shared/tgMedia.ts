@@ -44,11 +44,9 @@ async function uploadTelegramFileToSupabase(
     });
   if (error) throw error;
 
-  const { data } = supabase.storage.from("tg_media").getPublicUrl(filename);
-
   return {
     type,
-    url: data.publicUrl,
+    url: filename,
     file_name: file_name || `${file_id}.${ext}`,
     mime_type: mime_type || fileRes.headers.get("content-type"),
   };

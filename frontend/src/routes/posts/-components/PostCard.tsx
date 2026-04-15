@@ -21,12 +21,16 @@ export function PostCard({ post }: { post: TelegramPost }) {
     <div className="pb-12 border-b border-gray-800 sm:pb-12 md:pb-16 lg:pb-24">
       <div className="flex justify-center">
         <div className="w-full max-w-2xl px-2 sm:px-4">
-          <article key={post.id}>
+          <article>
             <header className="flex items-center gap-2 mt-3 mb-3 sm:gap-3 sm:mt-4 sm:mb-4">
               {hasLogo ? (
                 <img
                   src={authorLogo}
                   alt={post.author_name}
+                  width={36}
+                  height={36}
+                  loading="lazy"
+                  decoding="async"
                   className="block object-cover border rounded-full w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 shrink-0"
                   onError={(e) =>
                     (e.currentTarget.src = `/authors/${post.tg_author_id}.png`)

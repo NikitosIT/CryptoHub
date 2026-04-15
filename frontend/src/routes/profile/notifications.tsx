@@ -22,7 +22,7 @@ export function Notifications() {
         {!notifications || notifications.length === 0 ? (
           <div className="p-12 text-center border rounded-xl border-zinc-700 bg-zinc-800/50">
             <div className="flex items-center justify-center mx-auto mb-4 rounded-full size-16 bg-zinc-700">
-              <img className="size-10" src="" alt="notitfication" />
+              <img className="size-10" src="/others/telegram.png" alt="notification" />
             </div>
             <p className="text-zinc-400">No notifications yet</p>
           </div>
@@ -40,7 +40,7 @@ export function Notifications() {
                         <div className="flex items-center justify-center rounded-full bg-green-500/60 size-8">
                           <img
                             className="size-5"
-                            src="frontend\public\others\telegram.png"
+                            src="/others/telegram.png"
                             alt="notification"
                           />
                         </div>
@@ -53,7 +53,7 @@ export function Notifications() {
                         <div className="flex items-center justify-center rounded-full size-8 bg-blue-500/20">
                           <img
                             className="size-5"
-                            src="frontend\public\others\admin.png"
+                            src="/others/admin.png"
                             alt="admin"
                           />
                         </div>

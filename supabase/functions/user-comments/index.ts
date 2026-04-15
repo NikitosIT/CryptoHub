@@ -12,16 +12,34 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const url = new URL(req.url);
+    const action = url.searchParams.get("action");
+
     switch (req.method) {
       case "GET": {
-        const url = new URL(req.url);
         const postId = url.searchParams.get("post_id");
         if (!postId) return errorResponse("Missing post_id", 400, req);
         return await handleListComments(req, { post_id: Number(postId) });
       }
       case "POST": {
         const body = await parseRequestBody(req);
-        return await handleCreateComment(req, body);
+
+        switch (action) {
+          case "list": {
+            const postId = url.searchParams.get("post_id") ?? body.post_id;
+            if (!postId) return errorResponse("Missing post_id", 400, req);
+            return await handleListComments(req, { post_id: Number(postId) });
+          }
+          case "update":
+            return await handleUpdateComment(req, body);
+          case "delete":
+            return await handleDeleteComment(req, body);
+          case "create":
+          case null:
+            return await handleCreateComment(req, body);
+          default:
+            return errorResponse("Invalid action", 400, req);
+        }
       }
       case "PATCH": {
         const body = await parseRequestBody(req);

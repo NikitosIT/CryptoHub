@@ -11,7 +11,7 @@ export function getCachedProfile() {
   } catch {
     // Ignore JSON parse errors
   }
-  return null;
+  return undefined;
 }
 
 export function setCachedProfile(profile: UserProfile | null): void {

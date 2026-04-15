@@ -196,14 +196,17 @@ describe('Auth flow', () => {
         expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument();
       });
 
-      const codeInputs = document.querySelectorAll('input[inputmode="numeric"]');
+      const codeInputs = document.querySelectorAll<HTMLInputElement>(
+        'input[inputmode="numeric"]',
+      );
+
       expect(codeInputs.length).toBeGreaterThanOrEqual(6);
-      await userEvent.type(codeInputs[0], '1');
-      await userEvent.type(codeInputs[1], '2');
-      await userEvent.type(codeInputs[2], '3');
-      await userEvent.type(codeInputs[3], '4');
-      await userEvent.type(codeInputs[4], '5');
-      await userEvent.type(codeInputs[5], '6');
+      await userEvent.type(codeInputs[0]!, '1');
+      await userEvent.type(codeInputs[1]!, '2');
+      await userEvent.type(codeInputs[2]!, '3');
+      await userEvent.type(codeInputs[3]!, '4');
+      await userEvent.type(codeInputs[4]!, '5');
+      await userEvent.type(codeInputs[5]!, '6');
       await userEvent.click(screen.getByRole('button', { name: 'Confirm' }));
 
       await waitFor(() => {
@@ -250,7 +253,7 @@ describe('Auth flow', () => {
       expect(codeInputs.length).toBeGreaterThanOrEqual(6);
       for (let i = 0; i < 6; i++)
         // eslint-disable-next-line no-await-in-loop
-        await userEvent.type(codeInputs[i], String(i + 1));
+        await userEvent.type(codeInputs[i]!, String(i + 1));
       await userEvent.click(screen.getByRole('button', { name: 'Confirm' }));
 
       await waitFor(() => {

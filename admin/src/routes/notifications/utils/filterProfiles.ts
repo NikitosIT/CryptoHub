@@ -1,9 +1,10 @@
-import { UserInfo } from "@/api";
+export interface UserInfo {
+  id: string | null;
+  nickname: string | null;
+  profile_logo: string | null;
+}
 
-export function filterProfiles(
-  profiles: UserInfo[],
-  query: string,
-): UserInfo[] {
+export function filterProfiles(profiles: UserInfo[], query: string) {
   const q = query.trim().toLowerCase();
   if (!q) return profiles;
   return profiles.filter(

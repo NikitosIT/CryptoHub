@@ -1,4 +1,4 @@
-export function getSentimentStyles(sentiment: string): string {
+export function getSentimentStyles(sentiment: string) {
   switch (sentiment) {
     case "positive":
       return "bg-green-600/20 text-green-400";
@@ -9,7 +9,7 @@ export function getSentimentStyles(sentiment: string): string {
   }
 }
 
-export function getSentimentLabel(sentiment: string): string {
+export function getSentimentLabel(sentiment: string) {
   switch (sentiment) {
     case "positive":
       return "Положительный";
@@ -19,4 +19,3 @@ export function getSentimentLabel(sentiment: string): string {
       return "Нейтральный";
   }
 }
-

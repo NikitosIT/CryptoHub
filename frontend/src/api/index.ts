@@ -34,7 +34,7 @@ import { parseError } from '@/utils/errorUtils.ts';
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-interface FunctionRequestOptions<TBody = unknown> {
+interface FunctionRequestOptions<TBody> {
   functionName: string;
   method?: HttpMethod;
   query?: Record<string, string>;

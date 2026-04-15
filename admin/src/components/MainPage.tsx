@@ -35,7 +35,7 @@ function MainPage() {
               Отправляйте сообщения пользователям сайта
             </p>
           </Link>
-          <Link to="/tokens/" className={linkStyles}>
+          <Link to="/tokens" className={linkStyles}>
             <div className="flex items-center gap-4 mb-4">
               <div className="text-4xl">🪙</div>
               <h2 className="text-2xl font-semibold text-orange-400">

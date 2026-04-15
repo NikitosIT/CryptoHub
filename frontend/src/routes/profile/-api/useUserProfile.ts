@@ -40,7 +40,7 @@ export function useUserProfile() {
       const cached = queryClient.getQueryData<UserProfile | null>(
         profileQueryKey(user?.id),
       );
-      return cached ?? cachedProfile;
+      return cached;
     },
   });
 

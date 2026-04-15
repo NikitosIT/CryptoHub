@@ -4,26 +4,15 @@ export default function FilterSkeleton() {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
         width: '100%',
-        maxWidth: '28rem',
-        mx: 'auto',
-        mt: 8,
-        gap: 2,
       }}
     >
       <Skeleton
         variant="rectangular"
         height={56}
         sx={{
-          width: {
-            xs: '100%',
-            sm: 220,
-            md: 280,
-          },
+          width: '100%',
+          maxWidth: 320,
           borderRadius: 1,
           bgcolor: 'rgba(38, 38, 38, 0.8)',
         }}

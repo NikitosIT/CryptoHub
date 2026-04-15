@@ -1,9 +1,7 @@
-import { env } from '@/config/env';
 import { COMMENT_MEDIA_BUCKET } from '@/constants/storage';
+import { resolvePublicStorageUrl } from '@/utils/storage';
 
 import type { CommentMedia, CommentWithReplies, TypeMedia } from '../-types';
-
-const ABSOLUTE_URL_PREFIXES = ['blob:', 'http://', 'https://', '/'];
 
 export type MediaItem = {
   id: string;
@@ -17,13 +15,7 @@ export function getCommentMediaFullUrl(
   mediaItem: { url: string } | null | undefined,
 ): string {
   if (!mediaItem?.url) return '';
-
-  const url = mediaItem.url.trim();
-  if (ABSOLUTE_URL_PREFIXES.some((prefix) => url.startsWith(prefix))) {
-    return url;
-  }
-
-  return `${env.supabaseUrl}/storage/v1/object/public/${COMMENT_MEDIA_BUCKET}/${url}`;
+  return resolvePublicStorageUrl(mediaItem.url, COMMENT_MEDIA_BUCKET);
 }
 
 function fileToMediaType(file: File): TypeMedia {

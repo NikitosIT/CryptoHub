@@ -61,6 +61,7 @@ function FavoriteButtonWithPostsQuery({
     staleTime: Number.POSITIVE_INFINITY,
   });
   const postFromCache = data?.pages?.[0]?.[0];
+  if (!postFromCache) return null;
   return <FavoriteButton post={postFromCache} />;
 }
 
@@ -110,7 +111,7 @@ describe('FavoriteButton', () => {
       expect(mockToggleFavorite).toHaveBeenCalledTimes(1);
       expect(mockToggleFavorite).toHaveBeenCalledWith(42);
     });
-    expect(await mockToggleFavorite.mock.results[0].value).toEqual(addedResponse);
+    expect(await mockToggleFavorite.mock.results[0]?.value).toEqual(addedResponse);
   });
 
   it('when already favorite, click removes reaction: button loses yellow and request is sent with correct payload and mock response', async () => {
@@ -144,7 +145,7 @@ describe('FavoriteButton', () => {
       expect(mockToggleFavorite).toHaveBeenCalledTimes(1);
       expect(mockToggleFavorite).toHaveBeenCalledWith(99);
     });
-    expect(await mockToggleFavorite.mock.results[0].value).toEqual(removedResponse);
+    expect(await mockToggleFavorite.mock.results[0]?.value).toEqual(removedResponse);
   });
 
   it('when not logged in, click does nothing: no API call and button state unchanged', async () => {

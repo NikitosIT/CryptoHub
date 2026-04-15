@@ -1,13 +1,11 @@
-import { Outlet, useLocation, useMatch } from "@tanstack/react-router";
+import { Outlet, useLocation } from "@tanstack/react-router";
 import Header from "./Header";
 import { useThemeStore } from "@/store/useThemeStore";
 import { useEffect } from "react";
 
 export function MainLayout() {
-  const isAuthPage = useMatch({
-    from: "/auth/",
-    shouldThrow: false,
-  });
+  const { pathname } = useLocation();
+  const isAuthPage = pathname.startsWith("/auth");
 
   const theme = useThemeStore((s) => s.theme);
   useEffect(() => {

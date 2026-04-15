@@ -19,25 +19,26 @@ Your function URL is:
 
 ```
 https://figtowlbngryusuutsfo.supabase.co/functions/v1/telegram-bot
+
 ```
 
 Set the webhook (run once, or when you change the URL):
 
 ```bash
 # Replace YOUR_BOT_TOKEN with your real bot token (from @BotFather)
-curl "https://api.telegram.org/botYOUR_BOT_TOKEN/setWebhook?url=https://figtowlbngryusuutsfo.supabase.co/functions/v1/telegram-bot"
+curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://figtowlbngryusuutsfo.supabase.co/functions/v1/telegram-bot"
 ```
 
 Check that it’s set:
 
 ```bash
-curl "https://api.telegram.org/botYOUR_BOT_TOKEN/getWebhookInfo"
+curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getWebhookInfo"
 ```
 
 Remove the webhook (e.g. to switch back to polling):
 
 ```bash
-curl "https://api.telegram.org/botYOUR_BOT_TOKEN/deleteWebhook"
+curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/deleteWebhook"
 ```
 
 **Required:** Set these secrets on the Supabase project so the function can run:

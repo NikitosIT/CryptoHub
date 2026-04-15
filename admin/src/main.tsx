@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 
-import { useAuthListener } from "./api/useAuthListener";
+import { useAuthListener } from "./routes/auth/-api/useAuthListener";
 import "./index.css";
 import { routeTree } from "./routes/routeTree.gen";
 

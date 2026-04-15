@@ -2,8 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 
 import { api } from "@/api";
 import { isAuthError } from "@supabase/supabase-js";
+import { TokenForecast } from "./useForecastMutations";
+
+export interface ForecastsResponse {
+  success: boolean;
+  forecasts?: TokenForecast[];
+  error?: string;
+}
 
 export const forecastsQueryKey = () => ["admin", "forecasts"] as const;
+
 export function useForecasts(authorized: boolean, onUnauthorized?: () => void) {
   const handleAuthError = (error: unknown) => {
     if (isAuthError(error)) {

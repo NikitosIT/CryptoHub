@@ -25,7 +25,7 @@ export function useAvatarUrl() {
 
     const queryCached = queryClient.getQueryData<{
       profile_logo: string | null;
-    }>(profileQueryKey());
+    }>(profileQueryKey(user.id));
     if (queryCached?.profile_logo) {
       return getPublicAvatarUrl(queryCached.profile_logo);
     }

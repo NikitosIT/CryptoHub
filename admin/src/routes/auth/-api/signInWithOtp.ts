@@ -2,6 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 
 import { api } from "@/api";
 
+export interface CheckEmailResponse {
+  success: boolean;
+  exists?: boolean;
+  error?: string;
+}
+
 export const useSendEmail = (options?: {
   onSuccess?: (email: string) => void;
   onError?: (error: Error) => void;

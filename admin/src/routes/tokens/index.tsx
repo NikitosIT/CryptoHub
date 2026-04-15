@@ -1,8 +1,5 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
 
-import { api } from "@/api";
 import { createRouteGuard } from "@/hooks/routeGuards";
 import { formatPrice } from "@/utils/formatPrice";
 import { useListCryptoTokens } from "./api/useListCryptoTokens";

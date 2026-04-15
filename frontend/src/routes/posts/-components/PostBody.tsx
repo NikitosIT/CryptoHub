@@ -1,6 +1,9 @@
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { toHTML } from '@telegraf/entity';
 import type { MessageEntity } from '@telegraf/entity/types/types';
+
+import { TG_MEDIA_BUCKET } from '@/constants/storage';
+import { resolvePublicStorageUrl } from '@/utils/storage';
 
 import { formatRelativeTime } from '../../../utils/formatDate';
 import { CommentOpenButton } from '../-comments/-components/CommentOpenButton';
@@ -78,66 +81,70 @@ export function PostBody({ post }: { post: TelegramPost }) {
   );
 }
 
-function MediaGrid({ media, onPreview }: MediaGridProps) {
-  const [, setPreview] = useState<string | null>(null);
-
+const MediaGrid = memo(function MediaGrid({ media, onPreview }: MediaGridProps) {
   if (!Array.isArray(media) || media.length === 0) return null;
 
   const handlePreview = (url: string | null) => {
-    setPreview(url);
     onPreview?.(url);
   };
 
   return (
     <div className="grid grid-cols-1 gap-2 mb-2 sm:gap-3 sm:mb-3 sm:grid-cols-2">
-      {media.map((m, i) => (
-        <div
-          key={i}
-          className="overflow-hidden transition border rounded-lg border-gray-700/40 hover:border-gray-500 dark:border-gray-700/60"
-          onClick={() => {
-            if (m.type === 'photo' || m.type === 'document' || m.type === 'video') {
-              handlePreview(m.url);
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
+      {media.map((m, i) => {
+        const mediaUrl = resolvePublicStorageUrl(m.url, TG_MEDIA_BUCKET);
+
+        return (
+          <div
+            key={i}
+            className="overflow-hidden transition border rounded-lg border-gray-700/40 hover:border-gray-500 dark:border-gray-700/60"
+            style={{
+              aspectRatio: m.type === 'photo' || m.type === 'video' ? '4 / 3' : undefined,
+            }}
+            onClick={() => {
               if (m.type === 'photo' || m.type === 'document' || m.type === 'video') {
-                handlePreview(m.url);
+                handlePreview(mediaUrl);
               }
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label={`Open ${m.type} preview`}
-        >
-          {m.type === 'photo' && (
-            <img
-              src={m.url}
-              alt={`Image ${i + 1}`}
-              className="object-cover w-full h-auto rounded-lg cursor-pointer"
-              loading="lazy"
-            />
-          )}
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (m.type === 'photo' || m.type === 'document' || m.type === 'video') {
+                  handlePreview(mediaUrl);
+                }
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`Open ${m.type} preview`}
+          >
+            {m.type === 'photo' && (
+              <img
+                src={mediaUrl}
+                alt={`Image ${i + 1}`}
+                className="object-cover w-full h-full rounded-lg cursor-pointer"
+                loading="lazy"
+              />
+            )}
 
-          {m.type === 'video' && (
-            <video
-              controls
-              className="w-full h-auto rounded-lg cursor-pointer"
-              preload="metadata"
-            >
-              <source src={m.url} />
-            </video>
-          )}
+            {m.type === 'video' && (
+              <video
+                controls
+                className="object-cover w-full h-full rounded-lg cursor-pointer"
+                preload="metadata"
+              >
+                <source src={mediaUrl} />
+              </video>
+            )}
 
-          {m.type === 'document' && (
-            <div className="flex items-center justify-center p-4 text-gray-400 rounded-lg bg-neutral-900">
-              <DocumentIcon />
-              <span className="ml-2 truncate">{m.file_name}</span>
-            </div>
-          )}
-        </div>
-      ))}
+            {m.type === 'document' && (
+              <div className="flex items-center justify-center p-4 text-gray-400 rounded-lg bg-neutral-900">
+                <DocumentIcon />
+                <span className="ml-2 truncate">{m.file_name}</span>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
-}
+});
