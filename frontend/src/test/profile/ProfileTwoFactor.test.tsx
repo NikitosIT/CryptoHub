@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React from 'react';
+import type React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { api as apiClient } from '@/api';
 import ProfileTwoFactor from '@/routes/profile/-components/ProfileTwoFactor';
 
 const mockGetStatus = vi.fn();
@@ -13,13 +14,14 @@ const mockVerifySetup = vi.fn();
 const mockDisable = vi.fn();
 
 vi.mock('@/api', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@/api')>();
+  const mod = await importOriginal();
+  const typedMod = mod as { api: typeof apiClient };
   return {
-    ...mod,
+    ...typedMod,
     api: {
-      ...mod.api,
+      ...typedMod.api,
       twoFactor: {
-        ...mod.api.twoFactor,
+        ...typedMod.api.twoFactor,
         getStatus: () => mockGetStatus(),
         enable: () => mockEnable(),
         verifySetup: (code: string) => mockVerifySetup(code),
@@ -46,6 +48,7 @@ function createWrapper() {
   function Wrapper({ children }: { children: React.ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
+
   return { Wrapper, queryClient };
 }
 
@@ -179,7 +182,14 @@ describe('ProfileTwoFactor (2FA)', () => {
   });
 
   it('shows Loading while status is loading', () => {
-    mockGetStatus.mockImplementation(() => new Promise(() => {}));
+    let resolve!: () => void;
+
+    const pendingPromise = new Promise<void>((res) => {
+      resolve = res;
+    });
+
+    mockGetStatus.mockReturnValue(pendingPromise);
+    resolve();
 
     const { Wrapper } = createWrapper();
 

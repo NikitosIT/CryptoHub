@@ -82,7 +82,9 @@ export default function ProfileTwoFactor() {
                 {twoFactor.errorMessage !== null && (
                   <Alert
                     severity="error"
-                    onClose={() => twoFactor.setErrorMessage(null)}
+                    onClose={() => {
+                      twoFactor.setErrorMessage(null);
+                    }}
                     sx={alertStylesProfile}
                   >
                     {twoFactor.errorMessage}
@@ -92,7 +94,9 @@ export default function ProfileTwoFactor() {
                 {twoFactor.successMessage !== null && (
                   <Alert
                     severity="success"
-                    onClose={() => twoFactor.setSuccessMessage(null)}
+                    onClose={() => {
+                      twoFactor.setSuccessMessage(null);
+                    }}
                     sx={successAlertStylesProfile}
                   >
                     {twoFactor.successMessage}
@@ -104,7 +108,7 @@ export default function ProfileTwoFactor() {
                     {twoFactor.qrUrl === null && (
                       <Button
                         variant="contained"
-                        onClick={() => void twoFactor.handleStartSetup()}
+                        onClick={async () => twoFactor.handleStartSetup()}
                         disabled={twoFactor.isRequesting}
                         sx={buttonQrlStyles}
                       >
@@ -117,21 +121,29 @@ export default function ProfileTwoFactor() {
                         qrUrl={twoFactor.qrUrl}
                         control={twoFactor.control}
                         error={twoFactor.codeFormErrors.code?.message}
-                        onSubmit={(e) => void twoFactor.handleConfirmSetup(e)}
+                        onSubmit={async (e) => twoFactor.handleConfirmSetup(e)}
                         isVerifying={twoFactor.isVerifying}
                       />
                     )}
                   </>
                 )}
 
-                {twoFactor.isTwoFactorEnabled === true && (
+                {twoFactor.isTwoFactorEnabled && (
                   <Stack spacing={2}>
                     <Typography sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>
                       To disable 2FA, enter the current code from the app and confirm the
                       action.
                     </Typography>
 
-                    {!twoFactor.disableMode ? (
+                    {twoFactor.disableMode ? (
+                      <DisableForm
+                        control={twoFactor.control}
+                        error={twoFactor.codeFormErrors.code?.message}
+                        onSubmit={async (e) => twoFactor.handleDisableSubmit(e)}
+                        onCancel={twoFactor.handleCancelDisable}
+                        isDisabling={twoFactor.isDisabling}
+                      />
+                    ) : (
                       <Button
                         variant="outlined"
                         onClick={twoFactor.handleEnableDisableMode}
@@ -139,14 +151,6 @@ export default function ProfileTwoFactor() {
                       >
                         Disable 2FA
                       </Button>
-                    ) : (
-                      <DisableForm
-                        control={twoFactor.control}
-                        error={twoFactor.codeFormErrors.code?.message}
-                        onSubmit={(e) => void twoFactor.handleDisableSubmit(e)}
-                        onCancel={twoFactor.handleCancelDisable}
-                        isDisabling={twoFactor.isDisabling}
-                      />
                     )}
                   </Stack>
                 )}
@@ -176,9 +180,13 @@ function CodeInput({ control, error }: CodeInputProps) {
         <TextField
           {...field}
           label="6-digit code"
-          inputProps={{ inputMode: 'numeric', maxLength: 6 }}
+          slotProps={{
+            htmlInput: {
+              inputMode: 'numeric',
+              maxLength: 6,
+            },
+          }}
           fullWidth
-          autoFocus
           error={Boolean(error)}
           helperText={error}
           sx={profile2FaControllerStyles}
@@ -188,10 +196,10 @@ function CodeInput({ control, error }: CodeInputProps) {
   );
 }
 
-interface QrCodeSetupProps extends ShareTwoFaProps {
+type QrCodeSetupProps = {
   qrUrl: string;
   isVerifying: boolean;
-}
+} & ShareTwoFaProps;
 
 function QrCodeSetup({ qrUrl, control, error, onSubmit, isVerifying }: QrCodeSetupProps) {
   return (
@@ -223,10 +231,10 @@ function QrCodeSetup({ qrUrl, control, error, onSubmit, isVerifying }: QrCodeSet
   );
 }
 
-interface DisableFormProps extends ShareTwoFaProps {
+type DisableFormProps = {
   onCancel: () => void;
   isDisabling: boolean;
-}
+} & ShareTwoFaProps;
 
 function DisableForm({
   control,

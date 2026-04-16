@@ -3,9 +3,9 @@ import { useResendCode } from '@/routes/auth/-api/signInWithOtp';
 import type { NullableEmail } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-interface UseResendEmailCodeOptions {
+type UseResendEmailCodeOptions = {
   onSuccess?: () => void;
-}
+};
 
 export function useResendEmailCode(options: UseResendEmailCodeOptions = {}) {
   const { onSuccess } = options;

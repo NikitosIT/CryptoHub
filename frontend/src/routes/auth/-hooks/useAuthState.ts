@@ -5,19 +5,19 @@ import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 
 import { calculateAuthState } from '../-utils/calculateAuthState';
 
-interface UseAuthStateOptions {
+type UseAuthStateOptions = {
   checkTwoFactor?: boolean;
-}
+};
 
-interface BaseAuthState {
+type BaseAuthState = {
   user: User | undefined;
   hasPendingTwoFactor?: boolean;
   isAuthenticatedWith2FA?: boolean;
-}
+};
 
-interface UseAuthStateReturn extends BaseAuthState {
+type UseAuthStateReturn = {
   isLoading?: boolean;
-}
+} & BaseAuthState;
 
 export type AuthStateData = BaseAuthState;
 

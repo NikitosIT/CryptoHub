@@ -6,9 +6,9 @@ import type { PostId } from '@/types';
 import type { Comment, CommentWithReplies } from '../-types';
 import { organizeComments } from '../-utils/commentUtils';
 
-interface UseListCommentsOptions {
+type UseListCommentsOptions = {
   enabled?: boolean;
-}
+};
 
 export const commentsListQueryKey = (postId: PostId) => ['comments', postId] as const;
 
@@ -34,7 +34,7 @@ export function useCommentsList(postId: PostId, options: UseListCommentsOptions 
 
   return useQuery({
     queryKey: commentsListQueryKey(postId),
-    queryFn: () => fetchCommentsList(postId),
+    queryFn: async () => fetchCommentsList(postId),
     enabled,
     staleTime: 60_000,
     gcTime: 2 * 60_000,

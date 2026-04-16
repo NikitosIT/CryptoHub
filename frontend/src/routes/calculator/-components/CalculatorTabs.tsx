@@ -1,22 +1,17 @@
-import { Link, useMatch } from '@tanstack/react-router';
+import { Link, useMatchRoute } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 
 import HelpInfo from './HelpInfo';
 
-interface CalculatorTabsProps {
+type CalculatorTabsProps = {
   children: React.ReactNode;
-}
+};
 
 export function CalculatorTabs({ children }: CalculatorTabsProps) {
-  const isSpotActive = !!useMatch({
-    from: '/calculator/spot',
-    shouldThrow: false,
-  });
+  const matchRoute = useMatchRoute();
 
-  const isFuturesActive = useMatch({
-    from: '/calculator/futures',
-    shouldThrow: false,
-  });
+  const isSpotActive = Boolean(matchRoute({ to: '/calculator/spot' }));
+  const isFuturesActive = Boolean(matchRoute({ to: '/calculator/futures' }));
 
   const tabs = [
     { label: 'Spot', path: '/calculator/spot', isActive: isSpotActive },

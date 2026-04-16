@@ -9,7 +9,7 @@ export type Author = {
 
 export const authorsQueryKey = () => ['authors'] as const;
 
-function authorsList(): Promise<Author[]> {
+async function authorsList() {
   return api.authors.list();
 }
 

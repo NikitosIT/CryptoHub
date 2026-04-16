@@ -16,9 +16,9 @@ import { DropdownPaper, OptionImage } from './FilterImages';
 const ROW_HEIGHT = 42;
 const MAX_VISIBLE_ROWS = 8;
 
-interface VirtualRowData {
+type VirtualRowData = {
   items: readonly React.ReactNode[];
-}
+};
 
 type ListboxProps = React.HTMLAttributes<HTMLElement> & {
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ function VirtualRow({ index, style, items }: RowComponentProps<VirtualRowData>) 
 }
 
 const VirtualizedListbox = forwardRef<HTMLDivElement, ListboxProps>(
-  function VirtualizedListbox({ children, ownerState: _ownerState, ...other }, ref) {
+  ({ children, ownerState: _ownerState, ...other }, ref) => {
     const items = Children.toArray(children);
     const height = Math.min(items.length, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
 
@@ -49,17 +49,19 @@ const VirtualizedListbox = forwardRef<HTMLDivElement, ListboxProps>(
   },
 );
 
+VirtualizedListbox.displayName = 'VirtualizedListbox';
+
 type BaseOption = {
   label: string;
 };
 
-interface SelectFilterProps<T> extends BaseOption {
+type SelectFilterProps<T> = {
   options: T[];
   value: T | null;
   onChange: (value: T | null) => void;
   getOptionLabel?: (opt: T) => string;
   isOptionEqual?: (a: T, b: T) => boolean;
-}
+} & BaseOption;
 
 function SelectFilter<T extends BaseOption>({
   label,
@@ -109,7 +111,9 @@ function SelectFilter<T extends BaseOption>({
     <Autocomplete
       options={options}
       value={value}
-      onChange={(_, val) => onChange(val)}
+      onChange={(_, val) => {
+        onChange(val);
+      }}
       slots={{
         paper: DropdownPaper,
         listbox: VirtualizedListbox,

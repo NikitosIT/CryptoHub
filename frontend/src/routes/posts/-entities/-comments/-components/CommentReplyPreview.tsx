@@ -12,14 +12,16 @@ export function CommentReplyPreview() {
   if (!replyingTo) return null;
   const replyingToUserName = getCommentUserName(replyingTo);
   const replyingToText = replyingTo.text || '';
-  const media = replyingTo.media;
+  const { media } = replyingTo;
   const hasMedia = media && media.length > 0;
 
   return (
     <Paper elevation={0} sx={replyPreviewPaperStyles}>
       <Stack direction="row" alignItems="flex-start" spacing={{ xs: 1, sm: 1.5 }}>
         <Box
-          onClick={() => handleJumpToComment(replyingTo.id)}
+          onClick={() => {
+            handleJumpToComment(replyingTo.id);
+          }}
           sx={commentPreviewClickableBoxStyles}
           title="Click to jump to original comment"
         >

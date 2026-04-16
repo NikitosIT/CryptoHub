@@ -34,11 +34,13 @@ const DialogTransition = forwardRef<
   TransitionProps & { children: React.ReactElement }
 >((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-interface CommentsModalProps {
+DialogTransition.displayName = 'DialogTransition';
+
+type CommentsModalProps = {
   postId: PostId;
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 export function CommentModal({ postId, isOpen, onClose }: CommentsModalProps) {
   const { user } = useAuthState({

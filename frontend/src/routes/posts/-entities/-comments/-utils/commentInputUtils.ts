@@ -10,8 +10,10 @@ export function getCommentPlaceholder(
   if (editingComment) {
     return 'Editing comment...';
   }
+
   if (replyingTo) {
     return `Reply to ${replyingToUserName}...`;
   }
+
   return 'Write a comment...';
 }

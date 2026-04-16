@@ -5,7 +5,7 @@ import { PostBody } from './PostBody';
 
 export function PostCard({ post }: { post: TelegramPost }) {
   const authorLogo = `/authors/${post.tg_author_id}.jpg`;
-  const hasLogo = !!post.tg_author_id;
+  const hasLogo = Boolean(post.tg_author_id);
   const isYouTube = post.author_link.startsWith('@');
 
   const linkUrl = isYouTube
@@ -32,9 +32,9 @@ export function PostCard({ post }: { post: TelegramPost }) {
                   loading="lazy"
                   decoding="async"
                   className="block object-cover border rounded-full w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 shrink-0"
-                  onError={(e) =>
-                    (e.currentTarget.src = `/authors/${post.tg_author_id}.png`)
-                  }
+                  onError={(e) => {
+                    e.currentTarget.src = `/authors/${post.tg_author_id}.png`;
+                  }}
                 />
               ) : null}
 

@@ -27,7 +27,7 @@ export function useLogout() {
     try {
       await api.auth.signOut();
       localStorage.removeItem('user_profile_cache');
-      persister.removeClient();
+      void persister.removeClient();
       void navigate({ to: '/auth', replace: true });
     } catch (error) {
       const errorMessage = getErrorMessage(error, 'Failed to log out.');

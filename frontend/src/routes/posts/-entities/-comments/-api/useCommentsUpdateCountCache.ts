@@ -1,8 +1,7 @@
 import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
+import type { TelegramPost } from '@/routes/posts/-types/post-types';
 import type { PostId } from '@/types';
-
-import type { TelegramPost } from '../../-types/post-types';
 
 const POSTS_QUERY_KEY = ['posts'] as const;
 
@@ -10,11 +9,11 @@ export function useCommentsUpdateCountCache() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId, delta }: { postId: PostId; delta: 1 | -1 }) => {
+    async mutationFn({ postId, delta }: { postId: PostId; delta: 1 | -1 }) {
       return Promise.resolve({ postId, delta });
     },
 
-    onMutate: async ({ postId, delta }) => {
+    async onMutate({ postId, delta }) {
       await queryClient.cancelQueries({ queryKey: POSTS_QUERY_KEY });
 
       const previous = queryClient.getQueriesData<InfiniteData<TelegramPost[]>>({
@@ -43,7 +42,7 @@ export function useCommentsUpdateCountCache() {
       return { previous };
     },
 
-    onError: (_err, _vars, onMutateReturn) => {
+    onError(_err, _vars, onMutateReturn) {
       if (onMutateReturn?.previous) {
         for (const [queryKey, data] of onMutateReturn.previous) {
           queryClient.setQueryData(queryKey, data);

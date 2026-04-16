@@ -13,9 +13,10 @@
     "typescriptreact"
   ],
   "eslint.workingDirectories": [
-    { "directory": "frontend", "changeProcessCWD": true },
-    { "directory": "admin", "changeProcessCWD": true }
+     { "directory": "admin", "changeProcessCWD": true },
+    { "directory": "frontend", "changeProcessCWD": true }
   ],
+   "files.eol": "\n",
   "editor.rulers": [90],
   "deno.enable": true,
   "deno.enablePaths": ["supabase/functions"],

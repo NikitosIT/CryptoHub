@@ -13,7 +13,7 @@ export function CommentAvatar({ comment }: CommentProps) {
       sx={commentAvatarStyles}
       slotProps={{
         img: {
-          onError: (event) => {
+          onError(event) {
             (event.currentTarget as HTMLImageElement).src = '';
           },
         },

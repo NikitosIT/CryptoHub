@@ -14,5 +14,6 @@ export function findPostInCache(queryClient: QueryClient, postId: number) {
       if (found) return found;
     }
   }
+
   return null;
 }

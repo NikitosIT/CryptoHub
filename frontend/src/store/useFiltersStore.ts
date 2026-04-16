@@ -1,26 +1,25 @@
-import { useMemo } from 'react';
 import { create } from 'zustand';
 
 import { type PostMode, usePostsMode } from '@/routes/posts/-hooks/usePostsMode';
 
-export interface SelectedToken {
+export type SelectedToken = {
   label: string;
   value: string;
   imageUrl: string;
-}
+};
 
-interface FilterData {
+type FilterData = {
   selectedAuthorId: number | null;
   selectedToken: SelectedToken | null;
-}
+};
 
 type FiltersByMode = Record<PostMode, FilterData>;
 
-interface FiltersStore {
+type FiltersStore = {
   filters: FiltersByMode;
   setSelectedAuthorId: (mode: PostMode, id: number | null) => void;
   setSelectedToken: (mode: PostMode, token: SelectedToken | null) => void;
-}
+};
 
 const defaultFilterData: FilterData = {
   selectedAuthorId: null,
@@ -34,7 +33,7 @@ export const useFiltersStore = create<FiltersStore>()((set) => ({
     disliked: { ...defaultFilterData },
     favorites: { ...defaultFilterData },
   },
-  setSelectedAuthorId: (mode, id) => {
+  setSelectedAuthorId(mode, id) {
     set((state) => ({
       filters: {
         ...state.filters,
@@ -46,7 +45,7 @@ export const useFiltersStore = create<FiltersStore>()((set) => ({
     }));
   },
 
-  setSelectedToken: (mode, token) => {
+  setSelectedToken(mode, token) {
     set((state) => ({
       filters: {
         ...state.filters,
@@ -61,30 +60,36 @@ export const useFiltersStore = create<FiltersStore>()((set) => ({
 
 export function useSelectedAuthorId() {
   const { mode } = usePostsMode();
+
   const selectedAuthorId = useFiltersStore(
     (state) => state.filters[mode].selectedAuthorId,
   );
-  const setSelectedAuthorId = useFiltersStore((state) => state.setSelectedAuthorId);
 
-  return useMemo(
-    () => ({
-      selectedAuthorId,
-      setSelectedAuthorId: (id: number | null) => setSelectedAuthorId(mode, id),
-    }),
-    [mode, selectedAuthorId, setSelectedAuthorId],
-  );
+  const setSelectedAuthorIdStore = useFiltersStore((state) => state.setSelectedAuthorId);
+
+  const setSelectedAuthorId = (id: number | null) => {
+    setSelectedAuthorIdStore(mode, id);
+  };
+
+  return {
+    selectedAuthorId,
+    setSelectedAuthorId,
+  };
 }
 
 export function useSelectedToken() {
   const { mode } = usePostsMode();
-  const selectedToken = useFiltersStore((state) => state.filters[mode].selectedToken);
-  const setSelectedToken = useFiltersStore((state) => state.setSelectedToken);
 
-  return useMemo(
-    () => ({
-      selectedToken,
-      setSelectedToken: (token: SelectedToken | null) => setSelectedToken(mode, token),
-    }),
-    [mode, selectedToken, setSelectedToken],
-  );
+  const selectedToken = useFiltersStore((state) => state.filters[mode].selectedToken);
+
+  const setSelectedTokenStore = useFiltersStore((state) => state.setSelectedToken);
+
+  const setSelectedToken = (token: SelectedToken | null) => {
+    setSelectedTokenStore(mode, token);
+  };
+
+  return {
+    selectedToken,
+    setSelectedToken,
+  };
 }

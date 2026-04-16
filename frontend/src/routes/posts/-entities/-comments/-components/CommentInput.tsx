@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { SendIcon } from '@/components/ui/SendIcon';
 import { commentSchema } from '@/lib/validatorSchemas';
@@ -40,7 +40,7 @@ export function CommentInput() {
       defaultValues: { text: '' },
     });
 
-  const commentText = watch('text') || '';
+  const commentText = watch('text') ?? '';
   const isOverLimit = commentText.length > MAX_COMMENT_LENGTH;
 
   const {
@@ -74,7 +74,7 @@ export function CommentInput() {
   };
 
   const { handleKeyDown } = useCommentKeyboard({
-    onFormSubmit: () => handleSubmit(onFormSubmit)(),
+    onFormSubmit: async () => handleSubmit(onFormSubmit)(),
   });
 
   const hasContent =
@@ -95,7 +95,9 @@ export function CommentInput() {
             <CommentMediaPreviewItem
               key={item.id}
               item={item}
-              onRemove={() => handleMediaRemove(item)}
+              onRemove={() => {
+                handleMediaRemove(item);
+              }}
             />
           ))}
         </Stack>
@@ -147,7 +149,7 @@ export function CommentInput() {
 
           {showSendButton ? (
             <IconButton
-              onClick={() => handleSubmit(onFormSubmit)()}
+              onClick={async () => handleSubmit(onFormSubmit)()}
               sx={getCommentInputSendButtonStyles(true)}
               aria-label="Send comment"
             >

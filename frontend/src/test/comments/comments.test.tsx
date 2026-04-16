@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React from 'react';
+import type React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -39,7 +39,7 @@ vi.mock('@/routes/auth/-hooks/useAuthState', () => ({
 vi.mock('@/lib/supabaseClient', () => ({
   supabase: {
     auth: {
-      getSession: () =>
+      getSession: async () =>
         Promise.resolve({
           data: {
             session: {
@@ -73,9 +73,11 @@ function createWrapper(initialProfile?: { nickname: string | null }) {
       profile_logo: null,
     });
   }
+
   function Wrapper({ children }: { children: React.ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
+
   return { Wrapper, queryClient };
 }
 
@@ -100,9 +102,15 @@ function createPost(overrides: Partial<TelegramPost> = {}): TelegramPost {
 }
 
 describe('Comments', () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
-  afterAll(() => server.close());
-  afterEach(() => server.resetHandlers());
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+  afterAll(() => {
+    server.close();
+  });
+  afterEach(() => {
+    server.resetHandlers();
+  });
 
   beforeEach(() => {
     resetCommentsHandlersHistory();

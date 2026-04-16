@@ -36,7 +36,7 @@ export function VerifyEmailPage() {
         }}
       >
         <Stack spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-          {isAuthLoading || !showOTPField ? (
+          {(isAuthLoading ?? !showOTPField) ? (
             <Typography
               textAlign="center"
               sx={{

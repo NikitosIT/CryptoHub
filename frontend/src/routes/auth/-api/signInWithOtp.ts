@@ -3,10 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import { api } from '@/api';
 import type { Email, NullableEmail, OTPCode } from '@/types/index';
 
-interface SignOtp {
+type SignOtp = {
   email: NullableEmail;
   code: OTPCode;
-}
+};
 
 export const useSendEmail = (options?: {
   onSuccess?: (email: Email) => void;
@@ -21,19 +21,19 @@ export const useSendEmail = (options?: {
 
 export const useVerifyOtp = () => {
   return useMutation({
-    mutationFn: async ({ email, code }: SignOtp) => {
+    async mutationFn({ email, code }: SignOtp) {
       if (!email) {
         throw new Error('Email not found — try again');
       }
 
-      return await api.auth.verifyOtp(email, code);
+      return api.auth.verifyOtp(email, code);
     },
   });
 };
 
 export function useResendCode() {
   return useMutation({
-    mutationFn: async (email: Email) => {
+    async mutationFn(email: Email) {
       await api.auth.signInWithOtp(email);
     },
   });

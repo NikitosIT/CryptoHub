@@ -43,7 +43,7 @@ export function ProfileMain() {
     <div className="flex flex-col items-center justify-center px-2 mt-6 sm:px-4 sm:mt-8 md:mt-10">
       <Paper elevation={6} sx={profileCard}>
         <Typography variant="h5" sx={profileNickname}>
-          {profile?.nickname || session?.user.email?.split('@')[0] || 'User'}
+          {profile?.nickname ?? session?.user.email?.split('@')[0] ?? 'User'}
         </Typography>
 
         <Box display="flex" justifyContent="center" sx={{ mb: 3 }}>
@@ -51,7 +51,7 @@ export function ProfileMain() {
         </Box>
         <List sx={{ color: '#fff' }}>
           <ListItemButton
-            onClick={() => void navigate({ to: '/profile/edit' })}
+            onClick={async () => navigate({ to: '/profile/edit' })}
             sx={profileSettingName}
           >
             <EditIcon width={20} height={20} />
@@ -63,7 +63,7 @@ export function ProfileMain() {
           <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
 
           <ListItemButton
-            onClick={() => void navigate({ to: '/profile/twofactor' })}
+            onClick={async () => navigate({ to: '/profile/twofactor' })}
             sx={profileSecurity}
           >
             <SecurityIcon sx={{ fontSize: 20 }} />
@@ -75,7 +75,7 @@ export function ProfileMain() {
           <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
           <ListItemButton
             sx={profileNotifications}
-            onClick={() => void navigate({ to: '/profile/notifications' })}
+            onClick={async () => navigate({ to: '/profile/notifications' })}
           >
             <NotificationsIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>
@@ -86,7 +86,7 @@ export function ProfileMain() {
           <Divider sx={{ backgroundColor: '#3f3f46', my: 0.5 }} />
           <ListItemButton
             sx={profileLikedPost}
-            onClick={() => void navigate({ to: '/posts', search: { mode: 'liked' } })}
+            onClick={async () => navigate({ to: '/posts', search: { mode: 'liked' } })}
           >
             <FavoriteBorderIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>
@@ -97,7 +97,7 @@ export function ProfileMain() {
 
           <ListItemButton
             sx={profileDislikedPost}
-            onClick={() => void navigate({ to: '/posts', search: { mode: 'disliked' } })}
+            onClick={async () => navigate({ to: '/posts', search: { mode: 'disliked' } })}
           >
             <ThumbDownOffAltIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>
@@ -109,7 +109,9 @@ export function ProfileMain() {
 
           <ListItemButton
             sx={profileFavorites}
-            onClick={() => void navigate({ to: '/posts', search: { mode: 'favorites' } })}
+            onClick={async () =>
+              navigate({ to: '/posts', search: { mode: 'favorites' } })
+            }
           >
             <BookmarkBorderIcon sx={{ fontSize: 20 }} />
             <Typography fontSize="0.95rem" fontWeight={500}>

@@ -60,6 +60,7 @@ export function useVerifyOTP() {
       } else if (isAuthenticatedWith2FA) {
         void navigate({ to: '/auth/callback', replace: true });
       }
+
       return;
     }
 

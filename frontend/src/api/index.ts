@@ -21,10 +21,6 @@ import type { FetchTelegramPostParams } from '@/routes/posts/-api/useListTelegra
 import type { CreateCommentParams } from '@/routes/posts/-entities/-comments/-api/useCommentCreate';
 import type { UpdateCommentParams } from '@/routes/posts/-entities/-comments/-api/useCommentUpdate';
 import type { Comment } from '@/routes/posts/-entities/-comments/-types';
-import {
-  ALLOWED_IMAGE_TYPES,
-  ALLOWED_VIDEO_TYPES,
-} from '@/routes/posts/-entities/-comments/constants/comments';
 import type { ToggleReactionsParams } from '@/routes/posts/-entities/-reactions/-types';
 import type { TelegramPost } from '@/routes/posts/-types/post-types.ts';
 import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
@@ -37,13 +33,13 @@ import { parseError } from '@/utils/errorUtils.ts';
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-interface FunctionRequestOptions<TBody> {
+type FunctionRequestOptions<TBody> = {
   functionName: string;
   method?: HttpMethod;
   query?: Record<string, string>;
   body?: TBody;
   requireAuth?: boolean;
-}
+};
 
 async function functionRequest<TResponse, TBody = unknown>({
   functionName,
@@ -85,50 +81,20 @@ async function functionRequest<TResponse, TBody = unknown>({
   return data as TResponse;
 }
 
-function uploadCommentMedia(files: File[]) {
-  if (files.length === 0) {
-    return Promise.resolve([]);
+async function uploadCommentMedia(file: File, filename: string) {
+  const { error: uploadError } = await supabase.storage
+    .from(COMMENT_MEDIA_BUCKET)
+    .upload(filename, file, {
+      contentType: file.type,
+      upsert: false,
+    });
+
+  if (uploadError) {
+    throw new Error(`Failed to upload file "${file.name}": ${uploadError.message}`);
   }
-
-  const uploadPromises = files.map(async (file) => {
-    const isImage = ALLOWED_IMAGE_TYPES.includes(file.type);
-    const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type);
-
-    if (!isImage && !isVideo) {
-      throw new Error(
-        `Unsupported file type "${file.name}". Only images (JPEG, PNG, GIF, WebP) and videos (MP4, WebM, OGG, MOV) are allowed`,
-      );
-    }
-
-    const fileId = crypto.randomUUID();
-    const ext =
-      file.name.split('.').pop() || (file.type.startsWith('video/') ? 'mp4' : 'jpg');
-    const filename = `${fileId}.${ext}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from(COMMENT_MEDIA_BUCKET)
-      .upload(filename, file, {
-        contentType: file.type,
-        upsert: false,
-      });
-
-    if (uploadError) {
-      throw new Error(`Failed to upload file "${file.name}": ${uploadError.message}`);
-    }
-
-    const mediaType: 'video' | 'photo' = file.type.startsWith('video/')
-      ? 'video'
-      : 'photo';
-    return {
-      type: mediaType,
-      url: filename,
-    };
-  });
-
-  return Promise.all(uploadPromises);
 }
 
-function createComment(params: CreateCommentParams) {
+async function createComment(params: CreateCommentParams) {
   const { postId, text, parentCommentId, media } = params;
   return functionRequest<{ success: boolean; data: Comment }>({
     functionName: 'user-comments',
@@ -136,13 +102,13 @@ function createComment(params: CreateCommentParams) {
     body: {
       post_id: postId,
       text,
-      parent_comment_id: parentCommentId || null,
-      media: media || null,
+      parent_comment_id: parentCommentId ?? null,
+      media: media ?? null,
     },
   });
 }
 
-function updateComment(params: UpdateCommentParams) {
+async function updateComment(params: UpdateCommentParams) {
   const { commentId, text, media } = params;
   return functionRequest<{ success: boolean; data: Comment }>({
     functionName: 'user-comments',
@@ -151,12 +117,12 @@ function updateComment(params: UpdateCommentParams) {
     body: {
       comment_id: commentId,
       text,
-      media: media || null,
+      media: media ?? null,
     },
   });
 }
 
-function deleteComment(commentId: number) {
+async function deleteComment(commentId: number) {
   return functionRequest<{ success: boolean }>({
     functionName: 'user-comments',
     method: 'DELETE',
@@ -167,7 +133,7 @@ function deleteComment(commentId: number) {
   });
 }
 
-function listComments(postId: number) {
+async function listComments(postId: number) {
   return functionRequest<{ success: boolean; data: Comment[] }>({
     functionName: 'user-comments',
     method: 'GET',
@@ -175,7 +141,7 @@ function listComments(postId: number) {
   });
 }
 
-function toggleFavorite(postId: number) {
+async function toggleFavorite(postId: number) {
   return functionRequest<{ success: boolean }>({
     functionName: 'toggle-favorites',
     requireAuth: true,
@@ -185,7 +151,7 @@ function toggleFavorite(postId: number) {
   });
 }
 
-function toggleCommentsLike(commentId: number) {
+async function toggleCommentsLike(commentId: number) {
   return functionRequest<{
     success: boolean;
     status: 'added' | 'removed';
@@ -199,7 +165,7 @@ function toggleCommentsLike(commentId: number) {
   });
 }
 
-function toggleReactions(params: ToggleReactionsParams) {
+async function toggleReactions(params: ToggleReactionsParams) {
   const { postId, reactionType } = params;
   return functionRequest<{ success: boolean }>({
     functionName: 'toggle-reactions',
@@ -211,7 +177,7 @@ function toggleReactions(params: ToggleReactionsParams) {
   });
 }
 
-function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
+async function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
   return functionRequest<TwoFactorStatusResponse>({
     functionName: 'get-2fa-status',
     body: {},
@@ -219,7 +185,7 @@ function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
   });
 }
 
-function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
+async function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
   return functionRequest<EnableTwoFactorResponse>({
     functionName: 'enable-2fa',
     body: {},
@@ -227,7 +193,7 @@ function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
   });
 }
 
-function verifyTwoFactorSetup(code: string) {
+async function verifyTwoFactorSetup(code: string) {
   return functionRequest<{
     success?: boolean;
   }>({
@@ -237,7 +203,7 @@ function verifyTwoFactorSetup(code: string) {
   });
 }
 
-function verifyLogin2FA(code: string) {
+async function verifyLogin2FA(code: string) {
   return functionRequest<VerifyLogin2FA>({
     functionName: 'verify-login-2fa',
     body: { code },
@@ -245,7 +211,7 @@ function verifyLogin2FA(code: string) {
   });
 }
 
-function disableTwoFactor(code: string) {
+async function disableTwoFactor(code: string) {
   return functionRequest<{ success?: boolean }>({
     functionName: 'disable-2fa',
     body: { code },
@@ -253,7 +219,7 @@ function disableTwoFactor(code: string) {
   });
 }
 
-function clearTwoFactorVerification() {
+async function clearTwoFactorVerification() {
   return functionRequest<TwoFactorApiResponse>({
     functionName: 'clear-2fa-verification',
     body: {},
@@ -270,6 +236,7 @@ async function getUserProfile(userId: string | undefined) {
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
+
   return data as UserProfile | null;
 }
 
@@ -281,6 +248,7 @@ async function getNotifications() {
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
+
   return data as UserNotifications[];
 }
 
@@ -294,7 +262,7 @@ async function uploadProfileLogo(file: File, encryption: string) {
   if (uploadError) throw uploadError;
 }
 
-function updateProfile(payload: UpdateProfile) {
+async function updateProfile(payload: UpdateProfile) {
   return functionRequest<UpdateProfile>({
     functionName: 'update-profile',
     body: payload,
@@ -326,6 +294,7 @@ async function listAuthors() {
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
+
   return data;
 }
 
@@ -345,7 +314,7 @@ async function fetchTelegramPost(params: FetchTelegramPostParams) {
     page_limit: limit,
     author_id: authorId,
     token_name: tokenName,
-    mode: mode,
+    mode,
   })) as { data: TelegramPost[] | null; error: unknown };
 
   if (error) {
@@ -357,6 +326,7 @@ async function fetchTelegramPost(params: FetchTelegramPostParams) {
             : 'Unknown error occurred',
         );
   }
+
   return data ?? [];
 }
 
@@ -365,6 +335,7 @@ async function signInWithOtp(email: Email) {
   if (error) {
     throw new Error(error.message);
   }
+
   return email;
 }
 
@@ -391,7 +362,9 @@ async function signOut() {
 function onAuthStateChange(callback: (event: string, session: Session | null) => void) {
   const { data } = supabase.auth.onAuthStateChange(callback);
   return {
-    unsubscribe: () => data.subscription.unsubscribe(),
+    unsubscribe() {
+      data.subscription.unsubscribe();
+    },
   };
 }
 
@@ -415,7 +388,7 @@ async function getAuthState(queryClient?: QueryClient) {
       if (queryClient) {
         twoFactorStatus = await queryClient.ensureQueryData({
           queryKey: twoFactorStatusQueryKey(userId),
-          queryFn: () => getTwoFactorStatus(),
+          queryFn: async () => getTwoFactorStatus(),
           staleTime: Infinity,
         });
       } else {

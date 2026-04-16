@@ -51,7 +51,9 @@ export function PostBody({ post }: { post: TelegramPost }) {
 
         {isLong ? (
           <button
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              setExpanded(!expanded);
+            }}
             className="mt-1 text-xs font-medium cursor-pointer sm:text-sm text-sky-500 hover:text-sky-400"
           >
             {expanded ? 'Hide ... ' : 'Read more ... '}
@@ -75,13 +77,20 @@ export function PostBody({ post }: { post: TelegramPost }) {
           </div>
         ) : null}
 
-        {preview ? <ImageModal url={preview} onClose={() => setPreview(null)} /> : null}
+        {preview ? (
+          <ImageModal
+            url={preview}
+            onClose={() => {
+              setPreview(null);
+            }}
+          />
+        ) : null}
       </div>
     </div>
   );
 }
 
-const MediaGrid = memo(function MediaGrid({ media, onPreview }: MediaGridProps) {
+const MediaGrid = memo(({ media, onPreview }: MediaGridProps) => {
   if (!Array.isArray(media) || media.length === 0) return null;
 
   const handlePreview = (url: string | null) => {
@@ -120,7 +129,7 @@ const MediaGrid = memo(function MediaGrid({ media, onPreview }: MediaGridProps) 
             {m.type === 'photo' && (
               <img
                 src={mediaUrl}
-                alt={`Image ${i + 1}`}
+                alt="PostPhoto"
                 className="object-cover w-full h-full rounded-lg cursor-pointer"
                 loading="lazy"
               />
@@ -132,6 +141,13 @@ const MediaGrid = memo(function MediaGrid({ media, onPreview }: MediaGridProps) 
                 className="object-cover w-full h-full rounded-lg cursor-pointer"
                 preload="metadata"
               >
+                <track
+                  kind="captions"
+                  src="/captions/video.vtt"
+                  srcLang="en"
+                  label="English"
+                  default
+                />
                 <source src={mediaUrl} />
               </video>
             )}
@@ -148,3 +164,5 @@ const MediaGrid = memo(function MediaGrid({ media, onPreview }: MediaGridProps) 
     </div>
   );
 });
+
+MediaGrid.displayName = 'MediaGrid';

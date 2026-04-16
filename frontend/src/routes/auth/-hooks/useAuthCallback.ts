@@ -31,11 +31,12 @@ export function useAuthCallback() {
     if (searchRedirectTo) {
       return searchRedirectTo;
     }
+
     return profileNickname ? '/profile/' : '/auth/setnickname';
   }, [searchRedirectTo, profileNickname]);
 
   useEffect(() => {
-    if (isAuthLoading || user?.id === undefined) return;
+    if (isAuthLoading ?? user?.id === undefined) return;
 
     if (!user.id) {
       void navigate({ to: '/auth', replace: true });
@@ -76,6 +77,6 @@ export function useAuthCallback() {
 
   return {
     isProfileError,
-    isLoading: isAuthLoading || isProfileLoading,
+    isLoading: isAuthLoading ?? isProfileLoading,
   };
 }

@@ -33,7 +33,7 @@ export function useLogin() {
   });
 
   const sendCodeMutation = useSendEmail({
-    onSuccess: (email) => {
+    onSuccess(email) {
       countdown.start();
       const safeRedirectTo = search.redirectTo;
       void navigate({
@@ -54,7 +54,7 @@ export function useLogin() {
 
   const formErrors: FieldErrors<LoginFormValues> = {
     email:
-      errors.email ||
+      errors.email ??
       (sendCodeMutation.error?.message
         ? {
             type: 'server',

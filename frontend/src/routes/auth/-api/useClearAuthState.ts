@@ -24,7 +24,7 @@ export function useHeaderNavigation() {
       queryKey: twoFactorStatusQueryKey(),
     });
 
-    persister.removeClient();
+    void persister.removeClient();
     queryClient.clear();
 
     try {

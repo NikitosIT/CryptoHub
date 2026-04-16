@@ -11,11 +11,11 @@ type ThumbnailMetrics = {
 };
 
 type ThumbnailSize = 'small' | 'medium';
-interface MediaThumbnailsProps {
+type MediaThumbnailsProps = {
   media: CommentMedia[];
   maxThumbnails?: number;
   size?: ThumbnailSize;
-}
+};
 
 const SIZES: Record<ThumbnailSize, ThumbnailMetrics> = {
   small: { dimension: 32, icon: 12, spinner: 12 },
@@ -38,7 +38,9 @@ function MediaThumbnailItem({
         type={mediaItem.type}
         src={getCommentMediaFullUrl(mediaItem)}
         alt="Media thumbnail"
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => {
+          setIsLoaded(true);
+        }}
         sx={thumbnailMediaStyles}
         videoMuted
         spinnerSize={spinner}

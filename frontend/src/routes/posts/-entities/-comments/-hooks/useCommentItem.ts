@@ -20,7 +20,9 @@ export function useCommentItem({ comment }: CommentProps) {
   return {
     previewMedia,
     handleMediaClick,
-    handleCloseMediaPreview: () => setPreviewMedia(null),
+    handleCloseMediaPreview() {
+      setPreviewMedia(null);
+    },
     isOwner,
   };
 }

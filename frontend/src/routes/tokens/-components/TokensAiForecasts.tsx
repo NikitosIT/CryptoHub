@@ -52,7 +52,7 @@ export default function TokensAiForecasts() {
   return (
     <>
       <Button
-        onClick={() => void handleOpen()}
+        onClick={async () => handleOpen()}
         disabled={!selectedToken || isLoading}
         variant="contained"
         sx={buttonForecastStyles}
@@ -69,24 +69,32 @@ export default function TokensAiForecasts() {
 
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
         maxWidth="sm"
         fullWidth
-        PaperProps={{ sx: dialogPaperSx }}
         slotProps={{
           backdrop: {
             sx: {
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               backdropFilter: 'blur(4px)',
+              dialogPaperSx,
             },
           },
         }}
       >
         <DialogTitle sx={forecastModalStyles}>
           <Typography variant="h6" fontWeight={600}>
-            {forecast !== null ? `Forecast for ${selectedToken?.value}` : 'AI Forecast'}
+            {forecast === null ? 'AI Forecast' : `Forecast for ${selectedToken?.value}`}
           </Typography>
-          <IconButton onClick={() => setOpen(false)} size="small" sx={closeButtonSx}>
+          <IconButton
+            onClick={() => {
+              setOpen(false);
+            }}
+            size="small"
+            sx={closeButtonSx}
+          >
             <CloseIcon />
           </IconButton>
         </DialogTitle>

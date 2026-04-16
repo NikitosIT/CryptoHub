@@ -17,13 +17,13 @@ export function useToggleReaction() {
   const { user } = useAuthState();
   const userId = user?.id;
   return useMutation({
-    mutationFn: ({
+    async mutationFn({
       postId,
       reactionType,
     }: {
       postId: PostId;
       reactionType: UserReaction;
-    }) => {
+    }) {
       const key = `${postId}:${user?.id}`;
 
       const initial = initialReactionMap.get(key) ?? null;
@@ -38,9 +38,11 @@ export function useToggleReaction() {
         initialReactionMap.delete(key);
         return Promise.resolve();
       }
+
       if (!userId) {
         return Promise.reject(new Error('User not authenticated'));
       }
+
       return debounceAsync(
         key,
         async () => {
@@ -51,19 +53,14 @@ export function useToggleReaction() {
       );
     },
 
-    onMutate: ({
-      postId,
-      reactionType,
-    }: {
-      postId: PostId;
-      reactionType: UserReaction;
-    }) => {
+    onMutate({ postId, reactionType }: { postId: PostId; reactionType: UserReaction }) {
       const key = `${postId}:${userId}`;
 
       if (!initialReactionMap.has(key)) {
         const post = findPostInCache(queryClient, postId);
         initialReactionMap.set(key, post?.user_reaction);
       }
+
       updatePostInCache(queryClient, postId, (post) =>
         toggleReaction(post, reactionType),
       );

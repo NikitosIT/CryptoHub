@@ -19,7 +19,7 @@ export function useCommentToggleLike(postId: number) {
   const { user } = useAuthState();
   const userId = user?.id;
 
-  function debouncedToggleCommentLikeWithCheck(commentId: number) {
+  async function debouncedToggleCommentLikeWithCheck(commentId: number) {
     const key = `like-comment:${commentId}:${userId}`;
     const queryKey = commentsListQueryKey(postId);
 
@@ -28,7 +28,7 @@ export function useCommentToggleLike(postId: number) {
       async () => {
         const initial = initialCommentLikeByKey.get(key);
         const currentComment = findCommentInCache(queryClient, queryKey, commentId);
-        const current = currentComment ? !!currentComment.user_has_liked : false;
+        const current = currentComment ? Boolean(currentComment.user_has_liked) : false;
 
         if (initial === current) {
           initialCommentLikeByKey.delete(key);
@@ -45,11 +45,11 @@ export function useCommentToggleLike(postId: number) {
   }
 
   const mutation = useMutation({
-    mutationFn: ({ commentId }: { commentId: number }) => {
+    async mutationFn({ commentId }: { commentId: number }) {
       return debouncedToggleCommentLikeWithCheck(commentId);
     },
 
-    onMutate: async ({ commentId }: { commentId: number }) => {
+    async onMutate({ commentId }: { commentId: number }) {
       if (!userId) {
         return { previous: null, queryKey: null };
       }
@@ -71,10 +71,10 @@ export function useCommentToggleLike(postId: number) {
       }
 
       if (!initialCommentLikeByKey.has(key)) {
-        initialCommentLikeByKey.set(key, !!currentComment.user_has_liked);
+        initialCommentLikeByKey.set(key, Boolean(currentComment.user_has_liked));
       }
 
-      const currentlyLiked = !!currentComment.user_has_liked;
+      const currentlyLiked = Boolean(currentComment.user_has_liked);
       const newLikeCount = Math.max(
         currentComment.like_count + (currentlyLiked ? -1 : 1),
         0,
@@ -96,7 +96,7 @@ export function useCommentToggleLike(postId: number) {
       return { previousComments, queryKey };
     },
 
-    onError: (err, _vars, onMutateReturn) => {
+    onError(err, _vars, onMutateReturn) {
       if (onMutateReturn?.previousComments) {
         queryClient.setQueryData(
           onMutateReturn.queryKey,

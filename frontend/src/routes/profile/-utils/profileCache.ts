@@ -11,6 +11,7 @@ export function getCachedProfile() {
   } catch {
     // Ignore JSON parse errors
   }
+
   return undefined;
 }
 

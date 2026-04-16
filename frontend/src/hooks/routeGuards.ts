@@ -1,23 +1,33 @@
-import { redirect, type RegisteredRouter, type ToOptions } from '@tanstack/react-router';
+import { redirect, type ToOptions } from '@tanstack/react-router';
 
 import { api } from '@/api';
 import { queryClient } from '@/main';
 import { profileQueryKey, type UserProfile } from '@/routes/profile/-api/useUserProfile';
 
-export type RouteTo = ToOptions<RegisteredRouter>['to'];
+export type RouteTo = ToOptions['to'];
 
-interface GuardOptions {
+type GuardOptions = {
   requireAuth?: boolean;
   requireNoAuth?: boolean;
   allowTwoFactorNoAuth?: boolean;
   redirectTo?: RouteTo;
-}
+};
 
-interface CurrentLocation {
+type CurrentLocation = {
   location: {
     pathname: string;
   };
-}
+};
+
+type RouteFlags = {
+  currentPath: string;
+  isVerify2FAPath: boolean;
+  isSetNicknamePath: boolean;
+};
+
+type AuthState = Awaited<ReturnType<typeof api.auth.getState>> & {
+  isAuthenticated: boolean;
+};
 
 function throwRedirect(to: RouteTo) {
   // eslint-disable-next-line @typescript-eslint/only-throw-error
@@ -27,56 +37,78 @@ function throwRedirect(to: RouteTo) {
   });
 }
 
+function getRouteFlags(pathname: string) {
+  return {
+    currentPath: pathname,
+    isVerify2FAPath: pathname === '/auth/verify-2fa',
+    isSetNicknamePath: pathname === '/auth/setnickname',
+  };
+}
+
+async function getGuardAuthState() {
+  const authState = await api.auth.getState(queryClient);
+
+  return {
+    ...authState,
+    isAuthenticated: Boolean(authState.user?.id),
+  };
+}
+
+function handleTwoFactorRedirect(
+  auth: AuthState,
+  route: RouteFlags,
+  options: GuardOptions,
+) {
+  if (
+    auth.hasPendingTwoFactor &&
+    auth.isAuthenticated &&
+    !route.isVerify2FAPath &&
+    !options.allowTwoFactorNoAuth
+  ) {
+    throwRedirect('/auth/verify-2fa');
+  }
+}
+
+function handleRequireAuth(auth: AuthState, options: GuardOptions) {
+  if (options.requireAuth && !auth.isAuthenticated) {
+    throwRedirect(options.redirectTo ?? '/auth');
+  }
+}
+
+function handleRequireNoAuth(auth: AuthState, options: GuardOptions) {
+  if (options.requireNoAuth && auth.isAuthenticatedWith2FA) {
+    throwRedirect(options.redirectTo ?? '/profile');
+  }
+}
+
+async function handleNicknameGuard(auth: AuthState, route: RouteFlags) {
+  if (!route.isSetNicknamePath || !auth.isAuthenticated || !auth.user?.id) return;
+
+  const cached = queryClient.getQueryData<UserProfile | null>(
+    profileQueryKey(auth.user.id),
+  );
+
+  const profile = cached ?? (await api.profile.get(auth.user.id));
+  if (profile?.nickname) {
+    throwRedirect('/profile');
+  }
+}
+
+function handleVerify2FARedirect(auth: AuthState, route: RouteFlags) {
+  if (route.isVerify2FAPath && auth.isAuthenticatedWith2FA) {
+    throwRedirect('/profile');
+  }
+}
+
 export function createRouteGuard(options: GuardOptions) {
-  const {
-    requireAuth = false,
-    requireNoAuth = false,
-    allowTwoFactorNoAuth = false,
-    redirectTo,
-  } = options;
-
   return async ({ location }: CurrentLocation) => {
-    const currentPath = location.pathname;
-    const isVerify2FAPath = currentPath === '/auth/verify-2fa';
+    const route = getRouteFlags(location.pathname);
+    const auth = await getGuardAuthState();
 
-    const isSetNicknamePath = currentPath === '/auth/setnickname';
-
-    const { user, isAuthenticatedWith2FA, hasPendingTwoFactor } =
-      await api.auth.getState(queryClient);
-    const isAuthenticated = Boolean(user?.id);
-
-    if (
-      hasPendingTwoFactor &&
-      isAuthenticated &&
-      !isVerify2FAPath &&
-      !allowTwoFactorNoAuth
-    ) {
-      throwRedirect('/auth/verify-2fa');
-    }
-
-    if (requireAuth) {
-      if (!isAuthenticated) {
-        throwRedirect(redirectTo || '/auth');
-      }
-    }
-
-    if (requireNoAuth) {
-      if (isAuthenticatedWith2FA) {
-        throwRedirect(redirectTo || '/profile');
-      }
-    }
-    if (isSetNicknamePath && isAuthenticated) {
-      const cached = queryClient.getQueryData<UserProfile | null>(
-        profileQueryKey(user?.id),
-      );
-      const profile = cached ?? (await api.profile.get(user?.id));
-      if (profile?.nickname) {
-        throwRedirect('/profile');
-      }
-    }
-
-    if (isVerify2FAPath && isAuthenticatedWith2FA) {
-      throwRedirect('/profile');
-    }
+    handleTwoFactorRedirect(auth, route, options);
+    handleRequireAuth(auth, options);
+    handleRequireNoAuth(auth, options);
+    await handleNicknameGuard(auth, route);
+    handleVerify2FARedirect(auth, route);
   };
 }

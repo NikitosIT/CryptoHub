@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { api } from '@/api';
 
-export interface CryptoTokens {
+export type CryptoTokens = {
   id: string;
   symbol: string;
   name: string;
@@ -10,11 +10,11 @@ export interface CryptoTokens {
   current_price: number;
   market_cap: number;
   market_cap_rank: number;
-}
+};
 
 export const cryptoTokensQueryKey = () => ['crypto-tokens'] as const;
 
-function cryptoTokenList(): Promise<CryptoTokens[]> {
+async function cryptoTokenList(): Promise<CryptoTokens[]> {
   return api.tokens.crypto();
 }
 

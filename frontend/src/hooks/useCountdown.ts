@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 const DEFAULT_COUNTDOWN_DURATION = 60000;
 const STORAGE_KEY_PREFIX = 'countdown_';
 
-interface UseCountdownOptions {
+type UseCountdownOptions = {
   duration?: number;
   storageKey?: string;
-}
+};
 
 function getStorageKey(key?: string) {
   if (!key) return null;

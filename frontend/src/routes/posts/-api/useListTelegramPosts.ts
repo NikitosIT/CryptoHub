@@ -6,14 +6,14 @@ import { useSelectedAuthorId, useSelectedToken } from '@/store/useFiltersStore';
 import { type PostMode, usePostsMode } from '../-hooks/usePostsMode';
 import type { TelegramPost } from '../-types/post-types';
 
-export interface FetchTelegramPostParams {
-  cursorId: number | undefined;
-  cursorCreatedAt: string | undefined;
+export type FetchTelegramPostParams = {
+  cursorId?: number | undefined;
+  cursorCreatedAt?: string | undefined;
   limit?: number;
   mode?: PostMode;
   authorId?: number | null;
   tokenName?: string | null;
-}
+};
 
 type Cursor = {
   createdAt?: string;
@@ -35,7 +35,7 @@ export function useTelegramPosts() {
   const { selectedAuthorId } = useSelectedAuthorId();
   const { selectedToken } = useSelectedToken();
 
-  const tokenName = selectedToken?.value || null;
+  const tokenName = selectedToken?.value ?? null;
   const authorId = selectedAuthorId ?? null;
 
   const { mode } = usePostsMode();
@@ -48,7 +48,7 @@ export function useTelegramPosts() {
       id: undefined,
       createdAt: undefined,
     },
-    queryFn: ({ pageParam }: { pageParam: Cursor }) => {
+    async queryFn({ pageParam }: { pageParam: Cursor }) {
       return api.posts.list({
         cursorId: pageParam.id,
         cursorCreatedAt: pageParam.createdAt,
@@ -59,7 +59,7 @@ export function useTelegramPosts() {
       });
     },
 
-    getNextPageParam: (lastPage: TelegramPost[]) => {
+    getNextPageParam(lastPage: TelegramPost[]) {
       if (!lastPage.length) return undefined;
       const last = lastPage[lastPage.length - 1];
       return { createdAt: last?.created_at ?? undefined, id: last?.id ?? undefined };

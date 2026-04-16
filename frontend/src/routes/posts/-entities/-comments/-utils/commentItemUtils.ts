@@ -11,12 +11,12 @@ export function getCommentAvatarUrl(comment: CommentWithReplies): string | null 
 export function getCommentUserName(comment: CommentWithReplies | null): string {
   if (!comment) return 'User';
   const nickname = comment.user?.raw_user_meta_data?.nickname?.trim();
-  return nickname || 'User';
+  return nickname ?? 'User';
 }
 
 export function isCommentOwner(
   comment: CommentWithReplies,
   currentUserId: string | undefined,
 ): boolean {
-  return !!currentUserId && currentUserId === comment.user_id;
+  return Boolean(currentUserId) && currentUserId === comment.user_id;
 }

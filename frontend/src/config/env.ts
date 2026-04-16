@@ -9,11 +9,14 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(import.meta.env);
 
 if (!parsed.success) {
-  console.error('Invalid environment variables:', z.flattenError(parsed.error).fieldErrors);
+  console.error(
+    'Invalid environment variables:',
+    z.flattenError(parsed.error).fieldErrors,
+  );
   throw new Error('Invalid environment variables');
 }
 
-const data = parsed.data;
+const { data } = parsed;
 
 export const env = {
   supabaseUrl: data.VITE_SUPABASE_URL,

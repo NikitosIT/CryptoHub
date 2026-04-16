@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
 export function useScrollTop(threshold = 400) {
   const [show, setShow] = useState(false);

@@ -10,13 +10,13 @@ export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
   const { userId } = useRequiredAuth();
   return useMutation({
-    mutationFn: async (payload: UpdateProfile) => {
-      return await api.profile.update({
+    async mutationFn(payload: UpdateProfile) {
+      return api.profile.update({
         ...payload,
       });
     },
 
-    onMutate: async (payload) => {
+    async onMutate(payload) {
       await queryClient.cancelQueries({
         queryKey: profileQueryKey(userId),
       });
@@ -36,7 +36,7 @@ export const useUpdateProfile = () => {
       return { previousProfile };
     },
 
-    onSuccess: (_data, payload) => {
+    onSuccess(_data, payload) {
       const current = queryClient.getQueryData<UserProfile | null>(
         profileQueryKey(userId),
       );
@@ -48,7 +48,7 @@ export const useUpdateProfile = () => {
       setCachedProfile(confirmed);
     },
 
-    onError: (_err, _payload, onMutateReturn) => {
+    onError(_err, _payload, onMutateReturn) {
       if (onMutateReturn?.previousProfile) {
         queryClient.setQueryData(profileQueryKey(userId), onMutateReturn.previousProfile);
         setCachedProfile(onMutateReturn.previousProfile);

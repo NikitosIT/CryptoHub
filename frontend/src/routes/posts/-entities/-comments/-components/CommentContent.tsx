@@ -6,13 +6,13 @@ import type { CommentMedia, CommentProps, TypeMedia } from '../-types';
 import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
 import { CommentMediaWithLoading } from './CommentMediaWithLoading';
 
-interface CommentContentProps extends CommentProps {
+type CommentContentProps = {
   onMediaClick: (mediaUrl: string, mediaType: TypeMedia) => void;
-}
+} & CommentProps;
 
 export function CommentContent({ comment, onMediaClick }: CommentContentProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const media = comment.media;
+  const { media } = comment;
   const commentText = comment.text;
   const shouldTruncate = commentText.length > MAX_PREVIEW_LENGTH;
   const displayText =
@@ -37,7 +37,9 @@ export function CommentContent({ comment, onMediaClick }: CommentContentProps) {
           </Typography>
           {shouldTruncate ? (
             <Button
-              onClick={() => setIsExpanded(!isExpanded)}
+              onClick={() => {
+                setIsExpanded(!isExpanded);
+              }}
               size="small"
               sx={commentContentReadMoreButtonStyles}
             >
@@ -68,11 +70,11 @@ export function CommentContent({ comment, onMediaClick }: CommentContentProps) {
   );
 }
 
-interface CommentMediaProps {
+type CommentMediaProps = {
   mediaItem: CommentMedia;
   index: number;
   onMediaClick: (mediaUrl: string, mediaType: TypeMedia) => void;
-}
+};
 
 const MAX_PREVIEW_LENGTH = 200;
 
@@ -105,7 +107,9 @@ function CommentMediaItem({ mediaItem, index, onMediaClick }: CommentMediaProps)
         onLoad={handleLoad}
         sx={commentContentMediaImageStyles}
         videoControls
-        onVideoClick={(e) => e.stopPropagation()}
+        onVideoClick={(e) => {
+          e.stopPropagation();
+        }}
       />
       {mediaItem.type === 'photo' && isLoaded ? (
         <Box className="comment-media-overlay" sx={commentContentMediaOverlayStyles} />

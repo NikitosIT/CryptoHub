@@ -4,15 +4,6 @@ import type { TelegramPost } from '@/routes/posts/-types/post-types';
 
 const BASE = 'http://localhost';
 
-export type FetchTelegramPostsPayload = {
-  cursor_created_at: string | null;
-  cursor_id: number | null;
-  page_limit: number;
-  author_id: number | null;
-  token_name: string | null;
-  mode: string;
-};
-
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -59,8 +50,17 @@ function makeSecondPage(): TelegramPost[] {
   );
 }
 
+type FetchTelegramPostsRpcPayload = {
+  cursor_created_at?: string | undefined;
+  cursor_id?: number | undefined;
+  page_limit?: number;
+  mode?: 'all' | 'liked' | 'disliked' | 'favorites';
+  author_id?: number | null;
+  token_name?: string | null;
+};
+
 export type FetchTelegramPostsHistoryItem = {
-  payload: FetchTelegramPostsPayload;
+  payload: FetchTelegramPostsRpcPayload;
   response: TelegramPost[];
   responseLastCursor: { id: number; created_at: string } | null;
 };
@@ -145,16 +145,16 @@ export const tokenForecastsHandler = http.get(`${BASE}/rest/v1/token_forecasts`,
 export const fetchTelegramPostsHandler = http.post(
   `${BASE}/rest/v1/rpc/fetch_telegram_posts`,
   async ({ request }) => {
-    const payload = (await request.json()) as FetchTelegramPostsPayload;
+    const payload = (await request.json()) as FetchTelegramPostsRpcPayload;
 
-    const hasCursor = payload.cursor_id != null && payload.cursor_created_at != null;
-    const hasAuthor = payload.author_id != null;
-    const hasToken = payload.token_name != null;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const mode = payload.mode ?? 'all';
+    const hasCursor = payload.cursor_id && payload.cursor_created_at;
+    const hasAuthor = payload.author_id;
+    const hasToken = payload.token_name;
+
+    const { mode } = payload;
 
     let response: TelegramPost[];
-    if (hasAuthor && payload.author_id != null) {
+    if (hasAuthor && payload.author_id) {
       const authorName = AUTHOR_LABEL_BY_ID[payload.author_id] ?? 'Filtered Author';
       response = Array.from({ length: 5 }, (_, i) =>
         createMockPost({
@@ -178,8 +178,9 @@ export const fetchTelegramPostsHandler = http.post(
     }
 
     const last = response.at(-1) ?? null;
-    const responseLastCursor =
-      last && last.created_at ? { id: last.id, created_at: last.created_at } : null;
+    const responseLastCursor = last?.created_at
+      ? { id: last.id, created_at: last.created_at }
+      : null;
 
     fetchTelegramPostsHistory.push({ payload, response, responseLastCursor });
 

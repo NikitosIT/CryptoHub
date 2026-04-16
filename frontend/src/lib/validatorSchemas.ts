@@ -25,13 +25,13 @@ export const commentSchema = z.object({
 export const redirectTo = z.string().startsWith('/').optional();
 
 export const verifySearchSchema = z.object({
-  redirectTo: redirectTo,
+  redirectTo,
   mode: z.literal('email').optional(),
   email: z.email().optional(),
 });
 
 export const loginSearchSchema = z.object({
-  redirectTo: redirectTo,
+  redirectTo,
 });
 
 export const calcSpotSchema = z.object({

@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 
 import type { TypeMedia } from '../-types';
 
-interface CommentMediaWithLoadingProps {
+type CommentMediaWithLoadingProps = {
   type: TypeMedia;
   src: string;
   alt?: string;
@@ -16,7 +16,7 @@ interface CommentMediaWithLoadingProps {
   onVideoClick?: (e: React.MouseEvent) => void;
   spinnerSize?: number;
   hideLoadingBorder?: boolean;
-}
+};
 
 export function CommentMediaWithLoading({
   type,
@@ -48,7 +48,9 @@ export function CommentMediaWithLoading({
     onLoad?.();
   };
 
-  const handleError = () => setStatus('error');
+  const handleError = () => {
+    setStatus('error');
+  };
 
   const isLoading = status === 'loading';
   const hasError = status === 'error';

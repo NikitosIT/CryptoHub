@@ -25,11 +25,10 @@ export default function PostsList() {
   if (isLoading) return <FeedSkeleton />;
 
   const selectedAuthorName =
-    authorId != null
-      ? (authors?.find((author) => author.id === authorId)?.label ?? null)
-      : null;
+    authorId !== null &&
+    (authors?.find((author) => author.id === authorId)?.label ?? null);
 
-  if (authorId != null && posts.length === 0) {
+  if (authorId !== null && posts.length === 0) {
     return (
       <p className="px-4 py-3 mt-4 text-sm text-center text-gray-400 shadow-inner sm:px-6 sm:mt-6 sm:text-base rounded-xl shadow-black/30">
         No posts from{' '}
@@ -48,7 +47,7 @@ export default function PostsList() {
 
       {shouldShowLoadMore ? (
         <button
-          onClick={() => void fetchNextPage()}
+          onClick={async () => fetchNextPage()}
           disabled={isFetchingNextPage}
           className="w-full py-3 mt-4 text-sm text-gray-400 border rounded-lg cursor-pointer hover:text-white disabled:opacity-50"
         >

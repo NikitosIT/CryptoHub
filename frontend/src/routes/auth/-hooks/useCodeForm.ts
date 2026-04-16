@@ -7,9 +7,9 @@ import type { OTPCode } from '@/types';
 
 type CodeFormValues = { code: OTPCode };
 
-interface UseCodeFormOptions {
+type UseCodeFormOptions = {
   schema: ZodString;
-}
+};
 
 export function useCodeForm({ schema }: UseCodeFormOptions) {
   const {

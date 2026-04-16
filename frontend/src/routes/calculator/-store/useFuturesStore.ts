@@ -7,14 +7,14 @@ import type { ShareCryptoType } from './useSpotStore';
 
 export type PositionType = 'long' | 'short';
 
-export interface FuturesState extends ShareCryptoType {
+export type FuturesState = {
   leverage: number | null;
 
   position: PositionType;
 
   setPosition: (position: PositionType) => void;
   calculator: (data: FuturesFormData) => void;
-}
+} & ShareCryptoType;
 
 export const useFuturesStore = create<FuturesState>()(
   persist(

@@ -9,13 +9,13 @@ import ResendEmailCode from './ResendEmailCode';
 
 type OtpFormValues = { code: OTPCode };
 
-interface OtpFormProps {
+type OtpFormProps = {
   control: Control<OtpFormValues>;
   errors: FieldErrors<OtpFormValues>;
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   disabled?: boolean;
-}
+};
 
 export function OtpForm({
   control,

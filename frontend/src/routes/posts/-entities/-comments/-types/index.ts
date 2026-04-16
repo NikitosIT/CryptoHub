@@ -1,11 +1,11 @@
 import type { PostId } from '@/types';
 
-export interface MutationContext {
+export type MutationContext = {
   previousComments: CommentWithReplies[] | undefined;
   queryKey: readonly ['comments', number];
   blobUrls: string[];
   optimisticCommentId: number;
-}
+};
 
 //
 
@@ -50,6 +50,6 @@ export type CommentWithReplies = Comment & {
 
 //
 
-export interface CommentProps {
+export type CommentProps = {
   comment: CommentWithReplies;
-}
+};

@@ -37,7 +37,7 @@ export default function Header() {
     displayNickname &&
     !hasPendingTwoFactor;
 
-  const shouldShowHelp = isProfilePath || isAuthPath;
+  const shouldShowHelp = isProfilePath ?? isAuthPath;
 
   const onLoginClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (isOnVerificationPage && hasPendingTwoFactor) {
@@ -48,12 +48,12 @@ export default function Header() {
     void navigate({ to: '/auth', replace: true });
   };
 
-  const onHelpClick = () => void navigate({ to: '/help' });
+  const onHelpClick = async () => navigate({ to: '/help' });
 
   return (
     <header className="relative px-4 mt-2 mb-4 sm:mt-3 sm:mb-6">
       {shouldShowHelp ? <Helper onHelpClick={onHelpClick} /> : null}
-      {!isProfilePath ? (
+      {!isProfilePath && (
         <nav
           className="absolute top-0 flex items-center h-full left-6 sm:left-4"
           aria-label="Calculator"
@@ -70,7 +70,7 @@ export default function Header() {
             />
           </Link>
         </nav>
-      ) : null}
+      )}
       <div className="flex justify-center mb-3 sm:mb-4">
         <Link
           to="/"

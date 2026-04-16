@@ -13,21 +13,21 @@ import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList'
 import { useCommentsUpdateCountCache } from './useCommentsUpdateCountCache';
 import { uploadCommentMedia } from './useUploadMedia';
 
-interface ShareCommentsParams {
+type ShareCommentsParams = {
   postId: PostId;
   text: string;
   parentCommentId?: number | null;
-}
+};
 
-export interface CreateCommentParams extends ShareCommentsParams {
+export type CreateCommentParams = {
   media?: CommentMedia[] | null;
-}
+} & ShareCommentsParams;
 
-interface CommentVariables extends ShareCommentsParams {
+type CommentVariables = {
   commentId?: number;
   userId: string;
   mediaFiles?: File[];
-}
+} & ShareCommentsParams;
 
 export function useCommentCreate() {
   const queryClient = useQueryClient();
@@ -35,12 +35,7 @@ export function useCommentCreate() {
   const { showError } = useToast();
 
   return useMutation({
-    mutationFn: async ({
-      postId,
-      text,
-      parentCommentId,
-      mediaFiles,
-    }: CommentVariables) => {
+    async mutationFn({ postId, text, parentCommentId, mediaFiles }: CommentVariables) {
       const uploadedMedia = await uploadCommentMedia({ mediaFiles });
 
       return api.comments.create({
@@ -51,7 +46,7 @@ export function useCommentCreate() {
       });
     },
 
-    onMutate: async ({ postId, text, userId, parentCommentId, mediaFiles }) => {
+    async onMutate({ postId, text, userId, parentCommentId, mediaFiles }) {
       const queryKey = commentsListQueryKey(postId);
 
       await queryClient.cancelQueries({ queryKey });
@@ -99,18 +94,21 @@ export function useCommentCreate() {
       return { previousComments, queryKey, blobUrls, optimisticCommentId };
     },
 
-    onError: (err, _vars, context) => {
+    onError(err, _vars, context) {
       if (context?.previousComments) {
         queryClient.setQueryData(context.queryKey, context.previousComments);
       }
-      context?.blobUrls.forEach((url) => URL.revokeObjectURL(url));
+
+      context?.blobUrls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
 
       showError(
         getErrorMessage(err, 'Failed to create comment. Please try again later.'),
       );
     },
 
-    onSuccess: (response, { postId }, context) => {
+    onSuccess(response, { postId }, context) {
       if (response.success) {
         const realComment = response.data as CommentWithReplies;
 

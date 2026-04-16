@@ -55,11 +55,11 @@ export type CommentsLikeResponse = {
   like_count: number;
 };
 
-export const commentsListRequests: { payload: CommentsListPayload }[] = [];
-export const commentsCreateRequests: { payload: CommentsCreatePayload }[] = [];
-export const commentsUpdateRequests: { payload: CommentsUpdatePayload }[] = [];
-export const commentsDeleteRequests: { payload: CommentsDeletePayload }[] = [];
-export const commentsLikeRequests: { payload: CommentsLikePayload }[] = [];
+export const commentsListRequests: Array<{ payload: CommentsListPayload }> = [];
+export const commentsCreateRequests: Array<{ payload: CommentsCreatePayload }> = [];
+export const commentsUpdateRequests: Array<{ payload: CommentsUpdatePayload }> = [];
+export const commentsDeleteRequests: Array<{ payload: CommentsDeletePayload }> = [];
+export const commentsLikeRequests: Array<{ payload: CommentsLikePayload }> = [];
 
 export function resetCommentsHandlersHistory() {
   commentsListRequests.length = 0;
@@ -95,20 +95,17 @@ const defaultListComment = createMockComment({
 
 let nextCommentId = 1000;
 
-export const listCommentsHandler = http.get(
-  `${BASE}/user-comments`,
-  ({ request }) => {
-    const url = new URL(request.url);
-    const postId = Number(url.searchParams.get('post_id'));
-    const payload: CommentsListPayload = { post_id: postId };
-    commentsListRequests.push({ payload });
-    const response: CommentsListResponse = {
-      success: true,
-      data: [defaultListComment],
-    };
-    return HttpResponse.json(response, { headers: CORS_HEADERS });
-  },
-);
+export const listCommentsHandler = http.get(`${BASE}/user-comments`, ({ request }) => {
+  const url = new URL(request.url);
+  const postId = Number(url.searchParams.get('post_id'));
+  const payload: CommentsListPayload = { post_id: postId };
+  commentsListRequests.push({ payload });
+  const response: CommentsListResponse = {
+    success: true,
+    data: [defaultListComment],
+  };
+  return HttpResponse.json(response, { headers: CORS_HEADERS });
+});
 
 export const createCommentHandler = http.post(
   `${BASE}/user-comments`,

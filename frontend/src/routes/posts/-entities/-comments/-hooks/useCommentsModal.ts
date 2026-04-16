@@ -41,7 +41,11 @@ export function useCommentsModal(postId: number) {
       return;
     }
 
-    const hasContent = text.trim() || mediaFiles?.length || existingMediaUrls?.length;
+    const hasContent = Boolean(
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      text.trim() || mediaFiles?.length || existingMediaUrls?.length,
+    );
+
     if (!hasContent) {
       return;
     }
@@ -109,7 +113,9 @@ export function useCommentsModal(postId: number) {
       const timer = setTimeout(() => {
         setHighlightedCommentId(null);
       }, 350);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
   }, [highlightedCommentId]);
 

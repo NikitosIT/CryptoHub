@@ -2,11 +2,11 @@ import { Avatar, Skeleton } from '@mui/material';
 
 import { useAvatarUrl } from '@/hooks/useAvatarUrl';
 
-interface UserAvatarProps {
+type UserAvatarProps = {
   size?: number;
   showSkeleton?: boolean;
   borderColor?: string;
-}
+};
 
 export function UserAvatar({
   size = 40,
@@ -15,7 +15,6 @@ export function UserAvatar({
 }: UserAvatarProps) {
   const { avatarUrl, isLoading } = useAvatarUrl();
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (showSkeleton && isLoading) {
     return (
       <Skeleton
@@ -32,7 +31,7 @@ export function UserAvatar({
 
   return (
     <Avatar
-      src={avatarUrl || undefined}
+      src={avatarUrl ?? undefined}
       alt="Avatar"
       sx={{
         width: size,

@@ -1,10 +1,10 @@
 import { Paper, type PaperProps } from '@mui/material';
 
-interface FilterOption {
+type FilterOption = {
   id?: number;
   imageUrl?: string;
   label: string;
-}
+};
 
 export function AuthorImg({ id, label }: FilterOption) {
   return (
@@ -14,7 +14,8 @@ export function AuthorImg({ id, label }: FilterOption) {
       alt={label}
       onError={(e) => {
         const img = e.currentTarget;
-        return (img.src = `/authors/${id}.png`);
+        img.onerror = null;
+        img.src = `/authors/${id}.png`;
       }}
     />
   );
@@ -43,5 +44,6 @@ export function OptionImage({ option }: { option: FilterOption }) {
       />
     );
   }
+
   return <AuthorImg id={option.id} label={option.label} />;
 }

@@ -31,7 +31,9 @@ export function ReactionButton({ post }: { post: TelegramPost }) {
           <button
             key={type}
             type="button"
-            onClick={() => handleReaction(type)}
+            onClick={() => {
+              handleReaction(type);
+            }}
             aria-pressed={isActive}
             aria-label={`${config.label} (${post[config.countKey]})`}
             className={classes.button}

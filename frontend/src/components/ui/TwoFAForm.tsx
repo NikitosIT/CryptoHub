@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { type Control, Controller, type FieldErrors } from 'react-hook-form';
 import { Alert, Box, Stack, Typography } from '@mui/material';
 
@@ -7,13 +7,13 @@ import { StyledOtpInput } from '@/components/ui/StyledOtpInput';
 
 type TwoFAFormValues = { code: string };
 
-interface TwoFAFormProps {
+type TwoFAFormProps = {
   control: Control<TwoFAFormValues>;
   errors: FieldErrors<TwoFAFormValues>;
   isSubmitting: boolean;
   isCodeValid: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-}
+};
 
 export function TwoFAForm({
   control,

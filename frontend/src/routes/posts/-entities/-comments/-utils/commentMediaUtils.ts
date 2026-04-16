@@ -69,7 +69,7 @@ export function createBlobMediaFromFiles(mediaFiles?: File[]): {
   const blobUrls = mediaFiles.map((f) => URL.createObjectURL(f));
   const media: CommentMedia[] = mediaFiles.map((f, i) => ({
     type: fileToMediaType(f),
-    url: blobUrls[i] || '',
+    url: blobUrls[i] ?? '',
   }));
 
   return { media, blobUrls };

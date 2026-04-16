@@ -1,33 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import React from 'react';
+import type React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { api as apiClient } from '@/api';
 import { Verify2FAPage } from '@/routes/auth/-components/Verify2FAPage';
 import { EmailAuth } from '@/routes/auth/index';
 import { VerifyEmailPage } from '@/routes/auth/verify';
 import { ProfileMain } from '@/routes/profile/index';
-
 const mockSignInWithOtp = vi.fn();
 const mockVerifyOtp = vi.fn();
 
 const mockGetTwoFactorStatus = vi.fn();
 vi.mock('@/api', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@/api')>();
+  const mod = await importOriginal();
+  const typedMod = mod as { api: typeof apiClient };
+
   return {
-    ...mod,
+    ...typedMod,
     api: {
-      ...mod.api,
+      ...typedMod.api,
       auth: {
-        ...mod.api.auth,
+        ...typedMod.api.auth,
         signInWithOtp: (email: string) => mockSignInWithOtp(email),
         verifyOtp: (email: string, code: string) => mockVerifyOtp(email, code),
       },
       twoFactor: {
-        ...mod.api.twoFactor,
+        ...typedMod.api.twoFactor,
         getStatus: () => mockGetTwoFactorStatus(),
       },
     },
@@ -36,12 +38,16 @@ vi.mock('@/api', async (importOriginal) => {
 
 const mockNavigate = vi.fn();
 vi.mock('@tanstack/react-router', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@tanstack/react-router')>();
+  const mod = await importOriginal();
+  if (typeof mod !== 'object' || mod === null) {
+    return mod;
+  }
+
   return {
     ...mod,
     useNavigate: () => mockNavigate,
-    useSearch: (opts: { from: string }) => {
-      const from = (opts as { from?: string }).from;
+    useSearch(opts: { from: string }) {
+      const { from } = opts as { from?: string };
       if (from === '/auth/verify') return mockVerifySearch();
       if (from === '/auth/') return mockLoginSearch();
       if (from === '/auth/callback') return mockCallbackSearch();
@@ -86,13 +92,14 @@ function createWrapper() {
   function Wrapper({ children }: { children: React.ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
+
   return { Wrapper, queryClient };
 }
 
 describe('Auth flow', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockSignInWithOtp.mockImplementation((email: string) => Promise.resolve(email));
+    mockSignInWithOtp.mockImplementation(async (email: string) => Promise.resolve(email));
     mockVerifyOtp.mockResolvedValue({ user: { id: 'user-1' } });
     mockGetTwoFactorStatus.mockResolvedValue({
       enabled: false,

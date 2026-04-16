@@ -15,20 +15,20 @@ import type { CommentMedia, CommentWithReplies, MutationContext } from '../-type
 import { commentsListQueryKey, getPreviousCommentsList } from './useCommentList';
 import { uploadCommentMedia } from './useUploadMedia';
 
-interface ShareUpdateParams {
+type ShareUpdateParams = {
   commentId: number;
   text: string;
-}
+};
 
-export interface UpdateCommentParams extends ShareUpdateParams {
+export type UpdateCommentParams = {
   media?: CommentMedia[] | null;
-}
+} & ShareUpdateParams;
 
-interface UpdateCommentVariables extends ShareUpdateParams {
+type UpdateCommentVariables = {
   postId: PostId;
   mediaFiles?: File[];
   existingMediaUrls?: string[];
-}
+} & ShareUpdateParams;
 
 type MutationUpdateContext = Omit<MutationContext, 'optimisticCommentId'>;
 
@@ -39,7 +39,7 @@ export function useCommentUpdate() {
   const existingMediaRef = useRef<CommentMedia[]>([]);
 
   return useMutation({
-    mutationFn: async ({ commentId, text, mediaFiles }: UpdateCommentVariables) => {
+    async mutationFn({ commentId, text, mediaFiles }: UpdateCommentVariables) {
       const existingMedia = existingMediaRef.current;
       const newMedia = await uploadCommentMedia({ mediaFiles });
       const allMedia = [...existingMedia, ...newMedia];
@@ -51,13 +51,13 @@ export function useCommentUpdate() {
       });
     },
 
-    onMutate: async ({
+    async onMutate({
       commentId,
       text,
       postId,
       mediaFiles,
       existingMediaUrls,
-    }): Promise<MutationUpdateContext> => {
+    }): Promise<MutationUpdateContext> {
       const queryKey = commentsListQueryKey(postId);
       await queryClient.cancelQueries({ queryKey });
 
@@ -85,11 +85,14 @@ export function useCommentUpdate() {
       return { previousComments, queryKey, blobUrls };
     },
 
-    onError: (err, _vars, context) => {
+    onError(err, _vars, context) {
       if (context?.previousComments) {
         queryClient.setQueryData(context.queryKey, context.previousComments);
       }
-      context?.blobUrls.forEach((url) => URL.revokeObjectURL(url));
+
+      context?.blobUrls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
 
       showError(
         getErrorMessage(err, 'Failed to update comment. Please try again later.'),

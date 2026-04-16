@@ -12,12 +12,12 @@ type NicknameFormValues = { nickname: string };
 
 const formSchema = z.object({ nickname: nicknameSchema });
 
-interface UseNicknameFormProps {
+type UseNicknameFormProps = {
   defaultNickname?: string;
   onSuccess?: (nickname: string) => void;
   onError?: (error: Error) => void;
   resetOnSuccess?: boolean;
-}
+};
 
 export function useNicknameForm({
   defaultNickname = '',
@@ -47,6 +47,7 @@ export function useNicknameForm({
       if (resetOnSuccess) {
         reset({ nickname: '' });
       }
+
       onSuccess?.(nickname);
     } catch (err) {
       const errorMessage = getErrorMessage(err, 'Error saving');

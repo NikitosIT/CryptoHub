@@ -1,28 +1,28 @@
-export interface TwoFactorApiResponse {
+export type TwoFactorApiResponse = {
   success: boolean;
   message?: string;
   error?: Error;
-}
+};
 
-export interface TwoFactorPayload {
+export type TwoFactorPayload = {
   code: string;
   userId?: string | null;
-}
+};
 
-export interface IsVerifyForCS {
+export type IsVerifyForCS = {
   is_verified_for_current_session?: boolean;
-}
+};
 
-export interface TwoFactorStatusResponse extends IsVerifyForCS {
+export type TwoFactorStatusResponse = {
   enabled: boolean;
-}
+} & IsVerifyForCS;
 
 export type EnableTwoFactorResponse = {
   qrUrl: string;
 };
 
-export interface VerifyLogin2FA extends IsVerifyForCS {
+export type VerifyLogin2FA = {
   verified?: boolean;
   error?: string;
   remainingAttempts?: number;
-}
+} & IsVerifyForCS;

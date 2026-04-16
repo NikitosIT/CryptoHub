@@ -31,15 +31,20 @@ export default function HelpInfo() {
         setIsOpen(false);
       }
     };
+
     document.addEventListener('pointerdown', handleClick);
-    return () => document.removeEventListener('pointerdown', handleClick);
+    return () => {
+      document.removeEventListener('pointerdown', handleClick);
+    };
   }, [isOpen]);
 
   return (
     <div className="relative inline-block" ref={panelRef}>
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+        }}
         className="flex items-center justify-center transition cursor-pointer w-7 h-7 hover:opacity-70"
         aria-label="Help"
       >

@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
       refetchOnMount: false,
     },
     mutations: {
-      onError: (error: unknown) => {
+      onError(error: unknown) {
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -47,6 +47,7 @@ export { queryClient };
 const router = createRouter({ routeTree });
 
 declare module '@tanstack/router-core' {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Register {
     router: typeof router;
   }
@@ -65,7 +66,7 @@ function Root() {
         persister,
         maxAge: Infinity,
         dehydrateOptions: {
-          shouldDehydrateQuery: (query) => {
+          shouldDehydrateQuery(query) {
             return query.queryKey[0] === 'twoFactorStatus';
           },
         },

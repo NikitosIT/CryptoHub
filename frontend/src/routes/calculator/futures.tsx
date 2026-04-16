@@ -37,14 +37,16 @@ export function CalculatorFutures() {
     setPosition(type);
   };
 
-  const isProfit = profit != null && profit >= 0;
+  const isProfit = profit !== null && profit >= 0;
 
   return (
     <CalculatorTabs>
       <div className="relative flex p-1 mt-6 mb-4 bg-zinc-200 rounded-xl w-fit">
         <button
           type="button"
-          onClick={() => handlePosition('long')}
+          onClick={() => {
+            handlePosition('long');
+          }}
           className="relative px-4 py-2 text-sm font-medium"
         >
           {position === 'long' && (
@@ -65,7 +67,9 @@ export function CalculatorFutures() {
 
         <button
           type="button"
-          onClick={() => handlePosition('short')}
+          onClick={() => {
+            handlePosition('short');
+          }}
           className="relative px-4 py-2 text-sm font-medium"
         >
           {position === 'short' && (
@@ -84,7 +88,7 @@ export function CalculatorFutures() {
           </span>
         </button>
       </div>
-      <form onSubmit={void handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <input
             {...register('margin', { valueAsNumber: true })}
@@ -126,7 +130,7 @@ export function CalculatorFutures() {
 
         <CalculatorButtons handleReset={handleReset} />
       </form>
-      {profit != null && entryPrice != null && exitPrice != null && (
+      {profit !== null && entryPrice !== null && exitPrice !== null && (
         <div className="p-3 mt-4 text-center sm:p-4 sm:mt-6 rounded-xl bg-zinc-700">
           <p className="text-xs sm:text-sm text-zinc-300">
             {position === 'long' ? 'Long' : 'Short'} Profit

@@ -63,7 +63,7 @@ export default [
       ],
       'simple-import-sort/exports': 'error',
 
-      // TypeScript (overrides over xo-typescript defaults)
+      // TypeScript 
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_' },
@@ -79,7 +79,7 @@ export default [
         'error',
         { allowNumber: true, allowBoolean: true },
       ],
-      // xo sets strict naming-convention; relax to match existing codebase
+      // 
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-restricted-types': 'off',
 

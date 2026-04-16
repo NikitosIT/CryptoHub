@@ -1,9 +1,10 @@
 import { Button, type ButtonProps } from '@mui/material';
 
-interface AuthButtonProps extends ButtonProps {
+type AuthButtonProps = {
   isLoading?: boolean;
   loadingText?: string;
-}
+} & ButtonProps;
+
 export function AuthButton({
   isLoading = false,
   loadingText,

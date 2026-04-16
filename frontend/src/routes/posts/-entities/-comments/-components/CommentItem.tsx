@@ -20,10 +20,10 @@ import { CommentContent } from './CommentContent';
 import { CommentHeader } from './CommentHeader';
 import { CommentParentContext } from './CommentParentContext';
 import { useCommentContext } from './comments-context';
-interface CommentItemProps {
+type CommentItemProps = {
   comment: CommentWithReplies;
   parentComment?: CommentWithReplies | null;
-}
+};
 
 export function CommentItem({ comment, parentComment }: CommentItemProps) {
   const { previewMedia, handleMediaClick, handleCloseMediaPreview, isOwner } =
@@ -38,7 +38,7 @@ export function CommentItem({ comment, parentComment }: CommentItemProps) {
     handleDeleteCancel,
   } = useCommentContext();
 
-  const isReply = !!comment.parent_comment_id;
+  const isReply = Boolean(comment.parent_comment_id);
 
   return (
     <>
@@ -92,7 +92,6 @@ export function CommentItem({ comment, parentComment }: CommentItemProps) {
           <Button
             onClick={handleDeleteConfirm}
             sx={commentDeleteDialogDeleteButtonStyles}
-            autoFocus
           >
             Delete
           </Button>

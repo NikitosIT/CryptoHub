@@ -51,7 +51,7 @@ export function ProfileEditName() {
             </Typography>
 
             <Box sx={profileEmailBackground}>
-              <Typography>{session?.user.email || 'Not specified'}</Typography>
+              <Typography>{session?.user.email ?? 'Not specified'}</Typography>
 
               <Tooltip title="Copy email">
                 <IconButton

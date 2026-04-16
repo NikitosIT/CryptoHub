@@ -5,9 +5,9 @@ import type { TelegramPost } from '../../../-types/post-types';
 import { useCommentsModalPersistence } from '../-store/useCommentsModalStore';
 import { CommentModal } from './CommentModal';
 
-interface CommentButtonProps {
+type CommentButtonProps = {
   post: TelegramPost;
-}
+};
 
 function CommentOpenButtonComponent({ post }: CommentButtonProps) {
   const { isOpen, open, close } = useCommentsModalPersistence(post.id);

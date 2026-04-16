@@ -5,7 +5,7 @@ import { redirectTo } from '@/lib/validatorSchemas';
 
 import AuthCallback from './-components/AuthCallback';
 const searchSchema = z.object({
-  redirectTo: redirectTo,
+  redirectTo,
 });
 
 export const Route = createFileRoute('/auth/callback')({

@@ -13,10 +13,12 @@ export function useAuthListener() {
       if (event === 'SIGNED_OUT') {
         queryClient.clear();
         localStorage.removeItem('user_profile_cache');
-        persister.removeClient();
+        void persister.removeClient();
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 }

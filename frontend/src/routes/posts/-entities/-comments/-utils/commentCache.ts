@@ -12,5 +12,5 @@ export function findCommentInCache(
   if (!comments) return null;
 
   const comment = comments.find((c) => c.id === commentId);
-  return comment || null;
+  return comment ?? null;
 }

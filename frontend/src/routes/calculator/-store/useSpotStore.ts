@@ -3,18 +3,18 @@ import { persist } from 'zustand/middleware';
 
 import type { SpotFormData } from '@/lib/validatorSchemas';
 
-export interface ShareCryptoType {
+export type ShareCryptoType = {
   margin: number | null;
   entryPrice: number | null;
   exitPrice: number | null;
   profit: number | null;
 
   reset: () => void;
-}
+};
 
-interface CryptoSpot extends ShareCryptoType {
+type CryptoSpot = {
   calculator: (data: SpotFormData) => void;
-}
+} & ShareCryptoType;
 
 export const useSpotStore = create<CryptoSpot>()(
   persist(

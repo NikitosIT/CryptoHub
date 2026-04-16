@@ -13,10 +13,10 @@ export default function ResendEmailCode() {
   const email: NullableEmail = search.email ?? null;
 
   const countdown = useCountdown({
-    storageKey: email || undefined,
+    storageKey: email ?? undefined,
   });
   const { resend, isPending } = useResendEmailCode({
-    onSuccess: () => {
+    onSuccess() {
       countdown.start();
     },
   });

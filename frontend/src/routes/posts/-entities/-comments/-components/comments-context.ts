@@ -4,7 +4,7 @@ import type { PostId } from '@/types';
 
 import type { CommentWithReplies } from '../-types';
 
-interface CommentContextType {
+type CommentContextType = {
   postId: PostId;
   handleSubmit: (text: string, mediaFiles?: File[], existingMediaUrls?: string[]) => void;
   replyingTo: CommentWithReplies | null;
@@ -19,7 +19,7 @@ interface CommentContextType {
   handleReplyClick: (comment: CommentWithReplies) => void;
   handleEditClick: (comment: CommentWithReplies) => void;
   highlightedCommentId: number | null;
-}
+};
 
 export const CommentsContext = createContext<CommentContextType | null>(null);
 
@@ -28,5 +28,6 @@ export const useCommentContext = () => {
   if (!ctx) {
     throw new Error('useCommentsContext must be used inside CommentsProvider');
   }
+
   return ctx;
 };

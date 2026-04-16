@@ -54,8 +54,8 @@ export function EmailAuth() {
               label="Email"
               type="email"
               {...register('email')}
-              error={!!formErrors.email}
-              helperText={formErrors.email?.message || ''}
+              error={Boolean(formErrors.email)}
+              helperText={formErrors.email?.message ?? ''}
               fullWidth
             />
 

@@ -16,7 +16,8 @@ export function LogoutButton() {
   const [openDialog, setOpenDialog] = useState(false);
   const { handleLogout } = useLogout();
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
     setOpenDialog(true);
   };
 
@@ -43,7 +44,15 @@ export function LogoutButton() {
         Logout
       </Button>
 
-      <Dialog open={openDialog} onClose={handleCancel} sx={buttonStyle}>
+      <Dialog
+        open={openDialog}
+        onClose={handleCancel}
+        slotProps={{
+          paper: {
+            sx: buttonStyle,
+          },
+        }}
+      >
         <DialogTitle sx={{ color: '#fff' }}>Confirm Logout</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: '#a1a1aa' }}>
@@ -73,7 +82,6 @@ export function LogoutButton() {
                 bgcolor: 'rgba(239, 68, 68, 0.1)',
               },
             }}
-            autoFocus
           >
             Logout
           </Button>

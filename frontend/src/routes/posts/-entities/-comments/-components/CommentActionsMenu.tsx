@@ -33,7 +33,9 @@ export function CommentActionsMenu({ comment }: CommentProps) {
   return (
     <>
       <IconButton
-        onClick={(event) => setAnchorEl(event.currentTarget)}
+        onClick={(event) => {
+          setAnchorEl(event.currentTarget);
+        }}
         aria-label="Comment actions"
         size="small"
         sx={commentActionsMenuIconButtonStyles}

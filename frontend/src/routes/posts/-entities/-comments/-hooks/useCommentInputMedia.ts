@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useToast } from '@/hooks/useToast';
 import {
   MAX_FILE_SIZE,
   MAX_MEDIA_FILES,
 } from '@/routes/posts/-entities/-comments/constants/comments';
-import { useToast } from '@/hooks/useToast';
 
 import { useCommentContext } from '../-components/comments-context';
 import { buildMediaItems } from '../-utils/commentMediaUtils';
@@ -45,7 +45,11 @@ export function useCommentInputMedia() {
     const urls = selectedFiles.map((file) => URL.createObjectURL(file));
     setPreviews(urls);
 
-    return () => urls.forEach((url) => URL.revokeObjectURL(url));
+    return () => {
+      urls.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+    };
   }, [selectedFiles]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

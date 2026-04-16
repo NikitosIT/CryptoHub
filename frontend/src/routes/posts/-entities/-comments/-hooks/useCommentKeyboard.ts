@@ -1,6 +1,6 @@
-interface UseCommentKeyboardProps {
+type UseCommentKeyboardProps = {
   onFormSubmit: () => void;
-}
+};
 
 export function useCommentKeyboard({ onFormSubmit }: UseCommentKeyboardProps) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

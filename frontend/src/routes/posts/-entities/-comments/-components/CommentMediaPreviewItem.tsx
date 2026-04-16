@@ -7,10 +7,10 @@ import type { MediaItem } from '../-utils/commentMediaUtils';
 import { getCommentMediaFullUrl } from '../-utils/commentMediaUtils';
 import { CommentMediaWithLoading } from './CommentMediaWithLoading';
 
-interface MediaPreviewItemProps {
+type MediaPreviewItemProps = {
   item: MediaItem;
   onRemove: () => void;
-}
+};
 
 export function CommentMediaPreviewItem({ item, onRemove }: MediaPreviewItemProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -55,7 +55,12 @@ export function CommentMediaPreviewItem({ item, onRemove }: MediaPreviewItemProp
       </Box>
 
       {previewUrl ? (
-        <ImageModal url={previewUrl} onClose={() => setPreviewUrl(null)} />
+        <ImageModal
+          url={previewUrl}
+          onClose={() => {
+            setPreviewUrl(null);
+          }}
+        />
       ) : null}
     </>
   );

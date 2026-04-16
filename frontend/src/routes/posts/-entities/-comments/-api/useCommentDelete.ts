@@ -23,11 +23,11 @@ export function useCommentDelete() {
   const { showError } = useToast();
 
   return useMutation({
-    mutationFn: ({ commentId }: DeleteCommentVariables) => {
+    async mutationFn({ commentId }: DeleteCommentVariables) {
       return api.comments.delete(commentId);
     },
 
-    onMutate: async ({ commentId, postId }): Promise<MutationDeleteContext> => {
+    async onMutate({ commentId, postId }): Promise<MutationDeleteContext> {
       const queryKey = commentsListQueryKey(postId);
 
       await queryClient.cancelQueries({ queryKey });
@@ -41,7 +41,7 @@ export function useCommentDelete() {
       return { previousComments, queryKey };
     },
 
-    onError: (err, _vars, context) => {
+    onError(err, _vars, context) {
       if (context?.previousComments) {
         queryClient.setQueryData(context.queryKey, context.previousComments);
       }
@@ -51,7 +51,7 @@ export function useCommentDelete() {
       );
     },
 
-    onSuccess: (_data, { postId }) => {
+    onSuccess(_data, { postId }) {
       updateCommentsCount.mutate({ postId, delta: -1 });
     },
   });

@@ -30,9 +30,10 @@ export function CalculatorSpot() {
     reset();
     resetForm();
   };
+
   return (
     <CalculatorTabs>
-      <form onSubmit={void handleSubmit(onSubmit)} className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
         <div>
           <input
             {...register('margin', { valueAsNumber: true })}
@@ -64,7 +65,7 @@ export function CalculatorSpot() {
         <CalculatorButtons handleReset={handleReset} />
       </form>
 
-      {profit != null && entryPrice != null && exitPrice != null && (
+      {profit !== null && entryPrice !== null && exitPrice !== null && (
         <div className="p-3 mt-4 text-center sm:p-4 sm:mt-6 rounded-xl bg-zinc-700">
           <p className="text-xs sm:text-sm text-zinc-300">Profit</p>
           <p

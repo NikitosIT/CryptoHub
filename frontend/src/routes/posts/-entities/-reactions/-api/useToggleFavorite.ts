@@ -21,13 +21,13 @@ export function useToggleFavorite() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
+    async mutationFn({
       postId,
       userId,
     }: {
       postId: PostId;
       userId: string;
-    }): Promise<void> => {
+    }): Promise<void> {
       const key = `favorite:${postId}:${userId}`;
 
       const initial = initialFavoriteMap.get(key) ?? false;
@@ -35,7 +35,7 @@ export function useToggleFavorite() {
       const post = findPostInCache(queryClient, postId);
       if (!post) return Promise.resolve();
 
-      const current = !!post.is_favorite;
+      const current = Boolean(post.is_favorite);
 
       if (initial === current) {
         cancelDebounce(key);
@@ -53,12 +53,12 @@ export function useToggleFavorite() {
       );
     },
 
-    onMutate: ({ postId, userId }) => {
+    onMutate({ postId, userId }) {
       const key = `favorite:${postId}:${userId}`;
 
       if (!initialFavoriteMap.has(key)) {
         const post = findPostInCache(queryClient, postId);
-        initialFavoriteMap.set(key, !!post?.is_favorite);
+        initialFavoriteMap.set(key, Boolean(post?.is_favorite));
       }
 
       updatePostInCache(queryClient, postId, toggleFavorite);

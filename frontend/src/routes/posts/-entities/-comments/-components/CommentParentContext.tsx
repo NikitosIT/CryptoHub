@@ -5,10 +5,10 @@ import type { CommentWithReplies } from '../-types';
 import { getCommentUserName } from '../-utils/commentItemUtils';
 import { CommentMediaThumbnails } from './CommentMediaThumbnails';
 import { useCommentContext } from './comments-context';
-export interface CommentItemProps {
+export type CommentItemProps = {
   comment: CommentWithReplies;
   parentComment?: CommentWithReplies | null;
-}
+};
 export function CommentParentContext({ comment, parentComment }: CommentItemProps) {
   const { handleJumpToComment } = useCommentContext();
   const parentCommentId = comment.parent_comment_id;
@@ -16,10 +16,12 @@ export function CommentParentContext({ comment, parentComment }: CommentItemProp
   const parentUserName = getCommentUserName(parentComment ?? null);
   const parentMedia = parentComment?.media;
   const hasMedia = parentMedia && parentMedia.length > 0;
-  const parentText = parentComment?.text || '';
+  const parentText = parentComment?.text ?? '';
   return (
     <Paper
-      onClick={() => handleJumpToComment(parentCommentId)}
+      onClick={() => {
+        handleJumpToComment(parentCommentId);
+      }}
       title="Click to jump to original comment"
       sx={parentCommentPaperStyles}
     >

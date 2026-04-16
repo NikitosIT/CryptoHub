@@ -6,7 +6,12 @@ export type TelegramPost = {
   id: number;
   text_caption: string | null;
   text_entities: MessageEntity[] | null;
-  media: { type: string; url: string; file_name: string; mime_type: string }[] | null;
+  media: Array<{
+    type: string;
+    url: string;
+    file_name: string;
+    mime_type: string;
+  }> | null;
   tg_author_id: number | null;
   author_name: string;
   author_link: string;

@@ -51,11 +51,7 @@ export function Notifications() {
                     ) : (
                       <>
                         <div className="flex items-center justify-center rounded-full size-8 bg-blue-500/20">
-                          <img
-                            className="size-5"
-                            src="/others/admin.png"
-                            alt="admin"
-                          />
+                          <img className="size-5" src="/others/admin.png" alt="admin" />
                         </div>
                         <span className="text-xs font-medium text-blue-400">Admin</span>
                       </>

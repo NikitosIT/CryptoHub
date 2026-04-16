@@ -1,8 +1,8 @@
 import { Box, type BoxProps } from '@mui/material';
 
-export interface SendIconProps extends BoxProps {
+export type SendIconProps = {
   size?: 'small' | 'medium' | 'large';
-}
+} & BoxProps;
 
 const sizeMap = {
   small: { xs: '16px', sm: '18px' },

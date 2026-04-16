@@ -19,7 +19,7 @@ export function CommentActions({ comment }: CommentProps) {
   };
 
   const likeCount = comment.like_count;
-  const userHasLiked = !!comment.user_has_liked;
+  const userHasLiked = Boolean(comment.user_has_liked);
   return (
     <Stack
       direction="row"
@@ -56,7 +56,9 @@ export function CommentActions({ comment }: CommentProps) {
 
       {user?.id ? (
         <Button
-          onClick={() => handleReplyClick(comment)}
+          onClick={() => {
+            handleReplyClick(comment);
+          }}
           variant="text"
           size="small"
           sx={commentActionsReplyButtonStyles}

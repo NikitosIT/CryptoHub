@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface CommentsModalStore {
+type CommentsModalStore = {
   openPostId: number | null;
   open: (postId: number) => void;
   close: () => void;
-}
+};
 
 const useCommentsModalStore = create<CommentsModalStore>()(
   persist(
@@ -22,12 +22,16 @@ const useCommentsModalStore = create<CommentsModalStore>()(
 
 export function useCommentsModalPersistence(postId: number) {
   const openPostId = useCommentsModalStore((state) => state.openPostId);
-  const open = useCommentsModalStore((state) => state.open);
+  const openStore = useCommentsModalStore((state) => state.open);
   const close = useCommentsModalStore((state) => state.close);
+
+  const open = () => {
+    openStore(postId);
+  };
 
   return {
     isOpen: openPostId === postId,
-    open: () => open(postId),
+    open,
     close,
   };
 }
