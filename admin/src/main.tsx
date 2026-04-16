@@ -1,11 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 
-import { useAuthListener } from "./routes/auth/-api/useAuthListener";
-import "./index.css";
-import { routeTree } from "./routes/routeTree.gen";
+import { useAuthListener } from './routes/auth/-api/useAuthListener';
+import { routeTree } from './routes/routeTree.gen';
+
+import './index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +23,8 @@ const queryClient = new QueryClient({
 
 export { queryClient };
 const router = createRouter({ routeTree });
-declare module "@tanstack/router-core" {
+declare module '@tanstack/router-core' {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Register {
     router: typeof router;
   }
@@ -33,10 +35,10 @@ function RootWithProviders() {
   return <RouterProvider router={router} />;
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 
 if (!rootElement) {
-  throw new Error("Root element not found");
+  throw new Error('Root element not found');
 }
 
 ReactDOM.createRoot(rootElement).render(

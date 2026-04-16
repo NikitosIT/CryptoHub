@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from '@tanstack/react-router';
 
 function MainPage() {
   return (
@@ -15,13 +15,11 @@ function MainPage() {
           <Link to="/forecasts" className={linkStyles}>
             <div className="flex items-center gap-4 mb-4">
               <div className="text-4xl">🧑‍💻</div>
-              <h2 className="text-2xl font-semibold text-orange-400">
-                AI Прогнозы
-              </h2>
+              <h2 className="text-2xl font-semibold text-orange-400">AI Прогнозы</h2>
             </div>
             <p className="text-gray-400">
-              Просмотр и управление прогнозов от AI. Одобряйте, изменяйте или
-              отклоняйте прогнозы перед публикацией.
+              Просмотр и управление прогнозов от AI. Одобряйте, изменяйте или отклоняйте
+              прогнозы перед публикацией.
             </p>
           </Link>
           <Link to="/notifications" className={linkStyles}>
@@ -31,9 +29,7 @@ function MainPage() {
                 Сообщения пользователям
               </h2>
             </div>
-            <p className="text-gray-400">
-              Отправляйте сообщения пользователям сайта
-            </p>
+            <p className="text-gray-400">Отправляйте сообщения пользователям сайта</p>
           </Link>
           <Link to="/tokens" className={linkStyles}>
             <div className="flex items-center gap-4 mb-4">
@@ -53,4 +49,4 @@ function MainPage() {
 export default MainPage;
 
 const linkStyles =
-  "p-6 transition-all bg-gray-900 border rounded-xl border-orange-500/20 hover:border-orange-500/40 hover:bg-gray-800";
+  'p-6 transition-all bg-gray-900 border rounded-xl border-orange-500/20 hover:border-orange-500/40 hover:bg-gray-800';

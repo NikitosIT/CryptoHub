@@ -1,15 +1,17 @@
-import { api } from "@/api";
-import { useMutation } from "@tanstack/react-query";
-import { useListCryptoTokens } from "./useListCryptoTokens";
-import { useState } from "react";
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+
+import { api } from '@/api';
+
+import { useListCryptoTokens } from './useListCryptoTokens';
 
 export function useMutateTokens() {
   const { data } = useListCryptoTokens();
   const [addedTokens, setAddedTokens] = useState<Set<string>>(new Set());
 
   const insertAll = useMutation({
-    mutationFn: (names: string[]) => api.tokens.insertAll(names),
-    onSuccess: () => {
+    mutationFn: async (names: string[]) => api.tokens.insertAll(names),
+    onSuccess() {
       if (data) {
         setAddedTokens(new Set(data.map((t) => t.name)));
       }
@@ -17,8 +19,8 @@ export function useMutateTokens() {
   });
 
   const insertOne = useMutation({
-    mutationFn: (name: string) => api.tokens.insertOne(name),
-    onSuccess: (_, name) => {
+    mutationFn: async (name: string) => api.tokens.insertOne(name),
+    onSuccess(_, name) {
       setAddedTokens((prev) => new Set(prev).add(name));
     },
   });
@@ -32,6 +34,7 @@ export function useMutateTokens() {
     if (insertOne.isPending) return;
     insertOne.mutate(name);
   };
+
   return {
     addedTokens,
     insertAll,

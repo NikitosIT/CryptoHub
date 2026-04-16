@@ -1,10 +1,11 @@
-import { useSendNotification } from "@/api";
-import { useState } from "react";
+import { useState } from 'react';
+
+import { useSendNotification } from '@/api';
 
 export const useAdminNotifactionsHook = () => {
   const [sendToAll, setSendToAll] = useState(true);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const { mutateAsync: sendNotification, isPending } = useSendNotification();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,11 +16,11 @@ export const useAdminNotifactionsHook = () => {
 
     try {
       await sendNotification({
-        send_to: selectedUser ?? "",
+        send_to: selectedUser ?? '',
         send_to_all: sendToAll,
         msg,
       });
-      setMessage("");
+      setMessage('');
       setSelectedUser(null);
     } catch {
       // ignore
@@ -27,9 +28,7 @@ export const useAdminNotifactionsHook = () => {
   };
 
   const canSubmit =
-    message.trim().length > 0 &&
-    !isPending &&
-    (sendToAll || Boolean(selectedUser));
+    message.trim().length > 0 && !isPending && (sendToAll || Boolean(selectedUser));
 
   return {
     sendToAll,

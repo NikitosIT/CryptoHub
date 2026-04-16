@@ -1,13 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { useAdminAuth } from "@/routes/auth/-api/useAdminAuth";
-import { useForecastMutations } from "@/routes/forecasts/api/useForecastMutations";
-import { useForecasts } from "@/routes/forecasts/api/useForecasts";
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { getSentimentStyles, getSentimentLabel } from "../../utils/sentiment";
-import { ForecastEditor } from "./components/ForecastEditor";
+import { useState } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute("/forecasts/")({
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { useAdminAuth } from '@/routes/auth/-api/useAdminAuth';
+import { useForecastMutations } from '@/routes/forecasts/api/useForecastMutations';
+import { useForecasts } from '@/routes/forecasts/api/useForecasts';
+
+import { getSentimentLabel, getSentimentStyles } from '../../utils/sentiment';
+import { ForecastEditor } from './components/ForecastEditor';
+
+export const Route = createFileRoute('/forecasts/')({
   beforeLoad: createRouteGuard({
     requireAuth: true,
   }),
@@ -17,19 +19,13 @@ export const Route = createFileRoute("/forecasts/")({
 export default function AdminForecastsWrapper() {
   const { authorized, logout } = useAdminAuth();
   const [editingId, setEditingId] = useState<number | null>(null);
-  const { forecasts, loading, error: forecastsError } = useForecasts(
-    authorized,
-    logout,
-  );
-  const { updateStatus, updateText, actionLoading } =
-    useForecastMutations(logout);
+  const { forecasts, loading, error: forecastsError } = useForecasts(authorized, logout);
+  const { updateStatus, updateText, actionLoading } = useForecastMutations(logout);
 
   return (
     <div className="max-w-6xl min-h-screen p-4 mx-auto text-white bg-black sm:p-6 md:p-8">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl font-bold text-white">
-          🧑‍💻 AI Прогнозы (Админка)
-        </h1>
+        <h1 className="text-4xl font-bold text-white">🧑‍💻 AI Прогнозы (Админка)</h1>
       </div>
 
       {forecastsError && (
@@ -71,7 +67,9 @@ export default function AdminForecastsWrapper() {
                     await updateText(id, text);
                     setEditingId(null);
                   }}
-                  onCancel={() => setEditingId(null)}
+                  onCancel={() => {
+                    setEditingId(null);
+                  }}
                   isSaving={actionLoading === forecast.id}
                 />
               ) : (
@@ -81,9 +79,7 @@ export default function AdminForecastsWrapper() {
               )}
 
               <div className="p-4 mb-6 rounded-lg bg-white/5">
-                <strong className="block mb-2 text-sm text-gray-400">
-                  Источник:
-                </strong>
+                <strong className="block mb-2 text-sm text-gray-400">Источник:</strong>
                 <pre className="font-mono text-xs text-gray-300 whitespace-pre-wrap">
                   {forecast.source_url}
                 </pre>
@@ -92,37 +88,35 @@ export default function AdminForecastsWrapper() {
               <div className="flex gap-3">
                 {editingId !== forecast.id && (
                   <button
-                    onClick={() => setEditingId(forecast.id)}
+                    onClick={() => {
+                      setEditingId(forecast.id);
+                    }}
                     className="px-4 py-2 text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
                   >
                     ✏️ Edit
                   </button>
                 )}
                 <button
-                  onClick={() => updateStatus(forecast.id, "approved")}
-                  disabled={
-                    actionLoading === forecast.id || editingId === forecast.id
-                  }
+                  onClick={async () => updateStatus(forecast.id, 'approved')}
+                  disabled={actionLoading === forecast.id || editingId === forecast.id}
                   className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[120px]"
                 >
                   {actionLoading === forecast.id ? (
                     <span className="inline-block w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin" />
                   ) : (
-                    "✅ Approve"
+                    '✅ Approve'
                   )}
                 </button>
 
                 <button
-                  onClick={() => updateStatus(forecast.id, "rejected")}
-                  disabled={
-                    actionLoading === forecast.id || editingId === forecast.id
-                  }
+                  onClick={async () => updateStatus(forecast.id, 'rejected')}
+                  disabled={actionLoading === forecast.id || editingId === forecast.id}
                   className="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-w-[120px]"
                 >
                   {actionLoading === forecast.id ? (
                     <span className="inline-block w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin" />
                   ) : (
-                    "❌ Reject"
+                    '❌ Reject'
                   )}
                 </button>
               </div>

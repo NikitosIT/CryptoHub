@@ -1,12 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
 
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { useLogin } from "@/routes/auth/-hooks/useLogin";
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { useLogin } from '@/routes/auth/-hooks/useLogin';
 
-export const Route = createFileRoute("/auth/")({
+export const Route = createFileRoute('/auth/')({
   beforeLoad: createRouteGuard({
     requireNoAuth: true,
-    redirectTo: "/",
+    redirectTo: '/',
   }),
   component: AuthPage,
 });
@@ -33,14 +33,12 @@ function AuthPage() {
               id="email"
               type="email"
               placeholder="Введите email"
-              {...register("email")}
+              {...register('email')}
               disabled={isPending}
               className="w-full p-3 text-white border rounded bg-white/5 border-orange-500/30 focus:outline-none focus:border-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             {formErrors.email && (
-              <p className="mt-1 text-sm text-red-400">
-                {formErrors.email.message}
-              </p>
+              <p className="mt-1 text-sm text-red-400">{formErrors.email.message}</p>
             )}
           </div>
           <button
@@ -51,7 +49,7 @@ function AuthPage() {
             {isPending ? (
               <span className="inline-block w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin" />
             ) : (
-              "Продолжить"
+              'Продолжить'
             )}
           </button>
         </form>

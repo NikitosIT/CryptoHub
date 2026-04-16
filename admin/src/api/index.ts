@@ -1,61 +1,56 @@
-import type { Session } from "@supabase/supabase-js";
+import type { Session } from '@supabase/supabase-js';
+import { useMutation } from '@tanstack/react-query';
 
-import { supabase } from "@/lib/supabaseClient";
+import { env } from '@/config/env';
+import { supabase } from '@/lib/supabaseClient';
+import { type CheckEmailResponse } from '@/routes/auth/-api/signInWithOtp';
+import { type ForecastsResponse } from '@/routes/forecasts/api/useForecasts';
+import { type UserInfo } from '@/routes/notifications/utils/filterProfiles';
+import { type CryptoTokens } from '@/routes/tokens/api/useListCryptoTokens';
 
-import { useMutation } from "@tanstack/react-query";
-import { CryptoTokens } from "@/routes/tokens/api/useListCryptoTokens";
-import { UserInfo } from "@/routes/notifications/utils/filterProfiles";
-import { ForecastsResponse } from "@/routes/forecasts/api/useForecasts";
-import { CheckEmailResponse } from "@/routes/auth/-api/signInWithOtp";
-
-interface FunctionRequestOptions<TBody> {
+type FunctionRequestOptions<TBody> = {
   functionName: string;
   body: TBody;
   requireAuth?: boolean;
-}
+};
 
 async function performFunctionRequest<T, TBody = unknown>({
   functionName,
   body,
   requireAuth = false,
 }: FunctionRequestOptions<TBody>) {
-  const functionsBaseUrl: string =
-    (import.meta.env.VITE_SUPABASE_FUNCTIONS_URL as string | undefined) ||
-    `${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1`;
+  const { supabaseFunctionsUrl, supabaseAnonKey } = env;
 
-  if (!functionsBaseUrl) {
-    throw new Error(
-      "VITE_SUPABASE_FUNCTIONS_URL or VITE_SUPABASE_URL must be set",
-    );
+  if (!supabaseFunctionsUrl) {
+    throw new Error('VITE_SUPABASE_FUNCTIONS_URL or VITE_SUPABASE_URL must be set');
   }
 
-  const url = `${functionsBaseUrl}/${functionName}`;
+  const url = `${supabaseFunctionsUrl}/${functionName}`;
 
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-  if (!anonKey) {
-    throw new Error("VITE_SUPABASE_ANON_KEY is not set");
+  if (!supabaseAnonKey) {
+    throw new Error('VITE_SUPABASE_ANON_KEY is not set');
   }
 
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    apikey: anonKey,
+    'Content-Type': 'application/json',
+    apikey: supabaseAnonKey,
   };
 
   const {
     data: { session },
   } = await supabase.auth.getSession();
   if (session?.access_token) {
-    headers["Authorization"] = `Bearer ${session.access_token}`;
+    headers.Authorization = `Bearer ${session.access_token}`;
   } else {
-    headers["Authorization"] = `Bearer ${anonKey}`;
+    headers.Authorization = `Bearer ${supabaseAnonKey}`;
   }
 
   if (requireAuth && !session?.access_token) {
-    throw new Error("Authentication required");
+    throw new Error('Authentication required');
   }
 
   const res = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify(body),
   });
@@ -64,58 +59,55 @@ async function performFunctionRequest<T, TBody = unknown>({
   return data as T;
 }
 
-function checkAdminEmail(email: string) {
+async function checkAdminEmail(email: string) {
   return performFunctionRequest<CheckEmailResponse>({
-    functionName: "admin-auth",
+    functionName: 'admin-auth',
     body: { email },
   });
 }
 
-function listForecasts() {
+async function listForecasts() {
   return performFunctionRequest<ForecastsResponse>({
-    functionName: "admin-forecasts",
+    functionName: 'admin-forecasts',
     requireAuth: true,
-    body: { action: "list" },
+    body: { action: 'list' },
   });
 }
 
-function updateForecastStatus(
-  forecastId: number,
-  status: "approved" | "rejected",
-) {
+async function updateForecastStatus(forecastId: number, status: 'approved' | 'rejected') {
   return performFunctionRequest<void>({
-    functionName: "admin-forecasts",
+    functionName: 'admin-forecasts',
     requireAuth: true,
     body: {
-      action: "update",
+      action: 'update',
       forecastId,
       status,
     },
   });
 }
 
-function updateForecastText(forecastId: number, forecast_text: string) {
+async function updateForecastText(forecastId: number, forecast_text: string) {
   return performFunctionRequest<void>({
-    functionName: "admin-forecasts",
+    functionName: 'admin-forecasts',
     requireAuth: true,
     body: {
-      action: "update",
+      action: 'update',
       forecastId,
       forecast_text,
     },
   });
 }
 
-interface SendNotificationPayload {
+type SendNotificationPayload = {
   send_to: string;
   send_to_all: boolean;
   msg: string;
   links?: unknown;
-}
+};
 
-function sendNotification(payload: SendNotificationPayload) {
+async function sendNotification(payload: SendNotificationPayload) {
   return performFunctionRequest<void>({
-    functionName: "admin_notifications",
+    functionName: 'admin_notifications',
     requireAuth: true,
     body: payload,
   });
@@ -123,7 +115,7 @@ function sendNotification(payload: SendNotificationPayload) {
 
 export function useSendNotification() {
   return useMutation({
-    mutationFn: (payload: SendNotificationPayload) =>
+    mutationFn: async (payload: SendNotificationPayload) =>
       api.admin.sendNotification(payload),
   });
 }
@@ -138,6 +130,7 @@ async function signInWithOtp(email: string) {
   if (error) {
     throw new Error(error.message);
   }
+
   return email;
 }
 
@@ -145,11 +138,11 @@ async function verifyOtp(email: string, code: string) {
   const { data, error } = await supabase.auth.verifyOtp({
     email,
     token: code,
-    type: "email",
+    type: 'email',
   });
 
   if (error) throw new Error(error.message);
-  if (!data.session) throw new Error("No session returned");
+  if (!data.session) throw new Error('No session returned');
 
   return data.session;
 }
@@ -161,44 +154,45 @@ async function signOut() {
   }
 }
 
-function onAuthStateChange(
-  callback: (event: string, session: Session | null) => void,
-) {
+function onAuthStateChange(callback: (event: string, session: Session | null) => void) {
   const { data } = supabase.auth.onAuthStateChange(callback);
   return {
-    unsubscribe: () => data.subscription.unsubscribe(),
+    unsubscribe() {
+      data.subscription.unsubscribe();
+    },
   };
 }
 
 async function listProfiles() {
   const { data, error } = await supabase
-    .from("profiles")
-    .select("id, nickname, profile_logo");
+    .from('profiles')
+    .select('id, nickname, profile_logo');
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
-  return (data ?? []) as UserInfo[];
+
+  return data as UserInfo[];
 }
 
 export async function cryptoTokens() {
   return performFunctionRequest<CryptoTokens[]>({
-    functionName: "crypto-tokens",
+    functionName: 'crypto-tokens',
     body: {},
     requireAuth: true,
   });
 }
 
-export function insertCryptoToken(tokenName: string) {
+export async function insertCryptoToken(tokenName: string) {
   return performFunctionRequest({
-    functionName: "admin_cryptotokens",
+    functionName: 'admin_cryptotokens',
     body: { token_name: tokenName },
     requireAuth: true,
   });
 }
 
-export function insertCryptoTokens(tokenNames: string[]) {
+export async function insertCryptoTokens(tokenNames: string[]) {
   return performFunctionRequest({
-    functionName: "admin_cryptotokens",
+    functionName: 'admin_cryptotokens',
     body: { token_names: tokenNames },
     requireAuth: true,
   });
@@ -231,12 +225,12 @@ export const api = {
 
 export {
   checkAdminEmail,
+  getSession,
   listForecasts,
+  onAuthStateChange,
+  signInWithOtp,
+  signOut,
   updateForecastStatus,
   updateForecastText,
-  getSession,
-  signInWithOtp,
   verifyOtp,
-  signOut,
-  onAuthStateChange,
 };
