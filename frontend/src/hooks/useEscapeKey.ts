@@ -7,6 +7,7 @@ export function useEscapeKey(callback: () => void) {
         callback();
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);

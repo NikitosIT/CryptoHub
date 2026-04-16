@@ -5,23 +5,18 @@ import { useToast } from '@/hooks/useToast';
 import { codeSchema } from '@/lib/validatorSchemas';
 import { useVerifyOtp } from '@/routes/auth/-api/signInWithOtp';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
+import type { NullableEmail, OTPCode } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 import { useCodeForm } from './useCodeForm';
 
-type OtpFormValues = { code: string };
-
-type VerifySearchParams = {
-  redirectTo?: string;
-  mode?: 'email';
-  email?: string;
-};
+type OtpFormValues = { code: OTPCode };
 
 export function useVerifyOTP() {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const search = useSearch({ from: '/auth/verify' }) as VerifySearchParams;
-  const email: string | null = search.email ?? null;
+
+  const search = useSearch({ from: '/auth/verify' });
+  const email: NullableEmail = search.email ?? null;
   const isEmailLogin = search.mode === 'email' || Boolean(email);
   const { showError } = useToast();
 
@@ -55,21 +50,22 @@ export function useVerifyOTP() {
     if (isAuthLoading) return;
 
     if (!isEmailLogin && !user?.id) {
-      navigate({ to: '/auth/', replace: true });
+      void navigate({ to: '/auth', replace: true });
       return;
     }
 
     if (isEmailLogin && isOtpSuccess) {
       if (hasPendingTwoFactor) {
-        navigate({ to: '/auth/verify-2fa', replace: true });
+        void navigate({ to: '/auth/verify-2fa', replace: true });
       } else if (isAuthenticatedWith2FA) {
-        navigate({ to: '/auth/callback', replace: true });
+        void navigate({ to: '/auth/callback', replace: true });
       }
+
       return;
     }
 
     if (isAuthenticatedWith2FA && !hasPendingTwoFactor && !isEmailLogin) {
-      navigate({ to: '/auth/callback', replace: true });
+      void navigate({ to: '/auth/callback', replace: true });
     }
   }, [
     isAuthLoading,

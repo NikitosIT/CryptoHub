@@ -5,7 +5,8 @@ import { AuthButton } from '@/components/ui/AuthButton';
 import { createRouteGuard } from '@/hooks/routeGuards';
 import { loginSearchSchema } from '@/lib/validatorSchemas';
 import AuthGoogle from '@/routes/auth/-components/AuthGoogle';
-import { useLogin } from '@/routes/auth/-hooks/useLogin';
+
+import { useLogin } from './-hooks/useLogin';
 
 export const Route = createFileRoute('/auth/')({
   validateSearch: loginSearchSchema,
@@ -43,7 +44,7 @@ export function EmailAuth() {
           <Box
             component="form"
             onSubmit={(e) => {
-              handleSubmit(e);
+              void handleSubmit(e);
             }}
             display="flex"
             flexDirection="column"
@@ -53,8 +54,8 @@ export function EmailAuth() {
               label="Email"
               type="email"
               {...register('email')}
-              error={!!formErrors.email}
-              helperText={formErrors.email?.message || ''}
+              error={Boolean(formErrors.email)}
+              helperText={formErrors.email?.message ?? ''}
               fullWidth
             />
 

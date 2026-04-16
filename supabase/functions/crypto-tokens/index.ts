@@ -18,7 +18,9 @@ Deno.serve(async (req) => {
 
   try {
     const url = `${COINGECKO_MARKETS_URL}&x_cg_demo_api_key=${apiKey}`;
+    console.log("Fetching CoinGecko...");
     const res = await fetch(url);
+    console.log("Fetched CoinGecko");
 
     if (!res.ok) {
       const text = await res.text();

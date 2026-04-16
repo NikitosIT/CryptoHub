@@ -1,7 +1,11 @@
 import { RemoveScroll } from 'react-remove-scroll';
 
 import { useEscapeKey } from '@/hooks/useEscapeKey';
-import type { ImageModalProps } from '@/types/db';
+
+type ImageModalProps = {
+  url: string;
+  onClose: () => void;
+};
 
 export function ImageModal({ url, onClose }: ImageModalProps) {
   useEscapeKey(onClose);
@@ -25,15 +29,6 @@ export function ImageModal({ url, onClose }: ImageModalProps) {
           src={url}
           alt="Preview"
           className="max-w-[85vw] max-h-[75vh] sm:max-w-[90vw] sm:max-h-[90vh] object-contain rounded-lg sm:rounded-2xl shadow-2xl relative z-10"
-          onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          }}
-          role="button"
-          tabIndex={0}
         />
         <button
           onClick={onClose}

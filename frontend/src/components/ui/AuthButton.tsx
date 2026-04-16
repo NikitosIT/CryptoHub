@@ -1,10 +1,10 @@
 import { Button, type ButtonProps } from '@mui/material';
 
-interface AuthButtonProps extends Omit<ButtonProps, 'disabled'> {
+type AuthButtonProps = {
   isLoading?: boolean;
   loadingText?: string;
-  disabled?: boolean;
-}
+} & ButtonProps;
+
 export function AuthButton({
   isLoading = false,
   loadingText,

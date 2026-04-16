@@ -1,11 +1,12 @@
-import { calcSpotSchema, type SpotFormData } from '@/lib/validatorSchemas';
-import { useSpotStore } from '@/routes/calculator/-store/useSpotStore';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
 
-import { CalculatorTabs } from './-layout/CalculatorTabs';
-import CalculatorButtons from './-layout/CalculatorButtons';
+import { calcSpotSchema, type SpotFormData } from '@/lib/validatorSchemas';
+import { useSpotStore } from '@/routes/calculator/-store/useSpotStore';
+
+import CalculatorButtons from './-components/CalculatorButtons';
+import { CalculatorTabs } from './-components/CalculatorTabs';
 
 export const Route = createFileRoute('/calculator/spot')({
   component: CalculatorSpot,
@@ -29,6 +30,7 @@ export function CalculatorSpot() {
     reset();
     resetForm();
   };
+
   return (
     <CalculatorTabs>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
@@ -63,7 +65,7 @@ export function CalculatorSpot() {
         <CalculatorButtons handleReset={handleReset} />
       </form>
 
-      {profit != null && entryPrice != null && exitPrice != null && (
+      {profit !== null && entryPrice !== null && exitPrice !== null && (
         <div className="p-3 mt-4 text-center sm:p-4 sm:mt-6 rounded-xl bg-zinc-700">
           <p className="text-xs sm:text-sm text-zinc-300">Profit</p>
           <p

@@ -1,7 +1,12 @@
 import { Paper, type PaperProps } from '@mui/material';
-import type { OptionType } from './CustomSelectFilter';
 
-export function AuthorImg({ id, label }: { id: number; label: string }) {
+type FilterOption = {
+  id?: number;
+  imageUrl?: string;
+  label: string;
+};
+
+export function AuthorImg({ id, label }: FilterOption) {
   return (
     <img
       className="object-cover w-6 h-6 rounded-full shrink-0"
@@ -9,7 +14,8 @@ export function AuthorImg({ id, label }: { id: number; label: string }) {
       alt={label}
       onError={(e) => {
         const img = e.currentTarget;
-        return (img.src = `/authors/${id}.png`);
+        img.onerror = null;
+        img.src = `/authors/${id}.png`;
       }}
     />
   );
@@ -28,7 +34,7 @@ export function DropdownPaper(props: PaperProps) {
   );
 }
 
-export function OptionImage({ option }: { option: OptionType }) {
+export function OptionImage({ option }: { option: FilterOption }) {
   if (option.imageUrl) {
     return (
       <img
@@ -38,8 +44,6 @@ export function OptionImage({ option }: { option: OptionType }) {
       />
     );
   }
-  if (option.id !== undefined) {
-    return <AuthorImg id={option.id} label={option.label} />;
-  }
-  return null;
+
+  return <AuthorImg id={option.id} label={option.label} />;
 }

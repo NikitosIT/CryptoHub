@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { api } from "@/api";
-import { useSessionQuery } from "@/api/useSessionQuery";
+import { useSessionQuery } from "@/routes/auth/-api/useSessionQuery";
 
 export function useAdminAuth() {
   const sessionQuery = useSessionQuery();

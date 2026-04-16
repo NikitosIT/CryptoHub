@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { useNavigate as useNavigateHook } from '@tanstack/react-router';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
@@ -16,6 +18,7 @@ import {
 } from 'vitest';
 
 import { PostsTelegram } from '@/routes/posts/-components/PostsTelegram';
+import type { useUserProfile as useUserProfileHook } from '@/routes/profile/-api/useUserProfile';
 import { ProfileMain } from '@/routes/profile/index';
 import {
   fetchTelegramPostsHandler,
@@ -24,7 +27,6 @@ import {
   resetFetchTelegramPostsHistory,
   tokenForecastsHandler,
 } from '@/test/mocks/handlers';
-
 const mockUsePostsMode = vi.fn();
 vi.mock('@/routes/posts/-hooks/usePostsMode', () => ({
   usePostsMode: () => mockUsePostsMode(),
@@ -35,9 +37,9 @@ vi.mock('@/routes/authors/-api/useListAuthors', () => ({
   useListAuthors: () => mockUseListAuthors(),
 }));
 
-const mockUseListTokens = vi.fn();
-vi.mock('@/routes/tokens/-api/useListTokens', () => ({
-  useListTokens: () => mockUseListTokens(),
+const mockUseListCryptoTokens = vi.fn();
+vi.mock('@/routes/tokens/-api/useListCryptoTokens', () => ({
+  useListCryptoTokens: () => mockUseListCryptoTokens(),
 }));
 
 const mockUseScrollTop = vi.fn();
@@ -64,10 +66,12 @@ vi.mock('@/api/useSessionQuery', () => ({
 }));
 
 vi.mock('@/routes/profile/-api/useUserProfile', async (importOriginal) => {
-  const mod =
-    await importOriginal<typeof import('@/routes/profile/-api/useUserProfile')>();
+  const mod = await importOriginal();
+  const typedMode = mod as {
+    useUserProfile: typeof useUserProfileHook;
+  };
   return {
-    ...mod,
+    ...typedMode,
     useUserProfile: () => ({
       data: { nickname: 'User', profile_logo: null },
       isLoading: false,
@@ -99,9 +103,12 @@ function createWrapper() {
 
 const mockNavigate = vi.fn();
 vi.mock('@tanstack/react-router', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@tanstack/react-router')>();
+  const mod = await importOriginal();
+  const typedMod = mod as {
+    useNavigate: typeof useNavigateHook;
+  };
   return {
-    ...mod,
+    ...typedMod,
     useNavigate: () => mockNavigate,
   };
 });
@@ -121,6 +128,7 @@ function ProfileThenPostsApp({
         setScreen('posts');
       }
     };
+
     mockNavigate.mockImplementation(navigateHandler);
     return () => {
       mockNavigate.mockReset();
@@ -131,9 +139,15 @@ function ProfileThenPostsApp({
 }
 
 describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
-  afterAll(() => server.close());
-  afterEach(() => server.resetHandlers());
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+  afterAll(() => {
+    server.close();
+  });
+  afterEach(() => {
+    server.resetHandlers();
+  });
 
   beforeEach(() => {
     resetFetchTelegramPostsHistory();
@@ -141,7 +155,7 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
 
     mockUsePostsMode.mockReturnValue({ mode: 'all' as const });
     mockUseListAuthors.mockReturnValue({ data: [] });
-    mockUseListTokens.mockReturnValue({ data: [] });
+    mockUseListCryptoTokens.mockReturnValue({ data: [] });
     mockUseScrollTop.mockReturnValue({ show: false, scrollToTop: vi.fn() });
     mockUseAuthState.mockReturnValue({
       isAuthenticatedWith2FA: true,
@@ -163,14 +177,14 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
     });
 
     const first = fetchTelegramPostsHistory[0];
-    expect(first.payload).toMatchObject({
-      cursor_id: null,
-      cursor_created_at: null,
+    expect(first?.payload).toMatchObject({
       page_limit: 10,
       author_id: null,
       token_name: null,
       mode: 'all',
     });
+    expect(first?.payload.cursor_id).toBeUndefined();
+    expect(first?.payload.cursor_created_at).toBeUndefined();
 
     await waitFor(() => {
       const authorLinks = screen.getAllByRole('link', { name: /author/i });
@@ -188,15 +202,15 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
       expect(fetchTelegramPostsHistory.length).toBe(2);
     });
 
-    const expectedCursor = first.responseLastCursor;
+    const expectedCursor = first?.responseLastCursor;
     expect(expectedCursor).not.toBeNull();
 
     const second = fetchTelegramPostsHistory[1];
-    expect(second.payload.cursor_id).toBe(expectedCursor!.id);
-    expect(second.payload.cursor_created_at).toBe(expectedCursor!.created_at);
+    expect(second?.payload.cursor_id).toBe(expectedCursor?.id);
+    expect(second?.payload.cursor_created_at).toBe(expectedCursor?.created_at);
 
-    expect(second.payload.page_limit).toBe(10);
-    expect(second.payload.mode).toBe('all');
+    expect(second?.payload.page_limit).toBe(10);
+    expect(second?.payload.mode).toBe('all');
 
     await waitFor(() => {
       const secondPageLinks = screen.getAllByRole('link', {
@@ -209,7 +223,7 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
       const articles = screen.getAllByRole('article');
       expect(articles).toHaveLength(13);
     });
-  });
+  }, 10000);
 
   it('when user selects author, fetch_telegram_posts is sent with author_id and posts render only from that author', async () => {
     const authorId = -1001792822445;
@@ -245,9 +259,9 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
     });
 
     const withAuthor = fetchTelegramPostsHistory[1];
-    expect(withAuthor.payload.author_id).toBe(authorId);
-    expect(withAuthor.payload.cursor_id).toBeNull();
-    expect(withAuthor.payload.cursor_created_at).toBeNull();
+    expect(withAuthor?.payload.author_id).toBe(authorId);
+    expect(withAuthor?.payload.cursor_id).toBeUndefined();
+    expect(withAuthor?.payload.cursor_created_at).toBeUndefined();
 
     await waitFor(() => {
       const authorLinks = screen.getAllByRole('link', {
@@ -262,14 +276,15 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
 
   it('when user selects token, fetch_telegram_posts is sent with token_name and TokenDetails renders', async () => {
     const token = {
-      label: 'Bitcoin',
-      value: 'BTC',
-      cmc: 'https://example.com/cmc',
-      coinglass: 'https://example.com/cg',
-      homelink: 'https://example.com',
-      xlink: 'https://example.com/x',
+      id: 'bitcoin',
+      name: 'Bitcoin',
+      symbol: 'BTC',
+      image: 'https://example.com/btc.png',
+      current_price: 100000,
+      market_cap: 2000000000000,
+      market_cap_rank: 1,
     };
-    mockUseListTokens.mockReturnValue({ data: [token] });
+    mockUseListCryptoTokens.mockReturnValue({ data: [token] });
 
     const { Wrapper } = createWrapper();
 
@@ -290,7 +305,7 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
-    const option = screen.getByText(token.label);
+    const option = screen.getByText(token.name);
     await user.click(option);
 
     await waitFor(() => {
@@ -298,13 +313,15 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
     });
 
     const withToken = fetchTelegramPostsHistory[1];
-    expect(withToken.payload.token_name).toBe(token.value);
+    expect(withToken?.payload.token_name).toBe(token.symbol);
 
     await waitFor(() => {
-      expect(screen.getByRole('link', { name: /coinmarketcap/i })).toBeInTheDocument();
+      expect(screen.getByText(token.name)).toBeInTheDocument();
     });
-
-    expect(screen.getByRole('link', { name: /coinglass/i })).toBeInTheDocument();
+    expect(screen.getByText(token.symbol)).toBeInTheDocument();
+    expect(screen.getByText(/price/i)).toBeInTheDocument();
+    expect(screen.getByText(/rank/i)).toBeInTheDocument();
+    expect(screen.getByText(/market cap/i)).toBeInTheDocument();
   });
 
   it('when user clicks Liked Posts on profile, fetch_telegram_posts is sent with mode liked and all posts show Like active', async () => {
@@ -330,7 +347,7 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
       expect(fetchTelegramPostsHistory.length).toBeGreaterThanOrEqual(1);
     });
     const lastRequest = fetchTelegramPostsHistory[fetchTelegramPostsHistory.length - 1];
-    expect(lastRequest.payload.mode).toBe('liked');
+    expect(lastRequest?.payload.mode).toBe('liked');
 
     await waitFor(() => {
       const articles = screen.getAllByRole('article');
@@ -367,7 +384,7 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
       expect(fetchTelegramPostsHistory.length).toBeGreaterThanOrEqual(1);
     });
     const lastRequest = fetchTelegramPostsHistory[fetchTelegramPostsHistory.length - 1];
-    expect(lastRequest.payload.mode).toBe('disliked');
+    expect(lastRequest?.payload.mode).toBe('disliked');
 
     await waitFor(() => {
       const articles = screen.getAllByRole('article');
@@ -404,7 +421,7 @@ describe('PostsTelegram fetch_telegram_posts (MSW)', () => {
       expect(fetchTelegramPostsHistory.length).toBeGreaterThanOrEqual(1);
     });
     const lastRequest = fetchTelegramPostsHistory[fetchTelegramPostsHistory.length - 1];
-    expect(lastRequest.payload.mode).toBe('favorites');
+    expect(lastRequest?.payload.mode).toBe('favorites');
 
     await waitFor(() => {
       const articles = screen.getAllByRole('article');

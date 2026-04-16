@@ -4,7 +4,7 @@ import { Box, type SxProps, TextField, type Theme } from '@mui/material';
 import { AuthButton } from '@/components/ui/AuthButton';
 import { useNicknameForm } from '@/hooks/useNicknameForm';
 
-export interface NicknameFormProps {
+export type NicknameFormProps = {
   title?: ReactNode;
   label?: string;
   buttonText?: string;
@@ -14,7 +14,7 @@ export interface NicknameFormProps {
   onError?: (error: Error) => void;
   resetOnSuccess?: boolean;
   containerSx?: SxProps<Theme>;
-}
+};
 
 export function NicknameForm({
   title,
@@ -39,20 +39,20 @@ export function NicknameForm({
     <Box
       component="form"
       onSubmit={(e) => {
-        handleSubmit(e);
+        void handleSubmit(e);
       }}
       display="flex"
       flexDirection="column"
       gap={2}
       sx={containerSx}
     >
-      {title ? title : null}
+      {title ?? null}
 
       <TextField
         label={label}
         {...register('nickname')}
-        error={!!errors.nickname || isError}
-        helperText={errors.nickname?.message || error?.message || ' '}
+        error={Boolean(errors.nickname) || isError}
+        helperText={errors.nickname?.message ?? error?.message ?? ' '}
         fullWidth
       />
 

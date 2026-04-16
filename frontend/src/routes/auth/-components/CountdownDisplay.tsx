@@ -1,10 +1,10 @@
 import Countdown from 'react-countdown';
 import { Box, Typography } from '@mui/material';
 
-interface CountdownDisplayProps {
+type CountdownDisplayProps = {
   date: number;
   onComplete: () => void;
-}
+};
 
 export function CountdownDisplay({ date, onComplete }: CountdownDisplayProps) {
   const renderer = ({

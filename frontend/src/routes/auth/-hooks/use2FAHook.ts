@@ -11,9 +11,10 @@ import {
 } from '@/routes/auth/-api/use2faApi';
 import { useAuthState } from '@/routes/auth/-hooks/useAuthState';
 import { useCodeForm } from '@/routes/auth/-hooks/useCodeForm';
+import type { OTPCode } from '@/types';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-type CodeForm = { code: string };
+type CodeForm = { code: OTPCode };
 
 export function useTwoFactorHook() {
   const [qrUrl, setQrUrl] = useState<string | null>(null);
@@ -46,6 +47,7 @@ export function useTwoFactorHook() {
       setError('code', { type: 'server', message: 'Authentication error' });
       return;
     }
+
     setErrorMessage(null);
     setSuccessMessage(null);
     try {
@@ -69,7 +71,7 @@ export function useTwoFactorHook() {
     }
   };
 
-  const handleConfirmSetup = ({ code }: CodeForm) =>
+  const handleConfirmSetup = async ({ code }: CodeForm) =>
     withUserId(async (uid) => {
       await verifySetup.mutateAsync({ code: code.trim(), userId: uid });
       setSuccessMessage('2FA successfully enabled!');
@@ -77,13 +79,22 @@ export function useTwoFactorHook() {
       reset();
     }, "Code didn't match. Please try again.");
 
-  const handleDisableSubmit = ({ code }: CodeForm) =>
+  const handleDisableSubmit = async ({ code }: CodeForm) =>
     withUserId(async (uid) => {
       await disableTwoFactor.mutateAsync({ code: code.trim(), userId: uid });
       setSuccessMessage('2FA disabled.');
       setDisableMode(false);
       reset();
     }, 'Failed to disable 2FA.');
+  const handleEnableDisableMode = () => {
+    resetState();
+    setDisableMode(true);
+  };
+
+  const handleCancelDisable = () => {
+    resetState();
+    setDisableMode(false);
+  };
 
   return {
     qrUrl,
@@ -99,14 +110,8 @@ export function useTwoFactorHook() {
     handleStartSetup,
     handleConfirmSetup: handleSubmit(handleConfirmSetup),
     handleDisableSubmit: handleSubmit(handleDisableSubmit),
-    handleEnableDisableMode: () => {
-      resetState();
-      setDisableMode(true);
-    },
-    handleCancelDisable: () => {
-      resetState();
-      setDisableMode(false);
-    },
+    handleEnableDisableMode,
+    handleCancelDisable,
     isRequesting: requestTwoFactor.isPending,
     isVerifying: verifySetup.isPending,
     isDisabling: disableTwoFactor.isPending,
@@ -135,15 +140,19 @@ export function useVerify2FA() {
 
     try {
       await verifyMutation.mutateAsync({ code, userId: user.id });
-      navigate({ to: '/auth/callback', replace: true });
+      void navigate({ to: '/auth/callback', replace: true });
     } catch (err) {
       const remaining = (err as { remainingAttempts?: number }).remainingAttempts;
-      const message =
-        remaining !== undefined
-          ? remaining > 0
-            ? `Invalid code. ${remaining} attempts remaining.`
-            : 'Invalid code. Attempts exhausted.'
-          : getErrorMessage(err, 'Failed to verify code.');
+      let message: string;
+
+      if (remaining === undefined) {
+        message = getErrorMessage(err, 'Failed to verify code.');
+      } else if (remaining > 0) {
+        message = `Invalid code. ${remaining} attempts remaining.`;
+      } else {
+        message = 'Invalid code. Attempts exhausted.';
+      }
+
       setError('code', { type: 'server', message });
     }
   };

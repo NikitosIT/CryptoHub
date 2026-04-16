@@ -31,7 +31,7 @@ function SetNickname() {
           buttonText="Continue"
           loadingText="Saving..."
           onSuccess={() => {
-            navigate({ to: '/profile/', replace: true });
+            void navigate({ to: '/profile', replace: true });
           }}
         />
       </Paper>

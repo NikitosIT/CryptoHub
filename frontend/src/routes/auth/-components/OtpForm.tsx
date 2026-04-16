@@ -3,18 +3,19 @@ import { Box, Typography } from '@mui/material';
 
 import { AuthButton } from '@/components/ui/AuthButton';
 import { StyledOtpInput } from '@/components/ui/StyledOtpInput';
+import type { OTPCode } from '@/types';
 
 import ResendEmailCode from './ResendEmailCode';
 
-type OtpFormValues = { code: string };
+type OtpFormValues = { code: OTPCode };
 
-interface OtpFormProps {
+type OtpFormProps = {
   control: Control<OtpFormValues>;
   errors: FieldErrors<OtpFormValues>;
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   disabled?: boolean;
-}
+};
 
 export function OtpForm({
   control,

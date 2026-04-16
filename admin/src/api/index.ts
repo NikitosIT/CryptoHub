@@ -1,21 +1,24 @@
 import type { Session } from "@supabase/supabase-js";
 
 import { supabase } from "@/lib/supabaseClient";
-import type { ForecastsResponse, CheckEmailResponse } from "@/types/admins";
+
 import { useMutation } from "@tanstack/react-query";
 import { CryptoTokens } from "@/routes/tokens/api/useListCryptoTokens";
+import { UserInfo } from "@/routes/notifications/utils/filterProfiles";
+import { ForecastsResponse } from "@/routes/forecasts/api/useForecasts";
+import { CheckEmailResponse } from "@/routes/auth/-api/signInWithOtp";
 
-interface FunctionRequestOptions {
+interface FunctionRequestOptions<TBody> {
   functionName: string;
-  body: unknown;
+  body: TBody;
   requireAuth?: boolean;
 }
 
-async function performFunctionRequest<T>({
+async function performFunctionRequest<T, TBody = unknown>({
   functionName,
   body,
   requireAuth = false,
-}: FunctionRequestOptions): Promise<T> {
+}: FunctionRequestOptions<TBody>) {
   const functionsBaseUrl: string =
     (import.meta.env.VITE_SUPABASE_FUNCTIONS_URL as string | undefined) ||
     `${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1`;
@@ -57,23 +60,18 @@ async function performFunctionRequest<T>({
     body: JSON.stringify(body),
   });
 
-  const data = (await res.json()) as {
-    error?: string;
-  } & T;
-  if (!res.ok) {
-    throw new Error(data.error || "Request failed");
-  }
+  const data: unknown = await res.json();
   return data as T;
 }
 
-function checkAdminEmail(email: string): Promise<CheckEmailResponse> {
+function checkAdminEmail(email: string) {
   return performFunctionRequest<CheckEmailResponse>({
     functionName: "admin-auth",
     body: { email },
   });
 }
 
-function listForecasts(): Promise<ForecastsResponse> {
+function listForecasts() {
   return performFunctionRequest<ForecastsResponse>({
     functionName: "admin-forecasts",
     requireAuth: true,
@@ -84,7 +82,7 @@ function listForecasts(): Promise<ForecastsResponse> {
 function updateForecastStatus(
   forecastId: number,
   status: "approved" | "rejected",
-): Promise<void> {
+) {
   return performFunctionRequest<void>({
     functionName: "admin-forecasts",
     requireAuth: true,
@@ -96,10 +94,7 @@ function updateForecastStatus(
   });
 }
 
-function updateForecastText(
-  forecastId: number,
-  forecast_text: string,
-): Promise<void> {
+function updateForecastText(forecastId: number, forecast_text: string) {
   return performFunctionRequest<void>({
     functionName: "admin-forecasts",
     requireAuth: true,
@@ -111,44 +106,34 @@ function updateForecastText(
   });
 }
 
-export interface SendNotificationPayload {
+interface SendNotificationPayload {
   send_to: string;
   send_to_all: boolean;
   msg: string;
   links?: unknown;
 }
 
-function sendNotification(
-  send_to: string,
-  send_to_all: boolean,
-  msg: string,
-  links?: unknown,
-): Promise<void> {
+function sendNotification(payload: SendNotificationPayload) {
   return performFunctionRequest<void>({
     functionName: "admin_notifications",
     requireAuth: true,
-    body: { send_to, send_to_all, msg, links },
+    body: payload,
   });
 }
 
 export function useSendNotification() {
   return useMutation({
-    mutationFn: ({
-      send_to,
-      send_to_all,
-      msg,
-      links,
-    }: SendNotificationPayload) =>
-      api.admin.sendNotification(send_to, send_to_all, msg, links),
+    mutationFn: (payload: SendNotificationPayload) =>
+      api.admin.sendNotification(payload),
   });
 }
 
-async function getSession(): Promise<Session | null> {
+async function getSession() {
   const { data: sessionData } = await supabase.auth.getSession();
   return sessionData.session ?? null;
 }
 
-async function signInWithOtp(email: string): Promise<string> {
+async function signInWithOtp(email: string) {
   const { error } = await supabase.auth.signInWithOtp({ email });
   if (error) {
     throw new Error(error.message);
@@ -156,7 +141,7 @@ async function signInWithOtp(email: string): Promise<string> {
   return email;
 }
 
-async function verifyOtp(email: string, code: string): Promise<Session> {
+async function verifyOtp(email: string, code: string) {
   const { data, error } = await supabase.auth.verifyOtp({
     email,
     token: code,
@@ -169,7 +154,7 @@ async function verifyOtp(email: string, code: string): Promise<Session> {
   return data.session;
 }
 
-async function signOut(): Promise<void> {
+async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
@@ -185,13 +170,7 @@ function onAuthStateChange(
   };
 }
 
-export interface UserInfo {
-  id: string | null;
-  nickname: string | null;
-  profile_logo: string | null;
-}
-
-async function listProfiles(): Promise<UserInfo[]> {
+async function listProfiles() {
   const { data, error } = await supabase
     .from("profiles")
     .select("id, nickname, profile_logo");
@@ -201,7 +180,7 @@ async function listProfiles(): Promise<UserInfo[]> {
   return (data ?? []) as UserInfo[];
 }
 
-export async function cryptoTokens(): Promise<CryptoTokens[]> {
+export async function cryptoTokens() {
   return performFunctionRequest<CryptoTokens[]>({
     functionName: "crypto-tokens",
     body: {},

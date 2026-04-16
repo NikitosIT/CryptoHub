@@ -11,10 +11,11 @@ export default function ProfileLogo() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    uploadLogo(file).catch((error) => {
+    uploadLogo(file).catch((error: unknown) => {
       console.error('Failed to upload profile logo:', error);
     });
   };
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
       <UserAvatar size={100} showSkeleton={true} />

@@ -1,35 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import React from 'react';
+import type React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { api as apiClient } from '@/api';
+import type { Author } from '@/routes/authors/-api/useListAuthors';
 import { PostsTelegram } from '@/routes/posts/-components/PostsTelegram';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens';
-import type { Author } from '@/types/db';
 
 const mockAuthorsList = vi.fn();
 const mockCryptoTokens = vi.fn();
 const mockPostsList = vi.fn();
 
 vi.mock('@/api', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@/api')>();
+  const mod = await importOriginal();
+  const typedMod = mod as { api: typeof apiClient };
+
   return {
-    ...mod,
+    ...typedMod,
     api: {
-      ...mod.api,
+      ...typedMod.api,
       authors: {
-        ...mod.api.authors,
+        ...typedMod.api.authors,
         list: () => mockAuthorsList(),
       },
       tokens: {
-        ...mod.api.tokens,
+        ...typedMod.api.tokens,
         crypto: () => mockCryptoTokens(),
       },
       posts: {
-        ...mod.api.posts,
+        ...typedMod.api.posts,
         list: () => mockPostsList(),
       },
     },
@@ -71,6 +74,7 @@ function createWrapper() {
   function Wrapper({ children }: { children: React.ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
+
   return { Wrapper, queryClient };
 }
 

@@ -1,13 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { z } from 'zod';
+import z from 'zod';
+
+import { redirectTo } from '@/lib/validatorSchemas';
 
 import AuthCallback from './-components/AuthCallback';
-
-const callbackSearchSchema = z.object({
-  redirectTo: z.string().optional(),
+const searchSchema = z.object({
+  redirectTo,
 });
 
 export const Route = createFileRoute('/auth/callback')({
-  validateSearch: callbackSearchSchema,
+  validateSearch: searchSchema,
   component: AuthCallback,
 });

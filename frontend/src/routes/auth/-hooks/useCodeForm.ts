@@ -3,11 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { ZodString } from 'zod';
 import { z } from 'zod';
 
-type CodeFormValues = { code: string };
+import type { OTPCode } from '@/types';
 
-interface UseCodeFormOptions {
+type CodeFormValues = { code: OTPCode };
+
+type UseCodeFormOptions = {
   schema: ZodString;
-}
+};
 
 export function useCodeForm({ schema }: UseCodeFormOptions) {
   const {

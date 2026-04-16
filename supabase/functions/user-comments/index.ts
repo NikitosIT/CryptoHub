@@ -15,31 +15,42 @@ Deno.serve(async (req) => {
     const url = new URL(req.url);
     const action = url.searchParams.get("action");
 
-    if (!action) {
-      return errorResponse("Missing action parameter", 400, req);
-    }
+    switch (req.method) {
+      case "GET": {
+        const postId = url.searchParams.get("post_id");
+        if (!postId) return errorResponse("Missing post_id", 400, req);
+        return await handleListComments(req, { post_id: Number(postId) });
+      }
+      case "POST": {
+        const body = await parseRequestBody(req);
 
-    const body = await parseRequestBody(req);
-
-    switch (action) {
-      case "create":
-        return await handleCreateComment(req, body);
-      case "update":
-        return await handleUpdateComment(req, body);
-      case "delete":
-        return await handleDeleteComment(req, body);
-      case "list":
-        try {
-          return await handleListComments(req, body);
-        } catch (err) {
-          if (err instanceof Response && err.status === 401) {
-            safeLogError("Unexpected 401 in listComments", "user-comments");
-            return errorResponse("Internal server error", 500, req);
+        switch (action) {
+          case "list": {
+            const postId = url.searchParams.get("post_id") ?? body.post_id;
+            if (!postId) return errorResponse("Missing post_id", 400, req);
+            return await handleListComments(req, { post_id: Number(postId) });
           }
-          throw err;
+          case "update":
+            return await handleUpdateComment(req, body);
+          case "delete":
+            return await handleDeleteComment(req, body);
+          case "create":
+          case null:
+            return await handleCreateComment(req, body);
+          default:
+            return errorResponse("Invalid action", 400, req);
         }
+      }
+      case "PATCH": {
+        const body = await parseRequestBody(req);
+        return await handleUpdateComment(req, body);
+      }
+      case "DELETE": {
+        const body = await parseRequestBody(req);
+        return await handleDeleteComment(req, body);
+      }
       default:
-        return errorResponse("Invalid action", 400, req);
+        return errorResponse("Method not allowed", 405, req);
     }
   } catch (err: unknown) {
     if (err instanceof Response) {

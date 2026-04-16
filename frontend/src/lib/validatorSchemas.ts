@@ -1,5 +1,5 @@
 import { z } from 'zod';
-export const emailSchema = z.string().trim().toLowerCase().email('Enter a valid email');
+export const emailSchema = z.email('Enter a valid email');
 
 export const codeSchema = z.string().regex(/^\d{6}$/, 'Code must contain 6 digits');
 
@@ -22,14 +22,16 @@ export const commentSchema = z.object({
   text: z.string().max(500, 'Comment cannot exceed 500 characters').optional(),
 });
 
+export const redirectTo = z.string().startsWith('/').optional();
+
 export const verifySearchSchema = z.object({
-  redirectTo: z.string().optional(),
+  redirectTo,
   mode: z.literal('email').optional(),
-  email: z.string().email().optional(),
+  email: z.email().optional(),
 });
 
 export const loginSearchSchema = z.object({
-  redirectTo: z.string().optional(),
+  redirectTo,
 });
 
 export const calcSpotSchema = z.object({
@@ -44,7 +46,7 @@ export const calcFuturesSchema = z.object({
   margin: z.number().positive(),
   leverage: z.number().max(200).positive(),
   entryPrice: z.number().positive(),
-  sellPrice: z.number().positive(),
+  exitPrice: z.number().positive(),
 });
 
 export type FuturesFormData = z.infer<typeof calcFuturesSchema>;

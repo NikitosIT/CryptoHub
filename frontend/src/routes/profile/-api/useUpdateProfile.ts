@@ -5,23 +5,18 @@ import { useRequiredAuth } from '@/routes/auth/-hooks/useRequiredAuth';
 import { setCachedProfile } from '@/routes/profile/-utils/profileCache';
 
 import { profileQueryKey, type UserProfile } from './useUserProfile';
-
-export interface UpdateProfile {
-  nickname?: string | null;
-  profile_logo?: string | null;
-}
-
+export type UpdateProfile = Omit<UserProfile, 'last_changed'>;
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
   const { userId } = useRequiredAuth();
   return useMutation({
-    mutationFn: async (payload: UpdateProfile) => {
-      return await api.profile.update({
+    async mutationFn(payload: UpdateProfile) {
+      return api.profile.update({
         ...payload,
       });
     },
 
-    onMutate: async (payload) => {
+    async onMutate(payload) {
       await queryClient.cancelQueries({
         queryKey: profileQueryKey(userId),
       });
@@ -31,8 +26,7 @@ export const useUpdateProfile = () => {
       );
 
       const optimisticProfile: UserProfile = {
-        nickname: previousProfile?.nickname ?? null,
-        profile_logo: previousProfile?.profile_logo ?? null,
+        ...previousProfile,
         ...payload,
       };
 
@@ -42,20 +36,19 @@ export const useUpdateProfile = () => {
       return { previousProfile };
     },
 
-    onSuccess: (_data, payload) => {
+    onSuccess(_data, payload) {
       const current = queryClient.getQueryData<UserProfile | null>(
         profileQueryKey(userId),
       );
       const confirmed: UserProfile = {
-        nickname: current?.nickname ?? null,
-        profile_logo: current?.profile_logo ?? null,
+        ...current,
         ...payload,
       };
       queryClient.setQueryData(profileQueryKey(userId), confirmed);
       setCachedProfile(confirmed);
     },
 
-    onError: (_err, _payload, onMutateReturn) => {
+    onError(_err, _payload, onMutateReturn) {
       if (onMutateReturn?.previousProfile) {
         queryClient.setQueryData(profileQueryKey(userId), onMutateReturn.previousProfile);
         setCachedProfile(onMutateReturn.previousProfile);

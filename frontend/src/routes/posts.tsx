@@ -11,7 +11,7 @@ const postsSearchSchema = z.object({
 
 export const Route = createFileRoute('/posts')({
   validateSearch: postsSearchSchema,
-  beforeLoad: async ({ location, search }) => {
+  async beforeLoad({ search }) {
     const requiresAuth =
       search.mode === 'liked' ||
       search.mode === 'disliked' ||

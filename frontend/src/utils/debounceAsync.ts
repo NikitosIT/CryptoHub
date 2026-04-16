@@ -1,36 +1,53 @@
 const DEFAULT_DELAY_MS = 500;
 
-interface PendingCall<T> {
-  timer: ReturnType<typeof setTimeout>;
-  resolvers: Array<{ resolve: (v: T) => void; reject: (e: unknown) => void }>;
-}
+type Resolver = {
+  resolve: (v: unknown) => void;
+  reject: (e: unknown) => void;
+};
 
-const pending = new Map<string, PendingCall<unknown>>();
+type PendingCall = {
+  timer?: ReturnType<typeof setTimeout>;
+  resolvers: Resolver[];
+};
 
-export function debounceAsync<T>(
+const pending = new Map<string, PendingCall>();
+
+export async function debounceAsync<T>(
   key: string,
   fn: () => Promise<T>,
   delayMs = DEFAULT_DELAY_MS,
 ): Promise<T> {
   return new Promise<T>((resolve, reject) => {
-    const existing = pending.get(key) as PendingCall<T> | undefined;
+    let entry = pending.get(key);
 
-    if (existing) {
-      clearTimeout(existing.timer);
-      existing.resolvers.push({ resolve, reject });
+    if (entry) {
+      clearTimeout(entry.timer);
     } else {
-      pending.set(key, {
-        timer: null!,
-        resolvers: [{ resolve, reject }],
-      } as PendingCall<unknown>);
+      entry = { resolvers: [] };
+      pending.set(key, entry);
     }
 
-    const entry = pending.get(key) as PendingCall<T>;
+    entry.resolvers.push({
+      resolve(v) {
+        resolve(v as T);
+      },
+      reject,
+    });
+
     entry.timer = setTimeout(() => {
       pending.delete(key);
+
       fn()
-        .then((result) => entry.resolvers.forEach((r) => r.resolve(result)))
-        .catch((error) => entry.resolvers.forEach((r) => r.reject(error)));
+        .then((result) => {
+          entry.resolvers.forEach((r) => {
+            r.resolve(result);
+          });
+        })
+        .catch((error: unknown) => {
+          entry.resolvers.forEach((r) => {
+            r.reject(error);
+          });
+        });
     }, delayMs);
   });
 }
@@ -40,6 +57,5 @@ export function cancelDebounce(key: string) {
   if (!entry) return;
 
   clearTimeout(entry.timer);
-
   pending.delete(key);
 }

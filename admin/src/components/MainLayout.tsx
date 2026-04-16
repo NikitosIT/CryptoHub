@@ -4,8 +4,9 @@ import { useThemeStore } from "@/store/useThemeStore";
 import { useEffect } from "react";
 
 export function MainLayout() {
-  const location = useLocation();
-  const isAuthPage = location.pathname === "/auth";
+  const { pathname } = useLocation();
+  const isAuthPage = pathname.startsWith("/auth");
+
   const theme = useThemeStore((s) => s.theme);
   useEffect(() => {
     const root = document.documentElement;

@@ -10,11 +10,11 @@ import {
 } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
 
-import { useSessionQuery } from '@/api/useSessionQuery';
 import BackButton from '@/components/ui/BackButton';
 import { NicknameForm } from '@/components/ui/NicknameForm';
 import { createRouteGuard } from '@/hooks/routeGuards';
 import { useToast } from '@/hooks/useToast';
+import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 import ProfileLogo from '@/routes/profile/-components/ProfileLogo';
 
 import { profileEditCard, profileEmailBackground } from './-utils/profileStyles';
@@ -51,7 +51,7 @@ export function ProfileEditName() {
             </Typography>
 
             <Box sx={profileEmailBackground}>
-              <Typography>{session?.user.email || 'Not specified'}</Typography>
+              <Typography>{session?.user.email ?? 'Not specified'}</Typography>
 
               <Tooltip title="Copy email">
                 <IconButton
@@ -59,7 +59,7 @@ export function ProfileEditName() {
                   aria-label="Copy email"
                   onClick={() => {
                     if (session?.user.email) {
-                      navigator.clipboard.writeText(session.user.email);
+                      void navigator.clipboard.writeText(session.user.email);
                     }
                   }}
                   sx={{

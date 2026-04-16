@@ -7,11 +7,11 @@ import { getCachedProfile, setCachedProfile } from '@/routes/profile/-utils/prof
 export const profileQueryKey = (userId?: string) =>
   userId ? (['profile', userId] as const) : (['profile'] as const);
 
-export interface UserProfile {
-  nickname: string | null;
-  profile_logo: string | null;
+export type UserProfile = {
+  nickname?: string | null;
+  profile_logo?: string | null;
   last_changed?: string | null;
-}
+};
 
 export function useUserProfile() {
   const queryClient = useQueryClient();
@@ -22,12 +22,13 @@ export function useUserProfile() {
 
   const query = useQuery<UserProfile | null>({
     queryKey: profileQueryKey(user?.id),
-    queryFn: async () => {
+    async queryFn() {
       if (!user?.id) return null;
       const profile = await api.profile.get(user.id);
       if (profile) {
         setCachedProfile(profile);
       }
+
       return profile;
     },
     enabled: isAuthenticatedWith2FA && Boolean(user?.id),
@@ -36,11 +37,11 @@ export function useUserProfile() {
     refetchOnMount: false,
     refetchOnReconnect: false,
     placeholderData: cachedProfile ?? undefined,
-    initialData: () => {
+    initialData() {
       const cached = queryClient.getQueryData<UserProfile | null>(
         profileQueryKey(user?.id),
       );
-      return cached ?? (cachedProfile as UserProfile | null) ?? undefined;
+      return cached;
     },
   });
 

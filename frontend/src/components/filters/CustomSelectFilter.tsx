@@ -16,21 +16,21 @@ import { DropdownPaper, OptionImage } from './FilterImages';
 const ROW_HEIGHT = 42;
 const MAX_VISIBLE_ROWS = 8;
 
-interface VirtualRowData {
-  items: React.ReactNode[];
-}
+type VirtualRowData = {
+  items: readonly React.ReactNode[];
+};
+
+type ListboxProps = React.HTMLAttributes<HTMLElement> & {
+  children?: React.ReactNode;
+  ownerState?: unknown;
+};
 
 function VirtualRow({ index, style, items }: RowComponentProps<VirtualRowData>) {
   return <div style={style}>{items[index]}</div>;
 }
 
-const VirtualizedListbox = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
-  function VirtualizedListbox(props, ref) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { children, ownerState, ...other } =
-      props as React.HTMLAttributes<HTMLElement> & {
-        ownerState?: unknown;
-      };
+const VirtualizedListbox = forwardRef<HTMLDivElement, ListboxProps>(
+  ({ children, ownerState: _ownerState, ...other }, ref) => {
     const items = Children.toArray(children);
     const height = Math.min(items.length, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
 
@@ -49,35 +49,33 @@ const VirtualizedListbox = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLE
   },
 );
 
-interface SelectFilterProps<T> {
+VirtualizedListbox.displayName = 'VirtualizedListbox';
+
+type BaseOption = {
   label: string;
+};
+
+type SelectFilterProps<T> = {
   options: T[];
   value: T | null;
   onChange: (value: T | null) => void;
   getOptionLabel?: (opt: T) => string;
   isOptionEqual?: (a: T, b: T) => boolean;
-}
+} & BaseOption;
 
-export type OptionType = {
-  label: string;
-  id?: number;
-  value?: string;
-  imageUrl?: string;
-};
-
-function SelectFilter<T extends OptionType>({
+function SelectFilter<T extends BaseOption>({
   label,
   options,
   value,
   onChange,
 }: SelectFilterProps<T>) {
   const renderOption = (
-    props: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
+    liProps: React.HTMLAttributes<HTMLLIElement> & { key?: React.Key },
     option: T,
   ) => {
-    const { key, ...rest } = props;
+    const { key, ...restLiProps } = liProps;
     return (
-      <Box component="li" key={key} {...rest} sx={optionSx}>
+      <Box component="li" key={key} {...restLiProps} sx={optionSx}>
         <Stack direction="row" spacing={1.5} alignItems="center">
           <OptionImage option={option} />
           <Typography variant="body2" noWrap sx={{ maxWidth: 180 }}>
@@ -113,7 +111,9 @@ function SelectFilter<T extends OptionType>({
     <Autocomplete
       options={options}
       value={value}
-      onChange={(_: unknown, val: T | null) => onChange(val)}
+      onChange={(_, val) => {
+        onChange(val);
+      }}
       slots={{
         paper: DropdownPaper,
         listbox: VirtualizedListbox,

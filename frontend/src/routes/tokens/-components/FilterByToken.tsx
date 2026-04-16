@@ -19,15 +19,13 @@ function FilterTokens() {
     }
   }, [error, showError]);
 
-  const tokens: SelectedToken[] = useMemo(
-    () =>
-      (rawTokens ?? []).map((t) => ({
-        label: t.name,
-        value: t.symbol,
-        imageUrl: t.image,
-      })),
-    [rawTokens],
-  );
+  const tokens = useMemo<SelectedToken[]>(() => {
+    return (rawTokens ?? []).map((t) => ({
+      label: t.name,
+      value: t.symbol,
+      imageUrl: t.image,
+    }));
+  }, [rawTokens]);
 
   const handleChange = useCallback(
     (val: SelectedToken | null) => {
@@ -40,7 +38,7 @@ function FilterTokens() {
 
   return (
     <div className="w-full">
-      <SelectFilter<SelectedToken>
+      <SelectFilter
         label="Select token"
         options={tokens}
         value={selectedToken}

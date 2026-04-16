@@ -1,0 +1,67 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { api } from '@/api';
+import type { PostId } from '@/types';
+import { cancelDebounce, debounceAsync } from '@/utils/debounceAsync';
+
+import type { TelegramPost } from '../../../-types/post-types';
+import { findPostInCache } from '../-utils/findPostInCache';
+import { updatePostInCache } from '../-utils/updatePostinCache';
+
+const initialFavoriteMap = new Map<string, boolean>();
+
+function toggleFavorite(post: TelegramPost) {
+  return {
+    ...post,
+    is_favorite: !post.is_favorite,
+  };
+}
+
+export function useToggleFavorite() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn({
+      postId,
+      userId,
+    }: {
+      postId: PostId;
+      userId: string;
+    }): Promise<void> {
+      const key = `favorite:${postId}:${userId}`;
+
+      const initial = initialFavoriteMap.get(key) ?? false;
+
+      const post = findPostInCache(queryClient, postId);
+      if (!post) return Promise.resolve();
+
+      const current = Boolean(post.is_favorite);
+
+      if (initial === current) {
+        cancelDebounce(key);
+        initialFavoriteMap.delete(key);
+        return Promise.resolve();
+      }
+
+      return debounceAsync(
+        key,
+        async () => {
+          await api.reactions.toggleFavorite(postId);
+          initialFavoriteMap.delete(key);
+        },
+        500,
+      );
+    },
+
+    onMutate({ postId, userId }) {
+      const key = `favorite:${postId}:${userId}`;
+
+      if (!initialFavoriteMap.has(key)) {
+        const post = findPostInCache(queryClient, postId);
+        initialFavoriteMap.set(key, Boolean(post?.is_favorite));
+      }
+
+      updatePostInCache(queryClient, postId, toggleFavorite);
+    },
+  });
+}

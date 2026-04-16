@@ -1,12 +1,12 @@
 import OtpInput from 'react-otp-input';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 
-interface StyledOtpInputProps {
+type StyledOtpInputProps = {
   value: string;
   onChange: (value: string) => void;
   shouldAutoFocus?: boolean;
   disabled?: boolean;
-}
+};
 
 export function StyledOtpInput({
   value,

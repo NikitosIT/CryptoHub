@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-
-import { useSessionQuery } from "@/api/useSessionQuery";
+import { useSessionQuery } from "@/routes/auth/-api/useSessionQuery";
 
 export function useAuthCallback() {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export function useAuthCallback() {
     if (isLoading) return;
 
     if (!session) {
-      navigate({ to: "/auth/", replace: true });
+      navigate({ to: "/auth", replace: true });
       return;
     }
 

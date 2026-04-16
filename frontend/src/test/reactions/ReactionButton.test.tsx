@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import type { InfiniteData } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { type QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ReactionButton } from '@/routes/posts/-reactions/-components/ReactionButton';
-import type { TelegramPost } from '@/types/db';
+import { ReactionButton } from '@/routes/posts/-entities/-reactions/-components/ReactionButton';
+import type { TelegramPost } from '@/routes/posts/-types/post-types';
 
 import { createPost, createQueryClientWithPost } from './testUtils';
 
@@ -52,7 +51,7 @@ function ReactionButtonWithPostsQuery({
 }) {
   const { data } = useQuery({
     queryKey: ['posts'],
-    queryFn: () =>
+    queryFn: async () =>
       Promise.resolve({
         pages: [] as TelegramPost[][],
         pageParams: [] as unknown[],
@@ -60,7 +59,8 @@ function ReactionButtonWithPostsQuery({
     initialData,
     staleTime: Number.POSITIVE_INFINITY,
   });
-  const postFromCache = data?.pages?.[0]?.[0];
+  const postFromCache = data.pages[0]?.[0];
+  if (!postFromCache) return null;
   return <ReactionButton post={postFromCache} />;
 }
 
@@ -114,7 +114,7 @@ describe('ReactionButton', () => {
         reactionType: 'like',
       });
     });
-    expect(await mockToggle.mock.results[0].value).toEqual(successResponse);
+    expect(await mockToggle.mock.results[0]?.value).toEqual(successResponse);
   });
 
   it('when user clicks dislike, button becomes red and request is sent with correct payload and mock response', async () => {
@@ -185,6 +185,7 @@ describe('ReactionButton', () => {
     );
 
     const [likeButton, dislikeButton] = screen.getAllByRole('button');
+    if (!likeButton || !dislikeButton) return null;
     expect(likeButton).toHaveAccessibleName('Like (0)');
     expect(dislikeButton).toHaveAccessibleName('Dislike (0)');
 

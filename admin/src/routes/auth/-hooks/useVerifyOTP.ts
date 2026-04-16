@@ -2,19 +2,13 @@ import { useEffect } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import { useVerifyOtp } from "@/routes/auth/-api/signInWithOtp";
-import { useSessionQuery } from "@/api/useSessionQuery";
+import { useSessionQuery } from "@/routes/auth/-api/useSessionQuery";
 
 type OtpFormValues = { code: string };
 
-type VerifySearchParams = {
-  redirectTo?: string;
-  mode?: "email";
-  email?: string;
-};
-
 export function useVerifyOTP() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/auth/verify" }) as VerifySearchParams;
+  const search = useSearch({ from: "/auth/verify" });
   const email: string | null = search.email ?? null;
   const isEmailLogin = search.mode === "email" || Boolean(email);
 
@@ -37,7 +31,7 @@ export function useVerifyOTP() {
     if (sessionQuery.isLoading) return;
 
     if (!isEmailLogin && !session) {
-      void navigate({ to: "/auth/", replace: true });
+      void navigate({ to: "/auth", replace: true });
       return;
     }
 

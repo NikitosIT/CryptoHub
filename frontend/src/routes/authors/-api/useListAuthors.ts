@@ -1,11 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { api } from '@/api';
-import type { Author } from '@/types/db';
+
+export type Author = {
+  label: string;
+  id: number;
+};
 
 export const authorsQueryKey = () => ['authors'] as const;
 
-function authorsList(): Promise<Author[]> {
+async function authorsList() {
   return api.authors.list();
 }
 

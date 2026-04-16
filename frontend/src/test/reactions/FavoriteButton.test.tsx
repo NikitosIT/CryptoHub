@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import type { InfiniteData } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { type QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import FavoriteButton from '@/routes/posts/-reactions/-components/FavoriteButton';
-import type { TelegramPost } from '@/types/db';
+import FavoriteButton from '@/routes/posts/-entities/-reactions/-components/FavoriteButton';
+import type { TelegramPost } from '@/routes/posts/-types/post-types';
 
 import { createPost, createQueryClientWithPost } from './testUtils';
 
@@ -52,7 +51,7 @@ function FavoriteButtonWithPostsQuery({
 }) {
   const { data } = useQuery({
     queryKey: ['posts'],
-    queryFn: () =>
+    queryFn: async () =>
       Promise.resolve({
         pages: [] as TelegramPost[][],
         pageParams: [] as unknown[],
@@ -60,7 +59,8 @@ function FavoriteButtonWithPostsQuery({
     initialData,
     staleTime: Number.POSITIVE_INFINITY,
   });
-  const postFromCache = data?.pages?.[0]?.[0];
+  const postFromCache = data.pages[0]?.[0];
+  if (!postFromCache) return null;
   return <FavoriteButton post={postFromCache} />;
 }
 
@@ -110,7 +110,7 @@ describe('FavoriteButton', () => {
       expect(mockToggleFavorite).toHaveBeenCalledTimes(1);
       expect(mockToggleFavorite).toHaveBeenCalledWith(42);
     });
-    expect(await mockToggleFavorite.mock.results[0].value).toEqual(addedResponse);
+    expect(await mockToggleFavorite.mock.results[0]?.value).toEqual(addedResponse);
   });
 
   it('when already favorite, click removes reaction: button loses yellow and request is sent with correct payload and mock response', async () => {
@@ -144,7 +144,7 @@ describe('FavoriteButton', () => {
       expect(mockToggleFavorite).toHaveBeenCalledTimes(1);
       expect(mockToggleFavorite).toHaveBeenCalledWith(99);
     });
-    expect(await mockToggleFavorite.mock.results[0].value).toEqual(removedResponse);
+    expect(await mockToggleFavorite.mock.results[0]?.value).toEqual(removedResponse);
   });
 
   it('when not logged in, click does nothing: no API call and button state unchanged', async () => {

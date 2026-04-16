@@ -14,25 +14,12 @@ import {
 } from '@mui/material';
 
 import { useToast } from '@/hooks/useToast';
-import { useTokensAiForecasts } from '@/routes/tokens/-api/useTokensAiForecasts';
+import {
+  type TokenForecast,
+  useTokensAiForecasts,
+} from '@/routes/tokens/-api/useTokensAiForecasts';
 import { useSelectedToken } from '@/store/useFiltersStore';
 import { getErrorMessage } from '@/utils/errorUtils';
-
-interface TokenForecast {
-  token_name: string;
-  sentiment: string;
-  forecast_text: string;
-}
-
-function isTokenForecast(data: unknown): data is TokenForecast {
-  if (typeof data !== 'object' || data === null) return false;
-  const d = data as Record<string, unknown>;
-  return (
-    typeof d.token_name === 'string' &&
-    typeof d.sentiment === 'string' &&
-    typeof d.forecast_text === 'string'
-  );
-}
 
 export default function TokensAiForecasts() {
   const { selectedToken } = useSelectedToken();
@@ -40,7 +27,7 @@ export default function TokensAiForecasts() {
   const { showError } = useToast();
 
   const { data: forecastData, isLoading, refetch } = useTokensAiForecasts();
-  const forecast = isTokenForecast(forecastData) ? forecastData : null;
+  const forecast = forecastData ?? null;
 
   const handleOpen = async () => {
     if (!selectedToken) return;
@@ -65,7 +52,7 @@ export default function TokensAiForecasts() {
   return (
     <>
       <Button
-        onClick={() => handleOpen()}
+        onClick={async () => handleOpen()}
         disabled={!selectedToken || isLoading}
         variant="contained"
         sx={buttonForecastStyles}
@@ -82,24 +69,32 @@ export default function TokensAiForecasts() {
 
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
         maxWidth="sm"
         fullWidth
-        PaperProps={{ sx: dialogPaperSx }}
         slotProps={{
           backdrop: {
             sx: {
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               backdropFilter: 'blur(4px)',
+              dialogPaperSx,
             },
           },
         }}
       >
         <DialogTitle sx={forecastModalStyles}>
           <Typography variant="h6" fontWeight={600}>
-            {forecast !== null ? `Forecast for ${selectedToken?.value}` : 'AI Forecast'}
+            {forecast === null ? 'AI Forecast' : `Forecast for ${selectedToken?.value}`}
           </Typography>
-          <IconButton onClick={() => setOpen(false)} size="small" sx={closeButtonSx}>
+          <IconButton
+            onClick={() => {
+              setOpen(false);
+            }}
+            size="small"
+            sx={closeButtonSx}
+          >
             <CloseIcon />
           </IconButton>
         </DialogTitle>

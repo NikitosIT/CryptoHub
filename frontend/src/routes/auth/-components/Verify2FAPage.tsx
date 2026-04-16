@@ -41,7 +41,7 @@ export function Verify2FAPage() {
               isSubmitting={is2FASubmitting}
               isCodeValid={isCodeValid}
               onSubmit={(e) => {
-                handle2FASubmit(e);
+                void handle2FASubmit(e);
               }}
             />
           )}

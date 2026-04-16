@@ -52,7 +52,7 @@ export default function Header() {
                   Notifications
                 </Link>
                 <Link
-                  to="/tokens/"
+                  to="/tokens"
                   className={linkStyles}
                   activeProps={{
                     className: "text-orange-500 bg-gray-900",

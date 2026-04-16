@@ -1,15 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { z } from 'zod';
+import z from 'zod';
 
 import { createRouteGuard } from '@/hooks/routeGuards';
+import { redirectTo } from '@/lib/validatorSchemas';
 import { Verify2FAPage } from '@/routes/auth/-components/Verify2FAPage';
-
-const verify2FASearchSchema = z.object({
-  redirectTo: z.string().optional(),
+const searchSchema = z.object({
+  redirectTo,
 });
 
 export const Route = createFileRoute('/auth/verify-2fa')({
-  validateSearch: verify2FASearchSchema,
+  validateSearch: searchSchema,
   beforeLoad: createRouteGuard({
     requireNoAuth: false,
   }),

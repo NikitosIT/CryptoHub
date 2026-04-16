@@ -30,7 +30,6 @@ function CryptoHelper() {
       </Typography>
 
       <Stack spacing={{ xs: 3, sm: 4, md: 5 }}>
-        {/* Second Block: Gmail Link */}
         <Paper
           sx={{
             p: { xs: 3, sm: 3.5, md: 4 },

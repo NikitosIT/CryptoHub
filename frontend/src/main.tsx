@@ -8,9 +8,9 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 
-import { useAuthListener } from './api/useAuthListener';
 import { ToastProvider } from './hooks/useToast';
 import { supabase } from './lib/supabaseClient';
+import { useAuthListener } from './routes/auth/-hooks/useAuthListener';
 import { routeTree } from './routes/routeTree.gen';
 import { theme } from './theme';
 
@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
       refetchOnMount: false,
     },
     mutations: {
-      onError: (error: unknown) => {
+      onError(error: unknown) {
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -46,6 +46,13 @@ export const persister = createAsyncStoragePersister({
 export { queryClient };
 const router = createRouter({ routeTree });
 
+declare module '@tanstack/router-core' {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface Register {
+    router: typeof router;
+  }
+}
+
 function RootWithProviders() {
   useAuthListener();
   return <RouterProvider router={router} />;
@@ -59,7 +66,7 @@ function Root() {
         persister,
         maxAge: Infinity,
         dehydrateOptions: {
-          shouldDehydrateQuery: (query) => {
+          shouldDehydrateQuery(query) {
             return query.queryKey[0] === 'twoFactorStatus';
           },
         },

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React from 'react';
+import type React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -15,7 +15,8 @@ import {
   vi,
 } from 'vitest';
 
-import { CommentOpenButton } from '@/routes/posts/-comments/-components/CommentOpenButton';
+import { CommentOpenButton } from '@/routes/posts/-entities/-comments/-components/CommentOpenButton';
+import type { TelegramPost } from '@/routes/posts/-types/post-types';
 import {
   commentsCreateRequests,
   commentsDeleteRequests,
@@ -23,25 +24,41 @@ import {
   commentsLikeRequests,
   commentsListRequests,
   commentsUpdateRequests,
+  createCommentHandler,
+  deleteCommentHandler,
+  listCommentsHandler,
   resetCommentsHandlersHistory,
-  userCommentsHandler,
+  updateCommentHandler,
 } from '@/test/mocks/commentsHandlers';
-import type { TelegramPost } from '@/types/db';
 
 const mockUseAuthState = vi.fn();
 vi.mock('@/routes/auth/-hooks/useAuthState', () => ({
   useAuthState: (opts: unknown) => mockUseAuthState(opts),
 }));
 
-vi.mock('@/api/getSession', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/api/getSession')>();
-  return {
-    ...actual,
-    getRequestAuth: () => Promise.resolve({ accessToken: 'test-token' }),
-  };
-});
+vi.mock('@/lib/supabaseClient', () => ({
+  supabase: {
+    auth: {
+      getSession: async () =>
+        Promise.resolve({
+          data: {
+            session: {
+              access_token: 'test-token',
+              user: { id: 'user-1' },
+            },
+          },
+        }),
+    },
+  },
+}));
 
-const server = setupServer(userCommentsHandler, commentsLikeHandler);
+const server = setupServer(
+  listCommentsHandler,
+  createCommentHandler,
+  updateCommentHandler,
+  deleteCommentHandler,
+  commentsLikeHandler,
+);
 
 function createWrapper(initialProfile?: { nickname: string | null }) {
   const queryClient = new QueryClient({
@@ -51,14 +68,16 @@ function createWrapper(initialProfile?: { nickname: string | null }) {
     },
   });
   if (initialProfile) {
-    queryClient.setQueryData(['profile'], {
+    queryClient.setQueryData(['profile', 'user-1'], {
       nickname: initialProfile.nickname,
       profile_logo: null,
     });
   }
+
   function Wrapper({ children }: { children: React.ReactNode }) {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
+
   return { Wrapper, queryClient };
 }
 
@@ -83,9 +102,15 @@ function createPost(overrides: Partial<TelegramPost> = {}): TelegramPost {
 }
 
 describe('Comments', () => {
-  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
-  afterAll(() => server.close());
-  afterEach(() => server.resetHandlers());
+  beforeAll(() => {
+    server.listen({ onUnhandledRequest: 'error' });
+  });
+  afterAll(() => {
+    server.close();
+  });
+  afterEach(() => {
+    server.resetHandlers();
+  });
 
   beforeEach(() => {
     resetCommentsHandlersHistory();
@@ -114,7 +139,7 @@ describe('Comments', () => {
         expect(commentsListRequests.length).toBeGreaterThanOrEqual(1);
       });
       const listReq = commentsListRequests[0];
-      expect(listReq.payload).toEqual({ post_id: 42 });
+      expect(listReq?.payload).toEqual({ post_id: 42 });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog', { name: /comments/i })).toBeInTheDocument();
@@ -154,12 +179,12 @@ describe('Comments', () => {
         expect(commentsCreateRequests.length).toBeGreaterThanOrEqual(1);
       });
       const createReq = commentsCreateRequests[0];
-      expect(createReq.payload).toMatchObject({
+      expect(createReq?.payload).toMatchObject({
         post_id: 10,
         text: 'My new comment',
         parent_comment_id: null,
       });
-      expect(createReq.payload.media).toBeNull();
+      expect(createReq?.payload.media).toBeNull();
 
       expect(screen.getByText('My new comment')).toBeInTheDocument();
     });
@@ -184,9 +209,11 @@ describe('Comments', () => {
       });
 
       await user.click(screen.getByRole('button', { name: 'Comment actions' }));
+
       await waitFor(() => {
         expect(screen.getByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
       });
+
       await user.click(screen.getByRole('menuitem', { name: 'Delete' }));
 
       await waitFor(() => {
@@ -199,7 +226,7 @@ describe('Comments', () => {
       await waitFor(() => {
         expect(commentsDeleteRequests.length).toBeGreaterThanOrEqual(1);
       });
-      expect(commentsDeleteRequests[0].payload.comment_id).toBe(100);
+      expect(commentsDeleteRequests[0]?.payload.comment_id).toBe(100);
 
       await waitFor(() => {
         expect(screen.queryByText('Existing comment')).not.toBeInTheDocument();
@@ -240,7 +267,7 @@ describe('Comments', () => {
       await waitFor(() => {
         expect(commentsUpdateRequests.length).toBeGreaterThanOrEqual(1);
       });
-      expect(commentsUpdateRequests[0].payload).toMatchObject({
+      expect(commentsUpdateRequests[0]?.payload).toMatchObject({
         comment_id: 100,
         text: 'Edited comment text',
       });
@@ -276,7 +303,7 @@ describe('Comments', () => {
       await waitFor(() => {
         expect(commentsLikeRequests.length).toBeGreaterThanOrEqual(1);
       });
-      expect(commentsLikeRequests[0].payload.comment_id).toBe(100);
+      expect(commentsLikeRequests[0]?.payload.comment_id).toBe(100);
 
       await waitFor(() => {
         expect(screen.getByRole('button', { name: '3' })).toBeInTheDocument();

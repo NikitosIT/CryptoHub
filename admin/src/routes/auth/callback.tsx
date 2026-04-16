@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { createRouteGuard } from "@/hooks/routeGuards";
-import { useAuthCallback } from "@/routes/auth/-hooks/useAuthCallback";
+import { useAuthCallback } from "./-hooks/useAuthCallback";
 
 export const Route = createFileRoute("/auth/callback")({
   beforeLoad: createRouteGuard({

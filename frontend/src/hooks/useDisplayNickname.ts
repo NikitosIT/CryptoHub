@@ -15,13 +15,12 @@ export function useDisplayNickname() {
   const { data: profile } = useUserProfile();
 
   const displayNickname =
-    isLoading || !isAuthenticatedWith2FA
+    (isLoading ?? !isAuthenticatedWith2FA)
       ? null
-      : profile?.nickname ||
-        queryClient.getQueryData<{ nickname: string | null } | null>(['profile'])
-          ?.nickname ||
-        getCachedProfile()?.nickname ||
-        'User';
+      : (profile?.nickname ??
+        queryClient.getQueryData<{ nickname: string | null }>(['profile'])?.nickname ??
+        getCachedProfile()?.nickname ??
+        'User');
 
   return {
     displayNickname,

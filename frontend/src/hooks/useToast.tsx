@@ -1,4 +1,4 @@
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { SnackbarProvider, useSnackbar, type VariantType } from 'notistack';
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -17,14 +17,10 @@ export function useToast() {
   const { enqueueSnackbar } = useSnackbar();
 
   return {
-    showToast: (
-      message: string,
-      severity: 'error' | 'success' | 'warning' | 'info' = 'info',
-      duration?: number,
-    ) =>
+    showToast: (message: string, severity: VariantType, duration?: number) =>
       enqueueSnackbar(message, {
         variant: severity,
-        autoHideDuration: duration,
+        ...(duration !== undefined && { autoHideDuration: duration }),
       }),
 
     showError: (message: string) =>

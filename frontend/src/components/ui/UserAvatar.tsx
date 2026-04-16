@@ -2,11 +2,11 @@ import { Avatar, Skeleton } from '@mui/material';
 
 import { useAvatarUrl } from '@/hooks/useAvatarUrl';
 
-interface UserAvatarProps {
+type UserAvatarProps = {
   size?: number;
   showSkeleton?: boolean;
   borderColor?: string;
-}
+};
 
 export function UserAvatar({
   size = 40,
@@ -31,7 +31,7 @@ export function UserAvatar({
 
   return (
     <Avatar
-      src={avatarUrl || undefined}
+      src={avatarUrl ?? undefined}
       alt="Avatar"
       sx={{
         width: size,

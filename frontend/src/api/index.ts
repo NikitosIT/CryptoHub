@@ -1,180 +1,131 @@
 import type { Session } from '@supabase/supabase-js';
 import { type QueryClient } from '@tanstack/react-query';
 
-import { ALLOWED_IMAGE_TYPES, ALLOWED_VIDEO_TYPES } from '@/constants/comments.ts';
+import { env } from '@/config/env';
 import {
   COMMENT_MEDIA_BUCKET,
   USER_AVATARS_BUCKET,
   USER_LOGO_PREFIX,
 } from '@/constants/storage';
 import { supabase } from '@/lib/supabaseClient';
-import type { AuthStateData } from '@/routes/auth/-hooks/useAuthState.ts';
+import { twoFactorStatusQueryKey } from '@/routes/auth/-api/use2faApi';
+import type {
+  EnableTwoFactorResponse,
+  TwoFactorApiResponse,
+  TwoFactorStatusResponse,
+  VerifyLogin2FA,
+} from '@/routes/auth/-types';
+import { calculateAuthState } from '@/routes/auth/-utils/calculateAuthState';
+import type { Author } from '@/routes/authors/-api/useListAuthors.ts';
 import type { FetchTelegramPostParams } from '@/routes/posts/-api/useListTelegramPosts.ts';
-import type { CreateCommentParams } from '@/routes/posts/-comments/-api/useCommentCreate.ts';
-import type { UpdateCommentParams } from '@/routes/posts/-comments/-api/useCommentUpdate.ts';
-import type { ToggleReactionsParams } from '@/routes/posts/-reactions/-api/useToggleReaction.ts';
+import type { CreateCommentParams } from '@/routes/posts/-entities/-comments/-api/useCommentCreate';
+import type { UpdateCommentParams } from '@/routes/posts/-entities/-comments/-api/useCommentUpdate';
+import type { Comment } from '@/routes/posts/-entities/-comments/-types';
+import type { ToggleReactionsParams } from '@/routes/posts/-entities/-reactions/-types';
+import type { TelegramPost } from '@/routes/posts/-types/post-types.ts';
 import type { UpdateProfile } from '@/routes/profile/-api/useUpdateProfile.ts';
 import type { UserNotifications } from '@/routes/profile/-api/useUserNotifications.ts';
 import type { UserProfile } from '@/routes/profile/-api/useUserProfile.ts';
 import type { CryptoTokens } from '@/routes/tokens/-api/useListCryptoTokens.ts';
-import type { Author, CommentMedia, TelegramPost } from '@/types/db';
+import type { TokenForecast } from '@/routes/tokens/-api/useTokensAiForecasts.ts';
+import type { Email, OTPCode } from '@/types';
+import { parseError } from '@/utils/errorUtils.ts';
 
-import {
-  type EnableTwoFactorResponse,
-  twoFactorStatusQueryKey,
-  type TwoFactorStatusResponse,
-} from '../routes/auth/-api/use2faApi.ts';
-import { getRequestAuth, getSession } from './getSession';
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-interface FunctionRequestOptions {
+type FunctionRequestOptions<TBody> = {
   functionName: string;
-  action?: string;
-  body: unknown;
+  method?: HttpMethod;
+  query?: Record<string, string>;
+  body?: TBody;
   requireAuth?: boolean;
-}
+};
 
-function performFunctionRequest<T>({
+async function functionRequest<TResponse, TBody = unknown>({
   functionName,
-  action,
+  method = 'POST',
+  query,
   body,
   requireAuth = false,
-}: FunctionRequestOptions): Promise<T> {
-  const functionsBaseUrl: string =
-    (import.meta.env.VITE_SUPABASE_FUNCTIONS_URL as string | undefined) ||
-    `${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1`;
+}: FunctionRequestOptions<TBody>) {
+  const { supabaseFunctionsUrl, supabaseAnonKey } = env;
 
-  if (!functionsBaseUrl) {
-    throw new Error('VITE_SUPABASE_FUNCTIONS_URL or VITE_SUPABASE_URL must be set');
+  const params = query ? `?${new URLSearchParams(query)}` : '';
+  const url = `${supabaseFunctionsUrl}/${functionName}${params}`;
+
+  const session = await getSession();
+  if (requireAuth && !session?.access_token) throw new Error('Authentication required');
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${session?.access_token ?? supabaseAnonKey}`,
+  };
+
+  const hasBody = method !== 'GET' && body !== undefined;
+  const res = await fetch(url, {
+    method,
+    headers,
+    body: hasBody ? JSON.stringify(body) : undefined,
+  });
+  const data: unknown = await res.json();
+
+  if (!res.ok) {
+    const errorInfo = parseError(data);
+    const error = new Error(errorInfo.message) as Error & { remainingAttempts?: number };
+    if (errorInfo.remainingAttempts !== undefined)
+      error.remainingAttempts = errorInfo.remainingAttempts;
+    throw error;
   }
 
-  const url = action
-    ? `${functionsBaseUrl}/${functionName}?action=${action}`
-    : `${functionsBaseUrl}/${functionName}`;
+  return data as TResponse;
+}
 
-  const promise = (async () => {
-    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-    if (!anonKey) {
-      throw new Error('VITE_SUPABASE_ANON_KEY is not set');
-    }
-
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-      apikey: anonKey,
-    };
-
-    const { accessToken } = await getRequestAuth();
-    const token = accessToken ?? anonKey;
-    headers.Authorization = `Bearer ${token}`;
-
-    if (requireAuth && !accessToken) {
-      throw new Error('Authentication required');
-    }
-
-    const res = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
+async function uploadCommentMedia(file: File, filename: string) {
+  const { error: uploadError } = await supabase.storage
+    .from(COMMENT_MEDIA_BUCKET)
+    .upload(filename, file, {
+      contentType: file.type,
+      upsert: false,
     });
 
-    const data = (await res.json()) as {
-      error?: string;
-      remainingAttempts?: number;
-    } & T;
-    if (!res.ok) {
-      const error = new Error(data.error || 'Request failed') as Error & {
-        remainingAttempts?: number;
-      };
-      if (data.remainingAttempts !== undefined) {
-        error.remainingAttempts = data.remainingAttempts;
-      }
-      throw error;
-    }
-    return data as T;
-  })();
-
-  return promise;
-}
-
-function uploadCommentMedia(files: File[]): Promise<CommentMedia[]> {
-  if (files.length === 0) {
-    return Promise.resolve([]);
+  if (uploadError) {
+    throw new Error(`Failed to upload file "${file.name}": ${uploadError.message}`);
   }
-
-  const uploadPromises = files.map(async (file) => {
-    const isImage = ALLOWED_IMAGE_TYPES.includes(
-      file.type as (typeof ALLOWED_IMAGE_TYPES)[number],
-    );
-    const isVideo = ALLOWED_VIDEO_TYPES.includes(
-      file.type as (typeof ALLOWED_VIDEO_TYPES)[number],
-    );
-
-    if (!isImage && !isVideo) {
-      throw new Error(
-        `Unsupported file type "${file.name}". Only images (JPEG, PNG, GIF, WebP) and videos (MP4, WebM, OGG, MOV) are allowed`,
-      );
-    }
-
-    const fileId = crypto.randomUUID();
-    const ext =
-      file.name.split('.').pop() || (file.type.startsWith('video/') ? 'mp4' : 'jpg');
-    const filename = `${fileId}.${ext}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from(COMMENT_MEDIA_BUCKET)
-      .upload(filename, file, {
-        contentType: file.type,
-        upsert: false,
-      });
-
-    if (uploadError) {
-      throw new Error(`Failed to upload file "${file.name}": ${uploadError.message}`);
-    }
-
-    const mediaType: 'video' | 'photo' = file.type.startsWith('video/')
-      ? 'video'
-      : 'photo';
-    return {
-      type: mediaType,
-      url: filename,
-    };
-  });
-
-  return Promise.all(uploadPromises);
 }
 
-function createComment(params: CreateCommentParams) {
+async function createComment(params: CreateCommentParams) {
   const { postId, text, parentCommentId, media } = params;
-  return performFunctionRequest<{ success: boolean; data: unknown }>({
+  return functionRequest<{ success: boolean; data: Comment }>({
     functionName: 'user-comments',
-    action: 'create',
     requireAuth: true,
     body: {
       post_id: postId,
       text,
-      parent_comment_id: parentCommentId || null,
-      media: media || null,
+      parent_comment_id: parentCommentId ?? null,
+      media: media ?? null,
     },
   });
 }
 
-function updateComment(params: UpdateCommentParams) {
+async function updateComment(params: UpdateCommentParams) {
   const { commentId, text, media } = params;
-  return performFunctionRequest<{ success: boolean; data: unknown }>({
+  return functionRequest<{ success: boolean; data: Comment }>({
     functionName: 'user-comments',
-    action: 'update',
+    method: 'PATCH',
     requireAuth: true,
     body: {
       comment_id: commentId,
       text,
-      media: media || null,
+      media: media ?? null,
     },
   });
 }
 
-function deleteComment(commentId: number) {
-  return performFunctionRequest<{ success: boolean }>({
+async function deleteComment(commentId: number) {
+  return functionRequest<{ success: boolean }>({
     functionName: 'user-comments',
-    action: 'delete',
+    method: 'DELETE',
     requireAuth: true,
     body: {
       comment_id: commentId,
@@ -182,18 +133,16 @@ function deleteComment(commentId: number) {
   });
 }
 
-function listComments(postId: number) {
-  return performFunctionRequest<{ success: boolean; data: unknown[] }>({
+async function listComments(postId: number) {
+  return functionRequest<{ success: boolean; data: Comment[] }>({
     functionName: 'user-comments',
-    action: 'list',
-    body: {
-      post_id: postId,
-    },
+    method: 'GET',
+    query: { post_id: String(postId) },
   });
 }
 
-function toggleFavorite(postId: number) {
-  return performFunctionRequest<{ success: boolean }>({
+async function toggleFavorite(postId: number) {
+  return functionRequest<{ success: boolean }>({
     functionName: 'toggle-favorites',
     requireAuth: true,
     body: {
@@ -202,8 +151,8 @@ function toggleFavorite(postId: number) {
   });
 }
 
-function toggleCommentsLike(commentId: number) {
-  return performFunctionRequest<{
+async function toggleCommentsLike(commentId: number) {
+  return functionRequest<{
     success: boolean;
     status: 'added' | 'removed';
     like_count: number;
@@ -216,9 +165,9 @@ function toggleCommentsLike(commentId: number) {
   });
 }
 
-function toggleReactions(params: ToggleReactionsParams) {
+async function toggleReactions(params: ToggleReactionsParams) {
   const { postId, reactionType } = params;
-  return performFunctionRequest<{ success: boolean }>({
+  return functionRequest<{ success: boolean }>({
     functionName: 'toggle-reactions',
     requireAuth: true,
     body: {
@@ -228,26 +177,24 @@ function toggleReactions(params: ToggleReactionsParams) {
   });
 }
 
-function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
-  return performFunctionRequest<TwoFactorStatusResponse>({
+async function getTwoFactorStatus(): Promise<TwoFactorStatusResponse> {
+  return functionRequest<TwoFactorStatusResponse>({
     functionName: 'get-2fa-status',
     body: {},
     requireAuth: true,
   });
 }
 
-function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
-  return performFunctionRequest<EnableTwoFactorResponse>({
+async function enableTwoFactor(): Promise<EnableTwoFactorResponse> {
+  return functionRequest<EnableTwoFactorResponse>({
     functionName: 'enable-2fa',
     body: {},
     requireAuth: true,
   });
 }
 
-function verifyTwoFactorSetup(code: string): Promise<{
-  success?: boolean;
-}> {
-  return performFunctionRequest<{
+async function verifyTwoFactorSetup(code: string) {
+  return functionRequest<{
     success?: boolean;
   }>({
     functionName: 'verify-2fa-setup',
@@ -256,51 +203,31 @@ function verifyTwoFactorSetup(code: string): Promise<{
   });
 }
 
-function verifyLogin2FA(code: string): Promise<{
-  verified?: boolean;
-  is_verified_for_current_session?: boolean;
-  error?: string;
-  remainingAttempts?: number;
-}> {
-  return performFunctionRequest<{
-    verified?: boolean;
-    is_verified_for_current_session?: boolean;
-    error?: string;
-    remainingAttempts?: number;
-  }>({
+async function verifyLogin2FA(code: string) {
+  return functionRequest<VerifyLogin2FA>({
     functionName: 'verify-login-2fa',
     body: { code },
     requireAuth: true,
   });
 }
 
-function disableTwoFactor(code: string): Promise<{
-  success?: boolean;
-}> {
-  return performFunctionRequest<{ success?: boolean }>({
+async function disableTwoFactor(code: string) {
+  return functionRequest<{ success?: boolean }>({
     functionName: 'disable-2fa',
     body: { code },
     requireAuth: true,
   });
 }
 
-function clearTwoFactorVerification(): Promise<{
-  success: boolean;
-  message?: string;
-  error?: string;
-}> {
-  return performFunctionRequest<{
-    success: boolean;
-    message?: string;
-    error?: string;
-  }>({
+async function clearTwoFactorVerification() {
+  return functionRequest<TwoFactorApiResponse>({
     functionName: 'clear-2fa-verification',
     body: {},
     requireAuth: true,
   });
 }
 
-async function getUserProfile(userId: string | undefined): Promise<UserProfile | null> {
+async function getUserProfile(userId: string | undefined) {
   const { data, error } = await supabase
     .from('profiles')
     .select('nickname, profile_logo, last_changed')
@@ -309,10 +236,11 @@ async function getUserProfile(userId: string | undefined): Promise<UserProfile |
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
+
   return data as UserProfile | null;
 }
 
-async function getNotifications(): Promise<UserNotifications[]> {
+async function getNotifications() {
   const { data, error } = await supabase
     .from('notification_users')
     .select('id, send_to, send_to_all, msg, created_at')
@@ -320,10 +248,11 @@ async function getNotifications(): Promise<UserNotifications[]> {
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
+
   return data as UserNotifications[];
 }
 
-async function uploadProfileLogo(file: File, encryption: string): Promise<void> {
+async function uploadProfileLogo(file: File, encryption: string) {
   const { error: uploadError } = await supabase.storage
     .from(USER_AVATARS_BUCKET)
     .upload(`${USER_LOGO_PREFIX}${encryption}.png`, file, {
@@ -333,17 +262,15 @@ async function uploadProfileLogo(file: File, encryption: string): Promise<void> 
   if (uploadError) throw uploadError;
 }
 
-function updateProfile(payload: UpdateProfile): Promise<UpdateProfile> {
-  return performFunctionRequest<UpdateProfile>({
+async function updateProfile(payload: UpdateProfile) {
+  return functionRequest<UpdateProfile>({
     functionName: 'update-profile',
     body: payload,
     requireAuth: true,
   });
 }
 
-async function getTokenForecast(
-  tokenName: string,
-): Promise<Record<string, unknown> | null> {
+async function getTokenForecast(tokenName: string) {
   if (!tokenName) return null;
 
   const { data, error } = await supabase
@@ -353,29 +280,25 @@ async function getTokenForecast(
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
     .limit(1)
-    .maybeSingle()
-    .overrideTypes<Record<string, unknown> | null>();
+    .overrideTypes<TokenForecast[]>();
 
   if (error) throw new Error(error.message);
-  return data ?? null;
+  return data[0] ?? null;
 }
 
-async function listAuthors(): Promise<Author[]> {
+async function listAuthors() {
   const { data, error } = await supabase
     .from('authors')
-    .select('author_name, tg_author_id');
+    .select('label:author_name, id:tg_author_id')
+    .overrideTypes<Author[]>();
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
   }
-  return data.map((author: { author_name: string; tg_author_id: number }) => ({
-    label: author.author_name,
-    id: author.tg_author_id,
-  }));
+
+  return data;
 }
 
-async function fetchTelegramPost(
-  params: FetchTelegramPostParams,
-): Promise<TelegramPost[]> {
+async function fetchTelegramPost(params: FetchTelegramPostParams) {
   const {
     cursorCreatedAt,
     cursorId,
@@ -391,7 +314,7 @@ async function fetchTelegramPost(
     page_limit: limit,
     author_id: authorId,
     token_name: tokenName,
-    mode: mode,
+    mode,
   })) as { data: TelegramPost[] | null; error: unknown };
 
   if (error) {
@@ -403,18 +326,20 @@ async function fetchTelegramPost(
             : 'Unknown error occurred',
         );
   }
+
   return data ?? [];
 }
 
-async function signInWithOtp(email: string): Promise<string> {
+async function signInWithOtp(email: Email) {
   const { error } = await supabase.auth.signInWithOtp({ email });
   if (error) {
     throw new Error(error.message);
   }
+
   return email;
 }
 
-async function verifyOtp(email: string, code: string): Promise<Session> {
+async function verifyOtp(email: Email, code: OTPCode) {
   const { data, error } = await supabase.auth.verifyOtp({
     email,
     token: code,
@@ -427,7 +352,7 @@ async function verifyOtp(email: string, code: string): Promise<Session> {
   return data.session;
 }
 
-async function signOut(): Promise<void> {
+async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) {
     throw error instanceof Error ? error : new Error(String(error));
@@ -437,35 +362,18 @@ async function signOut(): Promise<void> {
 function onAuthStateChange(callback: (event: string, session: Session | null) => void) {
   const { data } = supabase.auth.onAuthStateChange(callback);
   return {
-    unsubscribe: () => data.subscription.unsubscribe(),
+    unsubscribe() {
+      data.subscription.unsubscribe();
+    },
   };
 }
 
-function calculateAuthState(
-  session: Session | null,
-  checkTwoFactor: boolean,
-  twoFactorStatus: TwoFactorStatusResponse | null | undefined,
-): AuthStateData {
-  const user = session?.user;
-  const isAuthenticated = Boolean(user?.id);
-  const shouldCheckTwoFactor = checkTwoFactor && isAuthenticated;
-
-  const isTwoFactorEnabled = shouldCheckTwoFactor && (twoFactorStatus?.enabled ?? false);
-  const isTwoFactorVerified = shouldCheckTwoFactor
-    ? (twoFactorStatus?.is_verified_for_current_session ?? false)
-    : true;
-
-  const hasPendingTwoFactor = isTwoFactorEnabled && !isTwoFactorVerified;
-  const isAuthenticatedWith2FA = isAuthenticated && !hasPendingTwoFactor;
-
-  return {
-    user,
-    hasPendingTwoFactor,
-    isAuthenticatedWith2FA,
-  };
+export async function getSession() {
+  const { data: sessionData } = await supabase.auth.getSession();
+  return sessionData.session ?? null;
 }
 
-async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
+async function getAuthState(queryClient?: QueryClient) {
   const session = await getSession();
   const userId = session?.user.id;
 
@@ -480,7 +388,7 @@ async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
       if (queryClient) {
         twoFactorStatus = await queryClient.ensureQueryData({
           queryKey: twoFactorStatusQueryKey(userId),
-          queryFn: () => getTwoFactorStatus(),
+          queryFn: async () => getTwoFactorStatus(),
           staleTime: Infinity,
         });
       } else {
@@ -494,8 +402,8 @@ async function getAuthState(queryClient?: QueryClient): Promise<AuthStateData> {
   return calculateAuthState(session, true, twoFactorStatus);
 }
 
-export async function cryptoTokens(): Promise<CryptoTokens[]> {
-  return performFunctionRequest<CryptoTokens[]>({
+export async function cryptoTokens() {
+  return functionRequest<CryptoTokens[]>({
     functionName: 'crypto-tokens',
     body: {},
     requireAuth: false,
@@ -548,5 +456,3 @@ export const api = {
     getNotifications,
   },
 } as const;
-
-export { calculateAuthState };

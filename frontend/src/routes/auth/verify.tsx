@@ -36,7 +36,7 @@ export function VerifyEmailPage() {
         }}
       >
         <Stack spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-          {isAuthLoading || !showOTPField ? (
+          {(isAuthLoading ?? !showOTPField) ? (
             <Typography
               textAlign="center"
               sx={{
@@ -52,7 +52,7 @@ export function VerifyEmailPage() {
               errors={otpFormErrors}
               isSubmitting={isOtpSubmitting}
               onSubmit={(e) => {
-                handleOtpSubmit(e);
+                void handleOtpSubmit(e);
               }}
             />
           )}

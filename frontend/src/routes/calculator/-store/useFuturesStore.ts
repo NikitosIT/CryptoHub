@@ -1,21 +1,20 @@
-import type { FuturesFormData } from '@/lib/validatorSchemas';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import type { FuturesFormData } from '@/lib/validatorSchemas';
+
+import type { ShareCryptoType } from './useSpotStore';
+
 export type PositionType = 'long' | 'short';
 
-export interface FuturesState {
-  margin: number | null;
+export type FuturesState = {
   leverage: number | null;
-  entryPrice: number | null;
-  sellPrice: number | null;
-  profit: number | null;
+
   position: PositionType;
 
   setPosition: (position: PositionType) => void;
   calculator: (data: FuturesFormData) => void;
-  reset: () => void;
-}
+} & ShareCryptoType;
 
 export const useFuturesStore = create<FuturesState>()(
   persist(
@@ -23,7 +22,7 @@ export const useFuturesStore = create<FuturesState>()(
       margin: null,
       leverage: 1,
       entryPrice: null,
-      sellPrice: null,
+      exitPrice: null,
       profit: null,
       position: 'long',
 
@@ -36,8 +35,8 @@ export const useFuturesStore = create<FuturesState>()(
           const quantity = positionSize / data.entryPrice;
           const priceDiff =
             position === 'long'
-              ? data.sellPrice - data.entryPrice
-              : data.entryPrice - data.sellPrice;
+              ? data.exitPrice - data.entryPrice
+              : data.entryPrice - data.exitPrice;
           const profit = quantity * priceDiff;
 
           return {
@@ -45,7 +44,7 @@ export const useFuturesStore = create<FuturesState>()(
             margin: data.margin,
             leverage: data.leverage,
             entryPrice: data.entryPrice,
-            sellPrice: data.sellPrice,
+            exitPrice: data.exitPrice,
           };
         }),
 
@@ -54,7 +53,7 @@ export const useFuturesStore = create<FuturesState>()(
           margin: null,
           leverage: 1,
           entryPrice: null,
-          sellPrice: null,
+          exitPrice: null,
           profit: null,
         }),
     }),
@@ -64,7 +63,7 @@ export const useFuturesStore = create<FuturesState>()(
         margin: state.margin,
         leverage: state.leverage,
         entryPrice: state.entryPrice,
-        sellPrice: state.sellPrice,
+        exitPrice: state.exitPrice,
         profit: state.profit,
         position: state.position,
       }),

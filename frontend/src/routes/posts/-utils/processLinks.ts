@@ -4,7 +4,7 @@ export function processLinks(html: string) {
   doc.querySelectorAll('a').forEach((a) => {
     a.classList.add('no-underline', 'text-sky-500', 'hover:underline');
 
-    const currentRel = a.getAttribute('rel') || '';
+    const currentRel = a.getAttribute('rel') ?? '';
     const newRel = `${currentRel} nofollow ugc`.trim();
     a.setAttribute('rel', newRel);
 

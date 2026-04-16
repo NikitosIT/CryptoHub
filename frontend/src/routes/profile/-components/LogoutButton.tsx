@@ -10,11 +10,14 @@ import {
 
 import { useLogout } from '@/routes/auth/-hooks/useLogout';
 
+import { buttonStyle } from '../-utils/profileStyles';
+
 export function LogoutButton() {
   const [openDialog, setOpenDialog] = useState(false);
   const { handleLogout } = useLogout();
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
     setOpenDialog(true);
   };
 
@@ -44,11 +47,9 @@ export function LogoutButton() {
       <Dialog
         open={openDialog}
         onClose={handleCancel}
-        PaperProps={{
-          sx: {
-            bgcolor: '#18181b',
-            color: '#fff',
-            border: '1px solid #27272a',
+        slotProps={{
+          paper: {
+            sx: buttonStyle,
           },
         }}
       >
@@ -73,7 +74,7 @@ export function LogoutButton() {
           </Button>
           <Button
             onClick={() => {
-              handleConfirm();
+              void handleConfirm();
             }}
             sx={{
               color: '#ef4444',
@@ -81,7 +82,6 @@ export function LogoutButton() {
                 bgcolor: 'rgba(239, 68, 68, 0.1)',
               },
             }}
-            autoFocus
           >
             Logout
           </Button>
