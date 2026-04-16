@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { api } from "@/api";
-import { useSessionQuery } from "@/routes/auth/-api/useSessionQuery";
+import { api } from '@/api';
+import { useSessionQuery } from '@/routes/auth/-api/useSessionQuery';
 
 export function useAdminAuth() {
   const sessionQuery = useSessionQuery();
@@ -9,7 +9,7 @@ export function useAdminAuth() {
   const authorized = Boolean(session?.user);
 
   const logoutMutation = useMutation({
-    mutationFn: async () => {
+    async mutationFn() {
       return api.auth.signOut();
     },
   });

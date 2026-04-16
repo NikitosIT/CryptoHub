@@ -1,12 +1,12 @@
-import { redirect } from "@tanstack/react-router";
+import { redirect } from '@tanstack/react-router';
 
-import { api } from "@/api";
+import { api } from '@/api';
 
-interface GuardOptions {
+type GuardOptions = {
   requireAuth?: boolean;
   requireNoAuth?: boolean;
   redirectTo?: string;
-}
+};
 
 export function createRouteGuard(options: GuardOptions = {}) {
   const { requireAuth = false, requireNoAuth = false, redirectTo } = options;
@@ -19,7 +19,7 @@ export function createRouteGuard(options: GuardOptions = {}) {
       if (!isAuthenticated) {
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw redirect({
-          to: redirectTo || "/auth/",
+          to: redirectTo ?? '/auth/',
           replace: true,
         });
       }
@@ -29,7 +29,7 @@ export function createRouteGuard(options: GuardOptions = {}) {
       if (isAuthenticated) {
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw redirect({
-          to: redirectTo || "/",
+          to: redirectTo ?? '/',
           replace: true,
         });
       }

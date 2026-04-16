@@ -1,18 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
+import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
-import { createRouteGuard } from "@/hooks/routeGuards";
-import { useVerifyOTP } from "@/routes/auth/-hooks/useVerifyOTP";
-import { useCodeForm } from "./-hooks/useCodeForm";
-import { codeSchema } from "@/lib/validatorSchemas";
+import { createRouteGuard } from '@/hooks/routeGuards';
+import { codeSchema } from '@/lib/validatorSchemas';
+import { useVerifyOTP } from '@/routes/auth/-hooks/useVerifyOTP';
+
+import { useCodeForm } from './-hooks/useCodeForm';
 
 const verifySearchSchema = z.object({
   redirectTo: z.string().optional(),
-  mode: z.literal("email").optional(),
-  email: z.email(),
+  mode: z.literal('email').optional(),
+  email: z.email().optional(),
 });
 
-export const Route = createFileRoute("/auth/verify")({
+export const Route = createFileRoute('/auth/verify')({
   validateSearch: verifySearchSchema,
   beforeLoad: createRouteGuard({
     requireNoAuth: false,
@@ -24,8 +25,7 @@ function VerifyEmailPage() {
   const { register, codeFormErrors, handleSubmit } = useCodeForm({
     schema: codeSchema,
   });
-  const { showOTPField, isOtpSubmitting, onSubmit, isAuthLoading } =
-    useVerifyOTP();
+  const { showOTPField, isOtpSubmitting, onSubmit, isAuthLoading } = useVerifyOTP();
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-black">
@@ -55,14 +55,12 @@ function VerifyEmailPage() {
                 disabled={isOtpSubmitting}
                 maxLength={6}
                 className="w-full p-3 text-2xl tracking-widest text-center text-white border rounded bg-white/5 border-orange-500/30 focus:outline-none focus:border-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                {...register("code", {
-                  setValueAs: (v) => (v ?? "").replace(/\D/g, "").slice(0, 6),
+                {...register('code', {
+                  setValueAs: (v: string) => v.replace(/\D/g, '').slice(0, 6),
                 })}
               />
               {codeFormErrors.code && (
-                <p className="mt-1 text-sm text-red-400">
-                  {codeFormErrors.code.message}
-                </p>
+                <p className="mt-1 text-sm text-red-400">{codeFormErrors.code.message}</p>
               )}
             </div>
             <button
@@ -73,7 +71,7 @@ function VerifyEmailPage() {
               {isOtpSubmitting ? (
                 <span className="inline-block w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin" />
               ) : (
-                "Подтвердить"
+                'Подтвердить'
               )}
             </button>
           </form>

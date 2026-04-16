@@ -1,21 +1,21 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { api } from "@/api";
+import { api } from '@/api';
 
-import { isAuthError } from "../utils/utils";
-import { forecastsQueryKey } from "./useForecasts";
+import { isAuthError } from '../utils/utils';
+import { forecastsQueryKey } from './useForecasts';
 
-export interface TokenForecast {
+export type TokenForecast = {
   id: number;
   token_name: string;
   forecast_text: string;
-  sentiment: "positive" | "neutral" | "negative";
+  sentiment: 'positive' | 'neutral' | 'negative';
   source_url: string;
-  status: "pending" | "approved" | "rejected";
+  status: 'pending' | 'approved' | 'rejected';
   created_at: string;
-}
+};
 
-type Status = "approved" | "rejected";
+type Status = 'approved' | 'rejected';
 export function useForecastMutations(onUnauthorized?: () => void) {
   const queryClient = useQueryClient();
 
@@ -26,11 +26,11 @@ export function useForecastMutations(onUnauthorized?: () => void) {
   };
 
   const statusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: number; status: Status }) => {
+    async mutationFn({ id, status }: { id: number; status: Status }) {
       await api.admin.forecasts.updateStatus(id, status);
       return { id };
     },
-    onSuccess: (data) => {
+    onSuccess(data) {
       queryClient.setQueryData<TokenForecast[]>(forecastsQueryKey(), (old) =>
         old?.filter((f) => f.id !== data.id),
       );
@@ -39,10 +39,10 @@ export function useForecastMutations(onUnauthorized?: () => void) {
   });
 
   const textMutation = useMutation({
-    mutationFn: async ({ id, text }: { id: number; text: string }) => {
+    async mutationFn({ id, text }: { id: number; text: string }) {
       await api.admin.forecasts.updateText(id, text);
     },
-    onSuccess: (_, variables) => {
+    onSuccess(_, variables) {
       queryClient.setQueryData<TokenForecast[]>(forecastsQueryKey(), (old) =>
         old?.map((f) =>
           f.id === variables.id ? { ...f, forecast_text: variables.text } : f,
@@ -52,20 +52,16 @@ export function useForecastMutations(onUnauthorized?: () => void) {
     onError: handleAuthError,
   });
 
-  const statusLoadingId = statusMutation.isPending
-    ? (statusMutation.variables?.id ?? null)
-    : null;
+  const statusLoadingId = statusMutation.isPending ? statusMutation.variables.id : null;
 
-  const textLoadingId = textMutation.isPending
-    ? (textMutation.variables?.id ?? null)
-    : null;
+  const textLoadingId = textMutation.isPending ? textMutation.variables.id : null;
 
   const actionLoading = statusLoadingId ?? textLoadingId;
 
-  const updateText = (id: number, text: string) =>
+  const updateText = async (id: number, text: string) =>
     textMutation.mutateAsync({ id, text });
 
-  const updateStatus = (id: number, status: Status) =>
+  const updateStatus = async (id: number, status: Status) =>
     statusMutation.mutateAsync({ id, status });
 
   return {

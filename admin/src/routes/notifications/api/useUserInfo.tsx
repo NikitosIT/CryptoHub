@@ -1,9 +1,10 @@
-import { api } from "@/api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
+
+import { api } from '@/api';
 
 export function useProfilesList() {
   return useQuery({
-    queryKey: ["profiles"],
-    queryFn: () => api.admin.listProfiles(),
+    queryKey: ['profiles'],
+    queryFn: async () => api.admin.listProfiles(),
   });
 }

@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useState } from 'react';
+import { Link, useNavigate } from '@tanstack/react-router';
 
-import ThemeToggle from "./ThemeToggle";
-import { useAdminAuth } from "@/routes/auth/-api/useAdminAuth";
+import { useAdminAuth } from '@/routes/auth/-api/useAdminAuth';
+
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const { authorized, logout } = useAdminAuth();
@@ -12,7 +13,7 @@ export default function Header() {
   const handleLogout = async () => {
     await logout();
     setShowLogoutModal(false);
-    navigate({ to: "/auth" });
+    void navigate({ to: '/auth' });
   };
 
   return (
@@ -37,7 +38,7 @@ export default function Header() {
                   to="/forecasts"
                   className={linkStyles}
                   activeProps={{
-                    className: "text-orange-500 bg-gray-900",
+                    className: 'text-orange-500 bg-gray-900',
                   }}
                 >
                   Forecasts
@@ -46,7 +47,7 @@ export default function Header() {
                   to="/notifications"
                   className={linkStyles}
                   activeProps={{
-                    className: "text-orange-500 bg-gray-900",
+                    className: 'text-orange-500 bg-gray-900',
                   }}
                 >
                   Notifications
@@ -55,7 +56,7 @@ export default function Header() {
                   to="/tokens"
                   className={linkStyles}
                   activeProps={{
-                    className: "text-orange-500 bg-gray-900",
+                    className: 'text-orange-500 bg-gray-900',
                   }}
                 >
                   Tokens
@@ -67,7 +68,9 @@ export default function Header() {
             <ThemeToggle />
             {authorized && (
               <button
-                onClick={() => setShowLogoutModal(true)}
+                onClick={() => {
+                  setShowLogoutModal(true);
+                }}
                 className="px-4 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-red-400 hover:bg-gray-900"
               >
                 Выйти
@@ -78,21 +81,18 @@ export default function Header() {
       </header>
 
       {showLogoutModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
-          onClick={() => setShowLogoutModal(false)}
-        >
-          <div
-            className="w-full max-w-sm p-6 mx-4 bg-gray-900 border border-gray-700 rounded-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="w-full max-w-sm p-6 mx-4 bg-gray-900 border border-gray-700 rounded-xl">
             <h2 className="mb-2 text-xl font-bold text-white">Выход</h2>
             <p className="mb-6 text-gray-400">
               Вы уверены, что хотите выйти из аккаунта?
             </p>
             <div className="flex gap-3">
               <button
-                onClick={() => setShowLogoutModal(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLogoutModal(false);
+                }}
                 className="flex-1 px-4 py-2 text-sm font-medium text-gray-300 transition-colors bg-gray-800 rounded-lg hover:bg-gray-700"
               >
                 Отмена
@@ -112,4 +112,4 @@ export default function Header() {
 }
 
 const linkStyles =
-  "px-3 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-orange-500 hover:bg-gray-900";
+  'px-3 py-2 text-sm font-medium text-gray-300 transition-colors rounded-lg hover:text-orange-500 hover:bg-gray-900';
