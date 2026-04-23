@@ -23,7 +23,7 @@ const sb = createClient(SUPABASE_URL, SERVICE_KEY, {
 
 async function safeParse(req: Request) {
   try {
-    const raw = await req.text();
+    const raw = await req.text()
     console.log("RAW:", raw.slice(0, 1000));
     if (!raw) return null;
     return JSON.parse(raw);

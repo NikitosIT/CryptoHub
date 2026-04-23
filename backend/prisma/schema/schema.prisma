@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    String @id @default(ulid())
+  name  String
+  email String @unique
+
+  favorites Favorite[]
+  reaction PostReaction[]
+
+  @@map("user") 
+}
+
+//
+
+model TelegramPost {
+  id Int @id @default(autoincrement())
+
+  textCaption     String? @map("text_caption")
+  textEntities    Json?   @map("text_entities")
+  cryptoTokens    String[] @map("crypto_tokens")
+  tgAuthorId      BigInt?  @map("tg_author_id")
+
+  mediaGroupId    String? @map("media_group_id")
+  media           Json?
+  
+  likeCount       Int @default(0) @map("like_count")
+  dislikeCount    Int @default(0) @map("dislike_count")
+  favoritesCount  Int @default(0) @map("favorites_count")
+  commentsCount   Int? @default(0) @map("comments_count")
+ 
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  favorites Favorite[]
+  reaction PostReaction[]
+  @@map("telegram_posts")
+}
+
+//
+
+model Favorite {
+  id Int @id @default(autoincrement())
+
+  userId String @map("user_id")
+  postId Int @map("post_id")
+
+  user User @relation(fields: [userId], references: [id])
+  post TelegramPost @relation(fields: [postId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, postId])
+
+  @@map("favorites")
+}
+
+//
+
+model PostReaction {
+  id Int @id @default(autoincrement())
+
+  userId String @map("user_id")
+  postId Int @map("post_id")
+
+  user User @relation(fields: [userId], references: [id])
+  post TelegramPost @relation(fields: [postId], references: [id])
+
+  reactionType ReactionType @map("reaction_type")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, postId])
+
+  @@map("post_reactions")
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+}
+
+model UserCard {
+  id        String   @id @default(ulid())
+  name      String
+  cardName  String   @map("card_name") @db.VarChar(20)
+  pin       String
+  amount    Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([id, pin])
+
+  @@map("user_card")
+}

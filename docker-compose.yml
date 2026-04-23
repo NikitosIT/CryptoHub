@@ -1,11 +1,23 @@
 services:
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: crypto_pgadmin
+  postgres:
+    image: postgres:17
+    container_name: crypto_postgres
+    restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: cryptohub1112@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: CryptoHub
     ports:
-      - '5050:80'
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: crypto_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
