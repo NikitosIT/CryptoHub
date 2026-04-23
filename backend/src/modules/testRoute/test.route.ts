@@ -1,7 +1,9 @@
-import express from "express"
-import { transfers } from "./test.controller.js"
+import express from "express";
 
-const router = express.Router()
+import { testController } from "./test.controller.js";
+import { validateTransferRequest } from "./test.validation.js";
 
-router.post('/send', transfers)
-export default router
+const router = express.Router();
+
+router.post("/send", validateTransferRequest, testController.transfers);
+export default router;

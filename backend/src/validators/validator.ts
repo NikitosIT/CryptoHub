@@ -25,13 +25,6 @@ const CryptoTokenSchema = z.object({
 
 const CryptoTokensSchema = z.array(CryptoTokenSchema);
 
-const TransfersBankSchema = z.object({
-  id: z.string(),
-  amount: z.number().nonnegative(),
-  pin: z.string().regex(/^\d{4}$/, "PIN must be exactly 4 digits"),
-  toUserId: z.string(),
-});
-
 const GetAmountSchema = z.object({
   id: z.string(),
   pin: z.string().regex(/^\d{4}$/, "PIN must be exactly 4 digits"),
@@ -42,5 +35,4 @@ export {
   GetAmountSchema,
   ToggleFavoriteSchema,
   ToggleReaction,
-  TransfersBankSchema,
 };

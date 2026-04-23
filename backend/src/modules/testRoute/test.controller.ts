@@ -1,66 +1,18 @@
 import { Request, Response } from "express";
 
-import {
-  checkPinAttempts,
-  registerFailedPin,
-  resetPinAttempts,
-} from "@/modules/testRoute/test.service.js";
-import { prisma } from "@/shared/libs/db.js";
-import { AppError } from "@/shared/utils/AppError.js";
-import { asyncHandler } from "@/shared/utils/asyncHandler.js";
-import { TransfersBankSchema } from "@/shared/validators/validator.js";
+import { asyncHandler } from "@/utils/asyncHandler.js";
 
-export const transfers = asyncHandler(async (req: Request, res: Response) => {
-  const { id, pin, amount, toUserId } = TransfersBankSchema.parse(req.body);
+import { testService } from "./test.service.js";
+import type { TransferLocals } from "./test.validation.js";
 
-  if (id === toUserId) {
-    throw new AppError("Cannot transfer to yourself");
-  }
+const transfers = asyncHandler(async (_req: Request, res: Response) => {
+  const { transferRequest } = res.locals as TransferLocals;
 
-  const receiver = await prisma.userCard.findUnique({
-    where: { id: toUserId },
-  });
-
-  if (!receiver) {
-    throw new AppError("Receiver not found");
-  }
-
-  await prisma.$transaction(async (tx) => {
-    const sender = await tx.userCard.findUnique({
-      where: { id },
-    });
-
-    if (!sender) {
-      throw new AppError("Sender not found");
-    }
-
-    await checkPinAttempts(id);
-
-    if (pin !== sender.pin) {
-      await registerFailedPin(id);
-      throw new AppError("Invalid PIN");
-    }
-
-    await resetPinAttempts(id);
-
-    if (sender.amount < amount) {
-      throw new AppError("Insufficient funds");
-    }
-
-    await tx.userCard.update({
-      where: { id },
-      data: {
-        amount: { decrement: amount },
-      },
-    });
-
-    await tx.userCard.update({
-      where: { id: toUserId },
-      data: {
-        amount: { increment: amount },
-      },
-    });
-  });
+  await testService.transferFunds(transferRequest);
 
   res.json({ message: "Transfer successful" });
 });
+
+export const testController = {
+  transfers,
+} as const;
