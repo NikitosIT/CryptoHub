@@ -1,7 +1,8 @@
-import express from "express"
-import { getAmount } from "./getAmount.controller.js"
+import express from "express";
 
-const router = express.Router()
-router.get("/balance", getAmount)
+import { getAmount } from "./getAmount.controller.js";
 
-export default router
+const router = express.Router();
+router.get("/balance", getAmount);
+
+export default router;

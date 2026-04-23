@@ -5,7 +5,7 @@ import {
   registerFailedPin,
   resetPinAttempts,
 } from "@/modules/testRoute/test.service.js";
-import { prisma } from "@/shared/config/db.js";
+import { prisma } from "@/shared/libs/db.js";
 import { AppError } from "@/shared/utils/AppError.js";
 import { asyncHandler } from "@/shared/utils/asyncHandler.js";
 import { TransfersBankSchema } from "@/shared/validators/validator.js";

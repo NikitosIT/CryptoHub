@@ -1,8 +1,8 @@
 import "dotenv/config";
 
 import app from "./app.js";
-import { connectDB, disconnectDB } from "./shared/config/db.js";
-import { connectRedis, disconnectRedis } from "./shared/config/redis.js";
+import { connectDB, disconnectDB } from "./shared/libs/db.js";
+import { connectRedis, disconnectRedis } from "./shared/libs/redis.js";
 
 const PORT = Number(process.env.PORT) || 3000;
 

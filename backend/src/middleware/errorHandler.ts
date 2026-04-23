@@ -1,13 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { AppError } from "@/shared/utils/AppError.js";
+import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
-import { logger } from "../utils/logger.js";
+
+import { AppError } from "@/shared/utils/AppError.js";
+
+import { logger } from "../libs/logger.js";
 
 export const errorHandler = (
   err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (err instanceof AppError) {
     logger.error({

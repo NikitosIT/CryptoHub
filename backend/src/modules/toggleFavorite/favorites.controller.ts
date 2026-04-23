@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { prisma } from "@/shared/config/db.js";
+import { prisma } from "@/shared/libs/db.js";
 import { asyncHandler } from "@/shared/utils/asyncHandler.js";
 import { ToggleFavoriteSchema } from "@/shared/validators/validator.js";
 

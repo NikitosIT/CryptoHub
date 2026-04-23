@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import { prisma } from "@/shared/config/db.js";
-import { redis } from "@/shared/config/redis.js";
+import { prisma } from "@/shared/libs/db.js";
+import { redis } from "@/shared/libs/redis.js";
 import { AppError } from "@/shared/utils/AppError.js";
 import { asyncHandler } from "@/shared/utils/asyncHandler.js";
 import { GetAmountSchema } from "@/shared/validators/validator.js";
