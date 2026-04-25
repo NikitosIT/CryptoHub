@@ -1,57 +1,56 @@
 import { prisma } from "@/libs/db.js";
+import { cardsService } from "@/modules/cards/cards.service.js";
 import { AppError } from "@/utils/AppError.js";
 
 import type { TransferInput } from "../transfer.schema.js";
-import { invalidateBalanceCache } from "./cache.service.js";
+import { invalidateCardBalanceCache } from "./card-balance-cache.service.js";
 import {
   checkPinAttempts,
   registerFailedPin,
   resetPinAttempts,
 } from "./pin.service.js";
 
-const transferFunds = async ({ id, pin, amount, toUserId }: TransferInput) => {
-  await checkPinAttempts(id);
+const transferFunds = async ({
+  senderCardId,
+  senderCardPin,
+  amount,
+  receiverCardId,
+}: TransferInput) => {
+  await checkPinAttempts(senderCardId);
 
   await prisma.$transaction(async (tx) => {
-    const [sender, receiver] = await Promise.all([
-      tx.userCard.findUnique({ where: { id } }),
-      tx.userCard.findUnique({ where: { id: toUserId } }),
-    ]);
+    const cards = await cardsService.findCardsByIds(
+      tx,
+      senderCardId,
+      receiverCardId,
+    );
+    const senderCard = cards.find((card) => card.id === senderCardId);
+    const receiverCard = cards.find((card) => card.id === receiverCardId);
 
-    if (!sender) throw new AppError("Sender not found", 404);
-    if (!receiver) throw new AppError("Receiver not found", 404);
+    if (!senderCard) throw new AppError("Sender not found", 404);
+    if (!receiverCard) throw new AppError("Receiver not found", 404);
 
-    if (sender.pin !== pin) {
-      await registerFailedPin(id);
+    if (senderCard.pin !== senderCardPin) {
+      await registerFailedPin(senderCardId);
       throw new AppError("Invalid PIN", 400);
     }
 
-    await resetPinAttempts(id);
+    await resetPinAttempts(senderCardId);
 
-    const updatedSender = await tx.userCard.updateMany({
-      //updateMany возвращает результат count
-      where: {
-        id,
-        amount: { gte: amount }, // gte “обнови только если баланс >= суммы перевода”
-      },
-      data: {
-        amount: { decrement: amount },
-      },
-    });
+    const senderDebited = await cardsService.debitIfEnough(
+      tx,
+      senderCardId,
+      amount,
+    );
 
-    if (updatedSender.count === 0) {
+    if (!senderDebited) {
       throw new AppError("Insufficient funds", 400);
     }
 
-    await tx.userCard.update({
-      where: { id: toUserId },
-      data: {
-        amount: { increment: amount },
-      },
-    });
+    await cardsService.credit(tx, receiverCardId, amount);
   });
 
-  await invalidateBalanceCache(id, toUserId);
+  await invalidateCardBalanceCache(senderCardId, receiverCardId);
 };
 
 export const transferService = {
