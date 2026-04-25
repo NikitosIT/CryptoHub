@@ -19,6 +19,7 @@ build/
 .env
 .env.local
 .env.*.local
+.envrc
 .supabase/
 .supabase/config.toml
 
@@ -64,8 +65,17 @@ pnpm-lock.yaml
 
 # === Logs ===
 logs/
+backend/logs/
+*.ndjson
 *.log
 *.csv
+
+# === Docker / Observability local overrides ===
+docker-compose.override.yml
+docker-compose.local.yml
+
+# === Local telemetry data dirs (if ever mounted into repo) ===
+infrastructure/**/data/
 
 # === Supabase local data ===
 supabase/.branches/

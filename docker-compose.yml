@@ -4,9 +4,9 @@ services:
     container_name: crypto_postgres
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: CryptoHub
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -19,5 +19,68 @@ services:
     ports:
       - "6379:6379"
 
+  prometheus:
+    image: prom/prometheus:v3.5.2
+    container_name: crypto_prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+
+  loki:
+    image: grafana/loki:3.7.1
+    container_name: crypto_loki
+    restart: always
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./infrastructure/loki-config.yml:/etc/loki/config.yml:ro
+      - loki_data:/loki
+    command:
+      - "-config.file=/etc/loki/config.yml"
+
+  alloy:
+    image: grafana/alloy:v1.15.1
+    container_name: crypto_alloy
+    restart: always
+    depends_on:
+      - loki
+    volumes:
+      - ./infrastructure/alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - ./backend/logs:/var/log/cryptohub:ro
+      - alloy_data:/var/lib/alloy/data
+    command:
+      - "run"
+      - "/etc/alloy/config.alloy"
+      - "--storage.path=/var/lib/alloy/data"
+
+  grafana:
+    image: grafana/grafana:13.0.1
+    container_name: crypto_grafana
+    restart: always
+    depends_on:
+      - prometheus
+      - loki
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning:ro
+
 volumes:
   postgres_data:
+  prometheus_data:
+  loki_data:
+  alloy_data:
+  grafana_data:

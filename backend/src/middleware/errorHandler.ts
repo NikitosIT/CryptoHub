@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 
-import { AppError } from "@/shared/utils/AppError.js";
+import { AppError } from "@/utils/AppError.js";
 
 import { logger } from "../libs/logger.js";
 

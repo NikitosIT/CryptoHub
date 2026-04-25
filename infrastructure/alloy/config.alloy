@@ -1,0 +1,60 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+loki.source.file "backend_logs" {
+  targets = [
+    {
+      __path__ = "/var/log/cryptohub/backend.ndjson",
+      job      = "backend",
+      service  = "cryptohub-backend",
+      host     = "local-dev",
+    },
+  ]
+
+  forward_to = [loki.process.backend_logs.receiver]
+
+  file_watch {
+    min_poll_frequency = "250ms"
+    max_poll_frequency = "5s"
+  }
+}
+
+loki.process "backend_logs" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.static_labels {
+    values = {
+      app = "cryptohub",
+      env = "local",
+    }
+  }
+
+  stage.json {
+    expressions = {
+      level    = "level",
+      message  = "msg",
+      request  = "type",
+      method   = "method",
+      path     = "path",
+      status   = "statusCode",
+      duration = "durationMs",
+    }
+  }
+
+  stage.labels {
+    values = {
+      level   = "",
+      request = "",
+      method  = "",
+      status  = "",
+    }
+  }
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

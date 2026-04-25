@@ -1,4 +1,4 @@
-import { prisma } from "@/shared/libs/db.js";
+import { prisma } from "@/libs/db.js";
 
 async function main() {
   // создаём тестового пользователя

@@ -1,12 +1,22 @@
 import express from "express";
 
-import { corsMiddleware } from "./shared/middleware/corsMiddleware.js";
-import { errorHandler } from "./shared/middleware/errorHandler.js";
-import router from "./shared/routes/index.route.js";
+import { corsMiddleware } from "./middleware/corsMiddleware.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { requestLogger } from "./middleware/requestLogger.js";
+import {
+  metricsHandler,
+  prometheusMiddleware,
+} from "./monitoring/prometheus.js";
+import router from "./routes/index.route.js";
 
 const app = express();
 
 app.use(corsMiddleware);
+app.use(prometheusMiddleware);
+app.use(requestLogger);
+
+app.get("/metrics", metricsHandler);
+
 app.use(express.json());
 
 app.use("/api", router);
