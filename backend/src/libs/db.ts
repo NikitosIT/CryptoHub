@@ -2,6 +2,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 import { logger } from "@/libs/logger.js";
 
+import type { Prisma } from "../../prisma/generated/prisma/client.js";
 import { PrismaClient } from "../../prisma/generated/prisma/client.js";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
@@ -22,5 +23,7 @@ const connectDB = async () => {
 const disconnectDB = async () => {
   await prisma.$disconnect();
 };
+
+export type DbTransaction = Prisma.TransactionClient;
 
 export { connectDB, disconnectDB, prisma };
