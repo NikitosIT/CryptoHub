@@ -4,7 +4,7 @@ import {
   telegramPostSchema,
   telegramPostsListResponseSchema,
   telegramPostsQuerySchema,
-} from "./telegramPosts.schema.js";
+} from "./telegram-posts.schema.js";
 
 const telegramPostBasicSchema = openApiRegistry.register(
   "TelegramPost",

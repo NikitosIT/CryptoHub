@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { telegramPostsController } from "./telegramPosts.controller.js";
-import { validateTelegramPosts } from "./telegramPosts.validation.js";
+import { telegramPostsController } from "./telegram-posts.controller.js";
+import { validateTelegramPosts } from "./telegram-posts.validation.js";
 
 const router = Router();
 

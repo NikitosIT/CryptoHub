@@ -1,7 +1,7 @@
 import { Router } from "express";
 
+import telegramPostsRoutes from "@/modules/telegram-posts/telegram-posts.route.js";
 import telegramPostIngestionRoutes from "@/modules/telegramPostIngestion/telegramPostIngestion.route.js";
-import telegramPostsRoutes from "@/modules/telegramPosts/telegramPosts.route.js";
 import transferRoutes from "@/modules/transfer/transfer.route.js";
 const router = Router();
 

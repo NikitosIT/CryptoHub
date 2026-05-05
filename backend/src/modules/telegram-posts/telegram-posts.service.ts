@@ -6,7 +6,7 @@ import type {
 } from "../../../prisma/generated/prisma/client.js";
 import type { PaginatedResult } from "../paginate/paginate.service.js";
 import { paginate } from "../paginate/paginate.service.js";
-import type { TelegramPostsQuery } from "./telegramPosts.schema.js";
+import type { TelegramPostsQuery } from "./telegram-posts.schema.js";
 
 export const telegramPostsService = {
   list: async ({ cursor }: TelegramPostsQuery = {}): Promise<

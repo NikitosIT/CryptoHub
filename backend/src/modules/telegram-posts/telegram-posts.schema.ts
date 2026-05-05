@@ -1,10 +1,11 @@
 import { z } from "zod";
 
-export const telegramPostsQuerySchema = z
-  .object({
-    cursor: z.coerce.number().int().positive().optional(),
-  })
-  .strict();
+import {
+  createPaginatedResponseSchema,
+  cursorPaginationQuerySchema,
+} from "../paginate/paginate.schema.js";
+
+export const telegramPostsQuerySchema = cursorPaginationQuerySchema;
 
 export const telegramPostTextEntitySchema = z
   .object({
@@ -39,12 +40,8 @@ export const telegramPostSchema = z
   })
   .strict();
 
-export const telegramPostsListResponseSchema = z
-  .object({
-    data: z.array(telegramPostSchema),
-    nextCursor: z.number().int().positive().nullable(),
-  })
-  .strict();
+export const telegramPostsListResponseSchema =
+  createPaginatedResponseSchema(telegramPostSchema);
 
 export type TelegramPost = z.infer<typeof telegramPostSchema>;
 export type TelegramPostsQuery = z.infer<typeof telegramPostsQuerySchema>;

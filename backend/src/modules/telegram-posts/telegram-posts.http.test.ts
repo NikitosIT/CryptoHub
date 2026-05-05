@@ -3,7 +3,7 @@ import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { errorHandler } from "../../middleware/errorHandler.js";
-import telegramPostsRouter from "./telegramPosts.route.js";
+import telegramPostsRouter from "./telegram-posts.route.js";
 
 const { findManyMock } = vi.hoisted(() => ({
   findManyMock: vi.fn(),
