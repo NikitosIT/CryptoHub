@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 
 import { transferService } from "./services/transfer.service.js";
 import type { TransferInput } from "./transfer.schema.js";
@@ -11,4 +11,4 @@ export const transferController = {
 
     return res.json({ message: "Transfer successful" });
   },
-} as const;
+};

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 
 import { AppError } from "@/utils/AppError.js";
@@ -9,10 +9,12 @@ export const errorHandler = (
   err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) => {
+  const requestLogger = req.log ?? logger;
+
   if (err instanceof AppError) {
-    logger.error({
+    requestLogger.error({
       message: err.message,
       status: err.status,
       method: req.method,
@@ -27,7 +29,7 @@ export const errorHandler = (
   }
 
   if (err instanceof ZodError) {
-    logger.error({
+    requestLogger.error({
       message: "Validation error",
       issues: err.issues,
       method: req.method,
@@ -44,7 +46,7 @@ export const errorHandler = (
 
   const message = err instanceof Error ? err.message : "Internal Server Error";
 
-  logger.error({
+  requestLogger.error({
     message,
     method: req.method,
     url: req.originalUrl,

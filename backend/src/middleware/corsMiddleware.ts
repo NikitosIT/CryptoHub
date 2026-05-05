@@ -28,4 +28,3 @@ export const corsMiddleware = cors({
 
   allowedHeaders: ["authorization", "x-client-info", "apikey", "content-type"],
 });
-// Todo when switch to prod allowed constraint origin not *

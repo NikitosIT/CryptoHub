@@ -8,7 +8,8 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.authors (author_name, author_link, tg_author_id)
 VALUES
   ('КРИПТО ИЛЬЯ', 'https://t.me/crypto_ilya', -1001579090675),
-  ('COIN 22', 'https://t.me/COIN22T', -1001792822445)
+  ('COIN 22', 'https://t.me/COIN22T', -1001792822445),
+  ('')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.admin_users (id, email)

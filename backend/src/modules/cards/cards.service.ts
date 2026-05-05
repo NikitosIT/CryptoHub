@@ -1,6 +1,12 @@
-import type { DbTransaction } from "@/libs/db.js";
+import type { UserCard } from "prisma/generated/prisma/client.js";
 
-import type { UserCard } from "../../../prisma/generated/prisma/client.js";
+import { type DbTransaction } from "@/libs/db.js";
+
+type CardBalanceChangeInput = {
+  tx: DbTransaction;
+  cardId: string;
+  amount: number;
+};
 
 const findCardsByIds = async (
   tx: DbTransaction,
@@ -15,11 +21,11 @@ const findCardsByIds = async (
   });
 };
 
-const debitIfEnough = async (
-  tx: DbTransaction,
-  cardId: string,
-  amount: number,
-): Promise<boolean> => {
+const debitIfEnough = async ({
+  tx,
+  cardId,
+  amount,
+}: CardBalanceChangeInput): Promise<boolean> => {
   const updatedCard = await tx.userCard.updateMany({
     where: {
       id: cardId,
@@ -33,11 +39,11 @@ const debitIfEnough = async (
   return updatedCard.count > 0;
 };
 
-const credit = async (
-  tx: DbTransaction,
-  cardId: string,
-  amount: number,
-): Promise<void> => {
+const credit = async ({
+  tx,
+  cardId,
+  amount,
+}: CardBalanceChangeInput): Promise<void> => {
   await tx.userCard.update({
     where: { id: cardId },
     data: {

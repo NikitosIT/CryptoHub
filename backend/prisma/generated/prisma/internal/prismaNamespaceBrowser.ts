@@ -88,6 +88,8 @@ export const TelegramPostScalarFieldEnum = {
   textCaption: 'textCaption',
   textEntities: 'textEntities',
   cryptoTokens: 'cryptoTokens',
+  tgAuthorTitle: 'tgAuthorTitle',
+  tgAuthorUsername: 'tgAuthorUsername',
   tgAuthorId: 'tgAuthorId',
   mediaGroupId: 'mediaGroupId',
   media: 'media',

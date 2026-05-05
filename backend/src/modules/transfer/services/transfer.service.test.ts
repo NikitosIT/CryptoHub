@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AppError } from "@/utils/AppError.js";
+import { AppError } from "../../../utils/AppError.js";
 
 const {
   checkPinAttemptsMock,

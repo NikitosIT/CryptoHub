@@ -26,15 +26,18 @@ model TelegramPost {
   textCaption  String?  @map("text_caption")
   textEntities Json?    @map("text_entities")
   cryptoTokens String[] @map("crypto_tokens")
-  tgAuthorId   BigInt?  @map("tg_author_id")
+
+  tgAuthorTitle    String @map("tg_author_title")
+  tgAuthorUsername String @map("tg_author_username")
+  tgAuthorId       String @map("tg_author_id")
 
   mediaGroupId String? @map("media_group_id")
   media        Json?
 
-  likeCount      Int  @default(0) @map("like_count")
-  dislikeCount   Int  @default(0) @map("dislike_count")
-  favoritesCount Int  @default(0) @map("favorites_count")
-  commentsCount  Int? @default(0) @map("comments_count")
+  likeCount      Int @default(0) @map("like_count")
+  dislikeCount   Int @default(0) @map("dislike_count")
+  favoritesCount Int @default(0) @map("favorites_count")
+  commentsCount  Int @default(0) @map("comments_count")
 
   createdAt DateTime @default(now()) @map("created_at")
 

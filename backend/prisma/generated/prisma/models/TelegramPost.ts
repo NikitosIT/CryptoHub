@@ -28,7 +28,6 @@ export type AggregateTelegramPost = {
 
 export type TelegramPostAvgAggregateOutputType = {
   id: number | null
-  tgAuthorId: number | null
   likeCount: number | null
   dislikeCount: number | null
   favoritesCount: number | null
@@ -37,7 +36,6 @@ export type TelegramPostAvgAggregateOutputType = {
 
 export type TelegramPostSumAggregateOutputType = {
   id: number | null
-  tgAuthorId: bigint | null
   likeCount: number | null
   dislikeCount: number | null
   favoritesCount: number | null
@@ -47,7 +45,9 @@ export type TelegramPostSumAggregateOutputType = {
 export type TelegramPostMinAggregateOutputType = {
   id: number | null
   textCaption: string | null
-  tgAuthorId: bigint | null
+  tgAuthorTitle: string | null
+  tgAuthorUsername: string | null
+  tgAuthorId: string | null
   mediaGroupId: string | null
   likeCount: number | null
   dislikeCount: number | null
@@ -59,7 +59,9 @@ export type TelegramPostMinAggregateOutputType = {
 export type TelegramPostMaxAggregateOutputType = {
   id: number | null
   textCaption: string | null
-  tgAuthorId: bigint | null
+  tgAuthorTitle: string | null
+  tgAuthorUsername: string | null
+  tgAuthorId: string | null
   mediaGroupId: string | null
   likeCount: number | null
   dislikeCount: number | null
@@ -73,6 +75,8 @@ export type TelegramPostCountAggregateOutputType = {
   textCaption: number
   textEntities: number
   cryptoTokens: number
+  tgAuthorTitle: number
+  tgAuthorUsername: number
   tgAuthorId: number
   mediaGroupId: number
   media: number
@@ -87,7 +91,6 @@ export type TelegramPostCountAggregateOutputType = {
 
 export type TelegramPostAvgAggregateInputType = {
   id?: true
-  tgAuthorId?: true
   likeCount?: true
   dislikeCount?: true
   favoritesCount?: true
@@ -96,7 +99,6 @@ export type TelegramPostAvgAggregateInputType = {
 
 export type TelegramPostSumAggregateInputType = {
   id?: true
-  tgAuthorId?: true
   likeCount?: true
   dislikeCount?: true
   favoritesCount?: true
@@ -106,6 +108,8 @@ export type TelegramPostSumAggregateInputType = {
 export type TelegramPostMinAggregateInputType = {
   id?: true
   textCaption?: true
+  tgAuthorTitle?: true
+  tgAuthorUsername?: true
   tgAuthorId?: true
   mediaGroupId?: true
   likeCount?: true
@@ -118,6 +122,8 @@ export type TelegramPostMinAggregateInputType = {
 export type TelegramPostMaxAggregateInputType = {
   id?: true
   textCaption?: true
+  tgAuthorTitle?: true
+  tgAuthorUsername?: true
   tgAuthorId?: true
   mediaGroupId?: true
   likeCount?: true
@@ -132,6 +138,8 @@ export type TelegramPostCountAggregateInputType = {
   textCaption?: true
   textEntities?: true
   cryptoTokens?: true
+  tgAuthorTitle?: true
+  tgAuthorUsername?: true
   tgAuthorId?: true
   mediaGroupId?: true
   media?: true
@@ -234,13 +242,15 @@ export type TelegramPostGroupByOutputType = {
   textCaption: string | null
   textEntities: runtime.JsonValue | null
   cryptoTokens: string[]
-  tgAuthorId: bigint | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId: string | null
   media: runtime.JsonValue | null
   likeCount: number
   dislikeCount: number
   favoritesCount: number
-  commentsCount: number | null
+  commentsCount: number
   createdAt: Date
   _count: TelegramPostCountAggregateOutputType | null
   _avg: TelegramPostAvgAggregateOutputType | null
@@ -272,13 +282,15 @@ export type TelegramPostWhereInput = {
   textCaption?: Prisma.StringNullableFilter<"TelegramPost"> | string | null
   textEntities?: Prisma.JsonNullableFilter<"TelegramPost">
   cryptoTokens?: Prisma.StringNullableListFilter<"TelegramPost">
-  tgAuthorId?: Prisma.BigIntNullableFilter<"TelegramPost"> | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFilter<"TelegramPost"> | string
+  tgAuthorUsername?: Prisma.StringFilter<"TelegramPost"> | string
+  tgAuthorId?: Prisma.StringFilter<"TelegramPost"> | string
   mediaGroupId?: Prisma.StringNullableFilter<"TelegramPost"> | string | null
   media?: Prisma.JsonNullableFilter<"TelegramPost">
   likeCount?: Prisma.IntFilter<"TelegramPost"> | number
   dislikeCount?: Prisma.IntFilter<"TelegramPost"> | number
   favoritesCount?: Prisma.IntFilter<"TelegramPost"> | number
-  commentsCount?: Prisma.IntNullableFilter<"TelegramPost"> | number | null
+  commentsCount?: Prisma.IntFilter<"TelegramPost"> | number
   createdAt?: Prisma.DateTimeFilter<"TelegramPost"> | Date | string
   favorites?: Prisma.FavoriteListRelationFilter
   reaction?: Prisma.PostReactionListRelationFilter
@@ -289,13 +301,15 @@ export type TelegramPostOrderByWithRelationInput = {
   textCaption?: Prisma.SortOrderInput | Prisma.SortOrder
   textEntities?: Prisma.SortOrderInput | Prisma.SortOrder
   cryptoTokens?: Prisma.SortOrder
-  tgAuthorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tgAuthorTitle?: Prisma.SortOrder
+  tgAuthorUsername?: Prisma.SortOrder
+  tgAuthorId?: Prisma.SortOrder
   mediaGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
   media?: Prisma.SortOrderInput | Prisma.SortOrder
   likeCount?: Prisma.SortOrder
   dislikeCount?: Prisma.SortOrder
   favoritesCount?: Prisma.SortOrder
-  commentsCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   favorites?: Prisma.FavoriteOrderByRelationAggregateInput
   reaction?: Prisma.PostReactionOrderByRelationAggregateInput
@@ -309,13 +323,15 @@ export type TelegramPostWhereUniqueInput = Prisma.AtLeast<{
   textCaption?: Prisma.StringNullableFilter<"TelegramPost"> | string | null
   textEntities?: Prisma.JsonNullableFilter<"TelegramPost">
   cryptoTokens?: Prisma.StringNullableListFilter<"TelegramPost">
-  tgAuthorId?: Prisma.BigIntNullableFilter<"TelegramPost"> | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFilter<"TelegramPost"> | string
+  tgAuthorUsername?: Prisma.StringFilter<"TelegramPost"> | string
+  tgAuthorId?: Prisma.StringFilter<"TelegramPost"> | string
   mediaGroupId?: Prisma.StringNullableFilter<"TelegramPost"> | string | null
   media?: Prisma.JsonNullableFilter<"TelegramPost">
   likeCount?: Prisma.IntFilter<"TelegramPost"> | number
   dislikeCount?: Prisma.IntFilter<"TelegramPost"> | number
   favoritesCount?: Prisma.IntFilter<"TelegramPost"> | number
-  commentsCount?: Prisma.IntNullableFilter<"TelegramPost"> | number | null
+  commentsCount?: Prisma.IntFilter<"TelegramPost"> | number
   createdAt?: Prisma.DateTimeFilter<"TelegramPost"> | Date | string
   favorites?: Prisma.FavoriteListRelationFilter
   reaction?: Prisma.PostReactionListRelationFilter
@@ -326,13 +342,15 @@ export type TelegramPostOrderByWithAggregationInput = {
   textCaption?: Prisma.SortOrderInput | Prisma.SortOrder
   textEntities?: Prisma.SortOrderInput | Prisma.SortOrder
   cryptoTokens?: Prisma.SortOrder
-  tgAuthorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tgAuthorTitle?: Prisma.SortOrder
+  tgAuthorUsername?: Prisma.SortOrder
+  tgAuthorId?: Prisma.SortOrder
   mediaGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
   media?: Prisma.SortOrderInput | Prisma.SortOrder
   likeCount?: Prisma.SortOrder
   dislikeCount?: Prisma.SortOrder
   favoritesCount?: Prisma.SortOrder
-  commentsCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TelegramPostCountOrderByAggregateInput
   _avg?: Prisma.TelegramPostAvgOrderByAggregateInput
@@ -349,13 +367,15 @@ export type TelegramPostScalarWhereWithAggregatesInput = {
   textCaption?: Prisma.StringNullableWithAggregatesFilter<"TelegramPost"> | string | null
   textEntities?: Prisma.JsonNullableWithAggregatesFilter<"TelegramPost">
   cryptoTokens?: Prisma.StringNullableListFilter<"TelegramPost">
-  tgAuthorId?: Prisma.BigIntNullableWithAggregatesFilter<"TelegramPost"> | bigint | number | null
+  tgAuthorTitle?: Prisma.StringWithAggregatesFilter<"TelegramPost"> | string
+  tgAuthorUsername?: Prisma.StringWithAggregatesFilter<"TelegramPost"> | string
+  tgAuthorId?: Prisma.StringWithAggregatesFilter<"TelegramPost"> | string
   mediaGroupId?: Prisma.StringNullableWithAggregatesFilter<"TelegramPost"> | string | null
   media?: Prisma.JsonNullableWithAggregatesFilter<"TelegramPost">
   likeCount?: Prisma.IntWithAggregatesFilter<"TelegramPost"> | number
   dislikeCount?: Prisma.IntWithAggregatesFilter<"TelegramPost"> | number
   favoritesCount?: Prisma.IntWithAggregatesFilter<"TelegramPost"> | number
-  commentsCount?: Prisma.IntNullableWithAggregatesFilter<"TelegramPost"> | number | null
+  commentsCount?: Prisma.IntWithAggregatesFilter<"TelegramPost"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TelegramPost"> | Date | string
 }
 
@@ -363,13 +383,15 @@ export type TelegramPostCreateInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
   favorites?: Prisma.FavoriteCreateNestedManyWithoutPostInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutPostInput
@@ -380,13 +402,15 @@ export type TelegramPostUncheckedCreateInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutPostInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutPostInput
@@ -396,13 +420,15 @@ export type TelegramPostUpdateInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.FavoriteUpdateManyWithoutPostNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutPostNestedInput
@@ -413,13 +439,15 @@ export type TelegramPostUncheckedUpdateInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutPostNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutPostNestedInput
@@ -430,13 +458,15 @@ export type TelegramPostCreateManyInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
 }
 
@@ -444,13 +474,15 @@ export type TelegramPostUpdateManyMutationInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -459,13 +491,15 @@ export type TelegramPostUncheckedUpdateManyInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -482,6 +516,8 @@ export type TelegramPostCountOrderByAggregateInput = {
   textCaption?: Prisma.SortOrder
   textEntities?: Prisma.SortOrder
   cryptoTokens?: Prisma.SortOrder
+  tgAuthorTitle?: Prisma.SortOrder
+  tgAuthorUsername?: Prisma.SortOrder
   tgAuthorId?: Prisma.SortOrder
   mediaGroupId?: Prisma.SortOrder
   media?: Prisma.SortOrder
@@ -494,7 +530,6 @@ export type TelegramPostCountOrderByAggregateInput = {
 
 export type TelegramPostAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  tgAuthorId?: Prisma.SortOrder
   likeCount?: Prisma.SortOrder
   dislikeCount?: Prisma.SortOrder
   favoritesCount?: Prisma.SortOrder
@@ -504,6 +539,8 @@ export type TelegramPostAvgOrderByAggregateInput = {
 export type TelegramPostMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   textCaption?: Prisma.SortOrder
+  tgAuthorTitle?: Prisma.SortOrder
+  tgAuthorUsername?: Prisma.SortOrder
   tgAuthorId?: Prisma.SortOrder
   mediaGroupId?: Prisma.SortOrder
   likeCount?: Prisma.SortOrder
@@ -516,6 +553,8 @@ export type TelegramPostMaxOrderByAggregateInput = {
 export type TelegramPostMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   textCaption?: Prisma.SortOrder
+  tgAuthorTitle?: Prisma.SortOrder
+  tgAuthorUsername?: Prisma.SortOrder
   tgAuthorId?: Prisma.SortOrder
   mediaGroupId?: Prisma.SortOrder
   likeCount?: Prisma.SortOrder
@@ -527,7 +566,6 @@ export type TelegramPostMinOrderByAggregateInput = {
 
 export type TelegramPostSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  tgAuthorId?: Prisma.SortOrder
   likeCount?: Prisma.SortOrder
   dislikeCount?: Prisma.SortOrder
   favoritesCount?: Prisma.SortOrder
@@ -552,24 +590,8 @@ export type TelegramPostUpdatecryptoTokensInput = {
   push?: string | string[]
 }
 
-export type NullableBigIntFieldUpdateOperationsInput = {
-  set?: bigint | number | null
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -612,13 +634,15 @@ export type TelegramPostCreateWithoutFavoritesInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
   reaction?: Prisma.PostReactionCreateNestedManyWithoutPostInput
 }
@@ -628,13 +652,15 @@ export type TelegramPostUncheckedCreateWithoutFavoritesInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutPostInput
 }
@@ -659,13 +685,15 @@ export type TelegramPostUpdateWithoutFavoritesInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reaction?: Prisma.PostReactionUpdateManyWithoutPostNestedInput
 }
@@ -675,13 +703,15 @@ export type TelegramPostUncheckedUpdateWithoutFavoritesInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutPostNestedInput
 }
@@ -690,13 +720,15 @@ export type TelegramPostCreateWithoutReactionInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
   favorites?: Prisma.FavoriteCreateNestedManyWithoutPostInput
 }
@@ -706,13 +738,15 @@ export type TelegramPostUncheckedCreateWithoutReactionInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
-  tgAuthorId?: bigint | number | null
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
   mediaGroupId?: string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: number
   dislikeCount?: number
   favoritesCount?: number
-  commentsCount?: number | null
+  commentsCount?: number
   createdAt?: Date | string
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutPostInput
 }
@@ -737,13 +771,15 @@ export type TelegramPostUpdateWithoutReactionInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.FavoriteUpdateManyWithoutPostNestedInput
 }
@@ -753,13 +789,15 @@ export type TelegramPostUncheckedUpdateWithoutReactionInput = {
   textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
-  tgAuthorId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
   mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   likeCount?: Prisma.IntFieldUpdateOperationsInput | number
   dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
   favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  commentsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutPostNestedInput
 }
@@ -809,6 +847,8 @@ export type TelegramPostSelect<ExtArgs extends runtime.Types.Extensions.Internal
   textCaption?: boolean
   textEntities?: boolean
   cryptoTokens?: boolean
+  tgAuthorTitle?: boolean
+  tgAuthorUsername?: boolean
   tgAuthorId?: boolean
   mediaGroupId?: boolean
   media?: boolean
@@ -827,6 +867,8 @@ export type TelegramPostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   textCaption?: boolean
   textEntities?: boolean
   cryptoTokens?: boolean
+  tgAuthorTitle?: boolean
+  tgAuthorUsername?: boolean
   tgAuthorId?: boolean
   mediaGroupId?: boolean
   media?: boolean
@@ -842,6 +884,8 @@ export type TelegramPostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   textCaption?: boolean
   textEntities?: boolean
   cryptoTokens?: boolean
+  tgAuthorTitle?: boolean
+  tgAuthorUsername?: boolean
   tgAuthorId?: boolean
   mediaGroupId?: boolean
   media?: boolean
@@ -857,6 +901,8 @@ export type TelegramPostSelectScalar = {
   textCaption?: boolean
   textEntities?: boolean
   cryptoTokens?: boolean
+  tgAuthorTitle?: boolean
+  tgAuthorUsername?: boolean
   tgAuthorId?: boolean
   mediaGroupId?: boolean
   media?: boolean
@@ -867,7 +913,7 @@ export type TelegramPostSelectScalar = {
   createdAt?: boolean
 }
 
-export type TelegramPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "textCaption" | "textEntities" | "cryptoTokens" | "tgAuthorId" | "mediaGroupId" | "media" | "likeCount" | "dislikeCount" | "favoritesCount" | "commentsCount" | "createdAt", ExtArgs["result"]["telegramPost"]>
+export type TelegramPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "textCaption" | "textEntities" | "cryptoTokens" | "tgAuthorTitle" | "tgAuthorUsername" | "tgAuthorId" | "mediaGroupId" | "media" | "likeCount" | "dislikeCount" | "favoritesCount" | "commentsCount" | "createdAt", ExtArgs["result"]["telegramPost"]>
 export type TelegramPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   favorites?: boolean | Prisma.TelegramPost$favoritesArgs<ExtArgs>
   reaction?: boolean | Prisma.TelegramPost$reactionArgs<ExtArgs>
@@ -887,13 +933,15 @@ export type $TelegramPostPayload<ExtArgs extends runtime.Types.Extensions.Intern
     textCaption: string | null
     textEntities: runtime.JsonValue | null
     cryptoTokens: string[]
-    tgAuthorId: bigint | null
+    tgAuthorTitle: string
+    tgAuthorUsername: string
+    tgAuthorId: string
     mediaGroupId: string | null
     media: runtime.JsonValue | null
     likeCount: number
     dislikeCount: number
     favoritesCount: number
-    commentsCount: number | null
+    commentsCount: number
     createdAt: Date
   }, ExtArgs["result"]["telegramPost"]>
   composites: {}
@@ -1324,7 +1372,9 @@ export interface TelegramPostFieldRefs {
   readonly textCaption: Prisma.FieldRef<"TelegramPost", 'String'>
   readonly textEntities: Prisma.FieldRef<"TelegramPost", 'Json'>
   readonly cryptoTokens: Prisma.FieldRef<"TelegramPost", 'String[]'>
-  readonly tgAuthorId: Prisma.FieldRef<"TelegramPost", 'BigInt'>
+  readonly tgAuthorTitle: Prisma.FieldRef<"TelegramPost", 'String'>
+  readonly tgAuthorUsername: Prisma.FieldRef<"TelegramPost", 'String'>
+  readonly tgAuthorId: Prisma.FieldRef<"TelegramPost", 'String'>
   readonly mediaGroupId: Prisma.FieldRef<"TelegramPost", 'String'>
   readonly media: Prisma.FieldRef<"TelegramPost", 'Json'>
   readonly likeCount: Prisma.FieldRef<"TelegramPost", 'Int'>
@@ -1555,7 +1605,7 @@ export type TelegramPostCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * The data needed to create a TelegramPost.
    */
-  data?: Prisma.XOR<Prisma.TelegramPostCreateInput, Prisma.TelegramPostUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.TelegramPostCreateInput, Prisma.TelegramPostUncheckedCreateInput>
 }
 
 /**

@@ -7,9 +7,7 @@ loki.source.file "backend_logs" {
   targets = [
     {
       __path__ = "/var/log/cryptohub/backend.ndjson",
-      job      = "backend",
       service  = "cryptohub-backend",
-      host     = "local-dev",
     },
   ]
 
@@ -33,22 +31,16 @@ loki.process "backend_logs" {
 
   stage.json {
     expressions = {
-      level    = "level",
-      message  = "msg",
-      request  = "type",
-      method   = "method",
-      path     = "path",
-      status   = "statusCode",
-      duration = "durationMs",
+      method     = "method",
+      status     = "statusCode",
+      request_id = "requestId",
     }
   }
 
   stage.labels {
     values = {
-      level   = "",
-      request = "",
-      method  = "",
-      status  = "",
+      method = "",
+      status = "",
     }
   }
 }

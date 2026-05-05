@@ -1,5 +1,9 @@
 {
+    "scripts": {
+    "claude": "dotenv -e .env -- claude"
+  },
   "dependencies": {
+    "dotenv-cli": "^11.0.0",
     "tsx": "^4.21.0"
   },
   "devDependencies": {

@@ -11,6 +11,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis:
     image: redis:7
@@ -18,6 +24,12 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   prometheus:
     image: prom/prometheus:v3.5.2
@@ -33,6 +45,13 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=7d"
+    healthcheck:
+      test: ["CMD", "promtool", "check", "ready", "--url=http://localhost:9090"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   loki:
     image: grafana/loki:3.7.1
@@ -45,13 +64,26 @@ services:
       - loki_data:/loki
     command:
       - "-config.file=/etc/loki/config.yml"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/bin/loki",
+          "-verify-config=true",
+          "-config.file=/etc/loki/config.yml",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   alloy:
     image: grafana/alloy:v1.15.1
     container_name: crypto_alloy
     restart: always
     depends_on:
-      - loki
+      loki:
+        condition: service_healthy
     volumes:
       - ./infrastructure/alloy/config.alloy:/etc/alloy/config.alloy:ro
       - ./backend/logs:/var/log/cryptohub:ro
@@ -60,14 +92,26 @@ services:
       - "run"
       - "/etc/alloy/config.alloy"
       - "--storage.path=/var/lib/alloy/data"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "bash -ec \"exec 3<>/dev/tcp/127.0.0.1/12345; printf 'GET /-/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; grep -q '200 OK' <&3\"",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   grafana:
     image: grafana/grafana:13.0.1
     container_name: crypto_grafana
     restart: always
     depends_on:
-      - prometheus
-      - loki
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
     ports:
       - "3001:3000"
     environment:
@@ -77,6 +121,17 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infrastructure/grafana/dashboards:/etc/grafana/dashboards:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:3000/api/health | grep -q '\"database\": \"ok\"'",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 volumes:
   postgres_data:

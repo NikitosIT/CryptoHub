@@ -1,0 +1,392 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CryptoHub API",
+    "version": "1.0.0",
+    "description": "OpenAPI documentation generated from Zod schemas."
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "Application API root"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "TelegramPost": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          },
+          "textCaption": {
+            "type": "string",
+            "nullable": true
+          },
+          "textEntities": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "length": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "exclusiveMinimum": true
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "offset",
+                "length",
+                "type"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "cryptoTokens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tgAuthorId": {
+            "type": "string"
+          },
+          "mediaGroupId": {
+            "type": "string",
+            "nullable": true
+          },
+          "media": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "fileId": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "exclusiveMinimum": true
+                },
+                "height": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "exclusiveMinimum": true
+                }
+              },
+              "required": [
+                "fileId",
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "likeCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "dislikeCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "favoritesCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "commentsCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "textCaption",
+          "textEntities",
+          "cryptoTokens",
+          "tgAuthorId",
+          "mediaGroupId",
+          "media",
+          "likeCount",
+          "dislikeCount",
+          "favoritesCount",
+          "commentsCount",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "TelegramPostsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "exclusiveMinimum": true
+                },
+                "textCaption": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "textEntities": {
+                  "type": "array",
+                  "nullable": true,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "offset": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "length": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "offset",
+                      "length",
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "cryptoTokens": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "tgAuthorId": {
+                  "type": "string"
+                },
+                "mediaGroupId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "media": {
+                  "type": "array",
+                  "nullable": true,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "fileId": {
+                        "type": "string"
+                      },
+                      "width": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                      },
+                      "height": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                      }
+                    },
+                    "required": [
+                      "fileId",
+                      "width",
+                      "height"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "likeCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "dislikeCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "favoritesCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "commentsCount": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "textCaption",
+                "textEntities",
+                "cryptoTokens",
+                "tgAuthorId",
+                "mediaGroupId",
+                "media",
+                "likeCount",
+                "dislikeCount",
+                "favoritesCount",
+                "commentsCount",
+                "createdAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "nextCursor": {
+            "type": "integer",
+            "nullable": true,
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ],
+        "additionalProperties": false
+      },
+      "TelegramPostsQuery": {
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "integer",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransferRequest": {
+        "type": "object",
+        "properties": {
+          "senderCardId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "senderCardPin": {
+            "type": "string",
+            "pattern": "^\\d{4}$"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          },
+          "receiverCardId": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "senderCardId",
+          "senderCardPin",
+          "amount",
+          "receiverCardId"
+        ],
+        "additionalProperties": false
+      },
+      "TransferSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": [
+              "Transfer successful"
+            ]
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/telegram-posts": {
+      "get": {
+        "tags": [
+          "Telegram Posts"
+        ],
+        "summary": "List telegram posts",
+        "description": "Returns telegram posts ordered by newest first.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMinimum": true
+            },
+            "required": false,
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of telegram posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramPostsListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transfer/send": {
+      "post": {
+        "tags": [
+          "Transfer"
+        ],
+        "summary": "Transfer funds between cards",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer was completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferSuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

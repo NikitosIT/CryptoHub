@@ -16,4 +16,10 @@ export const transferBodySchema = z
     },
   );
 
+export const transferSuccessResponseSchema = z
+  .object({
+    message: z.literal("Transfer successful"),
+  })
+  .strict();
+
 export type TransferInput = z.infer<typeof transferBodySchema>;

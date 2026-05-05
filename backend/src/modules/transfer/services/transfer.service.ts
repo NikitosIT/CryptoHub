@@ -37,17 +37,21 @@ const transferFunds = async ({
 
     await resetPinAttempts(senderCardId);
 
-    const senderDebited = await cardsService.debitIfEnough(
+    const senderDebited = await cardsService.debitIfEnough({
       tx,
-      senderCardId,
+      cardId: senderCardId,
       amount,
-    );
+    });
 
     if (!senderDebited) {
       throw new AppError("Insufficient funds", 400);
     }
 
-    await cardsService.credit(tx, receiverCardId, amount);
+    await cardsService.credit({
+      tx,
+      cardId: receiverCardId,
+      amount,
+    });
   });
 
   await invalidateCardBalanceCache(senderCardId, receiverCardId);

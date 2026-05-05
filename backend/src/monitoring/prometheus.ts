@@ -46,9 +46,8 @@ const getRouteLabel = (req: Request) => {
     return "/metrics";
   }
 
-  const route = req.route as unknown as { path?: unknown };
-
-  const routePath = typeof route.path === "string" ? route.path : undefined;
+  const route = req.route as { path?: unknown } | undefined;
+  const routePath = typeof route?.path === "string" ? route.path : undefined;
 
   if (routePath) {
     return `${req.baseUrl}${routePath}` || "/";
