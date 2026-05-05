@@ -77,32 +77,6 @@ services:
       retries: 5
       start_period: 15s
 
-  alloy:
-    image: grafana/alloy:v1.15.1
-    container_name: crypto_alloy
-    restart: always
-    depends_on:
-      loki:
-        condition: service_healthy
-    volumes:
-      - ./infrastructure/alloy/config.alloy:/etc/alloy/config.alloy:ro
-      - ./backend/logs:/var/log/cryptohub:ro
-      - alloy_data:/var/lib/alloy/data
-    command:
-      - "run"
-      - "/etc/alloy/config.alloy"
-      - "--storage.path=/var/lib/alloy/data"
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "bash -ec \"exec 3<>/dev/tcp/127.0.0.1/12345; printf 'GET /-/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; grep -q '200 OK' <&3\"",
-        ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
-
   grafana:
     image: grafana/grafana:13.0.1
     container_name: crypto_grafana
@@ -137,5 +111,4 @@ volumes:
   postgres_data:
   prometheus_data:
   loki_data:
-  alloy_data:
   grafana_data:

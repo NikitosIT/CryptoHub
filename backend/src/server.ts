@@ -1,7 +1,6 @@
 import "dotenv/config";
 
 import app from "./app.js";
-import { registerHealthChecks } from "./health/health.js";
 import { connectDB } from "./libs/db.js";
 import { logger } from "./libs/logger.js";
 import { connectRedis } from "./libs/redis.js";
@@ -13,10 +12,9 @@ const startServer = async () => {
     await connectDB();
     await connectRedis();
 
-    const server = app.listen(PORT, () => {
+    app.listen(PORT, () => {
       logger.info({ port: PORT }, `Server running on http://localhost:${PORT}`);
     });
-    registerHealthChecks(server);
   } catch (error) {
     logger.error({ err: error }, "Failed to start server");
     process.exit(1);

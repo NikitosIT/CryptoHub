@@ -1,34 +1,31 @@
-import fs from "node:fs";
-import path from "node:path";
-
+import type { TransportTargetOptions } from "pino";
 import pino from "pino";
 
 const level = process.env.LOG_LEVEL || "info";
-const logDir = path.resolve(process.cwd(), process.env.LOG_DIR || "logs");
-const logFilePath = path.join(logDir, process.env.LOG_FILE || "backend.ndjson");
+const lokiHost = process.env.LOKI_URL || "http://localhost:3100";
 
-fs.mkdirSync(logDir, { recursive: true });
+const targets: TransportTargetOptions[] = [
+  {
+    target: "pino-pretty",
+    level,
+    options: {
+      colorize: true,
+      translateTime: "SYS:standard",
+    },
+  },
+  {
+    target: "pino-loki",
+    level,
+    options: {
+      host: lokiHost,
+      batching: true,
+      interval: 5,
+      labels: { app: "cryptohub", env: process.env.NODE_ENV || "local" },
+    },
+  },
+];
 
-const transport = pino.transport({
-  targets: [
-    {
-      target: "pino-pretty",
-      level,
-      options: {
-        colorize: true,
-        translateTime: "SYS:standard",
-      },
-    },
-    {
-      target: "pino/file",
-      level,
-      options: {
-        destination: logFilePath,
-        mkdir: true,
-      },
-    },
-  ],
-});
+const transport = pino.transport({ targets });
 
 export const logger = pino(
   {
