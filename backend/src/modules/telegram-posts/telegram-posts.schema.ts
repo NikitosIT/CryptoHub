@@ -43,7 +43,6 @@ export const telegramPostSchema = z
 export const telegramPostsListResponseSchema =
   createPaginatedResponseSchema(telegramPostSchema);
 
-export type TelegramPost = z.infer<typeof telegramPostSchema>;
 export type TelegramPostsQuery = z.infer<typeof telegramPostsQuerySchema>;
 export type TelegramPostsListResponse = z.infer<
   typeof telegramPostsListResponseSchema

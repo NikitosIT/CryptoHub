@@ -1,25 +1,34 @@
 import cors from "cors";
 
-export const getAllowedOrigin = () => {
-  const envRaw = process.env.ALLOWED_ORIGINS;
+const defaultOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
-  if (!envRaw || envRaw === "*") return "*";
-  const env = envRaw.split(",").map((o) => o.trim());
+export const getConfiguredOrigins = () => {
+  const raw = process.env.ALLOWED_ORIGINS?.trim();
 
-  return env;
+  if (!raw) {
+    return defaultOrigins;
+  }
+
+  return [
+    ...new Set(
+      raw
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    ),
+  ];
 };
+
+const allowedOrigins = new Set(getConfiguredOrigins());
 
 export const corsMiddleware = cors({
   origin: (origin, callback) => {
-    const allowed = getAllowedOrigin();
-
     if (!origin) return callback(null, true);
 
-    if (allowed === "*") return callback(null, true);
-
-    if (Array.isArray(allowed) && allowed.includes(origin)) {
+    if (allowedOrigins.has(origin)) {
       return callback(null, true);
     }
+
     return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,

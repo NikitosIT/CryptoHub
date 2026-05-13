@@ -369,7 +369,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "{service=\"cryptohub-backend\", level=\"50\"}",
+          "expr": "{service=\"cryptohub-backend\", level=\"error\"}",
           "queryType": "range",
           "refId": "A"
         }

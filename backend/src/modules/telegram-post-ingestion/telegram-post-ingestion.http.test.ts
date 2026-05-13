@@ -3,7 +3,7 @@ import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { errorHandler } from "../../middleware/errorHandler.js";
-import telegramPostIngestionRouter from "./telegramPostIngestion.route.js";
+import telegramPostIngestionRouter from "./telegram-post-ingestion.route.js";
 
 const { processUpdateMock } = vi.hoisted(() => ({
   processUpdateMock: vi.fn(),

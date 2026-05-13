@@ -33,6 +33,7 @@
     "@tanstack/react-query-persist-client": "^5.90.13",
     "@tanstack/react-router": "^1.132.47",
     "@telegraf/entity": "^0.7.0",
+    "better-auth": "^1.6.10",
     "dayjs": "^1.11.18",
     "dompurify": "^3.2.7",
     "framer-motion": "^12.34.3",

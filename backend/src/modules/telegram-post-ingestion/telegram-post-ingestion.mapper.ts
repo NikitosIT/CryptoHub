@@ -2,7 +2,7 @@ import {
   type TelegramPostIngestionInput,
   telegramPostIngestionInputSchema,
   telegramPostIngestionUpdateSchema,
-} from "./telegramPostIngestion.schema.js";
+} from "./telegram-post-ingestion.schema.js";
 
 export const parseTelegramPostIngestion = (
   input: unknown,

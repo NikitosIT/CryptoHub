@@ -31,10 +31,11 @@ describe("paginate", () => {
 
     const result = await paginate({
       model: { findMany: findManyMock },
-      getArgs: (paginationArgs) => ({
-        ...paginationArgs,
-        orderBy: { id: "desc" },
-      }),
+      getArgs: (paginationArgs) =>
+        ({
+          ...paginationArgs,
+          orderBy: { id: "desc" },
+        }) satisfies FindManyArgs,
       limit: 2,
     });
 
@@ -55,10 +56,11 @@ describe("paginate", () => {
 
     const result = await paginate({
       model: { findMany: findManyMock },
-      getArgs: (paginationArgs) => ({
-        ...paginationArgs,
-        orderBy: { id: "desc" },
-      }),
+      getArgs: (paginationArgs) =>
+        ({
+          ...paginationArgs,
+          orderBy: { id: "desc" },
+        }) satisfies FindManyArgs,
       cursor: 2,
       limit: 2,
     });
@@ -80,10 +82,11 @@ describe("paginate", () => {
 
     const result = await paginate({
       model: { findMany: findManyMock },
-      getArgs: (paginationArgs) => ({
-        ...paginationArgs,
-        orderBy: { id: "desc" },
-      }),
+      getArgs: (paginationArgs) =>
+        ({
+          ...paginationArgs,
+          orderBy: { id: "desc" },
+        }) satisfies FindManyArgs,
     });
 
     expect(findManyMock).toHaveBeenCalledWith({

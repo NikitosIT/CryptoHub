@@ -18,9 +18,15 @@ const targets: TransportTargetOptions[] = [
     level,
     options: {
       host: lokiHost,
-      batching: true,
-      interval: 5,
-      labels: { app: "cryptohub", env: process.env.NODE_ENV || "local" },
+      batching: {
+        interval: 5,
+        maxBufferSize: 10_000,
+      },
+      labels: {
+        app: "cryptohub",
+        env: process.env.NODE_ENV || "local",
+        service: "cryptohub-backend",
+      },
     },
   },
 ];
@@ -31,7 +37,7 @@ export const logger = pino(
   {
     level,
     base: undefined,
-    timestamp: pino.stdTimeFunctions.isoTime,
+    timestamp: pino.stdTimeFunctions.epochTime,
   },
   transport,
 );

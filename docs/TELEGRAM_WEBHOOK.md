@@ -29,6 +29,8 @@ Set the webhook (run once, or when you change the URL):
 curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://figtowlbngryusuutsfo.supabase.co/functions/v1/telegram-bot"
 ```
 
+
+
 Check that it’s set:
 
 ```bash

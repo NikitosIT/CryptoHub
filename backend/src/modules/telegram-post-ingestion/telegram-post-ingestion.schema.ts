@@ -120,3 +120,6 @@ export type TelegramPostIngestionMediaItem = z.infer<
 export type TelegramPostIngestionInput = z.infer<
   typeof telegramPostIngestionInputSchema
 >;
+export type TelegramPostIngestionSuccessResponse = z.infer<
+  typeof telegramPostIngestionSuccessResponseSchema
+>;

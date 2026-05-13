@@ -2,8 +2,8 @@ import { Prisma } from "prisma/generated/prisma/client.js";
 
 import { prisma } from "@/libs/db.js";
 
-import type { TelegramPostIngestionInput } from "../telegramPostIngestion.schema.js";
-import { telegramBotService } from "./telegramBot.service.js";
+import type { TelegramPostIngestionInput } from "../telegram-post-ingestion.schema.js";
+import { telegramBotService } from "./telegram-bot.service.js";
 
 const TELEGRAM_POST_INGESTION_SUCCESS_MESSAGE = "Post Saved✅";
 

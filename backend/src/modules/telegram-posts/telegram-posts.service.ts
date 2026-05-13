@@ -4,8 +4,8 @@ import type {
   Prisma,
   TelegramPost,
 } from "../../../prisma/generated/prisma/client.js";
-import type { PaginatedResult } from "../paginate/paginate.service.js";
 import { paginate } from "../paginate/paginate.service.js";
+import type { PaginatedResult } from "../paginate/paginate.types.js";
 import type { TelegramPostsQuery } from "./telegram-posts.schema.js";
 
 export const telegramPostsService = {

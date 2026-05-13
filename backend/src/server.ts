@@ -1,9 +1,12 @@
 import "dotenv/config";
 
+import { createServer } from "node:http";
+
 import app from "./app.js";
 import { connectDB } from "./libs/db.js";
 import { logger } from "./libs/logger.js";
 import { connectRedis } from "./libs/redis.js";
+import { setupTerminus } from "./terminus.js";
 
 const PORT = Number(process.env.PORT) || 3000;
 
@@ -12,7 +15,11 @@ const startServer = async () => {
     await connectDB();
     await connectRedis();
 
-    app.listen(PORT, () => {
+    const server = createServer(app);
+
+    setupTerminus(server);
+
+    server.listen(PORT, () => {
       logger.info({ port: PORT }, `Server running on http://localhost:${PORT}`);
     });
   } catch (error) {

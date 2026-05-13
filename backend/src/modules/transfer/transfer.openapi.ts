@@ -1,4 +1,4 @@
-import { openApiRegistry } from "@/openapi/registry.js";
+import { openApiRegistry } from "../../openapi/registry.js";
 
 import {
   transferBodySchema,

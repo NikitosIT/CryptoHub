@@ -581,10 +581,6 @@ export type TelegramPostCreatecryptoTokensInput = {
   set: string[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type TelegramPostUpdatecryptoTokensInput = {
   set?: string[]
   push?: string | string[]
@@ -596,10 +592,6 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
 }
 
 export type TelegramPostCreateNestedOneWithoutFavoritesInput = {

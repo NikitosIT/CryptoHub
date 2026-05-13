@@ -28,8 +28,8 @@ vi.mock("./telegramBot.service.js", () => ({
   },
 }));
 
-import type { TelegramPostIngestionInput } from "../telegramPostIngestion.schema.js";
-import { telegramPostIngestionService } from "./telegramPostIngestion.service.js";
+import type { TelegramPostIngestionInput } from "../telegram-post-ingestion.schema.js";
+import { telegramPostIngestionService } from "./telegram-post-ingestion.service.js";
 
 const input: TelegramPostIngestionInput = {
   caption: "Post caption",
