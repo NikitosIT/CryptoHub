@@ -1,7 +1,5 @@
-import { toNodeHandler } from "better-auth/node";
 import express from "express";
 
-import { auth } from "@/libs/auth.js";
 import { errorHandler } from "@/middleware/errorHandler.js";
 
 import { corsMiddleware } from "./middleware/corsMiddleware.js";
@@ -24,7 +22,6 @@ app.use(requestLogger);
 
 app.get("/metrics", metricsHandler);
 app.use("/health", healthRouter);
-app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
 
