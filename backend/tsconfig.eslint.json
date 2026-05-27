@@ -4,7 +4,8 @@
     "src/**/*.ts",
     "prisma/**/*.ts",
     "prisma.config.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "library/**/*.ts"
   ],
   "exclude": ["coverage", "dist", "node_modules", "prisma/generated"]
 }

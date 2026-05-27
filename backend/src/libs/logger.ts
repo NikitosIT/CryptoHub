@@ -1,8 +1,10 @@
 import type { TransportTargetOptions } from "pino";
 import pino from "pino";
 
-const level = process.env.LOG_LEVEL || "info";
-const lokiHost = process.env.LOKI_URL || "http://localhost:3100";
+import { env } from "@/config/env.js";
+
+const level = env.LOG_LEVEL;
+const lokiHost = env.LOKI_URL;
 
 const targets: TransportTargetOptions[] = [
   {
@@ -24,7 +26,7 @@ const targets: TransportTargetOptions[] = [
       },
       labels: {
         app: "cryptohub",
-        env: process.env.NODE_ENV || "local",
+        env: env.NODE_ENV,
         service: "cryptohub-backend",
       },
     },

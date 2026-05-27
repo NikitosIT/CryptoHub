@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/db.js";
-import { redis } from "@/libs/redis.js";
+import { appRedis } from "@/redis/redis.js";
 
 import type {
   HealthDependencyStatus,
@@ -17,7 +17,7 @@ const checkDatabase = async (): Promise<HealthDependencyStatus> => {
 
 const checkRedis = async (): Promise<HealthDependencyStatus> => {
   try {
-    await redis.ping();
+    await appRedis.ping();
     return "ok";
   } catch {
     return "error";

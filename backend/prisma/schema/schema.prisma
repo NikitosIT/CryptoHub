@@ -150,18 +150,6 @@ enum ReactionType {
   DISLIKE
 }
 
-model UserCard {
-  id        String   @id @default(ulid())
-  name      String
-  cardName  String   @map("card_name") @db.VarChar(20)
-  pin       String
-  amount    Int
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@unique([id, pin])
-  @@map("user_card")
-}
-
 model TwoFactor {
   id          String   @id
   secret      String
@@ -173,4 +161,36 @@ model TwoFactor {
   @@index([secret])
   @@index([userId])
   @@map("twoFactor")
+}
+
+model CryptotokenSnapshot {
+  id Int @id @default(autoincrement())
+
+  coinGeckoId String @map("coingecko_id")
+  symbol      String
+  name        String
+  image       String
+
+  currentPrice              Decimal  @map("current_price") @db.Decimal(20, 8)
+  marketCap                 BigInt   @map("market_cap")
+  marketCapRank             Int      @map("market_cap_rank")
+  totalVolume               BigInt   @map("total_volume")
+  high24h                   Decimal  @map("high_24h") @db.Decimal(20, 8)
+  low24h                    Decimal  @map("low_24h") @db.Decimal(20, 8)
+  priceChange24h            Decimal  @map("price_change_24h") @db.Decimal(20, 8)
+  priceChangePercentage24h  Decimal  @map("price_change_percentage_24h") @db.Decimal(20, 8)
+  marketCapChange24h        Decimal  @map("market_cap_change_24h") @db.Decimal(20, 8)
+  marketCapChangePercentage Decimal  @map("market_cap_change_percentage_24h") @db.Decimal(20, 8)
+  ath                       Decimal  @db.Decimal(20, 8)
+  athChangePercentage       Decimal  @map("ath_change_percentage") @db.Decimal(20, 8)
+  athDate                   DateTime @map("ath_date")
+  atl                       Decimal  @db.Decimal(20, 8)
+  atlChangePercentage       Decimal  @map("atl_change_percentage") @db.Decimal(20, 8)
+  atlDate                   DateTime @map("atl_date")
+  lastUpdated               DateTime @map("last_updated")
+
+  snapshotAt DateTime @default(now()) @map("snapshot_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("cryptotoken_snapshots")
 }

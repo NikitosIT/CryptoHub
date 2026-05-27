@@ -4,12 +4,14 @@ import { createTerminus } from "@godaddy/terminus";
 
 import { disconnectDB } from "@/libs/db.js";
 import { logger } from "@/libs/logger.js";
-import { disconnectRedis } from "@/libs/redis.js";
+import { disconnectAppRedis } from "@/redis/redis.js";
+
+import { disconnectBullmq } from "./redis/bullmq.js";
 
 const onSignal = async (): Promise<void> => {
   logger.info("Terminus shutdown signal received, closing dependencies");
 
-  await Promise.all([disconnectDB(), disconnectRedis()]);
+  await Promise.all([disconnectDB(), disconnectAppRedis(), disconnectBullmq()]);
 };
 
 const beforeShutdown = async (): Promise<void> => {

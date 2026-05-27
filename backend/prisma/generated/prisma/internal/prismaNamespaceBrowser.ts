@@ -58,7 +58,8 @@ export const ModelName = {
   TelegramPost: 'TelegramPost',
   Favorite: 'Favorite',
   PostReaction: 'PostReaction',
-  UserCard: 'UserCard'
+  TwoFactor: 'TwoFactor',
+  CryptotokenSnapshot: 'CryptotokenSnapshot'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -84,7 +85,8 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  twoFactorEnabled: 'twoFactorEnabled'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -177,16 +179,45 @@ export const PostReactionScalarFieldEnum = {
 export type PostReactionScalarFieldEnum = (typeof PostReactionScalarFieldEnum)[keyof typeof PostReactionScalarFieldEnum]
 
 
-export const UserCardScalarFieldEnum = {
+export const TwoFactorScalarFieldEnum = {
   id: 'id',
+  secret: 'secret',
+  backupCodes: 'backupCodes',
+  userId: 'userId',
+  verified: 'verified'
+} as const
+
+export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
+
+
+export const CryptotokenSnapshotScalarFieldEnum = {
+  id: 'id',
+  coinGeckoId: 'coinGeckoId',
+  symbol: 'symbol',
   name: 'name',
-  cardName: 'cardName',
-  pin: 'pin',
-  amount: 'amount',
+  image: 'image',
+  currentPrice: 'currentPrice',
+  marketCap: 'marketCap',
+  marketCapRank: 'marketCapRank',
+  totalVolume: 'totalVolume',
+  high24h: 'high24h',
+  low24h: 'low24h',
+  priceChange24h: 'priceChange24h',
+  priceChangePercentage24h: 'priceChangePercentage24h',
+  marketCapChange24h: 'marketCapChange24h',
+  marketCapChangePercentage: 'marketCapChangePercentage',
+  ath: 'ath',
+  athChangePercentage: 'athChangePercentage',
+  athDate: 'athDate',
+  atl: 'atl',
+  atlChangePercentage: 'atlChangePercentage',
+  atlDate: 'atlDate',
+  lastUpdated: 'lastUpdated',
+  snapshotAt: 'snapshotAt',
   createdAt: 'createdAt'
 } as const
 
-export type UserCardScalarFieldEnum = (typeof UserCardScalarFieldEnum)[keyof typeof UserCardScalarFieldEnum]
+export type CryptotokenSnapshotScalarFieldEnum = (typeof CryptotokenSnapshotScalarFieldEnum)[keyof typeof CryptotokenSnapshotScalarFieldEnum]
 
 
 export const SortOrder = {

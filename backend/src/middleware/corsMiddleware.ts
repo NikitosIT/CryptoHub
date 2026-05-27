@@ -1,9 +1,11 @@
 import cors from "cors";
 
+import { env } from "@/config/env.js";
+
 const defaultOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
 export const getConfiguredOrigins = () => {
-  const raw = process.env.ALLOWED_ORIGINS?.trim();
+  const raw = env.ALLOWED_ORIGINS;
 
   if (!raw) {
     return defaultOrigins;

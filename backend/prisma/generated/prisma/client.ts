@@ -77,7 +77,12 @@ export type Favorite = Prisma.FavoriteModel
  */
 export type PostReaction = Prisma.PostReactionModel
 /**
- * Model UserCard
+ * Model TwoFactor
  * 
  */
-export type UserCard = Prisma.UserCardModel
+export type TwoFactor = Prisma.TwoFactorModel
+/**
+ * Model CryptotokenSnapshot
+ * 
+ */
+export type CryptotokenSnapshot = Prisma.CryptotokenSnapshotModel

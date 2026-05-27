@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 
-const resendApiKey = process.env.RESEND_API_KEY;
-const resendFrom = process.env.RESEND_FROM;
+import { env } from "@/config/env.js";
+
+const resendApiKey = env.RESEND_API_KEY;
+const resendFrom = env.RESEND_FROM;
 
 if (!resendApiKey) {
   throw new Error("RESEND_API_KEY is required");

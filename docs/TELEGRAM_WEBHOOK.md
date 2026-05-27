@@ -29,6 +29,7 @@ Set the webhook (run once, or when you change the URL):
 curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://figtowlbngryusuutsfo.supabase.co/functions/v1/telegram-bot"
 ```
 
+<!-- curl "https://api.telegram.org/bot8210803969:AAGP_nVS_lRDc2WpqGNbpYLa0Hzzl7b-N3s/setWebhook?url=https://worshippingly-heartless-mora.ngrok-free.dev/api/telegram-posts/ingestion&secret_token=1d87148977a19a824f2d66a0e2eb28f06967f27fa412319e80210b7a3a5c0809" -->
 
 
 Check that it’s set:

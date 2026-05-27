@@ -391,7 +391,8 @@ export const ModelName = {
   TelegramPost: 'TelegramPost',
   Favorite: 'Favorite',
   PostReaction: 'PostReaction',
-  UserCard: 'UserCard'
+  TwoFactor: 'TwoFactor',
+  CryptotokenSnapshot: 'CryptotokenSnapshot'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "favorite" | "postReaction" | "userCard"
+    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "favorite" | "postReaction" | "twoFactor" | "cryptotokenSnapshot"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -929,77 +930,151 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    UserCard: {
-      payload: Prisma.$UserCardPayload<ExtArgs>
-      fields: Prisma.UserCardFieldRefs
+    TwoFactor: {
+      payload: Prisma.$TwoFactorPayload<ExtArgs>
+      fields: Prisma.TwoFactorFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.UserCardFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload> | null
+          args: Prisma.TwoFactorFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.UserCardFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>
+          args: Prisma.TwoFactorFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>
         }
         findFirst: {
-          args: Prisma.UserCardFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload> | null
+          args: Prisma.TwoFactorFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.UserCardFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>
+          args: Prisma.TwoFactorFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>
         }
         findMany: {
-          args: Prisma.UserCardFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>[]
+          args: Prisma.TwoFactorFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>[]
         }
         create: {
-          args: Prisma.UserCardCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>
+          args: Prisma.TwoFactorCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>
         }
         createMany: {
-          args: Prisma.UserCardCreateManyArgs<ExtArgs>
+          args: Prisma.TwoFactorCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.UserCardCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>[]
+          args: Prisma.TwoFactorCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>[]
         }
         delete: {
-          args: Prisma.UserCardDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>
+          args: Prisma.TwoFactorDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>
         }
         update: {
-          args: Prisma.UserCardUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>
+          args: Prisma.TwoFactorUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>
         }
         deleteMany: {
-          args: Prisma.UserCardDeleteManyArgs<ExtArgs>
+          args: Prisma.TwoFactorDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.UserCardUpdateManyArgs<ExtArgs>
+          args: Prisma.TwoFactorUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.UserCardUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>[]
+          args: Prisma.TwoFactorUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>[]
         }
         upsert: {
-          args: Prisma.UserCardUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCardPayload>
+          args: Prisma.TwoFactorUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorPayload>
         }
         aggregate: {
-          args: Prisma.UserCardAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUserCard>
+          args: Prisma.TwoFactorAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTwoFactor>
         }
         groupBy: {
-          args: Prisma.UserCardGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserCardGroupByOutputType>[]
+          args: Prisma.TwoFactorGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorGroupByOutputType>[]
         }
         count: {
-          args: Prisma.UserCardCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserCardCountAggregateOutputType> | number
+          args: Prisma.TwoFactorCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorCountAggregateOutputType> | number
+        }
+      }
+    }
+    CryptotokenSnapshot: {
+      payload: Prisma.$CryptotokenSnapshotPayload<ExtArgs>
+      fields: Prisma.CryptotokenSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CryptotokenSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CryptotokenSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.CryptotokenSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CryptotokenSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.CryptotokenSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.CryptotokenSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.CryptotokenSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CryptotokenSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.CryptotokenSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>
+        }
+        update: {
+          args: Prisma.CryptotokenSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.CryptotokenSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CryptotokenSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CryptotokenSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.CryptotokenSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptotokenSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.CryptotokenSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCryptotokenSnapshot>
+        }
+        groupBy: {
+          args: Prisma.CryptotokenSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CryptotokenSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CryptotokenSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CryptotokenSnapshotCountAggregateOutputType> | number
         }
       }
     }
@@ -1049,7 +1124,8 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  twoFactorEnabled: 'twoFactorEnabled'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1142,16 +1218,45 @@ export const PostReactionScalarFieldEnum = {
 export type PostReactionScalarFieldEnum = (typeof PostReactionScalarFieldEnum)[keyof typeof PostReactionScalarFieldEnum]
 
 
-export const UserCardScalarFieldEnum = {
+export const TwoFactorScalarFieldEnum = {
   id: 'id',
+  secret: 'secret',
+  backupCodes: 'backupCodes',
+  userId: 'userId',
+  verified: 'verified'
+} as const
+
+export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
+
+
+export const CryptotokenSnapshotScalarFieldEnum = {
+  id: 'id',
+  coinGeckoId: 'coinGeckoId',
+  symbol: 'symbol',
   name: 'name',
-  cardName: 'cardName',
-  pin: 'pin',
-  amount: 'amount',
+  image: 'image',
+  currentPrice: 'currentPrice',
+  marketCap: 'marketCap',
+  marketCapRank: 'marketCapRank',
+  totalVolume: 'totalVolume',
+  high24h: 'high24h',
+  low24h: 'low24h',
+  priceChange24h: 'priceChange24h',
+  priceChangePercentage24h: 'priceChangePercentage24h',
+  marketCapChange24h: 'marketCapChange24h',
+  marketCapChangePercentage: 'marketCapChangePercentage',
+  ath: 'ath',
+  athChangePercentage: 'athChangePercentage',
+  athDate: 'athDate',
+  atl: 'atl',
+  atlChangePercentage: 'atlChangePercentage',
+  atlDate: 'atlDate',
+  lastUpdated: 'lastUpdated',
+  snapshotAt: 'snapshotAt',
   createdAt: 'createdAt'
 } as const
 
-export type UserCardScalarFieldEnum = (typeof UserCardScalarFieldEnum)[keyof typeof UserCardScalarFieldEnum]
+export type CryptotokenSnapshotScalarFieldEnum = (typeof CryptotokenSnapshotScalarFieldEnum)[keyof typeof CryptotokenSnapshotScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1279,6 +1384,34 @@ export type ListEnumReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1393,7 +1526,8 @@ export type GlobalOmitConfig = {
   telegramPost?: Prisma.TelegramPostOmit
   favorite?: Prisma.FavoriteOmit
   postReaction?: Prisma.PostReactionOmit
-  userCard?: Prisma.UserCardOmit
+  twoFactor?: Prisma.TwoFactorOmit
+  cryptotokenSnapshot?: Prisma.CryptotokenSnapshotOmit
 }
 
 /* Types for Logging */

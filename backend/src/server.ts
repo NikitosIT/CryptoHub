@@ -3,24 +3,26 @@ import "dotenv/config";
 import { createServer } from "node:http";
 
 import app from "./app.js";
+import { env } from "./config/env.js";
 import { connectDB } from "./libs/db.js";
 import { logger } from "./libs/logger.js";
-import { connectRedis } from "./libs/redis.js";
+import { connectAppRedis } from "./redis/redis.js";
 import { setupTerminus } from "./terminus.js";
-
-const PORT = Number(process.env.PORT) || 3000;
 
 const startServer = async () => {
   try {
     await connectDB();
-    await connectRedis();
+    await connectAppRedis();
 
     const server = createServer(app);
 
     setupTerminus(server);
 
-    server.listen(PORT, () => {
-      logger.info({ port: PORT }, `Server running on http://localhost:${PORT}`);
+    server.listen(env.PORT, () => {
+      logger.info(
+        { port: env.PORT },
+        `Server running on http://localhost:${env.PORT}`,
+      );
     });
   } catch (error) {
     logger.error({ err: error }, "Failed to start server");

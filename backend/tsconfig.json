@@ -21,6 +21,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "prisma"],
+  "include": ["src", "prisma", "library"],
   "exclude": ["**/*.test.ts", "**/*.spec.ts"]
 }
