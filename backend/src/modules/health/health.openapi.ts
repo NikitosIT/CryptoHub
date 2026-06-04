@@ -1,5 +1,6 @@
-import { openApiRegistry } from "../../openapi/registry.js";
+import { APP_ROUTES } from "@/constants/routes.js";
 
+import { openApiRegistry } from "../../openapi/registry.js";
 import { healthResponseSchema } from "./health.schema.js";
 
 const healthSchema = openApiRegistry.register(
@@ -9,7 +10,7 @@ const healthSchema = openApiRegistry.register(
 
 openApiRegistry.registerPath({
   method: "get",
-  path: "/health",
+  path: APP_ROUTES.health,
   tags: ["Health"],
   summary: "Health check",
   description: "Returns the health status of the service and its dependencies.",

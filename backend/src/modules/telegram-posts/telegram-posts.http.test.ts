@@ -2,6 +2,7 @@ import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { API_ROUTES } from "@/constants/routes.js";
 import { errorHandler } from "../../middleware/errorHandler.js";
 import telegramPostsRouter from "./telegram-posts.route.js";
 
@@ -28,7 +29,7 @@ vi.mock("@/libs/logger.js", () => ({
 const app = express();
 
 app.use(express.json());
-app.use("/api/telegram-posts", telegramPostsRouter);
+app.use(API_ROUTES.telegramPosts, telegramPostsRouter);
 app.use(errorHandler);
 
 describe("GET /api/telegram-posts", () => {
@@ -54,7 +55,7 @@ describe("GET /api/telegram-posts", () => {
 
     findManyMock.mockResolvedValue(data);
 
-    const response = await request(app).get("/api/telegram-posts");
+    const response = await request(app).get(API_ROUTES.telegramPosts);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -87,7 +88,7 @@ describe("GET /api/telegram-posts", () => {
 
     findManyMock.mockResolvedValue(data);
 
-    const response = await request(app).get("/api/telegram-posts?cursor=5");
+    const response = await request(app).get(`${API_ROUTES.telegramPosts}?cursor=5`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -110,7 +111,7 @@ describe("GET /api/telegram-posts", () => {
     "cursor=1&cursor=2",
     "cursor=1&page=2",
   ])("rejects invalid query: %s", async (query) => {
-    const response = await request(app).get(`/api/telegram-posts?${query}`);
+    const response = await request(app).get(`${API_ROUTES.telegramPosts}?${query}`);
     const body = response.body as {
       issues: unknown[];
       message: string;

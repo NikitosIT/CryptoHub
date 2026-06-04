@@ -3,10 +3,10 @@ import { logger } from "@/libs/logger.js";
 import { cryptotokens } from "@/modules/cryptotokens/cryptotokens.service.js";
 
 import { mapCryptotokenToSnapshotCreateInput } from "./snapshots.mapper.js";
-import type { RefreshCryptotokenSnapshotsResult } from "./snapshots.types.js";
+import type { CreateWeeklyCryptotokenSnapshotResult } from "./snapshots.types.js";
 
-const refreshWeeklySnapshot =
-  async (): Promise<RefreshCryptotokenSnapshotsResult> => {
+const createWeeklySnapshot =
+  async (): Promise<CreateWeeklyCryptotokenSnapshotResult> => {
     const snapshotAt = new Date();
     const tokens = await cryptotokens.list();
 
@@ -33,5 +33,5 @@ const refreshWeeklySnapshot =
   };
 
 export const snapshotsService = {
-  refreshWeeklySnapshot,
+  createWeeklySnapshot,
 } as const;

@@ -1,14 +1,14 @@
 import "dotenv/config";
 
+import { connectBullmq, disconnectBullmq } from "@/libs/bullmq.js";
 import { logger } from "@/libs/logger.js";
-import { connectBullmq, disconnectBullmq } from "@/redis/bullmq.js";
 
-import { removeRefreshCryptotokenSnapshotsScheduler } from "../snapshots.producer.js";
+import { removeWeeklyCryptotokenSnapshotScheduler } from "../snapshots.enqueue.js";
 
 const main = async () => {
   await connectBullmq();
 
-  const removed = await removeRefreshCryptotokenSnapshotsScheduler();
+  const removed = await removeWeeklyCryptotokenSnapshotScheduler();
 
   logger.info(
     {

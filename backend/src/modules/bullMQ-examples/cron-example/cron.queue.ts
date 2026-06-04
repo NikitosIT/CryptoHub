@@ -1,14 +1,12 @@
 import { Queue } from "bullmq";
 
-import { bullmqConnection } from "@/redis/bullmq.js";
+import { BULLMQ } from "@/constants/bullmq.js";
+import { bullmqConnection } from "@/libs/bullmq.js";
 
-import {
-  CRON_EXAMPLE_QUEUE_NAME,
-  type CronExampleMessageData,
-} from "./cron.types.js";
+import type { CronExampleMessageData } from "./cron.types.js";
 
 export const cronExampleQueue = new Queue<CronExampleMessageData>(
-  CRON_EXAMPLE_QUEUE_NAME,
+  BULLMQ.cronExample.queueName,
   {
     connection: bullmqConnection,
     defaultJobOptions: {

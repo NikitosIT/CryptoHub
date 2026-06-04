@@ -2,6 +2,8 @@ import express, { Router } from "express";
 import request from "supertest";
 import { describe, expect, it, vi } from "vitest";
 
+import { API_ROUTES, APP_ROUTES, ROUTE_SEGMENTS } from "@/constants/routes.js";
+
 vi.mock("better-auth/node", () => ({
   toNodeHandler: vi.fn(
     () => (_req: unknown, res: { sendStatus: (code: number) => void }) => {
@@ -26,7 +28,7 @@ vi.mock("@/modules/telegram-posts/ingestion/ingestion.route.js", () => {
 
 vi.mock("@/modules/cryptotokens/cryptotokens.route.js", () => {
   const router = Router();
-  router.get("/", (_req, res) => {
+  router.get(ROUTE_SEGMENTS.root, (_req, res) => {
     res.status(200).json({ ok: true });
   });
   return { default: router };
@@ -37,9 +39,9 @@ describe("index router", () => {
     const { default: apiRouter } = await import("./index.route.js");
 
     const app = express();
-    app.use("/api", apiRouter);
+    app.use(APP_ROUTES.api, apiRouter);
 
-    const response = await request(app).get("/api/cryptotokens");
+    const response = await request(app).get(API_ROUTES.cryptotokens);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ ok: true });

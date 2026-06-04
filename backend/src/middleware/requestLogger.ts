@@ -1,11 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
 
+import { APP_ROUTES } from "@/constants/routes.js";
+
 export const requestLogger = (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.path === "/metrics") {
+  if (req.path === APP_ROUTES.metrics) {
     return next();
   }
 

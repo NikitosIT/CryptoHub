@@ -1,5 +1,5 @@
 import { externalApi } from "@/config/external-api.js";
-import { redisKeys, TTL } from "@/redis/redis-keys.js";
+import { redisKeys, TTL } from "@/constants/redis-keys.js";
 import { AppError } from "@/utils/AppError.js";
 
 import { cache } from "../../services/cache/cache.service.js";

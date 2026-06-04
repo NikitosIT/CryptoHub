@@ -2,6 +2,7 @@ import express from "express";
 import request from "supertest";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { API_ROUTES } from "@/constants/routes.js";
 import { errorHandler } from "../../middleware/errorHandler.js";
 import cryptotokensRouter from "./cryptotokens.route.js";
 
@@ -28,7 +29,7 @@ vi.mock("@/libs/redis.js", () => ({
 const app = express();
 
 app.use(express.json());
-app.use("/api/cryptotokens", cryptotokensRouter);
+app.use(API_ROUTES.cryptotokens, cryptotokensRouter);
 app.use(errorHandler);
 
 describe("GET /api/cryptotokens", () => {
@@ -50,7 +51,7 @@ describe("GET /api/cryptotokens", () => {
 
     const fetchSpy = vi.spyOn(global, "fetch");
 
-    const response = await request(app).get("/api/cryptotokens");
+    const response = await request(app).get(API_ROUTES.cryptotokens);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(payload);
@@ -73,7 +74,7 @@ describe("GET /api/cryptotokens", () => {
       json: vi.fn().mockResolvedValue(payload),
     } as unknown as Response);
 
-    const response = await request(app).get("/api/cryptotokens");
+    const response = await request(app).get(API_ROUTES.cryptotokens);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(payload);
@@ -96,7 +97,7 @@ describe("GET /api/cryptotokens", () => {
       json: vi.fn(),
     } as unknown as Response);
 
-    const response = await request(app).get("/api/cryptotokens");
+    const response = await request(app).get(API_ROUTES.cryptotokens);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({

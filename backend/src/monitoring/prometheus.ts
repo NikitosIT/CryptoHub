@@ -7,6 +7,8 @@ import {
   Registry,
 } from "prom-client";
 
+import { APP_ROUTES } from "@/constants/routes.js";
+
 const register = new Registry();
 
 register.setDefaultLabels({
@@ -42,8 +44,8 @@ const httpRequestsInFlight = new Gauge({
 });
 
 const getRouteLabel = (req: Request) => {
-  if (req.path === "/metrics") {
-    return "/metrics";
+  if (req.path === APP_ROUTES.metrics) {
+    return APP_ROUTES.metrics;
   }
 
   const route = req.route as { path?: unknown } | undefined;
@@ -61,7 +63,7 @@ export const prometheusMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.path === "/metrics") {
+  if (req.path === APP_ROUTES.metrics) {
     return next();
   }
 

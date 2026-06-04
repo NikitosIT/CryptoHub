@@ -1,3 +1,4 @@
+import { API_ROUTE_SEGMENTS } from "@/constants/routes.js";
 import { openApiRegistry } from "../../../openapi/registry.js";
 import {
   sendEmailOtpBodySchema,
@@ -28,7 +29,7 @@ const signInWithEmailOtpResultSchema = openApiRegistry.register(
 
 openApiRegistry.registerPath({
   method: "post",
-  path: "/auth/email-otp/send-verification-otp",
+  path: `${API_ROUTE_SEGMENTS.auth}/email-otp/send-verification-otp`,
   tags: ["Auth"],
   summary: "Send sign-in OTP to email",
   description:
@@ -57,7 +58,7 @@ openApiRegistry.registerPath({
 
 openApiRegistry.registerPath({
   method: "post",
-  path: "/auth/sign-in/email-otp",
+  path: `${API_ROUTE_SEGMENTS.auth}/sign-in/email-otp`,
   tags: ["Auth"],
   summary: "Confirm OTP and sign in",
   description:

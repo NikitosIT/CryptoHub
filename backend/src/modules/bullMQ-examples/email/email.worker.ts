@@ -1,11 +1,10 @@
 import { Worker } from "bullmq";
 
+import { BULLMQ } from "@/constants/bullmq.js";
+import { bullmqConnection } from "@/libs/bullmq.js";
 import { logger } from "@/libs/logger.js";
-import { bullmqConnection } from "@/redis/bullmq.js";
 
 import { processWelcomeEmailJob } from "./email.processor.js";
-import { EMAIL_JOB_NAMES } from "./email.producer.js";
-import { EMAIL_QUEUE_NAME } from "./email.queue.js";
 import type { SendWelcomeEmailData } from "./email.types.js";
 
 // type EmailJobHandler = (job: Job<SendWelcomeEmailName>) => Promise<void>;
@@ -16,10 +15,10 @@ import type { SendWelcomeEmailData } from "./email.types.js";
 
 export function createEmailWorker() {
   const worker = new Worker<SendWelcomeEmailData>(
-    EMAIL_QUEUE_NAME,
+    BULLMQ.email.queueName,
     async (job) => {
       switch (job.name) {
-        case EMAIL_JOB_NAMES.SEND_WELCOME_EMAIL:
+        case BULLMQ.email.jobs.sendWelcomeEmail:
           return processWelcomeEmailJob(job);
 
         default:
@@ -39,7 +38,10 @@ export function createEmailWorker() {
   );
 
   worker.on("completed", (job) => {
-    logger.info({ jobId: job.id }, "Job completed");
+    logger.info(
+      { jobId: job.id, queue: BULLMQ.email.queueName, jobName: job.name },
+      "Job completed",
+    );
   });
 
   worker.on("failed", (job, error) => {

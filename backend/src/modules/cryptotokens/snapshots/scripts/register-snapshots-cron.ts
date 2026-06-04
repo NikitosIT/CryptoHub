@@ -1,15 +1,15 @@
 import "dotenv/config";
 
+import { connectBullmq, disconnectBullmq } from "@/libs/bullmq.js";
 import { logger } from "@/libs/logger.js";
-import { connectBullmq, disconnectBullmq } from "@/redis/bullmq.js";
 
-import { upsertRefreshCryptotokenSnapshotsScheduler } from "../snapshots.producer.js";
+import { upsertCreateWeeklyCryptotokenSnapshotScheduler } from "../snapshots.enqueue.js";
 
 const main = async () => {
   await connectBullmq();
 
-  const job = await upsertRefreshCryptotokenSnapshotsScheduler({
-    every: 60_000,
+  const job = await upsertCreateWeeklyCryptotokenSnapshotScheduler({
+    pattern: "0 0 * * 1",
   });
 
   logger.info(

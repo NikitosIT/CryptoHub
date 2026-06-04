@@ -1,6 +1,7 @@
 import { toNodeHandler } from "better-auth/node";
 import { Router } from "express";
 
+import { API_ROUTE_SEGMENTS, ROUTE_SEGMENTS } from "@/constants/routes.js";
 import { auth } from "@/libs/auth.js";
 import cryptotokensRoutes from "@/modules/cryptotokens/cryptotokens.route.js";
 import telegramPostIngestionRoutes from "@/modules/telegram-posts/ingestion/ingestion.route.js";
@@ -8,9 +9,12 @@ import telegramPostsRoutes from "@/modules/telegram-posts/telegram-posts.route.j
 
 const router = Router();
 
-router.all("/auth/*splat", toNodeHandler(auth));
-router.use("/telegram-posts", telegramPostsRoutes);
-router.use("/telegram-post-ingestion", telegramPostIngestionRoutes);
-router.use("/cryptotokens", cryptotokensRoutes);
+router.all(ROUTE_SEGMENTS.authWildcard, toNodeHandler(auth));
+router.use(API_ROUTE_SEGMENTS.telegramPosts, telegramPostsRoutes);
+router.use(
+  API_ROUTE_SEGMENTS.telegramPostIngestion,
+  telegramPostIngestionRoutes,
+);
+router.use(API_ROUTE_SEGMENTS.cryptotokens, cryptotokensRoutes);
 
 export default router;

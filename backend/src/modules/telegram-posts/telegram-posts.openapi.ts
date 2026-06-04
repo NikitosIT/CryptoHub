@@ -1,3 +1,4 @@
+import { API_ROUTE_SEGMENTS } from "@/constants/routes.js";
 import { openApiRegistry } from "../../openapi/registry.js";
 import {
   telegramPostSchema,
@@ -19,7 +20,7 @@ openApiRegistry.register("TelegramPostsQuery", telegramPostsQuerySchema);
 
 openApiRegistry.registerPath({
   method: "get",
-  path: "/telegram-posts",
+  path: API_ROUTE_SEGMENTS.telegramPosts,
   tags: ["Telegram Posts"],
   summary: "List telegram posts",
   description: "Returns telegram posts ordered by newest first.",

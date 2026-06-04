@@ -1,21 +1,18 @@
 import { Worker } from "bullmq";
 
+import { BULLMQ } from "@/constants/bullmq.js";
+import { bullmqConnection } from "@/libs/bullmq.js";
 import { logger } from "@/libs/logger.js";
-import { bullmqConnection } from "@/redis/bullmq.js";
 
 import { processPeriodicMessageJob } from "./cron.processor.js";
-import {
-  CRON_EXAMPLE_JOB_NAMES,
-  CRON_EXAMPLE_QUEUE_NAME,
-  type CronExampleMessageData,
-} from "./cron.types.js";
+import type { CronExampleMessageData } from "./cron.types.js";
 
 export const createCronExampleWorker = () => {
   const worker = new Worker<CronExampleMessageData>(
-    CRON_EXAMPLE_QUEUE_NAME,
+    BULLMQ.cronExample.queueName,
     async (job) => {
       switch (job.name) {
-        case CRON_EXAMPLE_JOB_NAMES.SEND_PERIODIC_MESSAGE:
+        case BULLMQ.cronExample.jobs.sendPeriodicMessage:
           return processPeriodicMessageJob(job);
 
         default:
@@ -37,7 +34,7 @@ export const createCronExampleWorker = () => {
       {
         jobId: job.id,
         jobName: job.name,
-        queue: CRON_EXAMPLE_QUEUE_NAME,
+        queue: BULLMQ.cronExample.queueName,
       },
       "Cron example job completed",
     );
@@ -49,7 +46,7 @@ export const createCronExampleWorker = () => {
         jobId: job?.id,
         jobName: job?.name,
         err: error,
-        queue: CRON_EXAMPLE_QUEUE_NAME,
+        queue: BULLMQ.cronExample.queueName,
       },
       "Cron example job failed",
     );

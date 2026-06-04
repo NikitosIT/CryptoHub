@@ -1,8 +1,4 @@
-export type RefreshCryptotokenSnapshotsJobData = {
-  requestedBy: "scheduler";
-};
-
-export type RefreshCryptotokenSnapshotsResult = {
+export type CreateWeeklyCryptotokenSnapshotResult = {
   createdCount: number;
   snapshotAt: Date;
 };

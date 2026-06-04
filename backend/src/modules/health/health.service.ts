@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/db.js";
-import { appRedis } from "@/redis/redis.js";
+import { appRedis } from "@/libs/redis.js";
 
 import type {
   HealthDependencyStatus,

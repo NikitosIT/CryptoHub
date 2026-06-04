@@ -6,7 +6,7 @@ import app from "./app.js";
 import { env } from "./config/env.js";
 import { connectDB } from "./libs/db.js";
 import { logger } from "./libs/logger.js";
-import { connectAppRedis } from "./redis/redis.js";
+import { connectAppRedis } from "./libs/redis.js";
 import { setupTerminus } from "./terminus.js";
 
 const startServer = async () => {

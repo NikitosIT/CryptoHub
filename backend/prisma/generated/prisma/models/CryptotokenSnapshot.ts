@@ -357,19 +357,19 @@ export type CryptotokenSnapshotGroupByOutputType = {
   image: string
   currentPrice: runtime.Decimal
   marketCap: bigint
-  marketCapRank: number
+  marketCapRank: number | null
   totalVolume: bigint
-  high24h: runtime.Decimal
-  low24h: runtime.Decimal
-  priceChange24h: runtime.Decimal
-  priceChangePercentage24h: runtime.Decimal
-  marketCapChange24h: runtime.Decimal
-  marketCapChangePercentage: runtime.Decimal
+  high24h: runtime.Decimal | null
+  low24h: runtime.Decimal | null
+  priceChange24h: runtime.Decimal | null
+  priceChangePercentage24h: runtime.Decimal | null
+  marketCapChange24h: runtime.Decimal | null
+  marketCapChangePercentage: runtime.Decimal | null
   ath: runtime.Decimal
-  athChangePercentage: runtime.Decimal
+  athChangePercentage: runtime.Decimal | null
   athDate: Date
   atl: runtime.Decimal
-  atlChangePercentage: runtime.Decimal
+  atlChangePercentage: runtime.Decimal | null
   atlDate: Date
   lastUpdated: Date
   snapshotAt: Date
@@ -407,19 +407,19 @@ export type CryptotokenSnapshotWhereInput = {
   image?: Prisma.StringFilter<"CryptotokenSnapshot"> | string
   currentPrice?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntFilter<"CryptotokenSnapshot"> | bigint | number
-  marketCapRank?: Prisma.IntFilter<"CryptotokenSnapshot"> | number
+  marketCapRank?: Prisma.IntNullableFilter<"CryptotokenSnapshot"> | number | null
   totalVolume?: Prisma.BigIntFilter<"CryptotokenSnapshot"> | bigint | number
-  high24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
   atl?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
   lastUpdated?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
   snapshotAt?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
@@ -434,19 +434,19 @@ export type CryptotokenSnapshotOrderByWithRelationInput = {
   image?: Prisma.SortOrder
   currentPrice?: Prisma.SortOrder
   marketCap?: Prisma.SortOrder
-  marketCapRank?: Prisma.SortOrder
+  marketCapRank?: Prisma.SortOrderInput | Prisma.SortOrder
   totalVolume?: Prisma.SortOrder
-  high24h?: Prisma.SortOrder
-  low24h?: Prisma.SortOrder
-  priceChange24h?: Prisma.SortOrder
-  priceChangePercentage24h?: Prisma.SortOrder
-  marketCapChange24h?: Prisma.SortOrder
-  marketCapChangePercentage?: Prisma.SortOrder
+  high24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  low24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  priceChange24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  priceChangePercentage24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketCapChange24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketCapChangePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   ath?: Prisma.SortOrder
-  athChangePercentage?: Prisma.SortOrder
+  athChangePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   athDate?: Prisma.SortOrder
   atl?: Prisma.SortOrder
-  atlChangePercentage?: Prisma.SortOrder
+  atlChangePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   atlDate?: Prisma.SortOrder
   lastUpdated?: Prisma.SortOrder
   snapshotAt?: Prisma.SortOrder
@@ -464,19 +464,19 @@ export type CryptotokenSnapshotWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringFilter<"CryptotokenSnapshot"> | string
   currentPrice?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntFilter<"CryptotokenSnapshot"> | bigint | number
-  marketCapRank?: Prisma.IntFilter<"CryptotokenSnapshot"> | number
+  marketCapRank?: Prisma.IntNullableFilter<"CryptotokenSnapshot"> | number | null
   totalVolume?: Prisma.BigIntFilter<"CryptotokenSnapshot"> | bigint | number
-  high24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
   atl?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.DecimalNullableFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
   lastUpdated?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
   snapshotAt?: Prisma.DateTimeFilter<"CryptotokenSnapshot"> | Date | string
@@ -491,19 +491,19 @@ export type CryptotokenSnapshotOrderByWithAggregationInput = {
   image?: Prisma.SortOrder
   currentPrice?: Prisma.SortOrder
   marketCap?: Prisma.SortOrder
-  marketCapRank?: Prisma.SortOrder
+  marketCapRank?: Prisma.SortOrderInput | Prisma.SortOrder
   totalVolume?: Prisma.SortOrder
-  high24h?: Prisma.SortOrder
-  low24h?: Prisma.SortOrder
-  priceChange24h?: Prisma.SortOrder
-  priceChangePercentage24h?: Prisma.SortOrder
-  marketCapChange24h?: Prisma.SortOrder
-  marketCapChangePercentage?: Prisma.SortOrder
+  high24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  low24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  priceChange24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  priceChangePercentage24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketCapChange24h?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketCapChangePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   ath?: Prisma.SortOrder
-  athChangePercentage?: Prisma.SortOrder
+  athChangePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   athDate?: Prisma.SortOrder
   atl?: Prisma.SortOrder
-  atlChangePercentage?: Prisma.SortOrder
+  atlChangePercentage?: Prisma.SortOrderInput | Prisma.SortOrder
   atlDate?: Prisma.SortOrder
   lastUpdated?: Prisma.SortOrder
   snapshotAt?: Prisma.SortOrder
@@ -526,19 +526,19 @@ export type CryptotokenSnapshotScalarWhereWithAggregatesInput = {
   image?: Prisma.StringWithAggregatesFilter<"CryptotokenSnapshot"> | string
   currentPrice?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntWithAggregatesFilter<"CryptotokenSnapshot"> | bigint | number
-  marketCapRank?: Prisma.IntWithAggregatesFilter<"CryptotokenSnapshot"> | number
+  marketCapRank?: Prisma.IntNullableWithAggregatesFilter<"CryptotokenSnapshot"> | number | null
   totalVolume?: Prisma.BigIntWithAggregatesFilter<"CryptotokenSnapshot"> | bigint | number
-  high24h?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeWithAggregatesFilter<"CryptotokenSnapshot"> | Date | string
   atl?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.DecimalNullableWithAggregatesFilter<"CryptotokenSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeWithAggregatesFilter<"CryptotokenSnapshot"> | Date | string
   lastUpdated?: Prisma.DateTimeWithAggregatesFilter<"CryptotokenSnapshot"> | Date | string
   snapshotAt?: Prisma.DateTimeWithAggregatesFilter<"CryptotokenSnapshot"> | Date | string
@@ -552,19 +552,19 @@ export type CryptotokenSnapshotCreateInput = {
   image: string
   currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap: bigint | number
-  marketCapRank: number
+  marketCapRank?: number | null
   totalVolume: bigint | number
-  high24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath: runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate: Date | string
   atl: runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate: Date | string
   lastUpdated: Date | string
   snapshotAt?: Date | string
@@ -579,19 +579,19 @@ export type CryptotokenSnapshotUncheckedCreateInput = {
   image: string
   currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap: bigint | number
-  marketCapRank: number
+  marketCapRank?: number | null
   totalVolume: bigint | number
-  high24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath: runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate: Date | string
   atl: runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate: Date | string
   lastUpdated: Date | string
   snapshotAt?: Date | string
@@ -605,19 +605,19 @@ export type CryptotokenSnapshotUpdateInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  marketCapRank?: Prisma.IntFieldUpdateOperationsInput | number
+  marketCapRank?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalVolume?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  high24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atl?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshotAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -632,19 +632,19 @@ export type CryptotokenSnapshotUncheckedUpdateInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  marketCapRank?: Prisma.IntFieldUpdateOperationsInput | number
+  marketCapRank?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalVolume?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  high24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atl?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshotAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -659,19 +659,19 @@ export type CryptotokenSnapshotCreateManyInput = {
   image: string
   currentPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap: bigint | number
-  marketCapRank: number
+  marketCapRank?: number | null
   totalVolume: bigint | number
-  high24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h: runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath: runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate: Date | string
   atl: runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate: Date | string
   lastUpdated: Date | string
   snapshotAt?: Date | string
@@ -685,19 +685,19 @@ export type CryptotokenSnapshotUpdateManyMutationInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  marketCapRank?: Prisma.IntFieldUpdateOperationsInput | number
+  marketCapRank?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalVolume?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  high24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atl?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshotAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -712,19 +712,19 @@ export type CryptotokenSnapshotUncheckedUpdateManyInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   currentPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCap?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  marketCapRank?: Prisma.IntFieldUpdateOperationsInput | number
+  marketCapRank?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalVolume?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  high24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  low24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  priceChangePercentage24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChange24h?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  marketCapChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  high24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  priceChangePercentage24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChange24h?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  marketCapChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   ath?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  athChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  athChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   athDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atl?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  atlChangePercentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  atlChangePercentage?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   atlDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUpdated?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshotAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -864,6 +864,22 @@ export type BigIntFieldUpdateOperationsInput = {
   divide?: bigint | number
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 
 
 export type CryptotokenSnapshotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -987,19 +1003,19 @@ export type $CryptotokenSnapshotPayload<ExtArgs extends runtime.Types.Extensions
     image: string
     currentPrice: runtime.Decimal
     marketCap: bigint
-    marketCapRank: number
+    marketCapRank: number | null
     totalVolume: bigint
-    high24h: runtime.Decimal
-    low24h: runtime.Decimal
-    priceChange24h: runtime.Decimal
-    priceChangePercentage24h: runtime.Decimal
-    marketCapChange24h: runtime.Decimal
-    marketCapChangePercentage: runtime.Decimal
+    high24h: runtime.Decimal | null
+    low24h: runtime.Decimal | null
+    priceChange24h: runtime.Decimal | null
+    priceChangePercentage24h: runtime.Decimal | null
+    marketCapChange24h: runtime.Decimal | null
+    marketCapChangePercentage: runtime.Decimal | null
     ath: runtime.Decimal
-    athChangePercentage: runtime.Decimal
+    athChangePercentage: runtime.Decimal | null
     athDate: Date
     atl: runtime.Decimal
-    atlChangePercentage: runtime.Decimal
+    atlChangePercentage: runtime.Decimal | null
     atlDate: Date
     lastUpdated: Date
     snapshotAt: Date

@@ -2,6 +2,7 @@ import "./register-modules.js";
 
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 
+import { APP_ROUTES } from "@/constants/routes.js";
 import { openApiRegistry } from "./registry.js";
 
 export function generateOpenApiDocument() {
@@ -16,7 +17,7 @@ export function generateOpenApiDocument() {
     },
     servers: [
       {
-        url: "/api",
+        url: APP_ROUTES.api,
         description: "Application API root",
       },
     ],

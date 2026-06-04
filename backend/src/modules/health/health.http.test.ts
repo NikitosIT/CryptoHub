@@ -2,6 +2,7 @@ import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { APP_ROUTES } from "../../constants/routes.js";
 import { errorHandler } from "../../middleware/errorHandler.js";
 import healthRouter from "./health.route.js";
 
@@ -25,7 +26,7 @@ vi.mock("@/libs/redis.js", () => ({
 const app = express();
 
 app.use(express.json());
-app.use("/health", healthRouter);
+app.use(APP_ROUTES.health, healthRouter);
 app.use(errorHandler);
 
 describe("GET /health", () => {
@@ -37,7 +38,7 @@ describe("GET /health", () => {
     rawQueryMock.mockResolvedValue([{ "1": 1 }]);
     redisPingMock.mockResolvedValue("PONG");
 
-    const response = await request(app).get("/health");
+    const response = await request(app).get(APP_ROUTES.health);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -53,7 +54,7 @@ describe("GET /health", () => {
     rawQueryMock.mockRejectedValue(new Error("Connection refused"));
     redisPingMock.mockResolvedValue("PONG");
 
-    const response = await request(app).get("/health");
+    const response = await request(app).get(APP_ROUTES.health);
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({
@@ -69,7 +70,7 @@ describe("GET /health", () => {
     rawQueryMock.mockResolvedValue([{ "1": 1 }]);
     redisPingMock.mockRejectedValue(new Error("Connection refused"));
 
-    const response = await request(app).get("/health");
+    const response = await request(app).get(APP_ROUTES.health);
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({

@@ -2,6 +2,7 @@ import express from "express";
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { API_ROUTES } from "@/constants/routes.js";
 import { errorHandler } from "../../../middleware/errorHandler.js";
 
 process.env.TELEGRAM_WEBHOOK_SECRET = "test-telegram-secret";
@@ -29,7 +30,7 @@ vi.mock("@/libs/logger.js", () => ({
 const app = express();
 
 app.use(express.json());
-app.use("/api/telegram-post/ingestion", telegramPostIngestionRouter);
+app.use(API_ROUTES.telegramPostIngestion, telegramPostIngestionRouter);
 app.use(errorHandler);
 
 const validPayload = {
@@ -72,7 +73,7 @@ describe("POST /api/telegram-post/ingestion", () => {
 
   it("passes the raw telegram update to the service", async () => {
     const response = await request(app)
-      .post("/api/telegram-post/ingestion")
+      .post(API_ROUTES.telegramPostIngestion)
       .set("x-telegram-bot-api-secret-token", "test-telegram-secret")
       .send(validPayload);
 
@@ -83,7 +84,7 @@ describe("POST /api/telegram-post/ingestion", () => {
 
   it("rejects requests without telegram webhook secret", async () => {
     const response = await request(app)
-      .post("/api/telegram-post/ingestion")
+      .post(API_ROUTES.telegramPostIngestion)
       .send(validPayload);
 
     expect(response.status).toBe(401);

@@ -1,5 +1,5 @@
 import { logger } from "@/libs/logger.js";
-import { appRedis } from "@/redis/redis.js";
+import { appRedis } from "@/libs/redis.js";
 
 export const cache = {
   async get<T>(key: string): Promise<T | null> {

@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { API_ROUTE_SEGMENTS } from "@/constants/routes.js";
 import { openApiRegistry } from "../../../openapi/registry.js";
 
 const telegramWebhookSecretHeaderSchema = z.object({
@@ -83,7 +84,7 @@ const telegramPostIngestionResultSchema = openApiRegistry.register(
 
 openApiRegistry.registerPath({
   method: "post",
-  path: "/telegram-posts/ingestion",
+  path: API_ROUTE_SEGMENTS.telegramPostIngestion,
   tags: ["Telegram Posts"],
   summary: "Ingest forwarded Telegram post",
   description:

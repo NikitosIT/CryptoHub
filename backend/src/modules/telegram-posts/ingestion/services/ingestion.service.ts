@@ -8,7 +8,7 @@ import {
 import { externalApi } from "@/config/external-api.js";
 import { prisma } from "@/libs/db.js";
 import { logger } from "@/libs/logger.js";
-import { appRedis } from "@/redis/redis.js";
+import { appRedis } from "@/libs/redis.js";
 
 import { mapTelegramPostToCreateInput } from "../ingestion.mapper.js";
 
