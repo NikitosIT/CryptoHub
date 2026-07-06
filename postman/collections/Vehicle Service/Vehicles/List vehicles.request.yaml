@@ -1,8 +1,0 @@
-$kind: http-request
-url: "{{baseUrl}}/vehicles"
-method: GET
-queryParams:
-  - key: userId
-    value: "{{userId}}"
-    disabled: true
-order: 1000

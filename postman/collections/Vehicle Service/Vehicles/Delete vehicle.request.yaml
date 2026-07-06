@@ -1,4 +1,0 @@
-$kind: http-request
-url: "{{baseUrl}}/vehicles/{{vehicleId}}"
-method: DELETE
-order: 6000

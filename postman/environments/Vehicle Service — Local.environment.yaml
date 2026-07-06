@@ -1,8 +1,0 @@
-name: Vehicle Service — Local
-values:
-  - key: baseUrl
-    value: 'http://localhost:4203'
-  - key: userId
-    value: ''
-  - key: vehicleId
-    value: '1'

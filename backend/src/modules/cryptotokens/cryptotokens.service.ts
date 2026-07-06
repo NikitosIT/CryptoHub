@@ -1,33 +1,37 @@
-import { externalApi } from "@/config/external-api.js";
-import { redisKeys, TTL } from "@/constants/redis-keys.js";
-import { AppError } from "@/utils/AppError.js";
+import { prisma } from "@/libs/db.js";
+import { logger } from "@/libs/logger.js";
+import { coingecko } from "@/services/coingecko/index.js";
 
-import { cache } from "../../services/cache/cache.service.js";
-import type { Cryptotoken } from "./cryptotokens.types.js";
+import { mapCryptotokenToSnapshotCreateInput } from "./cryptotokens.mapper.js";
+import type { CreateWeeklyCryptotokenSnapshotResult } from "./cryptotokens.types.js";
 
-const list = async (): Promise<Cryptotoken[]> => {
-  const key = redisKeys.cryptotokens.list();
-  const url = externalApi.coingecko.marketsUrl;
+const createWeeklySnapshot =
+  async (): Promise<CreateWeeklyCryptotokenSnapshotResult> => {
+    const snapshotAt = new Date();
+    const tokens = await coingecko.list();
 
-  const cached = await cache.get<Cryptotoken[]>(key);
+    const data = tokens.map((token) =>
+      mapCryptotokenToSnapshotCreateInput(token, snapshotAt),
+    );
 
-  if (cached) {
-    return cached;
-  }
+    const result = await prisma.cryptotokenSnapshot.createMany({
+      data,
+    });
 
-  const response = await fetch(url);
+    logger.info(
+      {
+        createdCount: result.count,
+        snapshotAt,
+      },
+      "Cryptotoken snapshots refreshed",
+    );
 
-  if (!response.ok) {
-    throw new AppError("Failed to fetch", 500);
-  }
+    return {
+      createdCount: result.count,
+      snapshotAt,
+    };
+  };
 
-  const data = (await response.json()) as Cryptotoken[];
-
-  await cache.set(key, data, TTL.MEDIUM);
-
-  return data;
-};
-
-export const cryptotokens = {
-  list,
-};
+export const snapshotsService = {
+  createWeeklySnapshot,
+} as const;

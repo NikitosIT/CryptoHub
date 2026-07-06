@@ -1,8 +1,0 @@
-name: User Service — Local
-values:
-  - key: baseUrl
-    value: 'http://localhost:4200'
-  - key: accountId
-    value: ''
-  - key: userId
-    value: ''

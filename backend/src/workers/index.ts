@@ -2,7 +2,7 @@ import type { Worker } from "bullmq";
 
 import { createCronExampleWorker } from "@/modules/bullMQ-examples/cron-example/cron.worker.js";
 import { createEmailWorker } from "@/modules/bullMQ-examples/email/email.worker.js";
-import { createCryptotokenSnapshotsWorker } from "@/modules/cryptotokens/snapshots/snapshots.worker.js";
+import { createCryptotokenSnapshotsWorker } from "@/modules/cryptotokens/cryptotokens.worker.js";
 
 export function startWorkers(): Worker[] {
   return [

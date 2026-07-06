@@ -8,7 +8,7 @@
     "dev": "concurrently -n http,worker -c blue,green \"npm run dev:http\" \"npm run dev:worker\"",
     "dev:http": "tsx watch src/server.ts",
     "dev:worker": "tsx watch src/workers/main.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "openapi:generate": "tsx src/openapi/write-document.ts",
     "start": "node dist/src/server.js",
     "start:http": "node dist/src/server.js",

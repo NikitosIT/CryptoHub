@@ -13,16 +13,16 @@ export const APP_ROUTES = {
   metrics: "/metrics",
 } as const;
 
-export const API_ROUTES = {
-  auth: `${APP_ROUTES.api}/auth`,
-  cryptotokens: `${APP_ROUTES.api}/cryptotokens`,
-  telegramPostIngestion: `${APP_ROUTES.api}/telegram-post-ingestion`,
-  telegramPosts: `${APP_ROUTES.api}/telegram-posts`,
-} as const;
-
 export const API_ROUTE_SEGMENTS = {
   auth: "/auth",
   cryptotokens: "/cryptotokens",
   telegramPostIngestion: "/telegram-post-ingestion",
   telegramPosts: "/telegram-posts",
+} as const;
+
+export const API_ROUTES = {
+  auth: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.auth}`,
+  cryptotokens: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.cryptotokens}`,
+  telegramPostIngestion: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.telegramPostIngestion}`,
+  telegramPosts: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.telegramPosts}`,
 } as const;

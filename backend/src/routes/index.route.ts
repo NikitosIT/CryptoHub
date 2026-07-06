@@ -3,7 +3,6 @@ import { Router } from "express";
 
 import { API_ROUTE_SEGMENTS, ROUTE_SEGMENTS } from "@/constants/routes.js";
 import { auth } from "@/libs/auth.js";
-import cryptotokensRoutes from "@/modules/cryptotokens/cryptotokens.route.js";
 import telegramPostIngestionRoutes from "@/modules/telegram-posts/ingestion/ingestion.route.js";
 import telegramPostsRoutes from "@/modules/telegram-posts/telegram-posts.route.js";
 
@@ -15,6 +14,5 @@ router.use(
   API_ROUTE_SEGMENTS.telegramPostIngestion,
   telegramPostIngestionRoutes,
 );
-router.use(API_ROUTE_SEGMENTS.cryptotokens, cryptotokensRoutes);
 
 export default router;

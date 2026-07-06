@@ -3,6 +3,7 @@ import "./register-modules.js";
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 
 import { APP_ROUTES } from "@/constants/routes.js";
+
 import { openApiRegistry } from "./registry.js";
 
 export function generateOpenApiDocument() {
