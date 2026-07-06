@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/vehicles"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "userId": "{{userId}}",
+      "make": "Toyota",
+      "model": "Camry",
+      "year": 2022
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 201) {
+        const body = pm.response.json();
+        if (body.id) pm.collectionVariables.set('vehicleId', String(body.id));
+      }
+    language: text/javascript
+order: 4000

@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "email": "demo@example.com",
+      "fullName": "Demo User",
+      "password": "password123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      if (pm.response.code === 201) {
+        const body = pm.response.json();
+        if (body.id) pm.collectionVariables.set('accountId', body.id);
+      }
+    language: text/javascript
+order: 1000

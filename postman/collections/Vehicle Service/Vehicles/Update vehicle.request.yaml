@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/vehicles/{{vehicleId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "make": "Honda",
+      "model": "Accord",
+      "year": 2023
+    }
+order: 5000

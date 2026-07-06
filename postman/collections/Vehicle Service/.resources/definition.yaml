@@ -1,0 +1,13 @@
+$kind: collection
+description: |-
+  Vehicle Service Platform — vehicle-service API.
+
+  Base URL defaults to http://localhost:4203.
+
+  Use `userId` from user-service when creating vehicles. The collection stores `vehicleId` after Create vehicle.
+
+  Import `local.postman_environment.json` and select the **Local** environment.
+variables:
+  baseUrl: http://localhost:4203
+  userId: ""
+  vehicleId: "1"

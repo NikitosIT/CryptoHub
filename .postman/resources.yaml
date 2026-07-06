@@ -5,3 +5,10 @@ workspace:
 localResources:
   specs:
     - ..\backend\openapi.json
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ..\postman\collections\User Service: 98caab9d-eea5-4bec-9cb1-c8ec161fc038
+    ..\postman\collections\Vehicle Service: 08d73131-52fe-4420-8069-e7536c4c11f3

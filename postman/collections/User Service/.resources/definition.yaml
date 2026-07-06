@@ -1,0 +1,13 @@
+$kind: collection
+description: |-
+  Vehicle Service Platform — user-service API.
+
+  Base URL defaults to http://localhost:4200.
+
+  Auth uses session cookies (`vsp.sid`). Run Register or Login first — Postman stores the cookie automatically when the cookie jar is enabled (default).
+
+  Import `local.postman_environment.json` and select the **Local** environment.
+variables:
+  baseUrl: http://localhost:4200
+  accountId: ""
+  userId: ""
