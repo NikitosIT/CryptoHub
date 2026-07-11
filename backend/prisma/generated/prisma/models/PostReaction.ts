@@ -40,7 +40,7 @@ export type PostReactionMinAggregateOutputType = {
   id: number | null
   userId: string | null
   postId: number | null
-  reactionType: $Enums.ReactionType | null
+  reactionType: $Enums.PostReactionType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,7 +49,7 @@ export type PostReactionMaxAggregateOutputType = {
   id: number | null
   userId: string | null
   postId: number | null
-  reactionType: $Enums.ReactionType | null
+  reactionType: $Enums.PostReactionType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -193,7 +193,7 @@ export type PostReactionGroupByOutputType = {
   id: number
   userId: string
   postId: number
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt: Date
   updatedAt: Date
   _count: PostReactionCountAggregateOutputType | null
@@ -225,7 +225,7 @@ export type PostReactionWhereInput = {
   id?: Prisma.IntFilter<"PostReaction"> | number
   userId?: Prisma.StringFilter<"PostReaction"> | string
   postId?: Prisma.IntFilter<"PostReaction"> | number
-  reactionType?: Prisma.EnumReactionTypeFilter<"PostReaction"> | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFilter<"PostReaction"> | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFilter<"PostReaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PostReaction"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -251,7 +251,7 @@ export type PostReactionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PostReactionWhereInput | Prisma.PostReactionWhereInput[]
   userId?: Prisma.StringFilter<"PostReaction"> | string
   postId?: Prisma.IntFilter<"PostReaction"> | number
-  reactionType?: Prisma.EnumReactionTypeFilter<"PostReaction"> | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFilter<"PostReaction"> | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFilter<"PostReaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PostReaction"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -279,13 +279,13 @@ export type PostReactionScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"PostReaction"> | number
   userId?: Prisma.StringWithAggregatesFilter<"PostReaction"> | string
   postId?: Prisma.IntWithAggregatesFilter<"PostReaction"> | number
-  reactionType?: Prisma.EnumReactionTypeWithAggregatesFilter<"PostReaction"> | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeWithAggregatesFilter<"PostReaction"> | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PostReaction"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PostReaction"> | Date | string
 }
 
 export type PostReactionCreateInput = {
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReactionInput
@@ -296,13 +296,13 @@ export type PostReactionUncheckedCreateInput = {
   id?: number
   userId: string
   postId: number
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PostReactionUpdateInput = {
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReactionNestedInput
@@ -313,7 +313,7 @@ export type PostReactionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   postId?: Prisma.IntFieldUpdateOperationsInput | number
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -322,13 +322,13 @@ export type PostReactionCreateManyInput = {
   id?: number
   userId: string
   postId: number
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PostReactionUpdateManyMutationInput = {
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -337,7 +337,7 @@ export type PostReactionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   postId?: Prisma.IntFieldUpdateOperationsInput | number
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -478,12 +478,12 @@ export type PostReactionUncheckedUpdateManyWithoutPostNestedInput = {
   deleteMany?: Prisma.PostReactionScalarWhereInput | Prisma.PostReactionScalarWhereInput[]
 }
 
-export type EnumReactionTypeFieldUpdateOperationsInput = {
-  set?: $Enums.ReactionType
+export type EnumPostReactionTypeFieldUpdateOperationsInput = {
+  set?: $Enums.PostReactionType
 }
 
 export type PostReactionCreateWithoutUserInput = {
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
   post: Prisma.TelegramPostCreateNestedOneWithoutReactionInput
@@ -492,7 +492,7 @@ export type PostReactionCreateWithoutUserInput = {
 export type PostReactionUncheckedCreateWithoutUserInput = {
   id?: number
   postId: number
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -530,13 +530,13 @@ export type PostReactionScalarWhereInput = {
   id?: Prisma.IntFilter<"PostReaction"> | number
   userId?: Prisma.StringFilter<"PostReaction"> | string
   postId?: Prisma.IntFilter<"PostReaction"> | number
-  reactionType?: Prisma.EnumReactionTypeFilter<"PostReaction"> | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFilter<"PostReaction"> | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFilter<"PostReaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PostReaction"> | Date | string
 }
 
 export type PostReactionCreateWithoutPostInput = {
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReactionInput
@@ -545,7 +545,7 @@ export type PostReactionCreateWithoutPostInput = {
 export type PostReactionUncheckedCreateWithoutPostInput = {
   id?: number
   userId: string
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -579,13 +579,13 @@ export type PostReactionUpdateManyWithWhereWithoutPostInput = {
 export type PostReactionCreateManyUserInput = {
   id?: number
   postId: number
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PostReactionUpdateWithoutUserInput = {
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   post?: Prisma.TelegramPostUpdateOneRequiredWithoutReactionNestedInput
@@ -594,7 +594,7 @@ export type PostReactionUpdateWithoutUserInput = {
 export type PostReactionUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   postId?: Prisma.IntFieldUpdateOperationsInput | number
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -602,7 +602,7 @@ export type PostReactionUncheckedUpdateWithoutUserInput = {
 export type PostReactionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   postId?: Prisma.IntFieldUpdateOperationsInput | number
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -610,13 +610,13 @@ export type PostReactionUncheckedUpdateManyWithoutUserInput = {
 export type PostReactionCreateManyPostInput = {
   id?: number
   userId: string
-  reactionType: $Enums.ReactionType
+  reactionType: $Enums.PostReactionType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PostReactionUpdateWithoutPostInput = {
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReactionNestedInput
@@ -625,7 +625,7 @@ export type PostReactionUpdateWithoutPostInput = {
 export type PostReactionUncheckedUpdateWithoutPostInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -633,7 +633,7 @@ export type PostReactionUncheckedUpdateWithoutPostInput = {
 export type PostReactionUncheckedUpdateManyWithoutPostInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  reactionType?: Prisma.EnumReactionTypeFieldUpdateOperationsInput | $Enums.ReactionType
+  reactionType?: Prisma.EnumPostReactionTypeFieldUpdateOperationsInput | $Enums.PostReactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -706,7 +706,7 @@ export type $PostReactionPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: number
     userId: string
     postId: number
-    reactionType: $Enums.ReactionType
+    reactionType: $Enums.PostReactionType
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["postReaction"]>
@@ -1137,7 +1137,7 @@ export interface PostReactionFieldRefs {
   readonly id: Prisma.FieldRef<"PostReaction", 'Int'>
   readonly userId: Prisma.FieldRef<"PostReaction", 'String'>
   readonly postId: Prisma.FieldRef<"PostReaction", 'Int'>
-  readonly reactionType: Prisma.FieldRef<"PostReaction", 'ReactionType'>
+  readonly reactionType: Prisma.FieldRef<"PostReaction", 'PostReactionType'>
   readonly createdAt: Prisma.FieldRef<"PostReaction", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PostReaction", 'DateTime'>
 }

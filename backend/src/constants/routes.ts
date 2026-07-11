@@ -1,7 +1,6 @@
 export const ROUTE_SEGMENTS = {
   root: "/",
   authWildcard: "/auth/*splat",
-  ingestion: "/ingestion",
   openApiJson: "/openapi.json",
 } as const;
 
@@ -16,13 +15,15 @@ export const APP_ROUTES = {
 export const API_ROUTE_SEGMENTS = {
   auth: "/auth",
   cryptotokens: "/cryptotokens",
-  telegramPostIngestion: "/telegram-post-ingestion",
-  telegramPosts: "/telegram-posts",
+  telegram: "/telegram",
+  posts: "/posts",
+  favorites: "/favorites",
 } as const;
 
 export const API_ROUTES = {
   auth: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.auth}`,
   cryptotokens: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.cryptotokens}`,
-  telegramPostIngestion: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.telegramPostIngestion}`,
-  telegramPosts: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.telegramPosts}`,
+  telegram: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.telegram}`,
+  posts: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.posts}`,
+  favorites: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.posts}${API_ROUTE_SEGMENTS.favorites}`,
 } as const;

@@ -239,21 +239,21 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
 }
 
-export type EnumReactionTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.ReactionType | Prisma.EnumReactionTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumReactionTypeFilter<$PrismaModel> | $Enums.ReactionType
+export type EnumPostReactionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PostReactionType | Prisma.EnumPostReactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel> | $Enums.PostReactionType
 }
 
-export type EnumReactionTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ReactionType | Prisma.EnumReactionTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumReactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.ReactionType
+export type EnumPostReactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PostReactionType | Prisma.EnumPostReactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPostReactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.PostReactionType
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumReactionTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumReactionTypeFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
 }
 
 export type DecimalFilter<$PrismaModel = never> = {
@@ -575,21 +575,21 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
 }
 
-export type NestedEnumReactionTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.ReactionType | Prisma.EnumReactionTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumReactionTypeFilter<$PrismaModel> | $Enums.ReactionType
+export type NestedEnumPostReactionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PostReactionType | Prisma.EnumPostReactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel> | $Enums.PostReactionType
 }
 
-export type NestedEnumReactionTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ReactionType | Prisma.EnumReactionTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.ReactionType[] | Prisma.ListEnumReactionTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumReactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.ReactionType
+export type NestedEnumPostReactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PostReactionType | Prisma.EnumPostReactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PostReactionType[] | Prisma.ListEnumPostReactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPostReactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.PostReactionType
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumReactionTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumReactionTypeFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
 }
 
 export type NestedDecimalFilter<$PrismaModel = never> = {

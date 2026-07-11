@@ -1,15 +1,9 @@
 import type { Worker } from "bullmq";
 
-import { createCronExampleWorker } from "@/modules/bullMQ-examples/cron-example/cron.worker.js";
-import { createEmailWorker } from "@/modules/bullMQ-examples/email/email.worker.js";
 import { createCryptotokenSnapshotsWorker } from "@/modules/cryptotokens/cryptotokens.worker.js";
 
 export function startWorkers(): Worker[] {
-  return [
-    createCryptotokenSnapshotsWorker(),
-    createEmailWorker(),
-    createCronExampleWorker(),
-  ];
+  return [createCryptotokenSnapshotsWorker()];
 }
 
 export async function stopWorkers(workers: Worker[]) {

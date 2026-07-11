@@ -9,10 +9,10 @@ import type { CreateWeeklyCryptotokenSnapshotResult } from "./cryptotokens.types
 
 export const createCryptotokenSnapshotsWorker = () => {
   const worker = new Worker<void, CreateWeeklyCryptotokenSnapshotResult>(
-    BULLMQ.snapshots.queueName,
+    BULLMQ.queues.cryptotokens.name,
     async (job) => {
       switch (job.name) {
-        case BULLMQ.snapshots.jobs.createWeeklySnapshot:
+        case BULLMQ.queues.cryptotokens.jobs.syncCryptotokens.name:
           return processCreateWeeklyCryptotokenSnapshotJob(job);
 
         default:
@@ -30,7 +30,7 @@ export const createCryptotokenSnapshotsWorker = () => {
       {
         jobId: job.id,
         jobName: job.name,
-        queue: BULLMQ.snapshots.queueName,
+        queue: BULLMQ.queues.cryptotokens.name,
         result,
       },
       "Cryptotoken snapshots job completed",
@@ -42,7 +42,7 @@ export const createCryptotokenSnapshotsWorker = () => {
       {
         jobId: job?.id,
         jobName: job?.name,
-        queue: BULLMQ.snapshots.queueName,
+        queue: BULLMQ.queues.cryptotokens.name,
         err: error,
       },
       "Cryptotoken snapshots job failed",

@@ -1,4 +1,4 @@
-import type { Cryptotoken } from "@/services/coingecko/types.js";
+import type { Cryptotoken } from "@/services/coingecko/coingecko.types.js";
 
 export const mapCryptotokenToSnapshotCreateInput = (
   token: Cryptotoken,

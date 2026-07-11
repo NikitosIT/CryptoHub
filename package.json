@@ -1,16 +1,35 @@
 {
-    "scripts": {
-        "claude": "dotenv -e .env -- claude"
-    },
-    "dependencies": {
-        "@godaddy/terminus": "^4.12.1",
-        "dotenv-cli": "^11.0.0",
-        "telegram-media": "^0.2.0",
-        "tsx": "^4.21.0"
-    },
-    "devDependencies": {
-        "@vitest/coverage-v8": "^4.1.5",
-        "vite-tsconfig-paths": "^6.1.1",
-        "vitest": "^4.1.5"
-    }
+  "name": "cryptohub-root",
+  "private": true,
+  "packageManager": "npm@10.9.3",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "claude": "dotenv -e .env -- claude",
+    "dev": "turbo run dev",
+    "dev:backend": "turbo run dev --filter=./backend",
+    "dev:frontend": "turbo run dev --filter=./frontend",
+    "build": "turbo run build",
+    "build:backend": "turbo run build --filter=./backend",
+    "build:frontend": "turbo run build --filter=./frontend",
+    "lint": "turbo run lint",
+    "lint:backend": "turbo run lint --filter=./backend",
+    "lint:frontend": "turbo run lint --filter=./frontend",
+    "test": "turbo run test",
+    "test:backend": "turbo run test --filter=./backend",
+    "test:frontend": "turbo run test --filter=./frontend"
+  },
+  "dependencies": {
+    "@godaddy/terminus": "^4.12.1",
+    "dotenv-cli": "^11.0.0",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.5",
+    "turbo": "^2.10.4",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.5"
+  }
 }

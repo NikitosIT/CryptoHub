@@ -1,0 +1,5 @@
+name: New Environment
+values:
+  - key: telegramWebhookSecret
+    value: ''
+color: 120

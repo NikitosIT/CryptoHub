@@ -1,0 +1,268 @@
+{
+  "info": {
+    "_postman_id": "2f1b6a4d-2f2d-4dd7-bb51-0ff616b8c0c8",
+    "name": "CryptoHub Backend",
+    "description": "Postman collection for the current CryptoHub backend endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{appBaseUrl}}/health",
+              "host": [
+                "{{appBaseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{appBaseUrl}}/metrics",
+              "host": [
+                "{{appBaseUrl}}"
+              ],
+              "path": [
+                "metrics"
+              ]
+            }
+          }
+        },
+        {
+          "name": "OpenAPI JSON",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{appBaseUrl}}/docs/openapi.json",
+              "host": [
+                "{{appBaseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "openapi.json"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Send Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dev@cryptohub.local\",\n  \"type\": \"sign-in\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/auth/email-otp/send-verification-otp",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "email-otp",
+                "send-verification-otp"
+              ]
+            },
+            "description": "Generates a one-time password for the sign-in flow and sends it to the user's email address."
+          }
+        },
+        {
+          "name": "Sign In With Email OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) {",
+                  "  pm.collectionVariables.set('authToken', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dev@cryptohub.local\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/auth/sign-in/email-otp",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "sign-in",
+                "email-otp"
+              ]
+            },
+            "description": "Validates the email OTP and stores the returned token in the collection variable authToken."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Telegram Posts",
+      "item": [
+        {
+          "name": "List Telegram Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiBaseUrl}}/posts?cursor=",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "description": "Optional positive integer cursor for pagination.",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Returns telegram posts ordered by newest first."
+          }
+        },
+        {
+          "name": "Ingest Forwarded Telegram Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-telegram-bot-api-secret-token",
+                "value": "{{telegramWebhookSecret}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"update_id\": 100000001,\n  \"message\": {\n    \"chat\": {\n      \"id\": 123456789,\n      \"type\": \"private\",\n      \"title\": \"CryptoHub Dev\"\n    },\n    \"caption\": \"BTC update from Telegram\",\n    \"caption_entities\": [\n      {\n        \"offset\": 0,\n        \"length\": 3,\n        \"type\": \"bold\"\n      }\n    ],\n    \"forward_origin\": {\n      \"type\": \"channel\",\n      \"date\": 1760000000,\n      \"message_id\": 42,\n      \"chat\": {\n        \"id\": -1001234567890,\n        \"type\": \"channel\",\n        \"title\": \"Crypto News\",\n        \"username\": \"cryptonews\"\n      }\n    },\n    \"media_group_id\": \"dev-media-group-1\",\n    \"photo\": [\n      {\n        \"file_id\": \"telegram-photo-file-id\",\n        \"width\": 1280,\n        \"height\": 720\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/telegram",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "telegram"
+              ]
+            },
+            "description": "Webhook endpoint that receives a Telegram update and persists the forwarded post."
+          }
+        },
+        {
+          "name": "Toggle Post Favorite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"postId\": 42\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiBaseUrl}}/posts/favorites",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "favorites"
+              ]
+            },
+            "description": "Adds the post to favorites if it is not favorited yet, otherwise removes it and returns the updated favorite state."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "appBaseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "apiBaseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "telegramWebhookSecret",
+      "value": "telegram-webhook-secret"
+    },
+    {
+      "key": "authToken",
+      "value": ""
+    }
+  ]
+}

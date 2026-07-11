@@ -1,6 +1,6 @@
 import { prisma } from "@/libs/db.js";
 import { logger } from "@/libs/logger.js";
-import { coingecko } from "@/services/coingecko/index.js";
+import { coingecko } from "@/services/coingecko/coingecko.service.js";
 
 import { mapCryptotokenToSnapshotCreateInput } from "./cryptotokens.mapper.js";
 import type { CreateWeeklyCryptotokenSnapshotResult } from "./cryptotokens.types.js";

@@ -56,7 +56,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   TelegramPost: 'TelegramPost',
-  Favorite: 'Favorite',
+  PostFavorite: 'PostFavorite',
   PostReaction: 'PostReaction',
   TwoFactor: 'TwoFactor',
   CryptotokenSnapshot: 'CryptotokenSnapshot'
@@ -157,14 +157,14 @@ export const TelegramPostScalarFieldEnum = {
 export type TelegramPostScalarFieldEnum = (typeof TelegramPostScalarFieldEnum)[keyof typeof TelegramPostScalarFieldEnum]
 
 
-export const FavoriteScalarFieldEnum = {
+export const PostFavoriteScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   postId: 'postId',
   createdAt: 'createdAt'
 } as const
 
-export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
+export type PostFavoriteScalarFieldEnum = (typeof PostFavoriteScalarFieldEnum)[keyof typeof PostFavoriteScalarFieldEnum]
 
 
 export const PostReactionScalarFieldEnum = {

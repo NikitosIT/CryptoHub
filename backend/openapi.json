@@ -13,6 +13,104 @@
   ],
   "components": {
     "schemas": {
+      "SendEmailOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "sign-in"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "type"
+        ]
+      },
+      "SendEmailOtpResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "success"
+        ]
+      },
+      "SignInWithEmailOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "otp": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 6
+          }
+        },
+        "required": [
+          "email",
+          "otp"
+        ]
+      },
+      "SignInWithEmailOtpResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "emailVerified": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "email",
+              "emailVerified",
+              "name",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        },
+        "required": [
+          "token",
+          "user"
+        ]
+      },
       "TelegramPost": {
         "type": "object",
         "properties": {
@@ -277,55 +375,257 @@
         },
         "additionalProperties": false
       },
-      "TransferRequest": {
+      "TelegramPostIngestionRequest": {
         "type": "object",
         "properties": {
-          "senderCardId": {
-            "type": "string",
-            "minLength": 1
+          "update_id": {
+            "type": "number"
           },
-          "senderCardPin": {
-            "type": "string",
-            "pattern": "^\\d{4}$"
-          },
-          "amount": {
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": true
-          },
-          "receiverCardId": {
-            "type": "string",
-            "minLength": 1
+          "message": {
+            "type": "object",
+            "properties": {
+              "chat": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "type"
+                ]
+              },
+              "caption": {
+                "type": "string"
+              },
+              "caption_entities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "offset": {
+                      "type": "number"
+                    },
+                    "length": {
+                      "type": "number"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "custom_emoji_id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "offset",
+                    "length",
+                    "type"
+                  ]
+                }
+              },
+              "forward_origin": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "channel"
+                    ]
+                  },
+                  "date": {
+                    "type": "number"
+                  },
+                  "message_id": {
+                    "type": "number"
+                  },
+                  "chat": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "username": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "title"
+                    ]
+                  }
+                },
+                "required": [
+                  "type",
+                  "date",
+                  "message_id",
+                  "chat"
+                ]
+              },
+              "media_group_id": {
+                "type": "string"
+              },
+              "photo": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "file_id": {
+                      "type": "string"
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "file_id",
+                    "width",
+                    "height"
+                  ]
+                }
+              },
+              "video": {
+                "type": "object",
+                "properties": {
+                  "file_id": {
+                    "type": "string"
+                  },
+                  "file_unique_id": {
+                    "type": "string"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "duration": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "file_id",
+                  "file_unique_id",
+                  "width",
+                  "height",
+                  "duration"
+                ]
+              }
+            },
+            "required": [
+              "chat",
+              "forward_origin"
+            ]
           }
         },
         "required": [
-          "senderCardId",
-          "senderCardPin",
-          "amount",
-          "receiverCardId"
-        ],
-        "additionalProperties": false
+          "update_id",
+          "message"
+        ]
       },
-      "TransferSuccessResponse": {
+      "TelegramPostIngestionResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
             "enum": [
-              "Transfer successful"
+              "Post ingestion processed"
             ]
           }
         },
         "required": [
           "message"
-        ],
-        "additionalProperties": false
+        ]
       }
     },
     "parameters": {}
   },
   "paths": {
-    "/telegram-posts": {
+    "/auth/email-otp/send-verification-otp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send sign-in OTP to email",
+        "description": "Generates a one-time password for the sign-in flow and sends it to the user's email address.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendEmailOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP email was accepted for delivery.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendEmailOtpResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-in/email-otp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Confirm OTP and sign in",
+        "description": "Validates the email OTP, creates the user automatically if needed, and creates an authenticated session.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInWithEmailOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP was valid and the user has been signed in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignInWithEmailOtpResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts": {
       "get": {
         "tags": [
           "Telegram Posts"
@@ -358,32 +658,53 @@
         }
       }
     },
-    "/transfer/send": {
+    "/telegram": {
       "post": {
         "tags": [
-          "Transfer"
+          "Telegram Posts"
         ],
-        "summary": "Transfer funds between cards",
+        "summary": "Ingest forwarded Telegram post",
+        "description": "Webhook endpoint that receives a Telegram update, persists the forwarded post, and sends a confirmation message back to the chat.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Secret token that Telegram sends with the webhook request.",
+              "example": "telegram-webhook-secret"
+            },
+            "required": true,
+            "description": "Secret token that Telegram sends with the webhook request.",
+            "name": "x-telegram-bot-api-secret-token",
+            "in": "header"
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TransferRequest"
+                "$ref": "#/components/schemas/TelegramPostIngestionRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Transfer was completed successfully.",
+            "description": "The Telegram post was persisted successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TransferSuccessResponse"
+                  "$ref": "#/components/schemas/TelegramPostIngestionResponse"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Telegram secret header is missing."
+          },
+          "403": {
+            "description": "Telegram secret header is invalid."
           }
         }
       }

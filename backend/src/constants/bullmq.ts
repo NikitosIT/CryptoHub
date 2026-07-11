@@ -13,5 +13,18 @@ export const BULLMQ = {
         },
       },
     },
+    cryptotokensForecasts: {
+      name: "cryptotokensForecast",
+      jobs: {
+        syncCryptotokensForecast: {
+          name: "sync-cryptotokens-forecasts",
+        },
+      },
+      schedulers: {
+        syncCryptotokensForecast: {
+          id: "sync-cryptotokens-forecasts-scheduler",
+        },
+      },
+    },
   },
 } as const;

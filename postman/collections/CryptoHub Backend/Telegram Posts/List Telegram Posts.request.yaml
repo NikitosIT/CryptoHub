@@ -1,0 +1,10 @@
+$kind: http-request
+description: Returns telegram posts ordered by newest first.
+url: "{{apiBaseUrl}}/posts"
+method: GET
+queryParams:
+  - key: cursor
+    value: ""
+    disabled: true
+    description: Optional positive integer cursor for pagination.
+order: 1000

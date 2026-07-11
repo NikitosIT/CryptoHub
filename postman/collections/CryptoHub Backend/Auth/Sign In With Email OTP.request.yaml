@@ -1,0 +1,22 @@
+$kind: http-request
+description: Validates the email OTP and stores the returned token in the collection variable authToken.
+url: "{{apiBaseUrl}}/auth/sign-in/email-otp"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "dev@cryptohub.local",
+      "otp": "123456"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      if (json.token) {
+        pm.collectionVariables.set('authToken', json.token);
+      }
+    language: text/javascript
+order: 2000

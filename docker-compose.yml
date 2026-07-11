@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -22,6 +22,7 @@ services:
     image: dpage/pgadmin4:9.5
     container_name: crypto_pgadmin
     restart: always
+    user: "0:0"
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,7 +41,7 @@ services:
       - /bin/sh
       - -c
       - |
-        cat > /pgadmin4/servers.json <<EOF
+        cat > /tmp/servers.json <<EOF
         {
           "Servers": {
             "1": {
@@ -59,6 +60,7 @@ services:
         printf '%s:%s:%s:%s:%s\n' "$$POSTGRES_HOST" "$$POSTGRES_PORT" "$$POSTGRES_DB" "$$POSTGRES_USER" "$$POSTGRES_PASSWORD" > /tmp/pgpass
         chmod 600 /tmp/pgpass
         export PGPASSFILE=/tmp/pgpass
+        cp /tmp/servers.json /pgadmin4/servers.json
         exec /entrypoint.sh
     volumes:
       - pgadmin_data:/var/lib/pgadmin
@@ -153,8 +155,8 @@ services:
     ports:
       - "3001:3000"
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASS}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - grafana_data:/var/lib/grafana

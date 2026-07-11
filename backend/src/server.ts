@@ -8,6 +8,7 @@ import { connectDB } from "./libs/db.js";
 import { logger } from "./libs/logger.js";
 import { connectAppRedis } from "./libs/redis.js";
 import { setupTerminus } from "./terminus.js";
+import { logStartupSummary } from "./utils/logStartupSummary.js";
 
 const startServer = async () => {
   try {
@@ -19,10 +20,9 @@ const startServer = async () => {
     setupTerminus(server);
 
     server.listen(env.PORT, () => {
-      logger.info(
-        { port: env.PORT },
-        `Server running on http://localhost:${env.PORT}`,
-      );
+      logStartupSummary({
+        port: env.PORT,
+      });
     });
   } catch (error) {
     logger.error({ err: error }, "Failed to start server");

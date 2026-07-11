@@ -16,34 +16,44 @@ vi.mock("@/libs/auth.js", () => ({
   auth: {},
 }));
 
-vi.mock("@/modules/telegram-posts/telegram-posts.route.js", () => {
-  const router = Router();
-  return { default: router };
-});
-
-vi.mock("@/modules/telegram-posts/ingestion/ingestion.route.js", () => {
-  const router = Router();
-  return { default: router };
-});
-
-vi.mock("@/modules/cryptotokens/cryptotokens.route.js", () => {
+vi.mock("@/modules/posts/posts.route.js", () => {
   const router = Router();
   router.get(ROUTE_SEGMENTS.root, (_req, res) => {
-    res.status(200).json({ ok: true });
+    res.status(200).json({ ok: "posts" });
+  });
+  return { default: router };
+});
+
+vi.mock("@/modules/posts/telegram/telegram.route.js", () => {
+  const router = Router();
+  router.post(ROUTE_SEGMENTS.root, (_req, res) => {
+    res.status(200).json({ ok: "telegram" });
   });
   return { default: router };
 });
 
 describe("index router", () => {
-  it("mounts cryptotokens under /api/cryptotokens", async () => {
+  it("mounts posts under /api/posts", async () => {
     const { default: apiRouter } = await import("./index.route.js");
 
     const app = express();
     app.use(APP_ROUTES.api, apiRouter);
 
-    const response = await request(app).get(API_ROUTES.cryptotokens);
+    const response = await request(app).get(API_ROUTES.posts);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ ok: true });
+    expect(response.body).toEqual({ ok: "posts" });
+  });
+
+  it("mounts telegram webhook under /api/telegram", async () => {
+    const { default: apiRouter } = await import("./index.route.js");
+
+    const app = express();
+    app.use(APP_ROUTES.api, apiRouter);
+
+    const response = await request(app).post(API_ROUTES.telegram);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ ok: "telegram" });
   });
 });

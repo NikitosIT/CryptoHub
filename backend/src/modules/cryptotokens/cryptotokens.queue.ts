@@ -3,7 +3,7 @@ import { Queue } from "bullmq";
 import { BULLMQ } from "@/constants/bullmq.js";
 import { bullmqConnection } from "@/libs/bullmq.js";
 
-export const snapshotsQueue = new Queue<void>(BULLMQ.snapshots.queueName, {
+export const snapshotsQueue = new Queue<void>(BULLMQ.queues.cryptotokens.name, {
   connection: bullmqConnection,
   defaultJobOptions: {
     attempts: 3,

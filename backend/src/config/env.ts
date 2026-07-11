@@ -12,7 +12,7 @@ export const env = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   LOG_LEVEL: process.env.LOG_LEVEL || "info",
   LOKI_URL: process.env.LOKI_URL || "http://localhost:3100",
-  NODE_ENV: process.env.NODE_ENV || "local",
+  NODE_ENV: process.env.NODE_ENV || "dev",
   PORT: Number(process.env.PORT) || 3000,
   REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
   RESEND_API_KEY: process.env.RESEND_API_KEY,

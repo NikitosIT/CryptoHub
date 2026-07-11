@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.7.0
- * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+ * Prisma Client JS version: 7.8.0
+ * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.7.0",
-  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
+  client: "7.8.0",
+  engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
 }
 
 /**
@@ -389,7 +389,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   TelegramPost: 'TelegramPost',
-  Favorite: 'Favorite',
+  PostFavorite: 'PostFavorite',
   PostReaction: 'PostReaction',
   TwoFactor: 'TwoFactor',
   CryptotokenSnapshot: 'CryptotokenSnapshot'
@@ -408,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "favorite" | "postReaction" | "twoFactor" | "cryptotokenSnapshot"
+    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "postFavorite" | "postReaction" | "twoFactor" | "cryptotokenSnapshot"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -782,77 +782,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Favorite: {
-      payload: Prisma.$FavoritePayload<ExtArgs>
-      fields: Prisma.FavoriteFieldRefs
+    PostFavorite: {
+      payload: Prisma.$PostFavoritePayload<ExtArgs>
+      fields: Prisma.PostFavoriteFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.FavoriteFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload> | null
+          args: Prisma.PostFavoriteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.FavoriteFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+          args: Prisma.PostFavoriteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>
         }
         findFirst: {
-          args: Prisma.FavoriteFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload> | null
+          args: Prisma.PostFavoriteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.FavoriteFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+          args: Prisma.PostFavoriteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>
         }
         findMany: {
-          args: Prisma.FavoriteFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[]
+          args: Prisma.PostFavoriteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>[]
         }
         create: {
-          args: Prisma.FavoriteCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+          args: Prisma.PostFavoriteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>
         }
         createMany: {
-          args: Prisma.FavoriteCreateManyArgs<ExtArgs>
+          args: Prisma.PostFavoriteCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.FavoriteCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[]
+          args: Prisma.PostFavoriteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>[]
         }
         delete: {
-          args: Prisma.FavoriteDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+          args: Prisma.PostFavoriteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>
         }
         update: {
-          args: Prisma.FavoriteUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+          args: Prisma.PostFavoriteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>
         }
         deleteMany: {
-          args: Prisma.FavoriteDeleteManyArgs<ExtArgs>
+          args: Prisma.PostFavoriteDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.FavoriteUpdateManyArgs<ExtArgs>
+          args: Prisma.PostFavoriteUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.FavoriteUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>[]
+          args: Prisma.PostFavoriteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>[]
         }
         upsert: {
-          args: Prisma.FavoriteUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FavoritePayload>
+          args: Prisma.PostFavoriteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostFavoritePayload>
         }
         aggregate: {
-          args: Prisma.FavoriteAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFavorite>
+          args: Prisma.PostFavoriteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePostFavorite>
         }
         groupBy: {
-          args: Prisma.FavoriteGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FavoriteGroupByOutputType>[]
+          args: Prisma.PostFavoriteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostFavoriteGroupByOutputType>[]
         }
         count: {
-          args: Prisma.FavoriteCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FavoriteCountAggregateOutputType> | number
+          args: Prisma.PostFavoriteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostFavoriteCountAggregateOutputType> | number
         }
       }
     }
@@ -1196,14 +1196,14 @@ export const TelegramPostScalarFieldEnum = {
 export type TelegramPostScalarFieldEnum = (typeof TelegramPostScalarFieldEnum)[keyof typeof TelegramPostScalarFieldEnum]
 
 
-export const FavoriteScalarFieldEnum = {
+export const PostFavoriteScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   postId: 'postId',
   createdAt: 'createdAt'
 } as const
 
-export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
+export type PostFavoriteScalarFieldEnum = (typeof PostFavoriteScalarFieldEnum)[keyof typeof PostFavoriteScalarFieldEnum]
 
 
 export const PostReactionScalarFieldEnum = {
@@ -1370,16 +1370,16 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
- * Reference to a field of type 'ReactionType'
+ * Reference to a field of type 'PostReactionType'
  */
-export type EnumReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReactionType'>
+export type EnumPostReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostReactionType'>
     
 
 
 /**
- * Reference to a field of type 'ReactionType[]'
+ * Reference to a field of type 'PostReactionType[]'
  */
-export type ListEnumReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReactionType[]'>
+export type ListEnumPostReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostReactionType[]'>
     
 
 
@@ -1517,6 +1517,21 @@ export type PrismaClientOptions = ({
    * ```
    */
   comments?: runtime.SqlCommenterPlugin[]
+  /**
+   * Optional maximum size for the query plan cache. If not provided, a default size will be used.
+   * A value of `0` can be used to disable the cache entirely. A higher cache size can improve
+   * performance for applications that execute a large number of unique queries, while a smaller
+   * cache size can reduce memory usage.
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   queryPlanCacheMaxSize: 100,
+   * })
+   * ```
+   */
+  queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
@@ -1524,7 +1539,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   telegramPost?: Prisma.TelegramPostOmit
-  favorite?: Prisma.FavoriteOmit
+  postFavorite?: Prisma.PostFavoriteOmit
   postReaction?: Prisma.PostReactionOmit
   twoFactor?: Prisma.TwoFactorOmit
   cryptotokenSnapshot?: Prisma.CryptotokenSnapshotOmit

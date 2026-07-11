@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { Cryptotoken } from "../../cryptotokens.types.js";
+import type { Cryptotoken } from "@/services/coingecko/coingecko.types.js";
+
 import { mapCryptotokenToSnapshotCreateInput } from "../cryptotokens.mapper.js";
 
 describe("mapCryptotokenToSnapshotCreateInput", () => {

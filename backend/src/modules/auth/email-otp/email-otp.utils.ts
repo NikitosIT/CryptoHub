@@ -6,3 +6,4 @@ export const buildOtpEmailHtml = (otp: string) => `
   <h2 style="letter-spacing: 8px;">${otp}</h2>
   <p>The code expires in ${OTP_TTL_MINUTES} minutes.</p>
 `;
+// для 1 письма тянуть зависимость npm install react-email @react-email/components не уверен что надо

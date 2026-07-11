@@ -20,7 +20,7 @@ model User {
 
   sessions  Session[]
   accounts  Account[]
-  favorites Favorite[]
+  favorites PostFavorite[]
   reaction  PostReaction[]
 
   twoFactorEnabled Boolean?    @default(false)
@@ -102,7 +102,7 @@ model TelegramPost {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  favorites Favorite[]
+  favorites PostFavorite[]
   reaction  PostReaction[]
 
   @@map("telegram_posts")
@@ -110,7 +110,7 @@ model TelegramPost {
 
 //
 
-model Favorite {
+model PostFavorite {
   id Int @id @default(autoincrement())
 
   userId String @map("user_id")
@@ -122,7 +122,7 @@ model Favorite {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@unique([userId, postId])
-  @@map("favorites")
+  @@map("post_favorites")
 }
 
 //
@@ -136,7 +136,7 @@ model PostReaction {
   user User         @relation(fields: [userId], references: [id])
   post TelegramPost @relation(fields: [postId], references: [id])
 
-  reactionType ReactionType @map("reaction_type")
+  reactionType PostReactionType @map("reaction_type")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -145,7 +145,7 @@ model PostReaction {
   @@map("post_reactions")
 }
 
-enum ReactionType {
+enum PostReactionType {
   LIKE
   DISLIKE
 }
@@ -160,7 +160,7 @@ model TwoFactor {
 
   @@index([secret])
   @@index([userId])
-  @@map("twoFactor")
+  @@map("two_factor")
 }
 
 model CryptotokenSnapshot {

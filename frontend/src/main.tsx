@@ -47,10 +47,9 @@ export { queryClient };
 const router = createRouter({ routeTree });
 
 declare module '@tanstack/router-core' {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface Register {
+  type Register = {
     router: typeof router;
-  }
+  };
 }
 
 function RootWithProviders() {

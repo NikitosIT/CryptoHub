@@ -9,9 +9,9 @@
 * 🟢 You can import this file directly.
 */
 
-export const ReactionType = {
+export const PostReactionType = {
   LIKE: 'LIKE',
   DISLIKE: 'DISLIKE'
 } as const
 
-export type ReactionType = (typeof ReactionType)[keyof typeof ReactionType]
+export type PostReactionType = (typeof PostReactionType)[keyof typeof PostReactionType]

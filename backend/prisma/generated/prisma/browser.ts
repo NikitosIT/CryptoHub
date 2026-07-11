@@ -43,10 +43,10 @@ export type Verification = Prisma.VerificationModel
  */
 export type TelegramPost = Prisma.TelegramPostModel
 /**
- * Model Favorite
+ * Model PostFavorite
  * 
  */
-export type Favorite = Prisma.FavoriteModel
+export type PostFavorite = Prisma.PostFavoriteModel
 /**
  * Model PostReaction
  * 

@@ -1,0 +1,14 @@
+$kind: http-request
+description: Generates a one-time password for the sign-in flow and sends it to the user's email address.
+url: "{{apiBaseUrl}}/auth/email-otp/send-verification-otp"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "dev@cryptohub.local",
+      "type": "sign-in"
+    }
+order: 1000
