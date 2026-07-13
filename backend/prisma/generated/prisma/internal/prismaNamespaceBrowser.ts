@@ -59,6 +59,7 @@ export const ModelName = {
   PostFavorite: 'PostFavorite',
   PostReaction: 'PostReaction',
   TwoFactor: 'TwoFactor',
+  CryptoAiChat: 'CryptoAiChat',
   CryptotokenSnapshot: 'CryptotokenSnapshot'
 } as const
 
@@ -188,6 +189,21 @@ export const TwoFactorScalarFieldEnum = {
 } as const
 
 export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
+
+
+export const CryptoAiChatScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  tokenSymbol: 'tokenSymbol',
+  status: 'status',
+  responseText: 'responseText',
+  request: 'request',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CryptoAiChatScalarFieldEnum = (typeof CryptoAiChatScalarFieldEnum)[keyof typeof CryptoAiChatScalarFieldEnum]
 
 
 export const CryptotokenSnapshotScalarFieldEnum = {

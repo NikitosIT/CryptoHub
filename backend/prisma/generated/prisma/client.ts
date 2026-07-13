@@ -82,6 +82,11 @@ export type PostReaction = Prisma.PostReactionModel
  */
 export type TwoFactor = Prisma.TwoFactorModel
 /**
+ * Model CryptoAiChat
+ * 
+ */
+export type CryptoAiChat = Prisma.CryptoAiChatModel
+/**
  * Model CryptotokenSnapshot
  * 
  */

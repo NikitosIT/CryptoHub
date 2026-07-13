@@ -256,6 +256,23 @@ export type EnumPostReactionTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
 }
 
+export type EnumCryptoAiChatStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CryptoAiChatStatus | Prisma.EnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCryptoAiChatStatusFilter<$PrismaModel> | $Enums.CryptoAiChatStatus
+}
+
+export type EnumCryptoAiChatStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CryptoAiChatStatus | Prisma.EnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCryptoAiChatStatusWithAggregatesFilter<$PrismaModel> | $Enums.CryptoAiChatStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCryptoAiChatStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCryptoAiChatStatusFilter<$PrismaModel>
+}
+
 export type DecimalFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel>
@@ -590,6 +607,23 @@ export type NestedEnumPostReactionTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPostReactionTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumCryptoAiChatStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.CryptoAiChatStatus | Prisma.EnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCryptoAiChatStatusFilter<$PrismaModel> | $Enums.CryptoAiChatStatus
+}
+
+export type NestedEnumCryptoAiChatStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CryptoAiChatStatus | Prisma.EnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CryptoAiChatStatus[] | Prisma.ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCryptoAiChatStatusWithAggregatesFilter<$PrismaModel> | $Enums.CryptoAiChatStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCryptoAiChatStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCryptoAiChatStatusFilter<$PrismaModel>
 }
 
 export type NestedDecimalFilter<$PrismaModel = never> = {

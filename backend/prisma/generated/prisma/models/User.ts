@@ -210,6 +210,7 @@ export type UserWhereInput = {
   accounts?: Prisma.AccountListRelationFilter
   favorites?: Prisma.PostFavoriteListRelationFilter
   reaction?: Prisma.PostReactionListRelationFilter
+  chats?: Prisma.CryptoAiChatListRelationFilter
   twofactors?: Prisma.TwoFactorListRelationFilter
 }
 
@@ -226,6 +227,7 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   favorites?: Prisma.PostFavoriteOrderByRelationAggregateInput
   reaction?: Prisma.PostReactionOrderByRelationAggregateInput
+  chats?: Prisma.CryptoAiChatOrderByRelationAggregateInput
   twofactors?: Prisma.TwoFactorOrderByRelationAggregateInput
 }
 
@@ -245,6 +247,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountListRelationFilter
   favorites?: Prisma.PostFavoriteListRelationFilter
   reaction?: Prisma.PostReactionListRelationFilter
+  chats?: Prisma.CryptoAiChatListRelationFilter
   twofactors?: Prisma.TwoFactorListRelationFilter
 }, "id" | "email">
 
@@ -289,6 +292,7 @@ export type UserCreateInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
 }
 
@@ -305,6 +309,7 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatUncheckedCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -321,6 +326,7 @@ export type UserUpdateInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
 }
 
@@ -337,6 +343,7 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUncheckedUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -501,6 +508,20 @@ export type UserUpdateOneRequiredWithoutTwofactorsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTwofactorsInput, Prisma.UserUpdateWithoutTwofactorsInput>, Prisma.UserUncheckedUpdateWithoutTwofactorsInput>
 }
 
+export type UserCreateNestedOneWithoutChatsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatsInput, Prisma.UserUncheckedCreateWithoutChatsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutChatsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatsInput, Prisma.UserUncheckedCreateWithoutChatsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatsInput
+  upsert?: Prisma.UserUpsertWithoutChatsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChatsInput, Prisma.UserUpdateWithoutChatsInput>, Prisma.UserUncheckedUpdateWithoutChatsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id?: string
   name: string
@@ -513,6 +534,7 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
 }
 
@@ -528,6 +550,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatUncheckedCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -559,6 +582,7 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
 }
 
@@ -574,6 +598,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUncheckedUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -589,6 +614,7 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
 }
 
@@ -604,6 +630,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatUncheckedCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -635,6 +662,7 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
 }
 
@@ -650,6 +678,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUncheckedUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -665,6 +694,7 @@ export type UserCreateWithoutFavoritesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
 }
 
@@ -680,6 +710,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatUncheckedCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -711,6 +742,7 @@ export type UserUpdateWithoutFavoritesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
 }
 
@@ -726,6 +758,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUncheckedUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -741,6 +774,7 @@ export type UserCreateWithoutReactionInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
 }
 
@@ -756,6 +790,7 @@ export type UserUncheckedCreateWithoutReactionInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatUncheckedCreateNestedManyWithoutUserInput
   twofactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -787,6 +822,7 @@ export type UserUpdateWithoutReactionInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
 }
 
@@ -802,6 +838,7 @@ export type UserUncheckedUpdateWithoutReactionInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUncheckedUpdateManyWithoutUserNestedInput
   twofactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -818,6 +855,7 @@ export type UserCreateWithoutTwofactorsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTwofactorsInput = {
@@ -833,6 +871,7 @@ export type UserUncheckedCreateWithoutTwofactorsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutUserInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutUserInput
+  chats?: Prisma.CryptoAiChatUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTwofactorsInput = {
@@ -864,6 +903,7 @@ export type UserUpdateWithoutTwofactorsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTwofactorsInput = {
@@ -879,6 +919,87 @@ export type UserUncheckedUpdateWithoutTwofactorsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutUserNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutUserNestedInput
+  chats?: Prisma.CryptoAiChatUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutChatsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  twoFactorEnabled?: boolean | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  favorites?: Prisma.PostFavoriteCreateNestedManyWithoutUserInput
+  reaction?: Prisma.PostReactionCreateNestedManyWithoutUserInput
+  twofactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutChatsInput = {
+  id?: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  twoFactorEnabled?: boolean | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutUserInput
+  reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutUserInput
+  twofactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutChatsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatsInput, Prisma.UserUncheckedCreateWithoutChatsInput>
+}
+
+export type UserUpsertWithoutChatsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChatsInput, Prisma.UserUncheckedUpdateWithoutChatsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatsInput, Prisma.UserUncheckedCreateWithoutChatsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChatsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChatsInput, Prisma.UserUncheckedUpdateWithoutChatsInput>
+}
+
+export type UserUpdateWithoutChatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.PostFavoriteUpdateManyWithoutUserNestedInput
+  reaction?: Prisma.PostReactionUpdateManyWithoutUserNestedInput
+  twofactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutUserNestedInput
+  twofactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -891,6 +1012,7 @@ export type UserCountOutputType = {
   accounts: number
   favorites: number
   reaction: number
+  chats: number
   twofactors: number
 }
 
@@ -899,6 +1021,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   favorites?: boolean | UserCountOutputTypeCountFavoritesArgs
   reaction?: boolean | UserCountOutputTypeCountReactionArgs
+  chats?: boolean | UserCountOutputTypeCountChatsArgs
   twofactors?: boolean | UserCountOutputTypeCountTwofactorsArgs
 }
 
@@ -943,6 +1066,13 @@ export type UserCountOutputTypeCountReactionArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountChatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CryptoAiChatWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountTwofactorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TwoFactorWhereInput
 }
@@ -961,6 +1091,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>
   reaction?: boolean | Prisma.User$reactionArgs<ExtArgs>
+  chats?: boolean | Prisma.User$chatsArgs<ExtArgs>
   twofactors?: boolean | Prisma.User$twofactorsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1004,6 +1135,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   favorites?: boolean | Prisma.User$favoritesArgs<ExtArgs>
   reaction?: boolean | Prisma.User$reactionArgs<ExtArgs>
+  chats?: boolean | Prisma.User$chatsArgs<ExtArgs>
   twofactors?: boolean | Prisma.User$twofactorsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1017,6 +1149,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     favorites: Prisma.$PostFavoritePayload<ExtArgs>[]
     reaction: Prisma.$PostReactionPayload<ExtArgs>[]
+    chats: Prisma.$CryptoAiChatPayload<ExtArgs>[]
     twofactors: Prisma.$TwoFactorPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1426,6 +1559,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   favorites<T extends Prisma.User$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reaction<T extends Prisma.User$reactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reactionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chats<T extends Prisma.User$chatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CryptoAiChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   twofactors<T extends Prisma.User$twofactorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$twofactorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1950,6 +2084,30 @@ export type User$reactionArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.PostReactionScalarFieldEnum | Prisma.PostReactionScalarFieldEnum[]
+}
+
+/**
+ * User.chats
+ */
+export type User$chatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CryptoAiChat
+   */
+  select?: Prisma.CryptoAiChatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CryptoAiChat
+   */
+  omit?: Prisma.CryptoAiChatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CryptoAiChatInclude<ExtArgs> | null
+  where?: Prisma.CryptoAiChatWhereInput
+  orderBy?: Prisma.CryptoAiChatOrderByWithRelationInput | Prisma.CryptoAiChatOrderByWithRelationInput[]
+  cursor?: Prisma.CryptoAiChatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CryptoAiChatScalarFieldEnum | Prisma.CryptoAiChatScalarFieldEnum[]
 }
 
 /**

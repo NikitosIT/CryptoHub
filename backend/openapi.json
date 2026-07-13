@@ -111,6 +111,120 @@
           "user"
         ]
       },
+      "CryptoAiChatStreamRequest": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "TOKEN_FORECAST"
+            ]
+          },
+          "tokenSymbol": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "action",
+          "tokenSymbol"
+        ],
+        "additionalProperties": false
+      },
+      "CryptoAiChatByIdResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "tokenSymbol": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "STREAMING",
+              "COMPLETED",
+              "ABORTED"
+            ]
+          },
+          "responseText": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "tokenSymbol",
+          "status",
+          "responseText",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "CryptoAiUsageTodayResponse": {
+        "type": "object",
+        "properties": {
+          "used": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "remaining": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "used",
+          "limit",
+          "remaining"
+        ],
+        "additionalProperties": false
+      },
+      "ToggleFavoriteRequest": {
+        "type": "object",
+        "properties": {
+          "postId": {
+            "type": "integer",
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        },
+        "required": [
+          "postId"
+        ],
+        "additionalProperties": false
+      },
+      "ToggleFavoriteResponse": {
+        "type": "object",
+        "properties": {
+          "isFavorite": {
+            "type": "boolean"
+          },
+          "favoritesCount": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "isFavorite",
+          "favoritesCount"
+        ],
+        "additionalProperties": false
+      },
       "TelegramPost": {
         "type": "object",
         "properties": {
@@ -621,6 +735,202 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/crypto-ai/chat/stream": {
+      "post": {
+        "tags": [
+          "Crypto AI"
+        ],
+        "summary": "Start AI crypto chat stream",
+        "description": "Creates a new AI-powered crypto chat and streams the response via SSE (Server-Sent Events).\n\nThe response is a stream of JSON events:\n- `{\"type\":\"init\",\"chatId\":\"...\"}` — emitted first with the chat record ID\n- `{\"type\":\"chunk\",\"content\":\"...\"}` — partial text chunks from the AI\n- `{\"type\":\"done\"}` — generation completed successfully\n- `{\"type\":\"error\",\"message\":\"...\"}` — an error occurred\n\nUsers are limited to 3 requests per day. If the client disconnects mid-stream, the partial response is saved with status ABORTED and still counts toward the limit.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Bearer token returned by the sign-in endpoint.",
+              "example": "Bearer your-auth-token"
+            },
+            "required": true,
+            "description": "Bearer token returned by the sign-in endpoint.",
+            "name": "authorization",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CryptoAiChatStreamRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "SSE stream of AI-generated content.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body validation failed."
+          },
+          "401": {
+            "description": "Authentication is required."
+          },
+          "429": {
+            "description": "Daily request limit reached."
+          }
+        }
+      }
+    },
+    "/crypto-ai/chat/{id}": {
+      "get": {
+        "tags": [
+          "Crypto AI"
+        ],
+        "summary": "Get completed chat by ID",
+        "description": "Returns a single chat record by its ID. Only chats with status COMPLETED are returned.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Chat record ID"
+            },
+            "required": true,
+            "description": "Chat record ID",
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Bearer token returned by the sign-in endpoint.",
+              "example": "Bearer your-auth-token"
+            },
+            "required": true,
+            "description": "Bearer token returned by the sign-in endpoint.",
+            "name": "authorization",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat record found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoAiChatByIdResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is required."
+          },
+          "404": {
+            "description": "Chat not found."
+          }
+        }
+      }
+    },
+    "/crypto-ai/usage/today": {
+      "get": {
+        "tags": [
+          "Crypto AI"
+        ],
+        "summary": "Get today's AI chat usage",
+        "description": "Returns the current user's daily usage count, limit, and remaining requests.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Bearer token returned by the sign-in endpoint.",
+              "example": "Bearer your-auth-token"
+            },
+            "required": true,
+            "description": "Bearer token returned by the sign-in endpoint.",
+            "name": "authorization",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current usage information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoAiUsageTodayResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is required."
+          }
+        }
+      }
+    },
+    "/posts/favorites": {
+      "post": {
+        "tags": [
+          "Telegram Posts"
+        ],
+        "summary": "Toggle post favorite",
+        "description": "Adds the post to the authenticated user's favorites if it is not there yet, otherwise removes it and returns the updated favorite state.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Bearer token returned by the sign-in endpoint.",
+              "example": "Bearer your-auth-token"
+            },
+            "required": true,
+            "description": "Bearer token returned by the sign-in endpoint.",
+            "name": "authorization",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleFavoriteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Favorite state was updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToggleFavoriteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body validation failed."
+          },
+          "401": {
+            "description": "Authentication is required."
           }
         }
       }

@@ -392,6 +392,7 @@ export const ModelName = {
   PostFavorite: 'PostFavorite',
   PostReaction: 'PostReaction',
   TwoFactor: 'TwoFactor',
+  CryptoAiChat: 'CryptoAiChat',
   CryptotokenSnapshot: 'CryptotokenSnapshot'
 } as const
 
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "postFavorite" | "postReaction" | "twoFactor" | "cryptotokenSnapshot"
+    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "postFavorite" | "postReaction" | "twoFactor" | "cryptoAiChat" | "cryptotokenSnapshot"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1004,6 +1005,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CryptoAiChat: {
+      payload: Prisma.$CryptoAiChatPayload<ExtArgs>
+      fields: Prisma.CryptoAiChatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CryptoAiChatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CryptoAiChatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
+        }
+        findFirst: {
+          args: Prisma.CryptoAiChatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CryptoAiChatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
+        }
+        findMany: {
+          args: Prisma.CryptoAiChatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>[]
+        }
+        create: {
+          args: Prisma.CryptoAiChatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
+        }
+        createMany: {
+          args: Prisma.CryptoAiChatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CryptoAiChatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>[]
+        }
+        delete: {
+          args: Prisma.CryptoAiChatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
+        }
+        update: {
+          args: Prisma.CryptoAiChatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
+        }
+        deleteMany: {
+          args: Prisma.CryptoAiChatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CryptoAiChatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CryptoAiChatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>[]
+        }
+        upsert: {
+          args: Prisma.CryptoAiChatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
+        }
+        aggregate: {
+          args: Prisma.CryptoAiChatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCryptoAiChat>
+        }
+        groupBy: {
+          args: Prisma.CryptoAiChatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CryptoAiChatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CryptoAiChatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CryptoAiChatCountAggregateOutputType> | number
+        }
+      }
+    }
     CryptotokenSnapshot: {
       payload: Prisma.$CryptotokenSnapshotPayload<ExtArgs>
       fields: Prisma.CryptotokenSnapshotFieldRefs
@@ -1229,6 +1304,21 @@ export const TwoFactorScalarFieldEnum = {
 export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
 
 
+export const CryptoAiChatScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  tokenSymbol: 'tokenSymbol',
+  status: 'status',
+  responseText: 'responseText',
+  request: 'request',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CryptoAiChatScalarFieldEnum = (typeof CryptoAiChatScalarFieldEnum)[keyof typeof CryptoAiChatScalarFieldEnum]
+
+
 export const CryptotokenSnapshotScalarFieldEnum = {
   id: 'id',
   coinGeckoId: 'coinGeckoId',
@@ -1380,6 +1470,20 @@ export type EnumPostReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'PostReactionType[]'
  */
 export type ListEnumPostReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostReactionType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CryptoAiChatStatus'
+ */
+export type EnumCryptoAiChatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CryptoAiChatStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'CryptoAiChatStatus[]'
+ */
+export type ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CryptoAiChatStatus[]'>
     
 
 
@@ -1542,6 +1646,7 @@ export type GlobalOmitConfig = {
   postFavorite?: Prisma.PostFavoriteOmit
   postReaction?: Prisma.PostReactionOmit
   twoFactor?: Prisma.TwoFactorOmit
+  cryptoAiChat?: Prisma.CryptoAiChatOmit
   cryptotokenSnapshot?: Prisma.CryptotokenSnapshotOmit
 }
 

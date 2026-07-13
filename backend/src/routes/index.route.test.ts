@@ -32,6 +32,14 @@ vi.mock("@/modules/posts/telegram/telegram.route.js", () => {
   return { default: router };
 });
 
+vi.mock("@/modules/crypto-ai/crypto-ai.route.js", () => {
+  const router = Router();
+  router.post("/chat/stream", (_req, res) => {
+    res.status(200).json({ ok: "crypto-ai-stream" });
+  });
+  return { default: router };
+});
+
 describe("index router", () => {
   it("mounts posts under /api/posts", async () => {
     const { default: apiRouter } = await import("./index.route.js");
@@ -55,5 +63,19 @@ describe("index router", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ ok: "telegram" });
+  });
+
+  it("mounts crypto-ai chat stream under /api/crypto-ai/chat/stream", async () => {
+    const { default: apiRouter } = await import("./index.route.js");
+
+    const app = express();
+    app.use(APP_ROUTES.api, apiRouter);
+
+    const response = await request(app).post(
+      API_ROUTES.cryptoAiChatStream,
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ ok: "crypto-ai-stream" });
   });
 });

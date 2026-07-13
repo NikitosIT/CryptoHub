@@ -14,6 +14,7 @@ export const APP_ROUTES = {
 
 export const API_ROUTE_SEGMENTS = {
   auth: "/auth",
+  cryptoAi: "/crypto-ai",
   cryptotokens: "/cryptotokens",
   telegram: "/telegram",
   posts: "/posts",
@@ -22,6 +23,9 @@ export const API_ROUTE_SEGMENTS = {
 
 export const API_ROUTES = {
   auth: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.auth}`,
+  cryptoAiChatStream: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.cryptoAi}/chat/stream`,
+  cryptoAiChat: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.cryptoAi}/chat`,
+  cryptoAiUsageToday: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.cryptoAi}/usage/today`,
   cryptotokens: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.cryptotokens}`,
   telegram: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.telegram}`,
   posts: `${APP_ROUTES.api}${API_ROUTE_SEGMENTS.posts}`,

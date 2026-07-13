@@ -22,6 +22,7 @@ model User {
   accounts  Account[]
   favorites PostFavorite[]
   reaction  PostReaction[]
+  chats     CryptoAiChat[]
 
   twoFactorEnabled Boolean?    @default(false)
   twofactors       TwoFactor[]
@@ -161,6 +162,33 @@ model TwoFactor {
   @@index([secret])
   @@index([userId])
   @@map("two_factor")
+}
+
+enum CryptoAiChatStatus {
+  STREAMING
+  COMPLETED
+  ABORTED
+}
+
+model CryptoAiChat {
+  id String @id @default(ulid())
+
+  userId String @map("user_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  action       String
+  tokenSymbol  String            @map("token_symbol")
+  status       CryptoAiChatStatus
+  responseText String?           @map("response_text")
+
+  request Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId, createdAt])
+  @@map("crypto_ai_chats")
 }
 
 model CryptotokenSnapshot {
