@@ -1,9 +1,10 @@
 import z from "zod";
 
-export const toggleFavoriteBodySchema = z
+export const toggleFavoriteParamsSchema = z
   .object({
-    postId: z.number().int().positive(),
+    postId: z
+      .string()
+      .regex(/^[1-9]\d*$/)
+      .transform(Number),
   })
   .strict();
-
-export type ToggleFavoriteBody = z.infer<typeof toggleFavoriteBodySchema>;

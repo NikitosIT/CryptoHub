@@ -89,9 +89,7 @@ describe("GET /api/posts", () => {
 
     findManyMock.mockResolvedValue(data);
 
-    const response = await request(app).get(
-      `${API_ROUTES.posts}?cursor=5`,
-    );
+    const response = await request(app).get(`${API_ROUTES.posts}?cursor=5`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
@@ -114,9 +112,7 @@ describe("GET /api/posts", () => {
     "cursor=1&cursor=2",
     "cursor=1&page=2",
   ])("rejects invalid query: %s", async (query) => {
-    const response = await request(app).get(
-      `${API_ROUTES.posts}?${query}`,
-    );
+    const response = await request(app).get(`${API_ROUTES.posts}?${query}`);
     const body = response.body as {
       issues: unknown[];
       message: string;

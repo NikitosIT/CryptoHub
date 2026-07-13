@@ -1,6 +1,6 @@
 import type { NextFunction, Response } from "express";
 
-import { toggleFavoriteBodySchema } from "./favorites.schema.js";
+import { toggleFavoriteParamsSchema } from "./favorites.schema.js";
 import type { ToggleFavoriteRequest } from "./favorites.types.js";
 
 export const validateToggleFavorite = (
@@ -8,6 +8,6 @@ export const validateToggleFavorite = (
   _res: Response,
   next: NextFunction,
 ) => {
-  req.body = toggleFavoriteBodySchema.parse(req.body);
+  toggleFavoriteParamsSchema.parse(req.params);
   next();
 };

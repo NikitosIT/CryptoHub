@@ -2,6 +2,7 @@ import { Router } from "express";
 import swaggerUi from "swagger-ui-express";
 
 import { ROUTE_SEGMENTS } from "@/constants/routes.js";
+
 import { generateOpenApiDocument } from "./document.js";
 
 const router = Router();

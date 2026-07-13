@@ -1,6 +1,6 @@
 import type { Response } from "express";
 
-import { toggleService } from "./favorites.service.js";
+import { favoriteService } from "./favorites.service.js";
 import type {
   ToggleFavoriteRequest,
   ToggleFavoriteResponse,
@@ -10,9 +10,9 @@ export const toggleFavoriteController = async (
   req: ToggleFavoriteRequest,
   res: Response<ToggleFavoriteResponse>,
 ) => {
-  const { postId } = req.body;
+  const postId = Number(req.params.postId);
   const userId = req.user!.id;
-  const result = await toggleService.favorite({
+  const result = await favoriteService.toggle({
     postId,
     userId,
   });

@@ -1,4 +1,5 @@
 import { API_ROUTE_SEGMENTS } from "@/constants/routes.js";
+
 import { openApiRegistry } from "../../openapi/registry.js";
 import {
   telegramPostSchema,

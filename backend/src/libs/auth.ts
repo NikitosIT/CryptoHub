@@ -3,7 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { emailOTP, twoFactor } from "better-auth/plugins";
 
 import { env } from "@/config/env.js";
-import { sendAuthOtpEmail } from "@/modules/auth/email-otp/email-otp.service.js";
+import { authEmailService } from "@/modules/auth/email-otp/email-otp.service.js";
 
 import { getConfiguredOrigins } from "../middleware/corsMiddleware.js";
 import { prisma } from "./db.js";
@@ -32,7 +32,7 @@ export const auth = betterAuth({
       async sendVerificationOTP({ email, otp, type }) {
         switch (type) {
           case "sign-in":
-            await sendAuthOtpEmail({ email, otp });
+            await authEmailService.sendOtp({ email, otp });
             break;
 
           default:

@@ -32,10 +32,18 @@ vi.mock("@/modules/posts/telegram/telegram.route.js", () => {
   return { default: router };
 });
 
-vi.mock("@/modules/crypto-ai/crypto-ai.route.js", () => {
+vi.mock("@/modules/posts/favorites/favorites.route.js", () => {
   const router = Router();
-  router.post("/chat/stream", (_req, res) => {
-    res.status(200).json({ ok: "crypto-ai-stream" });
+  router.post("/:postId/favorites", (_req, res) => {
+    res.status(200).json({ ok: "favorites" });
+  });
+  return { default: router };
+});
+
+vi.mock("@/modules/posts/reactions/reactions.route.js", () => {
+  const router = Router();
+  router.post("/:postId/reactions", (_req, res) => {
+    res.status(200).json({ ok: "reactions" });
   });
   return { default: router };
 });
@@ -65,17 +73,42 @@ describe("index router", () => {
     expect(response.body).toEqual({ ok: "telegram" });
   });
 
-  it("mounts crypto-ai chat stream under /api/crypto-ai/chat/stream", async () => {
+  it("mounts favorites under /api/posts/:postId/favorites", async () => {
     const { default: apiRouter } = await import("./index.route.js");
 
     const app = express();
     app.use(APP_ROUTES.api, apiRouter);
 
     const response = await request(app).post(
-      API_ROUTES.cryptoAiChatStream,
+      API_ROUTES.favorites.replace(":postId", "42"),
     );
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ ok: "crypto-ai-stream" });
+    expect(response.body).toEqual({ ok: "favorites" });
+  });
+
+  it("mounts reactions under /api/posts/:postId/reactions", async () => {
+    const { default: apiRouter } = await import("./index.route.js");
+
+    const app = express();
+    app.use(APP_ROUTES.api, apiRouter);
+
+    const response = await request(app).post(
+      API_ROUTES.reactions.replace(":postId", "42"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ ok: "reactions" });
+  });
+
+  it("mounts auth handler under /api/auth/*", async () => {
+    const { default: apiRouter } = await import("./index.route.js");
+
+    const app = express();
+    app.use(APP_ROUTES.api, apiRouter);
+
+    const response = await request(app).get(`${API_ROUTES.auth}/session`);
+
+    expect(response.status).toBe(204);
   });
 });

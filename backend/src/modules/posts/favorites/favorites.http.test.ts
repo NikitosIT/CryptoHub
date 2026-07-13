@@ -6,21 +6,23 @@ import express, {
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { API_ROUTES } from "@/constants/routes.js";
+import { errorHandler } from "@/middleware/errorHandler.js";
+
 import type {
   PostFavorite,
   TelegramPost,
 } from "../../../../prisma/generated/prisma/client.js";
-import { API_ROUTES } from "@/constants/routes.js";
-import { errorHandler } from "@/middleware/errorHandler.js";
 
 type FavoriteTransactionClient = {
+  telegramPost: {
+    findUnique: typeof findPostMock;
+    update: typeof updateMock;
+  };
   postFavorite: {
     findUnique: typeof findUniqueMock;
     create: typeof createMock;
     delete: typeof deleteMock;
-  };
-  telegramPost: {
-    update: typeof updateMock;
   };
 };
 
@@ -28,14 +30,21 @@ type FavoriteTransactionCallback<T> = (
   tx: FavoriteTransactionClient,
 ) => Promise<T>;
 
-const { transactionMock, findUniqueMock, createMock, deleteMock, updateMock } =
-  vi.hoisted(() => ({
-    transactionMock: vi.fn(),
-    findUniqueMock: vi.fn(),
-    createMock: vi.fn(),
-    deleteMock: vi.fn(),
-    updateMock: vi.fn(),
-  }));
+const {
+  transactionMock,
+  findPostMock,
+  findUniqueMock,
+  createMock,
+  deleteMock,
+  updateMock,
+} = vi.hoisted(() => ({
+  transactionMock: vi.fn(),
+  findPostMock: vi.fn(),
+  findUniqueMock: vi.fn(),
+  createMock: vi.fn(),
+  deleteMock: vi.fn(),
+  updateMock: vi.fn(),
+}));
 
 vi.mock("@/libs/db.js", () => ({
   prisma: {
@@ -68,13 +77,16 @@ import favoritesRouter from "./favorites.route.js";
 const app = express();
 
 app.use(express.json());
-app.use(API_ROUTES.favorites, favoritesRouter);
+app.use(API_ROUTES.posts, favoritesRouter);
 app.use(errorHandler);
 
-describe("POST /api/posts/favorites", () => {
+describe("POST /api/posts/:postId/favorites", () => {
+  const validFavoriteRoute = API_ROUTES.favorites.replace(":postId", "42");
+
   beforeEach(() => {
     vi.clearAllMocks();
 
+    findPostMock.mockReset();
     findUniqueMock.mockReset();
     createMock.mockReset();
     deleteMock.mockReset();
@@ -83,13 +95,14 @@ describe("POST /api/posts/favorites", () => {
     transactionMock.mockImplementation(
       async <T>(callback: FavoriteTransactionCallback<T>): Promise<T> => {
         const tx: FavoriteTransactionClient = {
+          telegramPost: {
+            findUnique: findPostMock,
+            update: updateMock,
+          },
           postFavorite: {
             findUnique: findUniqueMock,
             create: createMock,
             delete: deleteMock,
-          },
-          telegramPost: {
-            update: updateMock,
           },
         };
 
@@ -99,6 +112,7 @@ describe("POST /api/posts/favorites", () => {
   });
 
   it("adds a post to favorites and increments favoritesCount", async () => {
+    findPostMock.mockResolvedValue({ id: 42 });
     findUniqueMock.mockResolvedValue(null);
     createMock.mockResolvedValue({
       id: 1,
@@ -109,14 +123,11 @@ describe("POST /api/posts/favorites", () => {
       favoritesCount: 3,
     } satisfies Pick<TelegramPost, "favoritesCount">);
 
-    const response = await request(app)
-      .post(API_ROUTES.favorites)
-      .send({ postId: 42 });
+    const response = await request(app).post(validFavoriteRoute);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       isFavorite: true,
-      favoritesCount: 3,
     });
     expect(findUniqueMock).toHaveBeenCalledWith({
       where: {
@@ -139,14 +150,12 @@ describe("POST /api/posts/favorites", () => {
           increment: 1,
         },
       },
-      select: {
-        favoritesCount: true,
-      },
     });
     expect(deleteMock).not.toHaveBeenCalled();
   });
 
   it("removes a post from favorites and decrements favoritesCount", async () => {
+    findPostMock.mockResolvedValue({ id: 42 });
     findUniqueMock.mockResolvedValue({
       id: 1,
       userId: "user-1",
@@ -159,14 +168,11 @@ describe("POST /api/posts/favorites", () => {
       favoritesCount: 2,
     } satisfies Pick<TelegramPost, "favoritesCount">);
 
-    const response = await request(app)
-      .post(API_ROUTES.favorites)
-      .send({ postId: 42 });
+    const response = await request(app).post(validFavoriteRoute);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       isFavorite: false,
-      favoritesCount: 2,
     });
     expect(deleteMock).toHaveBeenCalledWith({
       where: {
@@ -183,21 +189,17 @@ describe("POST /api/posts/favorites", () => {
           decrement: 1,
         },
       },
-      select: {
-        favoritesCount: true,
-      },
     });
     expect(createMock).not.toHaveBeenCalled();
   });
 
   it.each([
-    {},
-    { postId: "42" },
-    { postId: 0 },
-    { postId: -1 },
-    { postId: 1.5 },
-  ])("rejects invalid body: %j", async (body) => {
-    const response = await request(app).post(API_ROUTES.favorites).send(body);
+    API_ROUTES.favorites.replace(":postId", "abc"),
+    API_ROUTES.favorites.replace(":postId", "0"),
+    API_ROUTES.favorites.replace(":postId", "-1"),
+    API_ROUTES.favorites.replace(":postId", "1.5"),
+  ])("rejects invalid params: %s", async (url) => {
+    const response = await request(app).post(url);
 
     const responseBody = response.body as {
       issues: unknown[];

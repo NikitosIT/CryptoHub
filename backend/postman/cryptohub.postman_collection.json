@@ -222,9 +222,37 @@
                 "value": "Bearer {{authToken}}"
               }
             ],
+            "url": {
+              "raw": "{{apiBaseUrl}}/posts/42/favorites",
+              "host": [
+                "{{apiBaseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "42",
+                "favorites"
+              ]
+            },
+            "description": "Adds the post to favorites if it is not favorited yet, otherwise removes it and returns whether the post is now in favorites."
+          }
+        },
+        {
+          "name": "Toggle Post Reaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"postId\": 42\n}",
+              "raw": "{\n  \"reactionType\": \"LIKE\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -232,16 +260,17 @@
               }
             },
             "url": {
-              "raw": "{{apiBaseUrl}}/posts/favorites",
+              "raw": "{{apiBaseUrl}}/posts/42/reactions",
               "host": [
                 "{{apiBaseUrl}}"
               ],
               "path": [
                 "posts",
-                "favorites"
+                "42",
+                "reactions"
               ]
             },
-            "description": "Adds the post to favorites if it is not favorited yet, otherwise removes it and returns the updated favorite state."
+            "description": "Adds, removes, or switches the authenticated user's reaction for the selected post and returns updated reaction counters."
           }
         }
       ]

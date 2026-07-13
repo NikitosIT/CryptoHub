@@ -8,7 +8,7 @@ type SendAuthOtpEmailParams = {
   otp: string;
 };
 
-export async function sendAuthOtpEmail({
+export async function sendOtp({
   email,
   otp,
 }: SendAuthOtpEmailParams): Promise<void> {
@@ -42,3 +42,6 @@ export async function sendAuthOtpEmail({
     "OTP email sent successfully",
   );
 }
+export const authEmailService = {
+  sendOtp,
+};

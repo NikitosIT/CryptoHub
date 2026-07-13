@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-import { API_ROUTE_SEGMENTS } from "@/constants/routes.js";
-
 import { openApiRegistry } from "../../../openapi/registry.js";
-import { toggleFavoriteBodySchema } from "./favorites.schema.js";
 
 const authHeaderSchema = z.object({
   authorization: z.string().min(1).openapi({
@@ -12,17 +9,20 @@ const authHeaderSchema = z.object({
   }),
 });
 
-const toggleFavoriteResponseSchema = z
+const toggleFavoriteParamsOpenApiSchema = z
   .object({
-    isFavorite: z.boolean(),
-    favoritesCount: z.number().int().nonnegative(),
+    postId: z.number().int().positive().openapi({
+      description: "Telegram post identifier.",
+      example: 42,
+    }),
   })
   .strict();
 
-const toggleFavoriteRequestSchema = openApiRegistry.register(
-  "ToggleFavoriteRequest",
-  toggleFavoriteBodySchema,
-);
+const toggleFavoriteResponseSchema = z
+  .object({
+    isFavorite: z.boolean(),
+  })
+  .strict();
 
 const toggleFavoriteResultSchema = openApiRegistry.register(
   "ToggleFavoriteResponse",
@@ -31,21 +31,14 @@ const toggleFavoriteResultSchema = openApiRegistry.register(
 
 openApiRegistry.registerPath({
   method: "post",
-  path: `${API_ROUTE_SEGMENTS.posts}${API_ROUTE_SEGMENTS.favorites}`,
+  path: "/posts/{postId}/favorites",
   tags: ["Telegram Posts"],
   summary: "Toggle post favorite",
   description:
-    "Adds the post to the authenticated user's favorites if it is not there yet, otherwise removes it and returns the updated favorite state.",
+    "Adds the post to the authenticated user's favorites if it is not there yet, otherwise removes it and returns whether the post is now in favorites.",
   request: {
     headers: authHeaderSchema,
-    body: {
-      required: true,
-      content: {
-        "application/json": {
-          schema: toggleFavoriteRequestSchema,
-        },
-      },
-    },
+    params: toggleFavoriteParamsOpenApiSchema,
   },
   responses: {
     200: {
@@ -57,10 +50,13 @@ openApiRegistry.registerPath({
       },
     },
     400: {
-      description: "Request body validation failed.",
+      description: "Route params validation failed.",
     },
     401: {
       description: "Authentication is required.",
+    },
+    404: {
+      description: "Post was not found.",
     },
   },
 });

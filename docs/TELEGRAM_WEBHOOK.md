@@ -1,4 +1,5 @@
 # Telegram bot webhook setup
+Hello
 
 Telegram sends updates to a **public HTTPS URL**. Your `telegram-bot` Edge Function is that endpoint. You must tell Telegram where to send updates using **setWebhook**.
 
