@@ -3,6 +3,7 @@ import { Router } from "express";
 
 import { API_ROUTE_SEGMENTS, ROUTE_SEGMENTS } from "@/constants/routes.js";
 import { auth } from "@/libs/auth.js";
+import commentsRoutes from "@/modules/posts/comments/comments.route.js";
 import favoritesRoutes from "@/modules/posts/favorites/favorites.route.js";
 import postsRoutes from "@/modules/posts/posts.route.js";
 import reactionsRoutes from "@/modules/posts/reactions/reactions.route.js";
@@ -13,6 +14,7 @@ const router = Router();
 router.all(ROUTE_SEGMENTS.authWildcard, toNodeHandler(auth));
 
 router.use(API_ROUTE_SEGMENTS.posts, postsRoutes);
+router.use(API_ROUTE_SEGMENTS.posts, commentsRoutes);
 router.use(API_ROUTE_SEGMENTS.posts, favoritesRoutes);
 router.use(API_ROUTE_SEGMENTS.posts, reactionsRoutes);
 router.use(API_ROUTE_SEGMENTS.telegram, telegramRoutes);

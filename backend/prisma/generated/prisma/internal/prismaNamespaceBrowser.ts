@@ -59,8 +59,9 @@ export const ModelName = {
   PostFavorite: 'PostFavorite',
   PostReaction: 'PostReaction',
   TwoFactor: 'TwoFactor',
-  CryptoAiChat: 'CryptoAiChat',
-  CryptotokenSnapshot: 'CryptotokenSnapshot'
+  CryptotokenSnapshot: 'CryptotokenSnapshot',
+  PostComment: 'PostComment',
+  PostCommentMedia: 'PostCommentMedia'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -191,21 +192,6 @@ export const TwoFactorScalarFieldEnum = {
 export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
 
 
-export const CryptoAiChatScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  action: 'action',
-  tokenSymbol: 'tokenSymbol',
-  status: 'status',
-  responseText: 'responseText',
-  request: 'request',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CryptoAiChatScalarFieldEnum = (typeof CryptoAiChatScalarFieldEnum)[keyof typeof CryptoAiChatScalarFieldEnum]
-
-
 export const CryptotokenSnapshotScalarFieldEnum = {
   id: 'id',
   coinGeckoId: 'coinGeckoId',
@@ -234,6 +220,38 @@ export const CryptotokenSnapshotScalarFieldEnum = {
 } as const
 
 export type CryptotokenSnapshotScalarFieldEnum = (typeof CryptotokenSnapshotScalarFieldEnum)[keyof typeof CryptotokenSnapshotScalarFieldEnum]
+
+
+export const PostCommentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId',
+  parentCommentId: 'parentCommentId',
+  text: 'text',
+  likeCount: 'likeCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostCommentScalarFieldEnum = (typeof PostCommentScalarFieldEnum)[keyof typeof PostCommentScalarFieldEnum]
+
+
+export const PostCommentMediaScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  type: 'type',
+  storage: 'storage',
+  bucket: 'bucket',
+  key: 'key',
+  url: 'url',
+  mimeType: 'mimeType',
+  size: 'size',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type PostCommentMediaScalarFieldEnum = (typeof PostCommentMediaScalarFieldEnum)[keyof typeof PostCommentMediaScalarFieldEnum]
 
 
 export const SortOrder = {

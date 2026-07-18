@@ -22,10 +22,10 @@ model User {
   accounts  Account[]
   favorites PostFavorite[]
   reaction  PostReaction[]
-  chats     CryptoAiChat[]
 
-  twoFactorEnabled Boolean?    @default(false)
+  twoFactorEnabled Boolean?      @default(false)
   twofactors       TwoFactor[]
+  postComments     PostComment[]
 
   @@map("user")
 }
@@ -103,8 +103,9 @@ model TelegramPost {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  favorites PostFavorite[]
-  reaction  PostReaction[]
+  favorites    PostFavorite[]
+  reaction     PostReaction[]
+  postComments PostComment[]
 
   @@map("telegram_posts")
 }
@@ -164,33 +165,6 @@ model TwoFactor {
   @@map("two_factor")
 }
 
-enum CryptoAiChatStatus {
-  STREAMING
-  COMPLETED
-  ABORTED
-}
-
-model CryptoAiChat {
-  id String @id @default(ulid())
-
-  userId String @map("user_id")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  action       String
-  tokenSymbol  String            @map("token_symbol")
-  status       CryptoAiChatStatus
-  responseText String?           @map("response_text")
-
-  request Json?
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@index([userId, createdAt])
-  @@map("crypto_ai_chats")
-}
-
 model CryptotokenSnapshot {
   id Int @id @default(autoincrement())
 
@@ -221,4 +195,53 @@ model CryptotokenSnapshot {
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@map("cryptotoken_snapshots")
+}
+
+model PostComment {
+  id              Int    @id @default(autoincrement())
+  userId          String @map("user_id")
+  postId          Int    @map("post_id")
+  parentCommentId Int?   @map("parent_comment_id")
+
+  parentComment PostComment?  @relation("CommentReplies", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  replies       PostComment[] @relation("CommentReplies")
+
+  post TelegramPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  text String
+
+  likeCount Int                @default(0) @map("like_count")
+  media     PostCommentMedia[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("post_comments")
+}
+
+model PostCommentMedia {
+  id        Int @id @default(autoincrement())
+  commentId Int @map("comment_id")
+
+  type     MediaType
+  storage  String    @default("s3")
+  bucket   String?
+  key      String
+  url      String?
+  mimeType String?   @map("mime_type")
+  size     Int?
+  width    Int?
+  height   Int?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@map("post_comment_media")
+}
+
+enum MediaType {
+  photo
+  video
 }

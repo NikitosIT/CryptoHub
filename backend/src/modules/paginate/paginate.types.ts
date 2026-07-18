@@ -9,11 +9,8 @@ export type PaginatedResult<TItem> = {
   nextCursor: number | null;
 };
 
-export type PaginateParams<TArgs, TItem extends { id: number }> = {
-  model: {
-    findMany(args: TArgs): Promise<TItem[]>;
-  };
-  getArgs: (paginationArgs: PaginationArgs) => TArgs;
+export type PaginateParams<TItem extends { id: number }> = {
+  query: (paginationArgs: PaginationArgs) => Promise<TItem[]>;
   cursor?: number;
   limit?: number;
 };

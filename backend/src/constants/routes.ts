@@ -19,6 +19,7 @@ export const API_ROUTE_SEGMENTS = {
   posts: "/posts",
   favorites: "/:postId/favorites",
   reactions: "/:postId/reactions",
+  comments: "/:postId/comments",
 } as const;
 
 export const API_ROUTES = {

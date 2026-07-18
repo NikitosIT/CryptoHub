@@ -392,8 +392,9 @@ export const ModelName = {
   PostFavorite: 'PostFavorite',
   PostReaction: 'PostReaction',
   TwoFactor: 'TwoFactor',
-  CryptoAiChat: 'CryptoAiChat',
-  CryptotokenSnapshot: 'CryptotokenSnapshot'
+  CryptotokenSnapshot: 'CryptotokenSnapshot',
+  PostComment: 'PostComment',
+  PostCommentMedia: 'PostCommentMedia'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "postFavorite" | "postReaction" | "twoFactor" | "cryptoAiChat" | "cryptotokenSnapshot"
+    modelProps: "user" | "session" | "account" | "verification" | "telegramPost" | "postFavorite" | "postReaction" | "twoFactor" | "cryptotokenSnapshot" | "postComment" | "postCommentMedia"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1005,80 +1006,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    CryptoAiChat: {
-      payload: Prisma.$CryptoAiChatPayload<ExtArgs>
-      fields: Prisma.CryptoAiChatFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.CryptoAiChatFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.CryptoAiChatFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
-        }
-        findFirst: {
-          args: Prisma.CryptoAiChatFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.CryptoAiChatFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
-        }
-        findMany: {
-          args: Prisma.CryptoAiChatFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>[]
-        }
-        create: {
-          args: Prisma.CryptoAiChatCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
-        }
-        createMany: {
-          args: Prisma.CryptoAiChatCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.CryptoAiChatCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>[]
-        }
-        delete: {
-          args: Prisma.CryptoAiChatDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
-        }
-        update: {
-          args: Prisma.CryptoAiChatUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
-        }
-        deleteMany: {
-          args: Prisma.CryptoAiChatDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.CryptoAiChatUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.CryptoAiChatUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>[]
-        }
-        upsert: {
-          args: Prisma.CryptoAiChatUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CryptoAiChatPayload>
-        }
-        aggregate: {
-          args: Prisma.CryptoAiChatAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCryptoAiChat>
-        }
-        groupBy: {
-          args: Prisma.CryptoAiChatGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CryptoAiChatGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.CryptoAiChatCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CryptoAiChatCountAggregateOutputType> | number
-        }
-      }
-    }
     CryptotokenSnapshot: {
       payload: Prisma.$CryptotokenSnapshotPayload<ExtArgs>
       fields: Prisma.CryptotokenSnapshotFieldRefs
@@ -1150,6 +1077,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CryptotokenSnapshotCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CryptotokenSnapshotCountAggregateOutputType> | number
+        }
+      }
+    }
+    PostComment: {
+      payload: Prisma.$PostCommentPayload<ExtArgs>
+      fields: Prisma.PostCommentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PostCommentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PostCommentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>
+        }
+        findFirst: {
+          args: Prisma.PostCommentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PostCommentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>
+        }
+        findMany: {
+          args: Prisma.PostCommentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>[]
+        }
+        create: {
+          args: Prisma.PostCommentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>
+        }
+        createMany: {
+          args: Prisma.PostCommentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PostCommentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>[]
+        }
+        delete: {
+          args: Prisma.PostCommentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>
+        }
+        update: {
+          args: Prisma.PostCommentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>
+        }
+        deleteMany: {
+          args: Prisma.PostCommentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PostCommentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PostCommentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>[]
+        }
+        upsert: {
+          args: Prisma.PostCommentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentPayload>
+        }
+        aggregate: {
+          args: Prisma.PostCommentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePostComment>
+        }
+        groupBy: {
+          args: Prisma.PostCommentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostCommentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PostCommentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostCommentCountAggregateOutputType> | number
+        }
+      }
+    }
+    PostCommentMedia: {
+      payload: Prisma.$PostCommentMediaPayload<ExtArgs>
+      fields: Prisma.PostCommentMediaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PostCommentMediaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PostCommentMediaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>
+        }
+        findFirst: {
+          args: Prisma.PostCommentMediaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PostCommentMediaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>
+        }
+        findMany: {
+          args: Prisma.PostCommentMediaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>[]
+        }
+        create: {
+          args: Prisma.PostCommentMediaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>
+        }
+        createMany: {
+          args: Prisma.PostCommentMediaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PostCommentMediaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>[]
+        }
+        delete: {
+          args: Prisma.PostCommentMediaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>
+        }
+        update: {
+          args: Prisma.PostCommentMediaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>
+        }
+        deleteMany: {
+          args: Prisma.PostCommentMediaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PostCommentMediaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PostCommentMediaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>[]
+        }
+        upsert: {
+          args: Prisma.PostCommentMediaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostCommentMediaPayload>
+        }
+        aggregate: {
+          args: Prisma.PostCommentMediaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePostCommentMedia>
+        }
+        groupBy: {
+          args: Prisma.PostCommentMediaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostCommentMediaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PostCommentMediaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostCommentMediaCountAggregateOutputType> | number
         }
       }
     }
@@ -1304,21 +1379,6 @@ export const TwoFactorScalarFieldEnum = {
 export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
 
 
-export const CryptoAiChatScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  action: 'action',
-  tokenSymbol: 'tokenSymbol',
-  status: 'status',
-  responseText: 'responseText',
-  request: 'request',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CryptoAiChatScalarFieldEnum = (typeof CryptoAiChatScalarFieldEnum)[keyof typeof CryptoAiChatScalarFieldEnum]
-
-
 export const CryptotokenSnapshotScalarFieldEnum = {
   id: 'id',
   coinGeckoId: 'coinGeckoId',
@@ -1347,6 +1407,38 @@ export const CryptotokenSnapshotScalarFieldEnum = {
 } as const
 
 export type CryptotokenSnapshotScalarFieldEnum = (typeof CryptotokenSnapshotScalarFieldEnum)[keyof typeof CryptotokenSnapshotScalarFieldEnum]
+
+
+export const PostCommentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId',
+  parentCommentId: 'parentCommentId',
+  text: 'text',
+  likeCount: 'likeCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PostCommentScalarFieldEnum = (typeof PostCommentScalarFieldEnum)[keyof typeof PostCommentScalarFieldEnum]
+
+
+export const PostCommentMediaScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  type: 'type',
+  storage: 'storage',
+  bucket: 'bucket',
+  key: 'key',
+  url: 'url',
+  mimeType: 'mimeType',
+  size: 'size',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type PostCommentMediaScalarFieldEnum = (typeof PostCommentMediaScalarFieldEnum)[keyof typeof PostCommentMediaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1474,20 +1566,6 @@ export type ListEnumPostReactionTypeFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
- * Reference to a field of type 'CryptoAiChatStatus'
- */
-export type EnumCryptoAiChatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CryptoAiChatStatus'>
-    
-
-
-/**
- * Reference to a field of type 'CryptoAiChatStatus[]'
- */
-export type ListEnumCryptoAiChatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CryptoAiChatStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -1512,6 +1590,20 @@ export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'BigInt[]'
  */
 export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MediaType'
+ */
+export type EnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType'>
+    
+
+
+/**
+ * Reference to a field of type 'MediaType[]'
+ */
+export type ListEnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType[]'>
     
 
 
@@ -1646,8 +1738,9 @@ export type GlobalOmitConfig = {
   postFavorite?: Prisma.PostFavoriteOmit
   postReaction?: Prisma.PostReactionOmit
   twoFactor?: Prisma.TwoFactorOmit
-  cryptoAiChat?: Prisma.CryptoAiChatOmit
   cryptotokenSnapshot?: Prisma.CryptotokenSnapshotOmit
+  postComment?: Prisma.PostCommentOmit
+  postCommentMedia?: Prisma.PostCommentMediaOmit
 }
 
 /* Types for Logging */

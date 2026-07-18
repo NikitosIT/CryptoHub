@@ -9,9 +9,10 @@ import { getConfiguredOrigins } from "../middleware/corsMiddleware.js";
 import { prisma } from "./db.js";
 
 const origins = getConfiguredOrigins();
+const APP_NAME = "CryptoHub";
 
 export const auth = betterAuth({
-  appName: "CryptoHub",
+  appName: APP_NAME,
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   trustedOrigins: origins,
@@ -29,6 +30,10 @@ export const auth = betterAuth({
       otpLength: 6,
       expiresIn: 300,
       allowedAttempts: 3,
+      rateLimit: {
+        window: 60,
+        max: 3,
+      },
       async sendVerificationOTP({ email, otp, type }) {
         switch (type) {
           case "sign-in":

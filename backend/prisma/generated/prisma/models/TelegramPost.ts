@@ -294,6 +294,7 @@ export type TelegramPostWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"TelegramPost"> | Date | string
   favorites?: Prisma.PostFavoriteListRelationFilter
   reaction?: Prisma.PostReactionListRelationFilter
+  postComments?: Prisma.PostCommentListRelationFilter
 }
 
 export type TelegramPostOrderByWithRelationInput = {
@@ -313,6 +314,7 @@ export type TelegramPostOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   favorites?: Prisma.PostFavoriteOrderByRelationAggregateInput
   reaction?: Prisma.PostReactionOrderByRelationAggregateInput
+  postComments?: Prisma.PostCommentOrderByRelationAggregateInput
 }
 
 export type TelegramPostWhereUniqueInput = Prisma.AtLeast<{
@@ -335,6 +337,7 @@ export type TelegramPostWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"TelegramPost"> | Date | string
   favorites?: Prisma.PostFavoriteListRelationFilter
   reaction?: Prisma.PostReactionListRelationFilter
+  postComments?: Prisma.PostCommentListRelationFilter
 }, "id">
 
 export type TelegramPostOrderByWithAggregationInput = {
@@ -395,6 +398,7 @@ export type TelegramPostCreateInput = {
   createdAt?: Date | string
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutPostInput
   reaction?: Prisma.PostReactionCreateNestedManyWithoutPostInput
+  postComments?: Prisma.PostCommentCreateNestedManyWithoutPostInput
 }
 
 export type TelegramPostUncheckedCreateInput = {
@@ -414,6 +418,7 @@ export type TelegramPostUncheckedCreateInput = {
   createdAt?: Date | string
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutPostInput
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutPostInput
+  postComments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutPostInput
 }
 
 export type TelegramPostUpdateInput = {
@@ -432,6 +437,7 @@ export type TelegramPostUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.PostFavoriteUpdateManyWithoutPostNestedInput
   reaction?: Prisma.PostReactionUpdateManyWithoutPostNestedInput
+  postComments?: Prisma.PostCommentUpdateManyWithoutPostNestedInput
 }
 
 export type TelegramPostUncheckedUpdateInput = {
@@ -451,6 +457,7 @@ export type TelegramPostUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutPostNestedInput
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutPostNestedInput
+  postComments?: Prisma.PostCommentUncheckedUpdateManyWithoutPostNestedInput
 }
 
 export type TelegramPostCreateManyInput = {
@@ -622,6 +629,20 @@ export type TelegramPostUpdateOneRequiredWithoutReactionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TelegramPostUpdateToOneWithWhereWithoutReactionInput, Prisma.TelegramPostUpdateWithoutReactionInput>, Prisma.TelegramPostUncheckedUpdateWithoutReactionInput>
 }
 
+export type TelegramPostCreateNestedOneWithoutPostCommentsInput = {
+  create?: Prisma.XOR<Prisma.TelegramPostCreateWithoutPostCommentsInput, Prisma.TelegramPostUncheckedCreateWithoutPostCommentsInput>
+  connectOrCreate?: Prisma.TelegramPostCreateOrConnectWithoutPostCommentsInput
+  connect?: Prisma.TelegramPostWhereUniqueInput
+}
+
+export type TelegramPostUpdateOneRequiredWithoutPostCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TelegramPostCreateWithoutPostCommentsInput, Prisma.TelegramPostUncheckedCreateWithoutPostCommentsInput>
+  connectOrCreate?: Prisma.TelegramPostCreateOrConnectWithoutPostCommentsInput
+  upsert?: Prisma.TelegramPostUpsertWithoutPostCommentsInput
+  connect?: Prisma.TelegramPostWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TelegramPostUpdateToOneWithWhereWithoutPostCommentsInput, Prisma.TelegramPostUpdateWithoutPostCommentsInput>, Prisma.TelegramPostUncheckedUpdateWithoutPostCommentsInput>
+}
+
 export type TelegramPostCreateWithoutFavoritesInput = {
   textCaption?: string | null
   textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -637,6 +658,7 @@ export type TelegramPostCreateWithoutFavoritesInput = {
   commentsCount?: number
   createdAt?: Date | string
   reaction?: Prisma.PostReactionCreateNestedManyWithoutPostInput
+  postComments?: Prisma.PostCommentCreateNestedManyWithoutPostInput
 }
 
 export type TelegramPostUncheckedCreateWithoutFavoritesInput = {
@@ -655,6 +677,7 @@ export type TelegramPostUncheckedCreateWithoutFavoritesInput = {
   commentsCount?: number
   createdAt?: Date | string
   reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutPostInput
+  postComments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutPostInput
 }
 
 export type TelegramPostCreateOrConnectWithoutFavoritesInput = {
@@ -688,6 +711,7 @@ export type TelegramPostUpdateWithoutFavoritesInput = {
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reaction?: Prisma.PostReactionUpdateManyWithoutPostNestedInput
+  postComments?: Prisma.PostCommentUpdateManyWithoutPostNestedInput
 }
 
 export type TelegramPostUncheckedUpdateWithoutFavoritesInput = {
@@ -706,6 +730,7 @@ export type TelegramPostUncheckedUpdateWithoutFavoritesInput = {
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutPostNestedInput
+  postComments?: Prisma.PostCommentUncheckedUpdateManyWithoutPostNestedInput
 }
 
 export type TelegramPostCreateWithoutReactionInput = {
@@ -723,6 +748,7 @@ export type TelegramPostCreateWithoutReactionInput = {
   commentsCount?: number
   createdAt?: Date | string
   favorites?: Prisma.PostFavoriteCreateNestedManyWithoutPostInput
+  postComments?: Prisma.PostCommentCreateNestedManyWithoutPostInput
 }
 
 export type TelegramPostUncheckedCreateWithoutReactionInput = {
@@ -741,6 +767,7 @@ export type TelegramPostUncheckedCreateWithoutReactionInput = {
   commentsCount?: number
   createdAt?: Date | string
   favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutPostInput
+  postComments?: Prisma.PostCommentUncheckedCreateNestedManyWithoutPostInput
 }
 
 export type TelegramPostCreateOrConnectWithoutReactionInput = {
@@ -774,6 +801,7 @@ export type TelegramPostUpdateWithoutReactionInput = {
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.PostFavoriteUpdateManyWithoutPostNestedInput
+  postComments?: Prisma.PostCommentUpdateManyWithoutPostNestedInput
 }
 
 export type TelegramPostUncheckedUpdateWithoutReactionInput = {
@@ -792,6 +820,97 @@ export type TelegramPostUncheckedUpdateWithoutReactionInput = {
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutPostNestedInput
+  postComments?: Prisma.PostCommentUncheckedUpdateManyWithoutPostNestedInput
+}
+
+export type TelegramPostCreateWithoutPostCommentsInput = {
+  textCaption?: string | null
+  textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
+  mediaGroupId?: string | null
+  media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  likeCount?: number
+  dislikeCount?: number
+  favoritesCount?: number
+  commentsCount?: number
+  createdAt?: Date | string
+  favorites?: Prisma.PostFavoriteCreateNestedManyWithoutPostInput
+  reaction?: Prisma.PostReactionCreateNestedManyWithoutPostInput
+}
+
+export type TelegramPostUncheckedCreateWithoutPostCommentsInput = {
+  id?: number
+  textCaption?: string | null
+  textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cryptoTokens?: Prisma.TelegramPostCreatecryptoTokensInput | string[]
+  tgAuthorTitle: string
+  tgAuthorUsername: string
+  tgAuthorId: string
+  mediaGroupId?: string | null
+  media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  likeCount?: number
+  dislikeCount?: number
+  favoritesCount?: number
+  commentsCount?: number
+  createdAt?: Date | string
+  favorites?: Prisma.PostFavoriteUncheckedCreateNestedManyWithoutPostInput
+  reaction?: Prisma.PostReactionUncheckedCreateNestedManyWithoutPostInput
+}
+
+export type TelegramPostCreateOrConnectWithoutPostCommentsInput = {
+  where: Prisma.TelegramPostWhereUniqueInput
+  create: Prisma.XOR<Prisma.TelegramPostCreateWithoutPostCommentsInput, Prisma.TelegramPostUncheckedCreateWithoutPostCommentsInput>
+}
+
+export type TelegramPostUpsertWithoutPostCommentsInput = {
+  update: Prisma.XOR<Prisma.TelegramPostUpdateWithoutPostCommentsInput, Prisma.TelegramPostUncheckedUpdateWithoutPostCommentsInput>
+  create: Prisma.XOR<Prisma.TelegramPostCreateWithoutPostCommentsInput, Prisma.TelegramPostUncheckedCreateWithoutPostCommentsInput>
+  where?: Prisma.TelegramPostWhereInput
+}
+
+export type TelegramPostUpdateToOneWithWhereWithoutPostCommentsInput = {
+  where?: Prisma.TelegramPostWhereInput
+  data: Prisma.XOR<Prisma.TelegramPostUpdateWithoutPostCommentsInput, Prisma.TelegramPostUncheckedUpdateWithoutPostCommentsInput>
+}
+
+export type TelegramPostUpdateWithoutPostCommentsInput = {
+  textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
+  mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  likeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.PostFavoriteUpdateManyWithoutPostNestedInput
+  reaction?: Prisma.PostReactionUpdateManyWithoutPostNestedInput
+}
+
+export type TelegramPostUncheckedUpdateWithoutPostCommentsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  textCaption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  textEntities?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cryptoTokens?: Prisma.TelegramPostUpdatecryptoTokensInput | string[]
+  tgAuthorTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorUsername?: Prisma.StringFieldUpdateOperationsInput | string
+  tgAuthorId?: Prisma.StringFieldUpdateOperationsInput | string
+  mediaGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  likeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikeCount?: Prisma.IntFieldUpdateOperationsInput | number
+  favoritesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.PostFavoriteUncheckedUpdateManyWithoutPostNestedInput
+  reaction?: Prisma.PostReactionUncheckedUpdateManyWithoutPostNestedInput
 }
 
 
@@ -802,11 +921,13 @@ export type TelegramPostUncheckedUpdateWithoutReactionInput = {
 export type TelegramPostCountOutputType = {
   favorites: number
   reaction: number
+  postComments: number
 }
 
 export type TelegramPostCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   favorites?: boolean | TelegramPostCountOutputTypeCountFavoritesArgs
   reaction?: boolean | TelegramPostCountOutputTypeCountReactionArgs
+  postComments?: boolean | TelegramPostCountOutputTypeCountPostCommentsArgs
 }
 
 /**
@@ -833,6 +954,13 @@ export type TelegramPostCountOutputTypeCountReactionArgs<ExtArgs extends runtime
   where?: Prisma.PostReactionWhereInput
 }
 
+/**
+ * TelegramPostCountOutputType without action
+ */
+export type TelegramPostCountOutputTypeCountPostCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostCommentWhereInput
+}
+
 
 export type TelegramPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -851,6 +979,7 @@ export type TelegramPostSelect<ExtArgs extends runtime.Types.Extensions.Internal
   createdAt?: boolean
   favorites?: boolean | Prisma.TelegramPost$favoritesArgs<ExtArgs>
   reaction?: boolean | Prisma.TelegramPost$reactionArgs<ExtArgs>
+  postComments?: boolean | Prisma.TelegramPost$postCommentsArgs<ExtArgs>
   _count?: boolean | Prisma.TelegramPostCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["telegramPost"]>
 
@@ -909,6 +1038,7 @@ export type TelegramPostOmit<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type TelegramPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   favorites?: boolean | Prisma.TelegramPost$favoritesArgs<ExtArgs>
   reaction?: boolean | Prisma.TelegramPost$reactionArgs<ExtArgs>
+  postComments?: boolean | Prisma.TelegramPost$postCommentsArgs<ExtArgs>
   _count?: boolean | Prisma.TelegramPostCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TelegramPostIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -919,6 +1049,7 @@ export type $TelegramPostPayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     favorites: Prisma.$PostFavoritePayload<ExtArgs>[]
     reaction: Prisma.$PostReactionPayload<ExtArgs>[]
+    postComments: Prisma.$PostCommentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1331,6 +1462,7 @@ export interface Prisma__TelegramPostClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   favorites<T extends Prisma.TelegramPost$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TelegramPost$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reaction<T extends Prisma.TelegramPost$reactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TelegramPost$reactionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  postComments<T extends Prisma.TelegramPost$postCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TelegramPost$postCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1812,6 +1944,30 @@ export type TelegramPost$reactionArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.PostReactionScalarFieldEnum | Prisma.PostReactionScalarFieldEnum[]
+}
+
+/**
+ * TelegramPost.postComments
+ */
+export type TelegramPost$postCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostComment
+   */
+  select?: Prisma.PostCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostComment
+   */
+  omit?: Prisma.PostCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostCommentInclude<ExtArgs> | null
+  where?: Prisma.PostCommentWhereInput
+  orderBy?: Prisma.PostCommentOrderByWithRelationInput | Prisma.PostCommentOrderByWithRelationInput[]
+  cursor?: Prisma.PostCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostCommentScalarFieldEnum | Prisma.PostCommentScalarFieldEnum[]
 }
 
 /**

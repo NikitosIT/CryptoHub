@@ -4,12 +4,11 @@ import type {
   PaginationArgs,
 } from "./paginate.types.js";
 
-export async function paginate<TArgs, TItem extends { id: number }>({
-  model,
-  getArgs,
+export async function paginate<TItem extends { id: number }>({
+  query,
   cursor,
   limit = 10,
-}: PaginateParams<TArgs, TItem>): Promise<PaginatedResult<TItem>> {
+}: PaginateParams<TItem>): Promise<PaginatedResult<TItem>> {
   const paginationArgs: PaginationArgs = {
     take: limit,
     ...(cursor !== undefined
@@ -20,7 +19,7 @@ export async function paginate<TArgs, TItem extends { id: number }>({
       : {}),
   };
 
-  const data = await model.findMany(getArgs(paginationArgs));
+  const data = await query(paginationArgs);
   const nextCursor = data.length === limit ? data[data.length - 1].id : null;
 
   return { data, nextCursor };

@@ -17,10 +17,9 @@ export const PostReactionType = {
 export type PostReactionType = (typeof PostReactionType)[keyof typeof PostReactionType]
 
 
-export const CryptoAiChatStatus = {
-  STREAMING: 'STREAMING',
-  COMPLETED: 'COMPLETED',
-  ABORTED: 'ABORTED'
+export const MediaType = {
+  photo: 'photo',
+  video: 'video'
 } as const
 
-export type CryptoAiChatStatus = (typeof CryptoAiChatStatus)[keyof typeof CryptoAiChatStatus]
+export type MediaType = (typeof MediaType)[keyof typeof MediaType]
