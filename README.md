@@ -53,37 +53,26 @@ The project uses **Supabase as a backend** — authentication, database, API, an
 From the project root:
 
 ```bash
-cd frontend
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Run the dev server:
-
-```bash
 npm run dev
 ```
 
-Other commands:
+App-specific commands:
 
 ```bash
-npm run build       # production build
-npm run preview     # preview production build
-npm run lint        # ESLint
-npm run test        # Vitest
-npm run router:gen  # regenerate TanStack Router tree
-
+npm run dev:frontend
+npm run dev:backend
+npm run dev:admin
+npm run build
+npm run lint
+npm run test
 ```
 
 ---
 
 ## Environment
 
-Create a `.env` (or `.env.local`) in `frontend/` with your Supabase URL and anon key so auth and API calls work:
+Create a `.env` (or `.env.local`) in `apps/frontend/` with your Supabase URL and anon key so auth and API calls work:
 
 ```bash
 VITE_SUPABASE_URL=your_supabase_project_url

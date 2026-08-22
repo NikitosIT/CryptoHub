@@ -13,8 +13,9 @@
     "typescriptreact"
   ],
   "eslint.workingDirectories": [
-     { "directory": "admin", "changeProcessCWD": true },
-    { "directory": "frontend", "changeProcessCWD": true }
+    { "directory": "apps/admin", "changeProcessCWD": true },
+    { "directory": "apps/frontend", "changeProcessCWD": true },
+    { "directory": "apps/backend", "changeProcessCWD": true }
   ],
   "files.eol": "\n",
   "editor.rulers": [90],

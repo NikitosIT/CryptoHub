@@ -1,4 +1,0 @@
-$kind: http-request
-url: "{{appBaseUrl}}/docs/openapi.json"
-method: GET
-order: 3000

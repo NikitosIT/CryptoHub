@@ -1,7 +1,0 @@
-$kind: http-request
-description: Returns the authenticated user's daily AI chat usage (used, limit, remaining).
-url: "{{apiBaseUrl}}/crypto-ai/usage/today"
-method: GET
-headers:
-  Authorization: "Bearer {{authToken}}"
-order: 3000

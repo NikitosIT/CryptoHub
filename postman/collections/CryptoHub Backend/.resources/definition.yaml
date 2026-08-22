@@ -1,7 +1,0 @@
-$kind: collection
-description: Postman collection for the current CryptoHub backend endpoints.
-variables:
-  appBaseUrl: http://localhost:3000
-  apiBaseUrl: http://localhost:3000/api
-  telegramWebhookSecret: telegram-webhook-secret
-  authToken: ""

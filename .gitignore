@@ -65,7 +65,7 @@ pnpm-lock.yaml
 
 # === Logs ===
 logs/
-backend/logs/
+apps/backend/logs/
 *.ndjson
 *.log
 *.csv

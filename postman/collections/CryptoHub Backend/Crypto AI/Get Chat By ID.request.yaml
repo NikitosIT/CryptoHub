@@ -1,7 +1,0 @@
-$kind: http-request
-description: Returns a completed chat by its ID. Only COMPLETED chats are returned.
-url: "{{apiBaseUrl}}/crypto-ai/chat/{{chatId}}"
-method: GET
-headers:
-  Authorization: "Bearer {{authToken}}"
-order: 2000

@@ -3,23 +3,26 @@
   "private": true,
   "packageManager": "npm@10.9.3",
   "workspaces": [
-    "backend",
-    "frontend"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "claude": "dotenv -e .env -- claude",
     "dev": "turbo run dev",
-    "dev:backend": "turbo run dev --filter=./backend",
-    "dev:frontend": "turbo run dev --filter=./frontend",
+    "dev:backend": "turbo run dev --filter=./apps/backend",
+    "dev:frontend": "turbo run dev --filter=./apps/frontend",
+    "dev:admin": "turbo run dev --filter=./apps/admin",
     "build": "turbo run build",
-    "build:backend": "turbo run build --filter=./backend",
-    "build:frontend": "turbo run build --filter=./frontend",
+    "build:backend": "turbo run build --filter=./apps/backend",
+    "build:frontend": "turbo run build --filter=./apps/frontend",
+    "build:admin": "turbo run build --filter=./apps/admin",
     "lint": "turbo run lint",
-    "lint:backend": "turbo run lint --filter=./backend",
-    "lint:frontend": "turbo run lint --filter=./frontend",
+    "lint:backend": "turbo run lint --filter=./apps/backend",
+    "lint:frontend": "turbo run lint --filter=./apps/frontend",
+    "lint:admin": "turbo run lint --filter=./apps/admin",
     "test": "turbo run test",
-    "test:backend": "turbo run test --filter=./backend",
-    "test:frontend": "turbo run test --filter=./frontend"
+    "test:backend": "turbo run test --filter=./apps/backend",
+    "test:frontend": "turbo run test --filter=./apps/frontend"
   },
   "dependencies": {
     "@godaddy/terminus": "^4.12.1",
